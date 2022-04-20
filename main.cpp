@@ -6,11 +6,17 @@
 #include <string>
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
+#include <dinput.h>
+#define DIRECTINPUT_VERSION  0x0800 //DirectInputのバージョン指定
+
 
 using namespace DirectX;
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib,"dinput8.lib")
+#pragma comment(lib,"dxguid.lib")
+
 //ウィンドウプロシージャ
 LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	//メッセージに応じてゲーム固有の処理を行う
@@ -188,6 +194,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ID3D12Fence* fence = nullptr;
 			UINT64 fenceVal = 0;
 			result = device->CreateFence(fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
+			//DirectInputの初期化
+			IDirectInput8* directInput = nullptr;
+			result = DirectInput8Create(
+				w.hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
+				(void**)&directInput, nullptr);
+			assert(SUCCEEDED(result));
+			//キーボードデバイスの生成
+			IDirectInputDevice8* keyboard = nullptr;
+			result = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
+			assert(SUCCEEDED(result));
+			//入力データ形式のセット
+			result = keyboard->SetDataFormat(&c_dfDIKeyboard);
+			assert(SUCCEEDED(result));
+			//排他的制御レベルのセット
+			result = keyboard->SetCooperativeLevel(
+				hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+			assert(SUCCEEDED(result));
 
 	//DIrectX初期化処理ここまで
 	// 描画初期化処理
@@ -352,7 +375,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ID3D12PipelineState* pipelineState = nullptr;
 			result = device->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState));
 			assert(SUCCEEDED(result));
-			//描画初期化処理
 			
 	
 
@@ -368,6 +390,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (msg.message == WM_QUIT) {
 			break;
 		}
+		//DirectX舞フレーム処理　ここから
+		//キーボード情報の取得開始
+		keyboard->Acquire();
+
+		//全キーの入力状態を取得する
+		BYTE key[256] = {};
+		keyboard->GetDeviceState(sizeof(key), key);
+		//数字の０キーが押されていたら
+		if (key[DIK_0]) {
+			OutputDebugStringA("Hit 0\n");//出力ウィンドウに「Hit 0」と表示
+		}
+		if (key[DIK_SPACE]) {
+			FLOAT clearColor[] = { 1.0f,0.6f,0.8f };
+		}
+		
+		//DirectX舞フレーム処理　ここまで
+		
 // バックバッファの番号を取得(2つなので0番か1番)
 		UINT bbIndex = swapChain->GetCurrentBackBufferIndex();
 		// 1.リソースバリアで書き込み可能に変更
@@ -386,15 +425,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// 3.画面クリア R G B A
 		FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
 		commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+
+		if (key[DIK_SPACE]) {
+			FLOAT clearColor[] = { 1.0f,0.2f,0.8f };
+			commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+		}
+
 	// 4.描画コマンドここから
 	// ビューポート設定コマンド
 		D3D12_VIEWPORT viewport{};
-		viewport.Width = window_width;
-		viewport.Height = window_height;
-		viewport.TopLeftX = 0;
-		viewport.TopLeftY = 0;
-		viewport.MinDepth = 0.0f;
-		viewport.MaxDepth = 1.0f;
+		viewport.Width = window_width;//横幅
+		viewport.Height = window_height;//縦幅
+		viewport.TopLeftX = 0;//左上X
+		viewport.TopLeftY = 0;//左上Y
+		viewport.MinDepth = 0.0f;//最小深度（０でよい）
+		viewport.MaxDepth = 1.0f;//最大深度（１でよい）
 		// ビューポート設定コマンドを、コマンドリストに積む
 		commandList->RSSetViewports(1, &viewport);
 		//シザー短形
@@ -414,7 +459,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		commandList->IASetVertexBuffers(0, 1, &vbView);
 		// 描画コマンド
 		commandList->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
+		XMFLOAT3 vertics[] = {
+			{-0.5f,-0.5f,0.0f},//Xがーで左　Yがーで下　左下
+			{-0.5f,+0.5f,0.0f},//Xがーで左　Yが＋で上　左上
+			{+0.5f,-0.5f,0.0f},//Xが＋で右　Yがーで下　右下
 
+		};
+		D3D12_INPUT_ELEMENT_DESC inputLayout[]{
+			{
+			"POSITION",//セマンチック
+			0,//同じセマンチック名が複数あるときに使うインデックス（０でよい）
+			DXGI_FORMAT_R32G32B32_FLOAT,//要素数とビット数を表す（XYZの３つでfloat型なのでR32G32B32_FLOAT）
+			0,//入力スロットインデックス
+			D3D12_APPEND_ALIGNED_ELEMENT,//データのオフセット値（D3D12_APPEND_ALIGNED_ELEMENTだと自動設定）
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,//入力データ種別（標準はD3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA）
+			0//一度に描画するインスタンス数（0でよい）
+			},
+			//座標以外に　色、テクスチャUVなどを渡す場合は更に続ける
+		};
 
 	// 4.描画コマンドここまで
 
@@ -445,7 +507,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// 再びコマンドリストを貯める準備
 		result = commandList->Reset(cmdAllocator, nullptr);
 		assert(SUCCEEDED(result));
-		//DirectX舞フレーム処理　ここまで
 	}
 
 	//ウィンドウクラスを登録解除
