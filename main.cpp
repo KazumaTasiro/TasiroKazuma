@@ -7,6 +7,7 @@
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
 #include <dinput.h>
+#include<math.h>
 #define DIRECTINPUT_VERSION  0x0800 //DirectInputのバージョン指定
 
 
@@ -16,6 +17,8 @@ using namespace DirectX;
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
+
+const float PI = 3.141592f;
 
 //ウィンドウプロシージャ
 LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -219,9 +222,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	{ -0.5f, -0.5f, 0.0f }, // 左下　インデックス0
 	{ -0.5f, +0.5f, 0.0f }, // 左上　インデックス1
 	{ +0.5f, -0.5f, 0.0f }, // 右下　インデックス2
-	{ +0.5f, +0.5f, 0.0f }, // 右上　インデックス3
+	//{ +0.5f, +0.5f, 0.0f }, // 右上　インデックス3
+	};
 
+	float TransformX = 0.0f;
+	float TransformY = 0.0f;
+	float rotation = 0.0f;
+	float scale = 0.0f;
 
+	float affin[3][3] =
+	{
+		{1.0f,0.0,0.0},
+		{0.0f,1.0,0.0},
+		{0.0f,0.0,1.0}
 	};
 	// 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
 	UINT sizeVB = static_cast<UINT>(sizeof(XMFLOAT3) * _countof(vertices));
@@ -459,7 +472,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	uint16_t indices[] =
 	{
 		0, 1, 2, // 三角形1つ目
-		1, 2, 3, // 三角形2つ目
+		//1, 2, 3, // 三角形2つ目
 	};
 
 	// インデックスデータ全体のサイズ
@@ -502,7 +515,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ibView.SizeInBytes = sizeIB;
 
 
-//ゲームループ
+	//ゲームループ
 	while (true) {
 		//メッセージがある？
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -519,16 +532,74 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		keyboard->Acquire();
 
 		//全キーの入力状態を取得する
+
 		BYTE key[256] = {};
 		keyboard->GetDeviceState(sizeof(key), key);
+
 		//数字の０キーが押されていたら
 		if (key[DIK_0]) {
 			OutputDebugStringA("Hit 0\n");//出力ウィンドウに「Hit 0」と表示
 		}
-		if (key[DIK_SPACE]) {
-			FLOAT clearColor[] = { 1.0f,0.6f,0.8f };
+		
+		TransformX = 0.0f;
+		TransformY = 0.0f;
+		rotation = 0.0f;
+		scale = 1.0f;
+
+		//平行移動
+		if (key[DIK_W]) {
+			TransformY += 0.01;
+		}
+		if (key[DIK_S]) {
+			TransformY -= 0.01;
+		}
+		if (key[DIK_A]) {
+			TransformX -= 0.01;
+		}
+		if (key[DIK_D]) {
+			TransformX += 0.01;
 		}
 
+		//拡大縮小
+		if (key[DIK_I]) {
+			scale += 0.1;
+		}
+		if (key[DIK_K]) {
+			scale -= 0.1;
+		}
+
+		//回転
+		if (key[DIK_Q]) {
+			rotation -= PI / 32;
+		}
+
+		if (key[DIK_E]) {
+			rotation += PI / 32;
+		}
+
+		//アフィン行列の生成
+		affin[0][0] = scale * cos(rotation);
+		affin[0][1] = scale * (-sin(rotation));
+		affin[0][2] = TransformX;
+
+		affin[1][0] = scale * sin(rotation);
+		affin[1][1] = scale * cos(rotation);
+		affin[1][2] = TransformY;
+
+		affin[2][0] = 0.0f;
+		affin[2][1] = 0.0f;
+		affin[2][2] = 1.0f;
+		//アフィン変換
+		for (int i = 0; i < _countof(vertices); i++) {
+			vertices[i].x = vertices[i].x * affin[0][0] + vertices[i].y * affin[0][1] + 1.0f * affin[0][2];
+			vertices[i].y = vertices[i].x * affin[1][0] + vertices[i].y * affin[1][1] + 1.0f * affin[1][2];
+			vertices[i].z = vertices[i].x * affin[2][0] + vertices[i].y * affin[2][1] + 1.0f * affin[2][2];
+		}
+
+
+		for (int i = 0; i < _countof(vertices); i++) {
+			vertMap[i] = vertices[i]; // 座標をコピー
+		}
 		//DirectX舞フレーム処理　ここまで
 
 // バックバッファの番号を取得(2つなので0番か1番)
@@ -593,12 +664,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//commandList->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
 		commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
 
-		XMFLOAT3 vertics[] = {
-			{-0.5f,-0.5f,0.0f},//Xがーで左　Yがーで下　左下
-			{-0.5f,+0.5f,0.0f},//Xがーで左　Yが＋で上　左上
-			{+0.5f,-0.5f,0.0f},//Xが＋で右　Yがーで下　右下
+		//XMFLOAT3 vertics[] = {
+		//	{-0.5f,-0.5f,0.0f},//Xがーで左　Yがーで下　左下
+		//	{-0.5f,+0.5f,0.0f},//Xがーで左　Yが＋で上　左上
+		//	{+0.5f,-0.5f,0.0f},//Xが＋で右　Yがーで下　右下
 
-		};
+		//};
 		D3D12_INPUT_ELEMENT_DESC inputLayout[]{
 			{
 			"POSITION",//セマンチック
