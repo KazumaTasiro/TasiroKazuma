@@ -560,7 +560,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imageData[i].x = 1.0f;//R
 		imageData[i].y = 0.0f;//G
 		imageData[i].z = 0.0f;//B
-		imageData[i].w = 1.0f;//A
+		if ((i / 10) % 2 == 0) {
+			imageData[i].w = 1.0f;//A
+		}
 	}
 	//ÉqÅ[Évê›íË
 	D3D12_HEAP_PROPERTIES textureHeapProp{};
