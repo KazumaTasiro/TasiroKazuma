@@ -217,27 +217,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//DIrectX初期化処理ここまで
 	// 描画初期化処理
-	// 頂点データ
-	XMFLOAT3 vertices[] = {
-	{ -0.5f, -0.5f, 0.0f }, // 左下　インデックス0
-	{ -0.5f, +0.5f, 0.0f }, // 左上　インデックス1
-	{ +0.5f, -0.5f, 0.0f }, // 右下　インデックス2
-	{ +0.5f, +0.5f, 0.0f }, // 右上　インデックス3
-	};
-
-	float TransformX = 0.0f;
-	float TransformY = 0.0f;
-	float rotation = 0.0f;
-	float scale = 0.0f;
-
-	float affin[3][3] =
+	// 頂点データ構造体
+	struct Vertex
 	{
-		{1.0f,0.0,0.0},
-		{0.0f,1.0,0.0},
-		{0.0f,0.0,1.0}
+		XMFLOAT3 pos; // xyz座標
+		XMFLOAT2 uv;  // uv座標
 	};
+	// 頂点データ
+	Vertex vertices[] = {
+		// x      y     z       u     v
+		{{-0.4f, -0.7f, 0.0f}, {0.0f, 1.0f}}, // 左下
+		{{-0.4f, +0.7f, 0.0f}, {0.0f, 0.0f}}, // 左上
+		{{+0.4f, -0.7f, 0.0f}, {1.0f, 1.0f}}, // 右下
+		{{+0.4f, +0.7f, 0.0f}, {1.0f, 0.0f}}, // 右上
+	};
+
+
 	// 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
-	UINT sizeVB = static_cast<UINT>(sizeof(XMFLOAT3) * _countof(vertices));
+	UINT sizeVB = static_cast<UINT>(sizeof(vertices[0]) * _countof(vertices));
 	// 頂点バッファの設定
 	D3D12_HEAP_PROPERTIES heapProp{}; // ヒープ設定
 	heapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPUへの転送用
@@ -261,7 +258,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		IID_PPV_ARGS(&vertBuff));
 	assert(SUCCEEDED(result));
 	// GPU上のバッファに対応した仮想メモリ(メインメモリ上)を取得
-	XMFLOAT3* vertMap = nullptr;
+	Vertex* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	assert(SUCCEEDED(result));
 	// 全頂点に対して
@@ -277,7 +274,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 頂点バッファのサイズ
 	vbView.SizeInBytes = sizeVB;
 	// 頂点1つ分のデータサイズ
-	vbView.StrideInBytes = sizeof(XMFLOAT3);
+	vbView.StrideInBytes = sizeof(vertices[0]);
 
 	ID3DBlob* vsBlob = nullptr; // 頂点シェーダオブジェクト
 	ID3DBlob* psBlob = nullptr; // ピクセルシェーダオブジェクト
@@ -328,12 +325,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 	// 頂点レイアウト
 	D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-	{
-			"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-			D3D12_APPEND_ALIGNED_ELEMENT,
-			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		}, // (1行で書いたほうが見やすい)
+	{ // xyz座標(1行で書いたほうが見やすい)
+		"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+		D3D12_APPEND_ALIGNED_ELEMENT,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+	},
+	{ // uv座標(1行で書いたほうが見やすい)
+		"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
+		D3D12_APPEND_ALIGNED_ELEMENT,
+		D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+	},
 	};
+
 
 	// グラフィックスパイプライン設定
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc{};
@@ -469,11 +472,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
 
 	// インデックスデータ
-	uint16_t indices[] =
-	{
+	unsigned short indices[] = {
 		0, 1, 2, // 三角形1つ目
 		1, 2, 3, // 三角形2つ目
 	};
+
 
 	// インデックスデータ全体のサイズ
 	UINT sizeIB = static_cast<UINT>(sizeof(uint16_t) * _countof(indices));
@@ -514,6 +517,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ibView.Format = DXGI_FORMAT_R16_UINT;
 	ibView.SizeInBytes = sizeIB;
 
+	
 
 	//ゲームループ
 	while (true) {
@@ -539,61 +543,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//数字の０キーが押されていたら
 		if (key[DIK_0]) {
 			OutputDebugStringA("Hit 0\n");//出力ウィンドウに「Hit 0」と表示
-		}
-		
-		TransformX = 0.0f;
-		TransformY = 0.0f;
-		rotation = 0.0f;
-		scale = 1.0f;
-
-		//平行移動
-		if (key[DIK_W]) {
-			TransformY += 0.01;
-		}
-		if (key[DIK_S]) {
-			TransformY -= 0.01;
-		}
-		if (key[DIK_A]) {
-			TransformX -= 0.01;
-		}
-		if (key[DIK_D]) {
-			TransformX += 0.01;
-		}
-
-		//拡大縮小
-		if (key[DIK_I]) {
-			scale += 0.1;
-		}
-		if (key[DIK_K]) {
-			scale -= 0.1;
-		}
-
-		//回転
-		if (key[DIK_Q]) {
-			rotation -= PI / 32;
-		}
-
-		if (key[DIK_E]) {
-			rotation += PI / 32;
-		}
-
-		//アフィン行列の生成
-		affin[0][0] = scale * cos(rotation);
-		affin[0][1] = scale * (-sin(rotation));
-		affin[0][2] = TransformX;
-
-		affin[1][0] = scale * sin(rotation);
-		affin[1][1] = scale * cos(rotation);
-		affin[1][2] = TransformY;
-
-		affin[2][0] = 0.0f;
-		affin[2][1] = 0.0f;
-		affin[2][2] = 1.0f;
-		//アフィン変換
-		for (int i = 0; i < _countof(vertices); i++) {
-			vertices[i].x = vertices[i].x * affin[0][0] + vertices[i].y * affin[0][1] + 1.0f * affin[0][2];
-			vertices[i].y = vertices[i].x * affin[1][0] + vertices[i].y * affin[1][1] + 1.0f * affin[1][2];
-			vertices[i].z = vertices[i].x * affin[2][0] + vertices[i].y * affin[2][1] + 1.0f * affin[2][2];
 		}
 
 
