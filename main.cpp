@@ -557,12 +557,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//全ピクセルの色を初期化
 	for (size_t i = 0; i < imageDataCount; i++) {
-		imageData[i].x = 1.0f;//R
+		imageData[i].x = 0.0f;//R
 		imageData[i].y = 0.0f;//G
 		imageData[i].z = 0.0f;//B
-		if ((i / 10) % 2 == 0) {
-			imageData[i].w = 1.0f;//A
+		if (rand() % 2 == 0) {
+			imageData[i].x = 1.0f;//R
 		}
+		if (rand() % 3 == 0) {
+			imageData[i].y = 1.0f;//G
+		}
+		if (rand() % 2 == 0) {
+			imageData[i].z = 1.0f;//B
+		}
+		imageData[i].w = 1.0f;//A
 	}
 	//ヒープ設定
 	D3D12_HEAP_PROPERTIES textureHeapProp{};
