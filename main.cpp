@@ -224,15 +224,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		XMFLOAT3 pos; // xyz座標
 		XMFLOAT2 uv;  // uv座標
 	};
-	// 頂点データ
+	//// 頂点データ
+	//Vertex vertices[] = {
+	//	// x      y     z       u     v
+	//	{{-0.4f, -0.7f, 0.0f}, {0.0f, 1.0f}}, // 左下
+	//	{{-0.4f, +0.7f, 0.0f}, {0.0f, 0.0f}}, // 左上
+	//	{{+0.4f, -0.7f, 0.0f}, {1.0f, 1.0f}}, // 右下
+	//	{{+0.4f, +0.7f, 0.0f}, {1.0f, 0.0f}}, // 右上
+	//};
 	Vertex vertices[] = {
-		// x      y     z       u     v
-		{{-0.4f, -0.7f, 0.0f}, {0.0f, 1.0f}}, // 左下
-		{{-0.4f, +0.7f, 0.0f}, {0.0f, 0.0f}}, // 左上
-		{{+0.4f, -0.7f, 0.0f}, {1.0f, 1.0f}}, // 右下
-		{{+0.4f, +0.7f, 0.0f}, {1.0f, 0.0f}}, // 右上
+		//x		//y		//z		//u		//v
+		{{-50.0f,-50.0f,50.f},{0.0f,1.0f}},	//左下
+		{{-50.0f,50.0f,50.0f},{0.0f,0.0f}},	//左上								
+		{{50.0f,-50.0f,50.0f},{1.0f,1.0f}},	//右下
+		{{50.0f,50.0f,50.0f},{1.0f,0.0f}},	//右上
 	};
-
 
 	// 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
 	UINT sizeVB = static_cast<UINT>(sizeof(vertices[0]) * _countof(vertices));
@@ -476,6 +482,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//定数バッファ用構造体（３D変換行列）
 	struct ConstBufferDataTransform {
 		XMMATRIX mat;	//3D変換行列
+		/*XMMATRIX unk;*/
 	};
 
 	ID3D12Resource* constBuffTransform = nullptr;
@@ -508,43 +515,58 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		result = constBuffTransform->Map(0, nullptr, (void**)&constMapTransform); // マッピング
 		assert(SUCCEEDED(result));
 	}
-
-	//並行投影行列の計算
-	constMapTransform->mat = XMMatrixIdentity();
-		// ヒープ設定
-		D3D12_HEAP_PROPERTIES cbHeapProp{};
-		cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;                   // GPUへの転送用
-		// リソース設定
-		D3D12_RESOURCE_DESC cbResourceDesc{};
-		cbResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		cbResourceDesc.Width = (sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff;   // 256バイトアラインメント
-		cbResourceDesc.Height = 1;
-		cbResourceDesc.DepthOrArraySize = 1;
-		cbResourceDesc.MipLevels = 1;
-		cbResourceDesc.SampleDesc.Count = 1;
-		cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-		ID3D12Resource* constBuffMaterial = nullptr;
-
-		// 定数バッファの生成
-		result = device->CreateCommittedResource(
-			&cbHeapProp, // ヒープ設定
-			D3D12_HEAP_FLAG_NONE,
-			&cbResourceDesc, // リソース設定
-			D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(&constBuffMaterial));
-		assert(SUCCEEDED(result));
-
-		// 定数バッファのマッピング
-		ConstBufferDataMaterial* constMapMaterial = nullptr;
-		result = constBuffMaterial->Map(0, nullptr, (void**)&constMapMaterial); // マッピング
-		assert(SUCCEEDED(result));
-
-		// 値を書き込むと自動的に転送される
-		constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
+	//constMapTransform->unk = XMMatrixIdentity();
+	////並行投影行列の計算
+	//constMapTransform->mat = XMMatrixOrthographicOffCenterLH(
+	//	-1.0f, 1.0f,
+	//	-1.0f, 1.0f,
+	//	0.0f, 1.0f
+	//);
 	
-	// インデックスデータ
+	//射影変換行列（透視投影）
+	XMMATRIX matProjection = XMMatrixPerspectiveFovLH(
+		XMConvertToRadians(45.0f),			//上下画角45度
+		(float)window_width / window_height,//アスペクト比（画面横幅/画面縦幅）
+		0.1f, 1000.0f						//前端、奥端
+	); 
+
+	//定数バッファに転送
+	constMapTransform->mat = matProjection;
+
+	// ヒープ設定
+	D3D12_HEAP_PROPERTIES cbHeapProp{};
+	cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;                   // GPUへの転送用
+	// リソース設定
+	D3D12_RESOURCE_DESC cbResourceDesc{};
+	cbResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	cbResourceDesc.Width = (sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff;   // 256バイトアラインメント
+	cbResourceDesc.Height = 1;
+	cbResourceDesc.DepthOrArraySize = 1;
+	cbResourceDesc.MipLevels = 1;
+	cbResourceDesc.SampleDesc.Count = 1;
+	cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	ID3D12Resource* constBuffMaterial = nullptr;
+
+	// 定数バッファの生成
+	result = device->CreateCommittedResource(
+		&cbHeapProp, // ヒープ設定
+		D3D12_HEAP_FLAG_NONE,
+		&cbResourceDesc, // リソース設定
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&constBuffMaterial));
+	assert(SUCCEEDED(result));
+
+	// 定数バッファのマッピング
+	ConstBufferDataMaterial* constMapMaterial = nullptr;
+	result = constBuffMaterial->Map(0, nullptr, (void**)&constMapMaterial); // マッピング
+	assert(SUCCEEDED(result));
+
+	// 値を書き込むと自動的に転送される
+	constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
+
+// インデックスデータ
 	unsigned short indices[] = {
 		0, 1, 2, // 三角形1つ目
 		1, 2, 3, // 三角形2つ目
@@ -615,7 +637,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	textureHeapProp.Type = D3D12_HEAP_TYPE_CUSTOM;
 	textureHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
 	textureHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-	
+
 	// リソース設定
 	// リソース設定
 	D3D12_RESOURCE_DESC textureResourceDesc{};
