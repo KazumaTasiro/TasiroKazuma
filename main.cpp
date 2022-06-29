@@ -234,10 +234,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//};
 	Vertex vertices[] = {
 		//x		//y		//z		//u		//v
-		{{-50.0f,-50.0f,50.f},{0.0f,1.0f}},	//左下
-		{{-50.0f,50.0f,50.0f},{0.0f,0.0f}},	//左上								
-		{{50.0f,-50.0f,50.0f},{1.0f,1.0f}},	//右下
-		{{50.0f,50.0f,50.0f},{1.0f,0.0f}},	//右上
+		{{-50.0f,-50.0f,0.0f},{0.0f,1.0f}},	//左下
+		{{-50.0f,50.0f,0.0f},{0.0f,0.0f}},	//左上								
+		{{50.0f,-50.0f,0.0f},{1.0f,1.0f}},	//右下
+		{{50.0f,50.0f,0.0f},{1.0f,0.0f}},	//右上
 	};
 
 	// 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
@@ -522,16 +522,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//	-1.0f, 1.0f,
 	//	0.0f, 1.0f
 	//);
-	
+
 	//射影変換行列（透視投影）
 	XMMATRIX matProjection = XMMatrixPerspectiveFovLH(
 		XMConvertToRadians(45.0f),			//上下画角45度
 		(float)window_width / window_height,//アスペクト比（画面横幅/画面縦幅）
 		0.1f, 1000.0f						//前端、奥端
-	); 
+	);
 
-	//定数バッファに転送
-	constMapTransform->mat = matProjection;
+	////ビュー変換行列
+	XMMATRIX matView;
+	XMFLOAT3 eye(0, 0, -100);	//視点座標
+	XMFLOAT3 target(0, 0, 0);	//注視点座標
+	XMFLOAT3 up(0, 1, 0);		//上方向ベクトル
+
+	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+
+	float angle = 0.0f;//カメラの回転角
+
+	////定数バッファに転送
+	//constMapTransform->mat = matView * matProjection;
 
 	// ヒープ設定
 	D3D12_HEAP_PROPERTIES cbHeapProp{};
@@ -809,6 +819,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//commandList->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
 		commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
 
+		if (key[DIK_D] | key[DIK_A]) 
+		{
+			if (key[DIK_D]) { angle += XMConvertToRadians(1.0f); }
+			else if (key[DIK_A]) { angle -= XMConvertToRadians(1.0f); }
+
+			//angleラジアンだけｙ軸周りに回転。半径は‐100
+			eye.x = -100 * sinf(angle);
+			eye.z = -100 * cosf(angle);
+
+			//ビュー変換行列
+			//XMMATRIX matView;
+			//XMFLOAT3 eye(0, 0, -100);	//視点座標
+			//XMFLOAT3 target(0, 0, 0);	//注視点座標
+			//XMFLOAT3 up(0, 1, 0);		//上方向ベクトル
+
+			matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+
+		}
+		//定数バッファに転送
+		constMapTransform->mat = matView * matProjection;
 		//XMFLOAT3 vertics[] = {
 		//	{-0.5f,-0.5f,0.0f},//Xがーで左　Yがーで下　左下
 		//	{-0.5f,+0.5f,0.0f},//Xがーで左　Yが＋で上　左上
