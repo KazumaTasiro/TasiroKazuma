@@ -693,7 +693,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	assert(SUCCEEDED(result));
 
 	// 値を書き込むと自動的に転送される
-	constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
+	constMapMaterial->color = XMFLOAT4(0, 1, 1, 1);              // RGBAで半透明の赤
 
 //// インデックスデータ
 //	unsigned short indices[] = {
