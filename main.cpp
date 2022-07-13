@@ -298,7 +298,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	};
 
-	for (int i = 0; i < _countof(indices) / 3; i++) 
+	for (int i = 0; i < _countof(indices) / 3; i++)
 	{//三角形1つごとに計算していく
 		//三角形にインデックスを取り出して、一時的な変数に入れる
 		unsigned short index0 = indices[i * 3 + 0];
@@ -955,63 +955,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// 3.画面クリア R G B A
 		FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
-		
+
 		commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 		commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-
+		
 
 		if (key[DIK_SPACE]) {
 			FLOAT clearColor[] = { 1.0f,0.2f,0.8f };
 			commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 		}
-
-		// 4.描画コマンドここから
-		// ビューポート設定コマンド
-		D3D12_VIEWPORT viewport{};
-		viewport.Width = window_width;//横幅
-		viewport.Height = window_height;//縦幅
-		viewport.TopLeftX = 0;//左上X
-		viewport.TopLeftY = 0;//左上Y
-		viewport.MinDepth = 0.0f;//最小深度（０でよい）
-		viewport.MaxDepth = 1.0f;//最大深度（１でよい）
-		// ビューポート設定コマンドを、コマンドリストに積む
-		commandList->RSSetViewports(1, &viewport);
-		//シザー短形
-		D3D12_RECT scissorRect{};
-		scissorRect.left = 0;									// 切り抜き座標左
-		scissorRect.right = scissorRect.left + window_width;	// 切り抜き座標右
-		scissorRect.top = 0;									// 切り抜き座標上
-		scissorRect.bottom = scissorRect.top + window_height;	// 切り抜き座標下
-		// シザー矩形設定コマンドを、コマンドリストに積む
-		commandList->RSSetScissorRects(1, &scissorRect);
-		// パイプラインステートとルートシグネチャの設定コマンド
-		commandList->SetPipelineState(pipelineState);
-		commandList->SetGraphicsRootSignature(rootSignature);
-		//プリミティブ形状の設定コマンド
-		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);//三角リスト
-		//頂点バッファビューの設定コマンド
-		commandList->IASetVertexBuffers(0, 1, &vbView);
-
-		// 定数バッファビュー(CBV)の設定コマンド
-		commandList->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
-		// SRVヒープの設定コマンド
-		commandList->SetDescriptorHeaps(1, &srvHeap);
-		// SRVヒープの先頭ハンドルを取得（SRVを指しているはず）
-		D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap->GetGPUDescriptorHandleForHeapStart();
-		// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
-		commandList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
-		// 定数バッファビュー(CBV)の設定コマンド
-		commandList->SetGraphicsRootConstantBufferView(2, constBuffTransform->GetGPUVirtualAddress());
-
-
-		// インデックスバッファビューの設定コマンド
-		commandList->IASetIndexBuffer(&ibView);
-
-
-		// 描画コマンド
-		//commandList->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
-		commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
-
 		if (key[DIK_D] | key[DIK_A])
 		{
 			if (key[DIK_D]) { angle += XMConvertToRadians(1.0f); }
@@ -1059,6 +1011,54 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//定数バッファに転送
 		constMapTransform->mat = matWorld * matView * matProjection;
+
+
+		// 4.描画コマンドここから
+		// ビューポート設定コマンド
+		D3D12_VIEWPORT viewport{};
+		viewport.Width = window_width;//横幅
+		viewport.Height = window_height;//縦幅
+		viewport.TopLeftX = 0;//左上X
+		viewport.TopLeftY = 0;//左上Y
+		viewport.MinDepth = 0.0f;//最小深度（０でよい）
+		viewport.MaxDepth = 1.0f;//最大深度（１でよい）
+		// ビューポート設定コマンドを、コマンドリストに積む
+		commandList->RSSetViewports(1, &viewport);
+		//シザー短形
+		D3D12_RECT scissorRect{};
+		scissorRect.left = 0;									// 切り抜き座標左
+		scissorRect.right = scissorRect.left + window_width;	// 切り抜き座標右
+		scissorRect.top = 0;									// 切り抜き座標上
+		scissorRect.bottom = scissorRect.top + window_height;	// 切り抜き座標下
+		// シザー矩形設定コマンドを、コマンドリストに積む
+		commandList->RSSetScissorRects(1, &scissorRect);
+		// パイプラインステートとルートシグネチャの設定コマンド
+		commandList->SetPipelineState(pipelineState);
+		commandList->SetGraphicsRootSignature(rootSignature);
+		//プリミティブ形状の設定コマンド
+		commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);//三角リスト
+		//頂点バッファビューの設定コマンド
+		commandList->IASetVertexBuffers(0, 1, &vbView);
+
+		// 定数バッファビュー(CBV)の設定コマンド
+		commandList->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
+		// SRVヒープの設定コマンド
+		commandList->SetDescriptorHeaps(1, &srvHeap);
+		// SRVヒープの先頭ハンドルを取得（SRVを指しているはず）
+		D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap->GetGPUDescriptorHandleForHeapStart();
+		// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
+		commandList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
+		// 定数バッファビュー(CBV)の設定コマンド
+		commandList->SetGraphicsRootConstantBufferView(2, constBuffTransform->GetGPUVirtualAddress());
+
+
+		// インデックスバッファビューの設定コマンド
+		commandList->IASetIndexBuffer(&ibView);
+
+
+		// 描画コマンド
+		//commandList->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
+		commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
 		//XMFLOAT3 vertics[] = {
 		//	{-0.5f,-0.5f,0.0f},//Xがーで左　Yがーで下　左下
 		//	{-0.5f,+0.5f,0.0f},//Xがーで左　Yが＋で上　左上
