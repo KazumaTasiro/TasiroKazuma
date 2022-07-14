@@ -809,6 +809,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	cbResourceDesc.SampleDesc.Count = 1;
 	cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
+	// リソース設定
+	D3D12_RESOURCE_DESC cbResourceDesc2{};
+	cbResourceDesc2.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	cbResourceDesc2.Width = (sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff;   // 256バイトアラインメント
+	cbResourceDesc2.Height = 1;
+	cbResourceDesc2.DepthOrArraySize = 1;
+	cbResourceDesc2.MipLevels = 1;
+	cbResourceDesc2.SampleDesc.Count = 1;
+	cbResourceDesc2.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
 	ID3D12Resource* constBuffMaterial = nullptr;
 
 	// 定数バッファの生成
@@ -819,6 +829,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(&constBuffMaterial));
+
+	ID3D12Resource* constBuffMaterial2 = nullptr;
+
+	// 定数バッファの生成
+	result = device->CreateCommittedResource(
+		&cbHeapProp, // ヒープ設定
+		D3D12_HEAP_FLAG_NONE,
+		&cbResourceDesc2, // リソース設定
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&constBuffMaterial2));
+
 	assert(SUCCEEDED(result));
 
 	// 定数バッファのマッピング
@@ -826,8 +848,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	result = constBuffMaterial->Map(0, nullptr, (void**)&constMapMaterial); // マッピング
 	assert(SUCCEEDED(result));
 
+	// 定数バッファのマッピング
+	ConstBufferDataMaterial* constMapMaterial2 = nullptr;
+	result = constBuffMaterial2->Map(0, nullptr, (void**)&constMapMaterial2); // マッピング
+	assert(SUCCEEDED(result));
+
 	// 値を書き込むと自動的に転送される
-	constMapMaterial->color = XMFLOAT4(0, 1, 1, 1);              // RGBAで半透明の赤
+	constMapMaterial2->color = XMFLOAT4(0, 1, 1, 1);              // RGBAで半透明の赤
 
 //// インデックスデータ
 //	unsigned short indices[] = {
@@ -899,7 +926,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		L"Resources/meemu.jpg",   //「Resources」フォルダの「texture.png」
 		WIC_FLAGS_NONE,
 		&metadata, scratchImg);
+
+	TexMetadata metadata2{};
+	ScratchImage scratchImg2{};
+	// WICテクスチャのロード
+	result = LoadFromWICFile(
+		L"Resources/wakka.jpg",   //「Resources」フォルダの「texture.png」
+		WIC_FLAGS_NONE,
+		&metadata2, scratchImg2);
+
 	ScratchImage mipChain{};
+
+
+
 	// ミップマップ生成
 	result = GenerateMipMaps(
 		scratchImg.GetImages(), scratchImg.GetImageCount(), scratchImg.GetMetadata(),
@@ -929,6 +968,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	textureResourceDesc.MipLevels = (UINT16)metadata.mipLevels;
 	textureResourceDesc.SampleDesc.Count = 1;
 
+	// リソース設定
+	D3D12_RESOURCE_DESC textureResourceDesc2{};
+	textureResourceDesc2.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	textureResourceDesc2.Format = metadata2.format;
+	textureResourceDesc2.Width = metadata2.width;
+	textureResourceDesc2.Height = (UINT)metadata2.height;
+	textureResourceDesc2.DepthOrArraySize = (UINT16)metadata2.arraySize;
+	textureResourceDesc2.MipLevels = (UINT16)metadata2.mipLevels;
+	textureResourceDesc2.SampleDesc.Count = 1;
+
 
 	// テクスチャバッファの生成
 	ID3D12Resource* texBuff = nullptr;
@@ -946,6 +995,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		const Image* img = scratchImg.GetImage(i, 0, 0);
 		// テクスチャバッファにデータ転送
 		result = texBuff->WriteToSubresource(
+			(UINT)i,
+			nullptr,              // 全領域へコピー
+			img->pixels,          // 元データアドレス
+			(UINT)img->rowPitch,  // 1ラインサイズ
+			(UINT)img->slicePitch // 1枚サイズ
+		);
+		assert(SUCCEEDED(result));
+	}
+
+	// テクスチャバッファの生成
+	ID3D12Resource* texBuff2 = nullptr;
+	result = device->CreateCommittedResource(
+		&textureHeapProp,
+		D3D12_HEAP_FLAG_NONE,
+		&textureResourceDesc2,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&texBuff2));
+	assert(SUCCEEDED(result));
+
+	//テクスチャバッファにデータ転送
+	// 全ミップマップについて
+	for (size_t i = 0; i < metadata2.mipLevels; i++) {
+		// ミップマップレベルを指定してイメージを取得
+		const Image* img = scratchImg2.GetImage(i, 0, 0);
+		// テクスチャバッファにデータ転送
+		result = texBuff2->WriteToSubresource(
 			(UINT)i,
 			nullptr,              // 全領域へコピー
 			img->pixels,          // 元データアドレス
@@ -982,6 +1058,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ハンドルの指す位置にシェーダーリソースビュー作成
 	device->CreateShaderResourceView(texBuff, &srvDesc, srvHandle);
+
+	//SRVヒープの先頭ハンドルを取得
+	UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	// シェーダリソースビュー設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc2{};
+	srvDesc2.Format = textureResourceDesc2.Format;
+	srvDesc2.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc2.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc2.Texture2D.MipLevels = textureResourceDesc2.MipLevels;
+
+	srvHandle.ptr += incrementSize;
+	// ハンドルの指す位置にシェーダーリソースビュー作成
+	device->CreateShaderResourceView(texBuff2, &srvDesc2, srvHandle);
 
 	//リソース設定
 	D3D12_RESOURCE_DESC depthResourceDesc{};
@@ -1199,12 +1288,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		commandList->IASetVertexBuffers(0, 1, &vbView);
 
 		// 定数バッファビュー(CBV)の設定コマンド
-		commandList->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
+		commandList->SetGraphicsRootConstantBufferView(0, constBuffMaterial2->GetGPUVirtualAddress());
 		// SRVヒープの設定コマンド
 		commandList->SetDescriptorHeaps(1, &srvHeap);
 		// SRVヒープの先頭ハンドルを取得（SRVを指しているはず）
 		D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap->GetGPUDescriptorHandleForHeapStart();
 		// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
+		srvGpuHandle.ptr += incrementSize;
 		commandList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
 		// インデックスバッファビューの設定コマンド
 		commandList->IASetIndexBuffer(&ibView);
