@@ -679,6 +679,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		XMFLOAT4 color; // 色 (RGBA)
 	};
 
+	//カラーのRGB値
+	float R = 0;
+	float G = 0;
+	float B = 0;
+
 	//定数バッファ用構造体（３D変換行列）
 	struct ConstBufferDataTransform {
 		XMMATRIX mat;	//3D変換行列
@@ -869,8 +874,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	result = constBuffMaterial2->Map(0, nullptr, (void**)&constMapMaterial2); // マッピング
 	assert(SUCCEEDED(result));
 
-	// 値を書き込むと自動的に転送される
-	constMapMaterial2->color = XMFLOAT4(0, 1, 1, 1);              // RGBAで半透明の赤
+	//// 値を書き込むと自動的に転送される
+	//constMapMaterial2->color = XMFLOAT4(0, 1, 1, 1);              // RGBAで半透明の赤
 
 //// インデックスデータ
 //	unsigned short indices[] = {
@@ -1297,6 +1302,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		// 4.描画コマンドここから
+		//float R = 0;
+		//float G = 0; 
+		//float B = 0;
+		R += 0.01;
+		G += 0.02;
+		B += 0.05;
+		if (R >= 1) {
+			R = 0;
+		}
+		if (G >= 1) {
+			G = 0;
+		}
+		if (B >= 1) {
+			B = 0;
+		}
+		// 値を書き込むと自動的に転送される
+		constMapMaterial2->color = XMFLOAT4(R, G, B, 1);              // RGBAで半透明の赤
+
 		// ビューポート設定コマンド
 		D3D12_VIEWPORT viewport{};
 		viewport.Width = window_width;//横幅
