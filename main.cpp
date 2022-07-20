@@ -1318,7 +1318,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			B = 0;
 		}
 		// 値を書き込むと自動的に転送される
-		constMapMaterial2->color = XMFLOAT4(R, G, B, 1);              // RGBAで半透明の赤
+		constMapMaterial2->color = XMFLOAT4(R, G, B,0.5);              // RGBAで半透明の赤
 
 		// ビューポート設定コマンド
 		D3D12_VIEWPORT viewport{};
