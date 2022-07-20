@@ -21,6 +21,35 @@ using namespace DirectX;
 
 const float PI = 3.141592f;
 
+XMMATRIX MatrixLookAtlH(XMMATRIX& pOut, XMVECTOR* TargetPos, XMVECTOR* playerPos, XMVECTOR* pUp)
+{
+	XMVECTOR zaxis;
+	XMVECTOR xaxis;
+	XMVECTOR yaxis;
+
+
+	zaxis.m128_f32[0] = {playerPos->m128_f32[0] - TargetPos->m128_f32[0]};
+	zaxis.m128_f32[1] = {playerPos->m128_f32[1] - TargetPos->m128_f32[1]};
+	zaxis.m128_f32[2] = {playerPos->m128_f32[2] - TargetPos->m128_f32[2]};
+	zaxis=XMVector3Normalize(zaxis);
+	/*Vec3Normalize(&yaxis, pUp);*/
+	xaxis = XMVector3Cross( *pUp, zaxis);
+	xaxis=XMVector3Normalize(xaxis);
+	yaxis=XMVector3Cross(zaxis,xaxis);
+	yaxis = XMVector3Normalize(yaxis);
+
+	pOut.r[0] = { xaxis };
+	pOut.r[1] = { yaxis };
+	pOut.r[2] = { zaxis };
+	pOut.r[3] = { 0,0,0,0 };
+	/*pOut.m[0][0] = xaxis.x; pOut.m[0][1] = xaxis.y; pOut.m[0][2] = xaxis.z; pOut.m[0][3] = 0;
+	pOut.m[1][0] = yaxis.x; pOut.m[1][1] = yaxis.y; pOut.m[1][2] = yaxis.z; pOut.m[1][3] = 0;
+	pOut.m[2][0] = zaxis.x; pOut.m[2][1] = zaxis.y; pOut.m[2][2] = zaxis.z; pOut.m[2][3] = 0;
+	pOut.m[3][0] = 0; pOut.m[3][1] = 0; pOut.m[3][2] = 0; pOut.m[3][3] = 1;*/
+
+	return pOut;
+}
+
 //ウィンドウプロシージャ
 LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	//メッセージに応じてゲーム固有の処理を行う
@@ -983,7 +1012,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		}
 
+		//XMMATRIX ma;
+
+		//MatrixLookAtlH(ma, XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up))
+
 		//いずれかのキーを押していたら
+
 		if (key[DIK_UP] | key[DIK_DOWN] | key[DIK_RIGHT] | key[DIK_LEFT])
 		{
 			//座標を移動する処理(Z座標)
