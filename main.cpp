@@ -263,10 +263,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	swapChainDesc.BufferCount = 2; // バッファ数を2つに設定
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // フリップ後は破棄
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	
+
 	//IDXGISwapChain1のComPtrを用意
 	ComPtr<IDXGISwapChain1> swapchain1;
-	
+
 	// スワップチェーンの生成
 	result = dxgiFactory->CreateSwapChainForHwnd(
 		commandQueue.Get(),
@@ -683,6 +683,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float R = 0;
 	float G = 0;
 	float B = 0;
+
+	//角度
+	float Rot = 0.0f;
 
 	//定数バッファ用構造体（３D変換行列）
 	struct ConstBufferDataTransform {
@@ -1297,6 +1300,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (key[DIK_RIGHT]) { object3ds[0].position.x += 1.0f; }
 			else if (key[DIK_LEFT]) { object3ds[0].position.x -= 1.0f; }
 		}
+
+		if (key[DIK_W]| (key[DIK_S])) {
+			if (key[DIK_W]) { Rot += 3; }
+			else if (key[DIK_S]) { Rot -= 3; }
+		}
+
+		object3ds[0].rotation.z = XMConvertToRadians(Rot);
+
 		for (int i = 0; i < _countof(object3ds); i++) {
 			UpdateObject3d(&object3ds[i], matView, matProjection);
 		}
@@ -1318,7 +1329,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			B = 0;
 		}
 		// 値を書き込むと自動的に転送される
-		constMapMaterial2->color = XMFLOAT4(R, G, B,0.5);              // RGBAで半透明の赤
+		constMapMaterial2->color = XMFLOAT4(R, G, B, 0.5);              // RGBAで半透明の赤
 
 		// ビューポート設定コマンド
 		D3D12_VIEWPORT viewport{};
@@ -1406,7 +1417,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		result = commandList->Close();
 		assert(SUCCEEDED(result));
 		// コマンドリストの実行
-		ID3D12CommandList* commandLists[] = { commandList.Get()};
+		ID3D12CommandList* commandLists[] = { commandList.Get() };
 		commandQueue->ExecuteCommandLists(1, commandLists);
 		// 画面に表示するバッファをフリップ(裏表の入替え)
 		result = swapChain->Present(1, 0);
