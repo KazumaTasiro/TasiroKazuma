@@ -25,6 +25,9 @@ using namespace DirectX;
 const float PI = 3.141592f;
 using namespace Microsoft::WRL;
 
+
+
+
 struct ConstBufferDataTransform {
 	XMMATRIX mat;	//3D変換行列
 	/*XMMATRIX unk;*/
@@ -715,7 +718,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//親オブジェクトの9割の大きさ
 			object3ds[i].scale = { 0.9f,0.9f,0.9f };
 			//親オブジェクトに対してZ軸まわりに30度回転
-			object3ds[i].rotation = { 0.0f,0.0f,XMConvertToRadians(30.0f) };
+			object3ds[i].rotation = { 0.0f,0.0f,0.0f/*XMConvertToRadians(30.0f)*/ };
 
 			//親オブジェクトに対してZ方向‐８.0ずらす
 			object3ds[i].position = { 0.0f,0.0f,-8.0f };
@@ -1368,6 +1371,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		commandList->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
 		// インデックスバッファビューの設定コマンド
 		commandList->IASetIndexBuffer(&ibView);
+
 
 		//// 定数バッファビュー(CBV)の設定コマンド
 		//commandList->SetGraphicsRootConstantBufferView(2, constBuffTransform0->GetGPUVirtualAddress());
