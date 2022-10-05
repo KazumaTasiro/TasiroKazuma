@@ -36,13 +36,16 @@ struct Object3d
 	//定数バッファ(行列用)
 	ComPtr<ID3D12Resource> constBuffTransform;
 	//定数バッファマップ(行列用)
-	ConstBufferDataTransform* constMapTransform;
+	ConstBufferDataTransform* constMapTransform = nullptr;
 	//アフィン変換情報
 	XMFLOAT3 scale = { 1,1,1 };
 	XMFLOAT3 rotation = { 0,0,0 };
 	XMFLOAT3 position = { 0,0,0 };
 	//ワールド変換行列
-	XMMATRIX matWorld;
+	XMMATRIX matWorld = { 0,0,0,0,
+	0,0,0,0,
+	0,0,0,0,
+	0,0,0,0 };
 	//親オブジェクトへのポインタ
 	Object3d* parent = nullptr;
 };
@@ -263,10 +266,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	swapChainDesc.BufferCount = 2; // バッファ数を2つに設定
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // フリップ後は破棄
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	
+
 	//IDXGISwapChain1のComPtrを用意
 	ComPtr<IDXGISwapChain1> swapchain1;
-	
+
 	// スワップチェーンの生成
 	result = dxgiFactory->CreateSwapChainForHwnd(
 		commandQueue.Get(),
@@ -1383,7 +1386,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		result = commandList->Close();
 		assert(SUCCEEDED(result));
 		// コマンドリストの実行
-		ID3D12CommandList* commandLists[] = { commandList.Get()};
+		ID3D12CommandList* commandLists[] = { commandList.Get() };
 		commandQueue->ExecuteCommandLists(1, commandLists);
 		// 画面に表示するバッファをフリップ(裏表の入替え)
 		result = swapChain->Present(1, 0);
@@ -1392,6 +1395,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		commandQueue->Signal(fence.Get(), ++fenceVal);
 		if (fence->GetCompletedValue() != fenceVal) {
 			HANDLE event = CreateEvent(nullptr, false, false, nullptr);
+			assert(event);
 			fence->SetEventOnCompletion(fenceVal, event);
 			WaitForSingleObject(event, INFINITE);
 			CloseHandle(event);
