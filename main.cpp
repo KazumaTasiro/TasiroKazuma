@@ -10,6 +10,7 @@
 #include <math.h>
 #include <DirectXTex.h>
 #include <wrl.h>
+#include "Input/Input.h"
 
 #include <DXGIDebug.h>
 #define DIRECTINPUT_VERSION  0x0800 //DirectInputのバージョン指定
@@ -36,13 +37,16 @@ struct Object3d
 	//定数バッファ(行列用)
 	ComPtr<ID3D12Resource> constBuffTransform;
 	//定数バッファマップ(行列用)
-	ConstBufferDataTransform* constMapTransform;
+	ConstBufferDataTransform* constMapTransform = nullptr;
 	//アフィン変換情報
 	XMFLOAT3 scale = { 1,1,1 };
 	XMFLOAT3 rotation = { 0,0,0 };
 	XMFLOAT3 position = { 0,0,0 };
 	//ワールド変換行列
-	XMMATRIX matWorld;
+	XMMATRIX matWorld = { 0,0,0,0,
+	0,0,0,0,
+	0,0,0,0,
+	0,0,0,0 };
 	//親オブジェクトへのポインタ
 	Object3d* parent = nullptr;
 };
@@ -263,10 +267,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	swapChainDesc.BufferCount = 2; // バッファ数を2つに設定
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // フリップ後は破棄
 	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	
+
 	//IDXGISwapChain1のComPtrを用意
 	ComPtr<IDXGISwapChain1> swapchain1;
-	
+
 	// スワップチェーンの生成
 	result = dxgiFactory->CreateSwapChainForHwnd(
 		commandQueue.Get(),
@@ -309,24 +313,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ComPtr<ID3D12Fence> fence;
 	UINT64 fenceVal = 0;
 	result = device->CreateFence(fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-	//DirectInputの初期化
-	IDirectInput8* directInput = nullptr;
-	result = DirectInput8Create(
-		w.hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
-		(void**)&directInput, nullptr);
-	assert(SUCCEEDED(result));
-	//キーボードデバイスの生成
-	IDirectInputDevice8* keyboard = nullptr;
-	result = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
-	assert(SUCCEEDED(result));
-	//入力データ形式のセット
-	result = keyboard->SetDataFormat(&c_dfDIKeyboard);
-	assert(SUCCEEDED(result));
-	//排他的制御レベルのセット
-	result = keyboard->SetCooperativeLevel(
-		hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-	assert(SUCCEEDED(result));
+	////DirectInputの初期化
+	//IDirectInput8* directInput = nullptr;
+	//result = DirectInput8Create(
+	//	w.hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
+	//	(void**)&directInput, nullptr);
+	//assert(SUCCEEDED(result));
+	////キーボードデバイスの生成
+	//IDirectInputDevice8* keyboard = nullptr;
+	//result = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
+	//assert(SUCCEEDED(result));
+	////入力データ形式のセット
+	//result = keyboard->SetDataFormat(&c_dfDIKeyboard);
+	//assert(SUCCEEDED(result));
+	////排他的制御レベルのセット
+	//result = keyboard->SetCooperativeLevel(
+	//	hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	//assert(SUCCEEDED(result));
 
+	//ポインタ
+	Input* input = nullptr;
+
+	//入力の初期化
+	input = new Input();
+	input->Initalize(w.hInstance,hwnd);
 	//DIrectX初期化処理ここまで
 	// 描画初期化処理
 	// 頂点データ構造体
@@ -1176,18 +1186,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 		//DirectX舞フレーム処理　ここから
-		//キーボード情報の取得開始
-		keyboard->Acquire();
+		////キーボード情報の取得開始
+		//keyboard->Acquire();
 
-		//全キーの入力状態を取得する
+		////全キーの入力状態を取得する
 
-		BYTE key[256] = {};
-		keyboard->GetDeviceState(sizeof(key), key);
-
+		//BYTE key[256] = {};
+		//keyboard->GetDeviceState(sizeof(key), key);
+		input->Update();
 		//数字の０キーが押されていたら
-		if (key[DIK_0]) {
-			OutputDebugStringA("Hit 0\n");//出力ウィンドウに「Hit 0」と表示
-		}
+		//if (input->PushKey(DIK_0)) {
+		//	OutputDebugStringA("Hit 0\n");//出力ウィンドウに「Hit 0」と表示
+		//}
 
 
 		for (int i = 0; i < _countof(vertices); i++) {
@@ -1219,14 +1229,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 
-		if (key[DIK_SPACE]) {
+		if (input->PushKey(DIK_SPACE)) {
 			FLOAT clearColor[] = { 1.0f,0.2f,0.8f };
 			commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 		}
-		if (key[DIK_D] | key[DIK_A])
+		if (input->PushKey(DIK_D) || input->PushKey(DIK_A))
 		{
-			if (key[DIK_D]) { angle += XMConvertToRadians(1.0f); }
-			else if (key[DIK_A]) { angle -= XMConvertToRadians(1.0f); }
+			if (input->PushKey(DIK_D)) { angle += XMConvertToRadians(1.0f); }
+			else if (input->PushKey(DIK_A)) { angle -= XMConvertToRadians(1.0f); }
 
 			//angleラジアンだけｙ軸周りに回転。半径は‐100
 			eye.x = -100 * sinf(angle);
@@ -1284,13 +1294,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//constMapTransform1->mat = matWorld1 * matView * matProjection;
 
 		//座標操作
-		if (key[DIK_UP] | key[DIK_DOWN] | key[DIK_RIGHT] | key[DIK_LEFT])
+		if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 		{
 			//座標を移動する処理(Z座標)
-			if (key[DIK_UP]) { object3ds[0].position.y += 1.0f; }
-			else if (key[DIK_DOWN]) { object3ds[0].position.y -= 1.0f; }
-			if (key[DIK_RIGHT]) { object3ds[0].position.x += 1.0f; }
-			else if (key[DIK_LEFT]) { object3ds[0].position.x -= 1.0f; }
+			if (input->PushKey(DIK_UP)) { object3ds[0].position.y += 1.0f; }
+			else if (input->PushKey(DIK_DOWN)) { object3ds[0].position.y -= 1.0f; }
+			if (input->PushKey(DIK_RIGHT)) { object3ds[0].position.x += 1.0f; }
+			else if (input->PushKey(DIK_LEFT)) { object3ds[0].position.x -= 1.0f; }
+		}
+		if (input->TriggerKey(DIK_0)) {
+			OutputDebugStringA("Hit 0\n");
 		}
 		for (int i = 0; i < _countof(object3ds); i++) {
 			UpdateObject3d(&object3ds[i], matView, matProjection);
@@ -1383,7 +1396,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		result = commandList->Close();
 		assert(SUCCEEDED(result));
 		// コマンドリストの実行
-		ID3D12CommandList* commandLists[] = { commandList.Get()};
+		ID3D12CommandList* commandLists[] = { commandList.Get() };
 		commandQueue->ExecuteCommandLists(1, commandLists);
 		// 画面に表示するバッファをフリップ(裏表の入替え)
 		result = swapChain->Present(1, 0);
@@ -1393,8 +1406,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (fence->GetCompletedValue() != fenceVal) {
 			HANDLE event = CreateEvent(nullptr, false, false, nullptr);
 			fence->SetEventOnCompletion(fenceVal, event);
-			WaitForSingleObject(event, INFINITE);
-			CloseHandle(event);
+			if (event != 0) {
+				WaitForSingleObject(event, INFINITE);
+				CloseHandle(event);
+			}
 		}
 		// キューをクリア
 		result = cmdAllocator->Reset();
@@ -1404,7 +1419,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		assert(SUCCEEDED(result));
 
 	}
-
+	delete input;
 	//ウィンドウクラスを登録解除
 	UnregisterClass(w.lpszClassName, w.hInstance);
 
