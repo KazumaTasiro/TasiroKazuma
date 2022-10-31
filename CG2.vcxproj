@@ -146,6 +146,7 @@
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -156,6 +157,7 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Triangle.h" />
+    <ClInclude Include="WinApp.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />

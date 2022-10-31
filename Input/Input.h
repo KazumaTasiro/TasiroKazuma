@@ -4,6 +4,7 @@
 #include <cassert>
 #include <wrl.h>
 #include <windows.h>
+#include "../WinApp.h"
 
 using namespace Microsoft::WRL;
 
@@ -13,7 +14,7 @@ public:
 	template<class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバー関数
 	//初期化
-	void Initalize(HINSTANCE hInstance,HWND hwnd);
+	void Initalize(WinApp* winApp);
 	//更新
 	void Update();
 
@@ -28,4 +29,6 @@ private://メンバ変数
 	BYTE keyPre[256] = {};
 	//DirectInputのインスタンス
 	ComPtr<IDirectInput8> directInput;
+	//WindowsAPI
+	WinApp* winApp_ = nullptr;
 };
