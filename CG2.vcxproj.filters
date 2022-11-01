@@ -28,6 +28,12 @@
     <Filter Include="ソース ファイル\WinApp">
       <UniqueIdentifier>{c1906bf3-aef2-41b8-96ba-35e7702b2b67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\DirectXCommon">
+      <UniqueIdentifier>{81b4c052-fc61-4583-9693-1da1ff75f17e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\DirectXCommon">
+      <UniqueIdentifier>{7ec5d983-a4ee-4d02-ad5f-74a16dd6bf46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,6 +48,9 @@
     <ClCompile Include="WinApp.cpp">
       <Filter>ソース ファイル\WinApp</Filter>
     </ClCompile>
+    <ClCompile Include="DirectXCommon.cpp">
+      <Filter>ソース ファイル\DirectXCommon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Triangle.h">
@@ -55,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="WinApp.h">
       <Filter>ヘッダー ファイル\WinApp</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXCommon.h">
+      <Filter>ヘッダー ファイル\DirectXCommon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
