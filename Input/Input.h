@@ -4,7 +4,7 @@
 #include <cassert>
 #include <wrl.h>
 #include <windows.h>
-#include "../WinApp.h"
+#include "WinApp.h"
 
 using namespace Microsoft::WRL;
 
