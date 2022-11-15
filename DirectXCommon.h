@@ -29,6 +29,11 @@ public://メンバ関数
 	//描画後処理
 	void PostDraw();
 
+	//デバイス取得
+	ID3D12Device* GetDevice() const { return device.Get(); }
+
+	//コマンドリスト取得
+	ID3D12GraphicsCommandList* GetCommandList()const { return commandList.Get(); }
 
 private:
 	//DirectX12デバイス
@@ -56,4 +61,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	D3D12_RESOURCE_BARRIER barrierDesc{};
 	UINT64 fenceVal = 0;
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuff;
 };
