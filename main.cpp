@@ -1190,52 +1190,54 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		//DirectX舞フレーム処理　ここまで
 
-// バックバッファの番号を取得(2つなので0番か1番)
-		UINT bbIndex = swapChain->GetCurrentBackBufferIndex();
-		// 1.リソースバリアで書き込み可能に変更
-		D3D12_RESOURCE_BARRIER barrierDesc{};
-		barrierDesc.Transition.pResource = backBuffers[bbIndex].Get(); // バックバッファを指定
-		barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT; // 表示状態から
-		barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET; // 描画状態へ
-		commandList->ResourceBarrier(1, &barrierDesc);
+		dxCommon->PreDraw();
 
-		// 2.描画先の変更
-		// レンダーターゲットビューのハンドルを取得
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvHeap->GetCPUDescriptorHandleForHeapStart();
-		rtvHandle.ptr += bbIndex * device->GetDescriptorHandleIncrementSize(rtvHeapDesc.Type);
-		//深度ステンシルビュー用デスクリプタ―ヒープのハンドルを取得
-		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvHeap->GetCPUDescriptorHandleForHeapStart();
-		commandList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
+	//// バックバッファの番号を取得(2つなので0番か1番)
+	//	UINT bbIndex = swapChain->GetCurrentBackBufferIndex();
+	//	// 1.リソースバリアで書き込み可能に変更
+	//	D3D12_RESOURCE_BARRIER barrierDesc{};
+	//	barrierDesc.Transition.pResource = backBuffers[bbIndex].Get(); // バックバッファを指定
+	//	barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT; // 表示状態から
+	//	barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET; // 描画状態へ
+	//	commandList->ResourceBarrier(1, &barrierDesc);
 
-		// 3.画面クリア R G B A
-		FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
+	//	// 2.描画先の変更
+	//	// レンダーターゲットビューのハンドルを取得
+	//	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvHeap->GetCPUDescriptorHandleForHeapStart();
+	//	rtvHandle.ptr += bbIndex * device->GetDescriptorHandleIncrementSize(rtvHeapDesc.Type);
+	//	//深度ステンシルビュー用デスクリプタ―ヒープのハンドルを取得
+	//	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvHeap->GetCPUDescriptorHandleForHeapStart();
+	//	commandList->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 
-		commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-		commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	//	// 3.画面クリア R G B A
+	//	FLOAT clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
+
+	//	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	//	commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 
-		if (input->PushKey(DIK_SPACE)) {
-			FLOAT clearColor[] = { 1.0f,0.2f,0.8f };
-			commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-		}
-		if (input->PushKey(DIK_D) || input->PushKey(DIK_A))
-		{
-			if (input->PushKey(DIK_D)) { angle += XMConvertToRadians(1.0f); }
-			else if (input->PushKey(DIK_A)) { angle -= XMConvertToRadians(1.0f); }
+		//if (input->PushKey(DIK_SPACE)) {
+		//	FLOAT clearColor[] = { 1.0f,0.2f,0.8f };
+		//	commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+		//}
+		//if (input->PushKey(DIK_D) || input->PushKey(DIK_A))
+		//{
+		//	if (input->PushKey(DIK_D)) { angle += XMConvertToRadians(1.0f); }
+		//	else if (input->PushKey(DIK_A)) { angle -= XMConvertToRadians(1.0f); }
 
-			//angleラジアンだけｙ軸周りに回転。半径は‐100
-			eye.x = -100 * sinf(angle);
-			eye.z = -100 * cosf(angle);
+		//	//angleラジアンだけｙ軸周りに回転。半径は‐100
+		//	eye.x = -100 * sinf(angle);
+		//	eye.z = -100 * cosf(angle);
 
-			//ビュー変換行列
-			//XMMATRIX matView;
-			//XMFLOAT3 eye(0, 0, -100);	//視点座標
-			//XMFLOAT3 target(0, 0, 0);	//注視点座標
-			//XMFLOAT3 up(0, 1, 0);		//上方向ベクトル
+		//	//ビュー変換行列
+		//	//XMMATRIX matView;
+		//	//XMFLOAT3 eye(0, 0, -100);	//視点座標
+		//	//XMFLOAT3 target(0, 0, 0);	//注視点座標
+		//	//XMFLOAT3 up(0, 1, 0);		//上方向ベクトル
 
-			matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+		//	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 
-		}
+		//}
 
 		////いずれかのキーを押していたら
 		//if (key[DIK_UP] | key[DIK_DOWN] | key[DIK_RIGHT] | key[DIK_LEFT])
@@ -1294,25 +1296,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			UpdateObject3d(&object3ds[i], matView, matProjection);
 		}
 
-		// 4.描画コマンドここから
-		// ビューポート設定コマンド
-		D3D12_VIEWPORT viewport{};
-		viewport.Width = WinApp::window_width;//横幅
-		viewport.Height = WinApp::window_height;//縦幅
-		viewport.TopLeftX = 0;//左上X
-		viewport.TopLeftY = 0;//左上Y
-		viewport.MinDepth = 0.0f;//最小深度（０でよい）
-		viewport.MaxDepth = 1.0f;//最大深度（１でよい）
-		// ビューポート設定コマンドを、コマンドリストに積む
-		commandList->RSSetViewports(1, &viewport);
-		//シザー短形
-		D3D12_RECT scissorRect{};
-		scissorRect.left = 0;									// 切り抜き座標左
-		scissorRect.right = scissorRect.left + WinApp::window_width;	// 切り抜き座標右
-		scissorRect.top = 0;									// 切り抜き座標上
-		scissorRect.bottom = scissorRect.top + WinApp::window_height;	// 切り抜き座標下
-		// シザー矩形設定コマンドを、コマンドリストに積む
-		commandList->RSSetScissorRects(1, &scissorRect);
+		//// 4.描画コマンドここから
+		//// ビューポート設定コマンド
+		//D3D12_VIEWPORT viewport{};
+		//viewport.Width = WinApp::window_width;//横幅
+		//viewport.Height = WinApp::window_height;//縦幅
+		//viewport.TopLeftX = 0;//左上X
+		//viewport.TopLeftY = 0;//左上Y
+		//viewport.MinDepth = 0.0f;//最小深度（０でよい）
+		//viewport.MaxDepth = 1.0f;//最大深度（１でよい）
+		//// ビューポート設定コマンドを、コマンドリストに積む
+		//commandList->RSSetViewports(1, &viewport);
+		////シザー短形
+		//D3D12_RECT scissorRect{};
+		//scissorRect.left = 0;									// 切り抜き座標左
+		//scissorRect.right = scissorRect.left + WinApp::window_width;	// 切り抜き座標右
+		//scissorRect.top = 0;									// 切り抜き座標上
+		//scissorRect.bottom = scissorRect.top + WinApp::window_height;	// 切り抜き座標下
+		//// シザー矩形設定コマンドを、コマンドリストに積む
+		//commandList->RSSetScissorRects(1, &scissorRect);
 		// パイプラインステートとルートシグネチャの設定コマンド
 		commandList->SetPipelineState(pipelineState.Get());
 		commandList->SetGraphicsRootSignature(rootSignature.Get());
@@ -1373,35 +1375,36 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// 4.描画コマンドここまで
 
-		// 5.リソースバリアを戻す
-		barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; // 描画状態から
-		barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT; // 表示状態へ
-		commandList->ResourceBarrier(1, &barrierDesc);
-		// 命令のクローズ
-		result = commandList->Close();
-		assert(SUCCEEDED(result));
-		// コマンドリストの実行
-		ID3D12CommandList* commandLists[] = { commandList.Get() };
-		commandQueue->ExecuteCommandLists(1, commandLists);
-		// 画面に表示するバッファをフリップ(裏表の入替え)
-		result = swapChain->Present(1, 0);
-		assert(SUCCEEDED(result));
-		// コマンドの実行完了を待つ
-		commandQueue->Signal(fence.Get(), ++fenceVal);
-		if (fence->GetCompletedValue() != fenceVal) {
-			HANDLE event = CreateEvent(nullptr, false, false, nullptr);
-			fence->SetEventOnCompletion(fenceVal, event);
-			if (event != 0) {
-				WaitForSingleObject(event, INFINITE);
-				CloseHandle(event);
-			}
-		}
-		// キューをクリア
-		result = cmdAllocator->Reset();
-		assert(SUCCEEDED(result));
-		// 再びコマンドリストを貯める準備
-		result = commandList->Reset(cmdAllocator.Get(), nullptr);
-		assert(SUCCEEDED(result));
+		dxCommon->PostDraw();
+		//// 5.リソースバリアを戻す
+		//barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; // 描画状態から
+		//barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT; // 表示状態へ
+		//commandList->ResourceBarrier(1, &barrierDesc);
+		//// 命令のクローズ
+		//result = commandList->Close();
+		//assert(SUCCEEDED(result));
+		//// コマンドリストの実行
+		//ID3D12CommandList* commandLists[] = { commandList.Get() };
+		//commandQueue->ExecuteCommandLists(1, commandLists);
+		//// 画面に表示するバッファをフリップ(裏表の入替え)
+		//result = swapChain->Present(1, 0);
+		//assert(SUCCEEDED(result));
+		//// コマンドの実行完了を待つ
+		//commandQueue->Signal(fence.Get(), ++fenceVal);
+		//if (fence->GetCompletedValue() != fenceVal) {
+		//	HANDLE event = CreateEvent(nullptr, false, false, nullptr);
+		//	fence->SetEventOnCompletion(fenceVal, event);
+		//	if (event != 0) {
+		//		WaitForSingleObject(event, INFINITE);
+		//		CloseHandle(event);
+		//	}
+		//}
+		//// キューをクリア
+		//result = cmdAllocator->Reset();
+		//assert(SUCCEEDED(result));
+		//// 再びコマンドリストを貯める準備
+		//result = commandList->Reset(cmdAllocator.Get(), nullptr);
+		//assert(SUCCEEDED(result));
 
 	}
 	winApp->Finalize();

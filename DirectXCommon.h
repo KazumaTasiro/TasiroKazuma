@@ -24,6 +24,12 @@ public://メンバ関数
 
 	void InitializeFence();
 
+	//描画前処理
+	void PreDraw();
+	//描画後処理
+	void PostDraw();
+
+
 private:
 	//DirectX12デバイス
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
@@ -46,4 +52,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	D3D12_RESOURCE_BARRIER barrierDesc{};
+	UINT64 fenceVal = 0;
 };
