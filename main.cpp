@@ -13,6 +13,7 @@
 #include "Input/Input.h"
 #include "WinApp.h"
 #include "DirectXCommon.h"
+#include "FPS.h"
 
 #include <DXGIDebug.h>
 #define DIRECTINPUT_VERSION  0x0800 //DirectInputのバージョン指定
@@ -1133,6 +1134,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	result = dxCommon->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState));
 	assert(SUCCEEDED(result));
 
+	FPS* fps = new FPS;
+
 	//ゲームループ
 	while (true) {
 		//メッセージがある？
@@ -1140,6 +1143,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//	TranslateMessage(&msg);//キー入力メッセージの処理
 		//	DispatchMessage(&msg);//プロシージャにメッセージを送る
 		//}
+		
+		//fps制限
+		fps->FpsControlBegin();
+
 		//Windowsのメッセージ処理
 		if (winApp->ProcessMessage()) {
 			//ゲームループを抜ける
@@ -1405,6 +1412,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//// 再びコマンドリストを貯める準備
 		//result = commandList->Reset(cmdAllocator.Get(), nullptr);
 		//assert(SUCCEEDED(result));
+
+				//FPS固定
+		fps->FpsControlEnd();
 
 	}
 	winApp->Finalize();
