@@ -1342,25 +1342,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// インデックスバッファビューの設定コマンド
 		dxCommon->GetCommandList()->IASetIndexBuffer(&ibView);
 
-		//// 定数バッファビュー(CBV)の設定コマンド
-		//commandList->SetGraphicsRootConstantBufferView(2, constBuffTransform0->GetGPUVirtualAddress());
-		//// 描画コマンド
-		//commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
-
-		//// 定数バッファビュー(CBV)の設定コマンド
-		//commandList->SetGraphicsRootConstantBufferView(2, constBuffTransform1->GetGPUVirtualAddress());
-		//// 描画コマンド
-		//commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
-
-		// 描画コマンド
-		//commandList->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
-		/*commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);*/
-		//XMFLOAT3 vertics[] = {
-		//	{-0.5f,-0.5f,0.0f},//Xがーで左　Yがーで下　左下
-		//	{-0.5f,+0.5f,0.0f},//Xがーで左　Yが＋で上　左上
-		//	{+0.5f,-0.5f,0.0f},//Xが＋で右　Yがーで下　右下
-
-		//};
 
 		//全オブジェクトについて処理
 		for (int i = 0; i < _countof(object3ds); i++) {
@@ -1384,34 +1365,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		dxCommon->PostDraw();
 		//// 5.リソースバリアを戻す
-		//barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; // 描画状態から
-		//barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT; // 表示状態へ
-		//commandList->ResourceBarrier(1, &barrierDesc);
-		//// 命令のクローズ
-		//result = commandList->Close();
-		//assert(SUCCEEDED(result));
-		//// コマンドリストの実行
-		//ID3D12CommandList* commandLists[] = { commandList.Get() };
-		//commandQueue->ExecuteCommandLists(1, commandLists);
-		//// 画面に表示するバッファをフリップ(裏表の入替え)
-		//result = swapChain->Present(1, 0);
-		//assert(SUCCEEDED(result));
-		//// コマンドの実行完了を待つ
-		//commandQueue->Signal(fence.Get(), ++fenceVal);
-		//if (fence->GetCompletedValue() != fenceVal) {
-		//	HANDLE event = CreateEvent(nullptr, false, false, nullptr);
-		//	fence->SetEventOnCompletion(fenceVal, event);
-		//	if (event != 0) {
-		//		WaitForSingleObject(event, INFINITE);
-		//		CloseHandle(event);
-		//	}
-		//}
-		//// キューをクリア
-		//result = cmdAllocator->Reset();
-		//assert(SUCCEEDED(result));
-		//// 再びコマンドリストを貯める準備
-		//result = commandList->Reset(cmdAllocator.Get(), nullptr);
-		//assert(SUCCEEDED(result));
 
 				//FPS固定
 		fps->FpsControlEnd();
