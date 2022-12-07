@@ -31,7 +31,6 @@ void Input::Initalize(WinApp* winApp)
 
 void Input::Update()
 {
-	HRESULT result;
 	//キーボード情報の取得開始
 	keyboard->Acquire();
 

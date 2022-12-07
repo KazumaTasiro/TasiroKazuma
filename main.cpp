@@ -82,6 +82,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region 最初のシーンの描画
 		// 4.描画コマンドここまで
 
+		sprite->Draw();
+
 #pragma endregion 最初のシーンの描画
 		dxCommon->PostDraw();
 		//// 5.リソースバリアを戻す
@@ -100,9 +102,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//入力開放
 	delete input;
 	//スプライトの開放
-	delete sprite;
-	delete spriteCommon;
 
+	delete spriteCommon;
+	delete sprite;
 	//DirectX解放
 	delete dxCommon;
 	//WindowsAPIの終了処理

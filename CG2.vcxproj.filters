@@ -16,9 +16,6 @@
     <Filter Include="シェーダーファイル">
       <UniqueIdentifier>{5fa55758-33af-4624-89c6-48b2b7dd1c2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Input">
-      <UniqueIdentifier>{6c17b004-2fd0-4e77-9b36-c58ffcfb5b6d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Input">
       <UniqueIdentifier>{82b38094-b11f-4107-95f4-3494a27bda40}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,9 @@
     </Filter>
     <Filter Include="ソース ファイル\Sprite">
       <UniqueIdentifier>{dec8c016-8867-4bd0-a755-1d3ecb5ce6d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Input">
+      <UniqueIdentifier>{6c17b004-2fd0-4e77-9b36-c58ffcfb5b6d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,16 +97,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\shaders\Basic.hlsli">
+    <FxCompile Include="Resources\shaders\SpritePS.hlsl">
       <Filter>シェーダーファイル</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
     <FxCompile Include="Resources\shaders\BasicPS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\BasicVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shaders\Basic.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>
