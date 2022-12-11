@@ -46,6 +46,16 @@ void Sprite::Initialize(SpriteCommon* spritecommon_)
 	vbView.SizeInBytes = sizeVB;
 	// 頂点1つ分のデータサイズ
 	vbView.StrideInBytes = sizeof(vertices[0]);
+
+	// シェーダリソースビュー設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = resDesc.Format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = resDesc.MipLevels;
+
+	// ハンドルの指す位置にシェーダーリソースビュー作成
+	spritecomon->GetDxCommon()->GetDevice()->CreateShaderResourceView(spritecomon->GetTexBuff(), &srvDesc, spritecomon->GetSrvHandle());
 }
 
 void Sprite::Draw()

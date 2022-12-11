@@ -27,6 +27,10 @@ public:
 
 	ID3D12DescriptorHeap* GetSrvHeap() { return srvHeap; }
 
+	D3D12_CPU_DESCRIPTOR_HANDLE GetSrvHandle() { return srvHandle; }
+
+	ID3D12Resource* GetTexBuff() { return texBuff; }
+
 	//SRV用デスクリプタヒープ
 	ID3D12DescriptorHeap* srvHeap = nullptr;
 private:
@@ -45,7 +49,8 @@ private:
 	ID3D12PipelineState* pipelineState = nullptr;
 	ID3D12Resource* constBuffMaterial = nullptr;
 
-	
+	// テクスチャバッファ
+	ID3D12Resource* texBuff = nullptr;
 
 	//横方向ピクセル数
 	const size_t textureWidth = 256;
@@ -53,4 +58,7 @@ private:
 	const size_t textureHeight = 256;
 	//配列の要素数
 	const size_t imageDataCount = textureWidth * textureHeight;
+
+	//SRVヒープの先頭ハンドルを取得
+	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle;
 };

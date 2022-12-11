@@ -12,6 +12,8 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	dxcommon_ = dxcommon;
 	
 	
+
+
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
 		L"Resources/shaders/SpriteVS.hlsl", // シェーダファイル名
@@ -252,7 +254,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	textureResourceDesc.SampleDesc.Count = 1;
 
 	// テクスチャバッファの生成
-	ID3D12Resource* texBuff = nullptr;
+
 	result = dxcommon_->GetDevice()->CreateCommittedResource(
 		&textureHeapProp,
 		D3D12_HEAP_FLAG_NONE,
@@ -289,16 +291,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	result = dxcommon_->GetDevice()->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
 	assert(SUCCEEDED(result));
 
-	//SRVヒープの先頭ハンドルを取得
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
+	
+	srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
 
-	// シェーダリソースビュー設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = resDesc.Format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = resDesc.MipLevels;
-
-	// ハンドルの指す位置にシェーダーリソースビュー作成
-	dxcommon_->GetDevice()->CreateShaderResourceView(texBuff, &srvDesc, srvHandle);
 }
