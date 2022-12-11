@@ -114,5 +114,8 @@
     <None Include="Resources\shaders\Basic.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
+    <None Include="Resources\shaders\Sprite.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>
