@@ -77,6 +77,9 @@ void Sprite::Draw()
 	// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
 	spritecomon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
 
+	// 定数バッファビュー(CBV)の設定コマンド
+	spritecomon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(2, spritecomon->GetConstBuffTransform()->GetGPUVirtualAddress());
+
 	// 描画コマンド
 	spritecomon->GetDxCommon()->GetCommandList()->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
 }

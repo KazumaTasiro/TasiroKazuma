@@ -12,7 +12,10 @@ public:
 	struct ConstBufferDataMaterial {
 		XMFLOAT4 color; // 色 (RGBA)
 	};
-
+	//定数バッファ用構造体（３D変換行列）
+	struct ConstBufferDataTransform {
+		XMMATRIX mat;	//3D変換行列
+	};
 public:
 	//初期化
 	void Initialize(DirectXCommon* dxcommon);
@@ -30,6 +33,8 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetSrvHandle() { return srvHandle; }
 
 	ID3D12Resource* GetTexBuff() { return texBuff; }
+
+	ID3D12Resource* GetConstBuffTransform() { return constBuffTransform; }
 
 	//SRV用デスクリプタヒープ
 	ID3D12DescriptorHeap* srvHeap = nullptr;
@@ -61,4 +66,7 @@ private:
 
 	//SRVヒープの先頭ハンドルを取得
 	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle;
+
+	ID3D12Resource* constBuffTransform = nullptr;
+	ConstBufferDataTransform* constMapTransform = nullptr;
 };
