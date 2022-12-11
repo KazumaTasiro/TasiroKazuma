@@ -20,6 +20,8 @@ public:
 	void Initialize(SpriteCommon* spritecommon_);
 
 	void Draw();
+
+	void Update();
 private:
 	SpriteCommon* spritecomon;
 	HRESULT result;
@@ -38,5 +40,13 @@ private:
 	//};
 	// 頂点バッファビューの作成
 	D3D12_VERTEX_BUFFER_VIEW vbView{};
+
+	XMMATRIX matWorld;
+	XMMATRIX matRot;//回転行列
+	XMMATRIX  matTrans;//平行移動行列
+
+	//座標
+	float rotation = 0.0f;
+	XMFLOAT3 position = { 0.0f, 0.0f, 0.0f };
 
 };

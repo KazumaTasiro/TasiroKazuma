@@ -36,6 +36,8 @@ public:
 
 	ID3D12Resource* GetConstBuffTransform() { return constBuffTransform; }
 
+	ConstBufferDataTransform* GetConstMapTransform() { return constMapTransform; }
+
 	//SRV用デスクリプタヒープ
 	ID3D12DescriptorHeap* srvHeap = nullptr;
 private:

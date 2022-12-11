@@ -71,6 +71,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//DirectX舞フレーム処理　ここから
 		input->Update();
+		sprite->Update();
 #pragma endregion 基盤システムの更新
 
 #pragma region 最初のシーンの更新

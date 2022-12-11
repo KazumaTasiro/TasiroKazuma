@@ -83,3 +83,19 @@ void Sprite::Draw()
 	// 描画コマンド
 	spritecomon->GetDxCommon()->GetCommandList()->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
 }
+
+void Sprite::Update()
+{
+
+	matRot = XMMatrixIdentity();
+	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation));//Z軸周りに0度回転してから
+
+	matTrans = XMMatrixTranslation(position.x, position.y, position.z);//(-50,0,0)平行移動
+
+
+	matWorld = XMMatrixIdentity();//変形をリセット
+	matWorld *= matRot;//ワールド行列にスケーリングを反映
+	matWorld *= matTrans;
+
+	spritecomon->GetConstMapTransform()->mat = matWorld;
+}
