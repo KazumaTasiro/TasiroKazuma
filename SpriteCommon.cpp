@@ -349,6 +349,7 @@ void SpriteCommon::SetTextureCommands(uint32_t index)
 
 	
 
+
 	srvGpuHandle.ptr += (incrementSize * index);
 	dxcommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
 }
