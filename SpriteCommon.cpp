@@ -4,16 +4,26 @@
 
 #pragma comment(lib, "d3dcompiler.lib")
 
-
+//デフォルトテクスチャ格納ディレクトリ
+std::string SpriteCommon::kDefaultTextureDirectoryPath = "Resources/";
 
 void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 {
 	assert(dxcommon);
 	dxcommon_ = dxcommon;
-	
-	
 
+	// 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
+	sizeVB = static_cast<UINT>(sizeof(vertices[0]) * _countof(vertices));
 
+	// リソース設定
+
+	resDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resDesc.Width = sizeVB; // 頂点データ全体のサイズ
+	resDesc.Height = 1;
+	resDesc.DepthOrArraySize = 1;
+	resDesc.MipLevels = 1;
+	resDesc.SampleDesc.Count = 1;
+	resDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
 		L"Resources/shaders/SpriteVS.hlsl", // シェーダファイル名
@@ -72,8 +82,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	}, // (1行で書いたほうが見やすい)
 	};
 
-	// グラフィックスパイプライン設定
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc{};
+
 
 	// シェーダーの設定
 	pipelineDesc.VS.pShaderBytecode = vsBlob->GetBufferPointer();
@@ -161,8 +170,9 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
 	samplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;           //ピクセルシェーダからのみ使用可能
 
+
 	// ルートシグネチャの設定
-	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
+
 
 	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
@@ -170,6 +180,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	rootSignatureDesc.NumParameters = _countof(rootParams);	//ルートパラメータ数
 	rootSignatureDesc.pStaticSamplers = &samplerDesc;
 	rootSignatureDesc.NumStaticSamplers = 1;
+
 
 	// ルートシグネチャのシリアライズ
 	ID3DBlob* rootSigBlob = nullptr;
@@ -184,83 +195,17 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	// パイプラインにルートシグネチャをセット
 	pipelineDesc.pRootSignature = rootSignature;
 
-	
+
 	result = dxcommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState));
 	assert(SUCCEEDED(result));
 
-	
-
-	
-	{
-		// ヒープ設定
-		D3D12_HEAP_PROPERTIES cbHeapProp{};
-		cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;                   // GPUへの転送用
-		// リソース設定
-		D3D12_RESOURCE_DESC cbResourceDesc{};
-		cbResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		cbResourceDesc.Width = (sizeof(ConstBufferDataTransform) + 0xff) & ~0xff;   // 256バイトアラインメント
-		cbResourceDesc.Height = 1;
-		cbResourceDesc.DepthOrArraySize = 1;
-		cbResourceDesc.MipLevels = 1;
-		cbResourceDesc.SampleDesc.Count = 1;
-		cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-		// 定数バッファの生成
-		result = dxcommon_->GetDevice()->CreateCommittedResource(
-			&cbHeapProp, // ヒープ設定
-			D3D12_HEAP_FLAG_NONE,
-			&cbResourceDesc, // リソース設定
-			D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(&constBuffTransform));
-		assert(SUCCEEDED(result));
-
-		// 定数バッファのマッピング
-		result = constBuffTransform->Map(0, nullptr, (void**)&constMapTransform); // マッピング
-		assert(SUCCEEDED(result));
-	}
-
-	//並行投影行列の計算
-	constMapTransform->mat = XMMatrixIdentity();
-	// ヒープ設定
-	D3D12_HEAP_PROPERTIES cbHeapProp{};
-	cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;                   // GPUへの転送用
-	// リソース設定
-	D3D12_RESOURCE_DESC cbResourceDesc{};
-	cbResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	cbResourceDesc.Width = (sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff;   // 256バイトアラインメント
-	cbResourceDesc.Height = 1;
-	cbResourceDesc.DepthOrArraySize = 1;
-	cbResourceDesc.MipLevels = 1;
-	cbResourceDesc.SampleDesc.Count = 1;
-	cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
 
-	// 定数バッファの生成
-	result = dxcommon_->GetDevice()->CreateCommittedResource(
-		&cbHeapProp, // ヒープ設定
-		D3D12_HEAP_FLAG_NONE,
-		&cbResourceDesc, // リソース設定
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&constBuffMaterial));
-	assert(SUCCEEDED(result));
 
-	// 定数バッファのマッピング
-	ConstBufferDataMaterial* constMapMaterial = nullptr;
-	result = constBuffMaterial->Map(0, nullptr, (void**)&constMapMaterial); // マッピング
-	assert(SUCCEEDED(result));
 
-	// 値を書き込むと自動的に転送される
-	constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
 
-	TexMetadata metadata{};
-	ScratchImage scratchImg{};
-	// WICテクスチャのロード
-	result = LoadFromWICFile(
-		L"Resources/meemu.jpg",   //「Resources」フォルダの「texture.png」
-		WIC_FLAGS_NONE,
-		&metadata, scratchImg);
+
+
 	ScratchImage mipChain{};
 	// ミップマップ生成
 	result = GenerateMipMaps(
@@ -276,13 +221,13 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 
 
 	//ヒープ設定
-	D3D12_HEAP_PROPERTIES textureHeapProp{};
+
 	textureHeapProp.Type = D3D12_HEAP_TYPE_CUSTOM;
 	textureHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
 	textureHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
 
 	// リソース設定
-	D3D12_RESOURCE_DESC textureResourceDesc{};
+
 	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	textureResourceDesc.Format = metadata.format;
 	textureResourceDesc.Width = metadata.width;
@@ -291,7 +236,58 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	textureResourceDesc.MipLevels = (UINT16)metadata.mipLevels;
 	textureResourceDesc.SampleDesc.Count = 1;
 
+
+
+	// デスクリプタヒープの設定
+	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
+	srvHeapDesc.NumDescriptors = kMaxSRVCount;
+
+
+
+	// 設定を元にSRV用デスクリプタヒープを生成
+
+
+	result = dxcommon_->GetDevice()->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
+	assert(SUCCEEDED(result));
+
+
+	incrementSize = dxcommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
+
+}
+
+void SpriteCommon::LoadTexture(uint32_t index, const std::string& fileName)
+{
+	//ディレクトリパスとファイル名を連結してフルパスを得る
+	std::string fullPath = kDefaultTextureDirectoryPath + fileName;
+
+	//ワイド文字列に変換した際の文字列バッファサイズの計算
+	int filePathBufferSize = MultiByteToWideChar(CP_ACP, 0, fullPath.c_str(), -1, nullptr, 0);
+
+	//ワイド文字列に変換
+	std::vector<wchar_t> wfilePath(filePathBufferSize);
+	MultiByteToWideChar(CP_ACP, 0, fullPath.c_str(), -1, wfilePath.data(), filePathBufferSize);
+
+
+	// WICテクスチャのロード
+	result = LoadFromWICFile(
+		wfilePath.data()/*L"Resources/meemu.jpg"*/,   //「Resources」フォルダの「texture.png」
+		WIC_FLAGS_NONE,
+		&metadata, scratchImg);
+
 	// テクスチャバッファの生成
+
+	// リソース設定
+
+	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	textureResourceDesc.Format = metadata.format;
+	textureResourceDesc.Width = metadata.width;
+	textureResourceDesc.Height = (UINT)metadata.height;
+	textureResourceDesc.DepthOrArraySize = (UINT16)metadata.arraySize;
+	textureResourceDesc.MipLevels = (UINT16)metadata.mipLevels;
+	textureResourceDesc.SampleDesc.Count = 1;
 
 	result = dxcommon_->GetDevice()->CreateCommittedResource(
 		&textureHeapProp,
@@ -299,13 +295,14 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 		&textureResourceDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&texBuff));
+		IID_PPV_ARGS(texBuff[index].GetAddressOf()));
+
 	// 全ミップマップについて
 	for (size_t i = 0; i < metadata.mipLevels; i++) {
 		// ミップマップレベルを指定してイメージを取得
 		const Image* img = scratchImg.GetImage(i, 0, 0);
 		// テクスチャバッファにデータ転送
-		result = texBuff->WriteToSubresource(
+		result = texBuff[index]->WriteToSubresource(
 			(UINT)i,
 			nullptr,              // 全領域へコピー
 			img->pixels,          // 元データアドレス
@@ -315,21 +312,43 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 		assert(SUCCEEDED(result));
 	}
 
-	// SRVの最大個数
-	const size_t kMaxSRVCount = 2056;
+	// シェーダリソースビュー設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = resDesc.Format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = resDesc.MipLevels;
 
-	// デスクリプタヒープの設定
-	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
-	srvHeapDesc.NumDescriptors = kMaxSRVCount;
+	srvHandle.ptr += (incrementSize * index);
 
-	// 設定を元にSRV用デスクリプタヒープを生成
+	// ハンドルの指す位置にシェーダーリソースビュー作成
+	dxcommon_->GetDevice()->CreateShaderResourceView(texBuff[index].Get(), &srvDesc, srvHandle);
+
+}
+
+void SpriteCommon::SetTextureCommands(uint32_t index)
+{
+
+	// パイプラインステートとルートシグネチャの設定コマンド
+	dxcommon_->GetCommandList()->SetPipelineState(pipelineState);
+	dxcommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature);
+
+
+	//プリミティブ形状の設定コマンド
+	dxcommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);//三角リスト
+
+
+
+
+
+	// SRVヒープの設定コマンド
+	dxcommon_->GetCommandList()->SetDescriptorHeaps(1, &srvHeap);
+	// SRVヒープの先頭ハンドルを取得（SRVを指しているはず）
+	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap->GetGPUDescriptorHandleForHeapStart();
+	// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
+
 	
-	result = dxcommon_->GetDevice()->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
-	assert(SUCCEEDED(result));
 
-	
-	srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
-
+	srvGpuHandle.ptr += (incrementSize * index);
+	dxcommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
 }

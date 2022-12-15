@@ -47,6 +47,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Sprite* sprite = new Sprite();
 	sprite->Initialize(spriteCommon);
 
+	Sprite* sprite2 = new Sprite();
+	sprite2->Initialize(spriteCommon);
+
+	XMFLOAT2 position = sprite2->GetPosition();
+
+	position.x += 1;
+
+	sprite2->SetPozition(position);
+
+	XMFLOAT4 color = { 0,1,0,1 };
+
+	sprite2->SetColor(color);
+
+	sprite2->SetScale(XMFLOAT3{ 0.5f,0.5f,1.0f });
+
+	spriteCommon->LoadTexture(0, "meemu.jpg");
+	spriteCommon->LoadTexture(1, "wakka.jpg");
+
+	sprite2->SetTextureIndex(1);
+
 #pragma endregion 最初のシーンの初期化
 	
 	//DIrectX初期化処理ここまで
@@ -72,6 +92,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//DirectX舞フレーム処理　ここから
 		input->Update();
 		sprite->Update();
+		sprite2->Update();
+		//sprite2->Update();
 #pragma endregion 基盤システムの更新
 
 #pragma region 最初のシーンの更新
@@ -84,6 +106,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// 4.描画コマンドここまで
 
 		sprite->Draw();
+		sprite2->Draw();
 
 #pragma endregion 最初のシーンの描画
 		dxCommon->PostDraw();
