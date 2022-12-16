@@ -49,6 +49,8 @@ public:
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetTexBuff(uint32_t index) { return texBuff[index]; }
 
+	ID3D12Resource* GetTextureBuffer(uint32_t index)const { return texBuff[index].Get(); }
+
 	//ID3D12Resource* GetConstBuffTransform() { return constBuffTransform; }
 
 	//ConstBufferDataTransform* GetConstMapTransform() { return constMapTransform; }

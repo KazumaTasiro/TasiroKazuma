@@ -127,6 +127,25 @@ void Sprite::Draw()
 
 void Sprite::Update()
 {
+	ID3D12Resource* textureBuffer = spritecomon->GetTextureBuffer(textureIndex_);
+
+	//指定番号の画像が読み込み済みなら
+	if (textureBuffer) {
+		//テクスチャ情報取得
+		D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
+
+		float tex_left = textureLeftTop.x / resDesc.Width;
+		float tex_right = (textureLeftTop.x + textureSize.x) / resDesc.Width;
+		float tex_top = textureLeftTop.y / resDesc.Height;
+		float texbottom = (textureLeftTop.y + textureSize.y) / resDesc.Height;
+		//頂点UVに反映する
+		vertices[LB].uv = { tex_left,texbottom };
+		vertices[LT].uv = { tex_left,tex_top };
+		vertices[RB].uv = { tex_right,texbottom };
+		vertices[RT].uv = { tex_right,tex_top };
+
+	}
+
 
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
 

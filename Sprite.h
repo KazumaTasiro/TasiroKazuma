@@ -61,6 +61,11 @@ public:
 	void SetTextureIndex(uint32_t texNmb) { textureIndex_ = texNmb; }
 
 	uint32_t GetTextureIndex() { return textureIndex_; }
+
+	void SetTexSize(XMFLOAT2 texSize) { textureSize = texSize; }
+
+	XMFLOAT2 GetTexSize() { return textureSize; }
+
 private:
 	SpriteCommon* spritecomon;
 	HRESULT result;
@@ -110,5 +115,11 @@ private:
 
 	//テクスチャ番号
 	uint32_t textureIndex_ = 0;
+
+	//テクスチャ左上座標
+	XMFLOAT2 textureLeftTop = { 0.0f,0.0f };
+	//テクスチャ切り出しサイズ
+	XMFLOAT2 textureSize = { 100.0f,100.0f };
+
 
 };
