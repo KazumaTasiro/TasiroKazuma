@@ -38,11 +38,11 @@ public:
 
 	void Update();
 
-	void SetPozition(const XMFLOAT2& position_) { position = position_; }
+	void SetPozition(const XMFLOAT2& position_);
 
 	const XMFLOAT2& GetPosition() const { return position; }
 
-	void SetRotation(float rotation_) { rotation = rotation_; }
+	void SetRotation(float rotation_);
 
 	float GetRotation() { return rotation; }
 
@@ -65,6 +65,20 @@ public:
 	void SetTexSize(XMFLOAT2 texSize) { textureSize = texSize; }
 
 	XMFLOAT2 GetTexSize() { return textureSize; }
+
+	XMFLOAT2 GetSize() { return size_; }
+
+	void SetSize(XMFLOAT2 size);
+
+	/*void SetAnchorPoint(const XMFLOAT2& anchorpoint_) { anchorpoint = anchorpoint_; };*/
+
+	XMFLOAT2 GetAnchorPonit() { return anchorpoint; }
+
+	/// 上下反転の設定
+	void SetIsFlipY(bool isFlipY);
+
+	/// 左右反転の設定
+	void SetIsFlipX(bool isFlipX);
 
 private:
 	SpriteCommon* spritecomon;
@@ -93,10 +107,11 @@ private:
 	//座標
 
 	XMFLOAT3 scale{ 0.5f, 0.5f, 1.0f };
+
+	XMFLOAT2 size_ = { 100.0f,100.0f };
+
 	float rotation = 0.0f;
 	XMFLOAT2 position = { 0.0f, 0.0f };
-
-	XMFLOAT2 size = { 0.1f,0.1f };
 
 	XMFLOAT4 color = { 1,1,1,1 };
 
@@ -109,8 +124,8 @@ private:
 
 	ID3D12Resource* constBuffMaterial = nullptr;
 
-	Vertex vertSize[4];
-
+	Vertex vertices_[4];
+	
 	Vertex* vertMap = nullptr;
 
 	//テクスチャ番号
@@ -121,5 +136,16 @@ private:
 	//テクスチャ切り出しサイズ
 	XMFLOAT2 textureSize = { 100.0f,100.0f };
 
+	XMMATRIX matProjection;
 
+	// アンカーポイント
+	XMFLOAT2 anchorpoint = { 0, 0 };
+
+	// 頂点バッファの生成
+	ID3D12Resource* vertBuff = nullptr;
+
+	// 左右反転
+	bool isFlipX = false;
+	// 上下反転
+	bool isFlipY = false;
 };
