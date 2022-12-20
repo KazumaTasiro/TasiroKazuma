@@ -64,7 +64,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	sprite2->SetSize(XMFLOAT2{100.0f,50.0f});
 
-	sprite2->SetIsFlipY(true);
+	/*sprite2->SetIsFlipY(true);*/
 
 	spriteCommon->LoadTexture(0, "meemu.jpg");
 	spriteCommon->LoadTexture(1, "wakka.jpg");
