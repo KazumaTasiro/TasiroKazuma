@@ -4,6 +4,7 @@
 #include "FPS.h"
 #include "SpriteCommon.h"
 #include "Sprite.h"
+#include "Object3d.h"
 
 
 
@@ -33,11 +34,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	input = new Input();
 	input->Initalize(winApp);
 
+	// 3Dオブジェクト静的初期化
+	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
+
 	SpriteCommon* spriteCommon = nullptr;
 	//スプライト共通部分の初期化
 	spriteCommon = new SpriteCommon;
 	spriteCommon->Initialize(dxCommon);
 
+	//OBJからモデルデータを読み込む
+	Model* model = Model::LoadFormOBJ("cube");
+
+	Object3d* object3d = Object3d::Create();
+	object3d->SetModel(model);
+
+	object3d->Update();
 #pragma endregion 基盤システムの初期化
 
 
@@ -62,7 +73,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	sprite2->SetColor(color);
 
-	sprite2->SetSize(XMFLOAT2{100.0f,50.0f});
+	sprite2->SetSize(XMFLOAT2{ 100.0f,50.0f });
 
 	/*sprite2->SetIsFlipY(true);*/
 
@@ -72,18 +83,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	sprite2->SetTextureIndex(1);
 
 #pragma endregion 最初のシーンの初期化
-	
+
 	//DIrectX初期化処理ここまで
 	// 描画初期化処理
 	// 頂点データ構造体
-	
+
 	FPS* fps = new FPS;
 
 	//ゲームループ
 	while (true) {
 #pragma region 基盤システムの更新
 		//メッセージがある？
-		
+
 		//fps制限
 		fps->FpsControlBegin();
 
@@ -95,6 +106,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//DirectX舞フレーム処理　ここから
 		input->Update();
+		object3d->Update();
 		//sprite2->Update();
 #pragma endregion 基盤システムの更新
 
@@ -111,6 +123,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sprite2->Draw();
 
 #pragma endregion 最初のシーンの描画
+		
+		
+		/*dxCommon->ClearDepthBuffer();*/
+
+		Object3d::PreDraw(dxCommon->GetCommandList());
+
+		object3d->Draw();
+
+		Object3d::PostDraw();
+
 		dxCommon->PostDraw();
 		//// 5.リソースバリアを戻す
 
@@ -127,8 +149,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region 基盤システムの終了
 	//入力開放
 	delete input;
-	//スプライトの開放
+	//3Dオブジェクトの解放
+	delete object3d;
+	//3Dモデル開放
+	delete model;
 
+	//スプライトの開放
 	delete spriteCommon;
 	delete sprite2;
 	//DirectX解放

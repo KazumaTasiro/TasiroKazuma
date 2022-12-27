@@ -40,6 +40,12 @@
     <Filter Include="ヘッダー ファイル\Input">
       <UniqueIdentifier>{6c17b004-2fd0-4e77-9b36-c58ffcfb5b6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Object3d">
+      <UniqueIdentifier>{dd7efff2-19d2-4ea9-ad70-558b8fe0fd09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Object3d">
+      <UniqueIdentifier>{fcc2b0e4-657e-411f-a90c-8c23fe5caa0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,6 +71,12 @@
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>ソース ファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Object3d.cpp">
+      <Filter>ソース ファイル\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>ソース ファイル\Object3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +107,12 @@
     <ClInclude Include="Sprite.h">
       <Filter>ヘッダー ファイル\Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="Object3d.h">
+      <Filter>ヘッダー ファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>ヘッダー ファイル\Object3d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -109,12 +127,21 @@
     <FxCompile Include="Resources\shaders\BasicVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ObjPS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ObjVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\Sprite.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\Obj.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>

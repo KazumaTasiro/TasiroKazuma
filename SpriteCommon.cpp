@@ -97,6 +97,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID; // ポリゴン内塗りつぶし
 	pipelineDesc.RasterizerState.DepthClipEnable = true; // 深度クリッピングを有効に
 
+	pipelineDesc.DepthStencilState;
 	//// ブレンドステート
 	//pipelineDesc.BlendState.RenderTarget[0].RenderTargetWriteMask
 	//	= D3D12_COLOR_WRITE_ENABLE_ALL; // RBGA全てのチャンネルを描画

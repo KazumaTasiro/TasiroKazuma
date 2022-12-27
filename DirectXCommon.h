@@ -1,5 +1,6 @@
 #pragma once
 #include <d3d12.h>
+#include <d3dx12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include "WinApp.h"
@@ -23,6 +24,8 @@ public://ƒƒ“ƒoŠÖ”
 	void InitializeDepthBuffer();
 
 	void InitializeFence();
+
+	void ClearDepthBuffer();
 
 	//•`‰æ‘Oˆ—
 	void PreDraw();
