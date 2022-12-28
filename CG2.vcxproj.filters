@@ -46,6 +46,12 @@
     <Filter Include="ヘッダー ファイル\Object3d">
       <UniqueIdentifier>{fcc2b0e4-657e-411f-a90c-8c23fe5caa0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\ImGui">
+      <UniqueIdentifier>{491a84b5-bf0f-40b6-a122-8a83b6fc38f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ImGui">
+      <UniqueIdentifier>{da7b4621-ff69-49c0-a58a-6717a805765f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -77,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>ソース ファイル\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiManager.cpp">
+      <Filter>ソース ファイル\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>ヘッダー ファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiManager.h">
+      <Filter>ヘッダー ファイル\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

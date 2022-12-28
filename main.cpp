@@ -5,8 +5,8 @@
 #include "SpriteCommon.h"
 #include "Sprite.h"
 #include "Object3d.h"
-
-
+#include "ImGuiManager.h"
+#include <imgui.h>
 
 
 
@@ -26,6 +26,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	dxCommon->Initialize(winApp);
 
 	MSG msg{};//メッセージ
+
+
+	ImGuiManager* ImGuiMan = nullptr;
+	ImGuiMan = new ImGuiManager();
+	ImGuiMan->Initialize(winApp,dxCommon);
 
 	//ポインタ
 	Input* input = nullptr;
@@ -58,8 +63,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	/*Sprite* sprite = new Sprite();
 	sprite->Initialize(spriteCommon);*/
 
+	spriteCommon->LoadTexture(0, "meemu.jpg");
+	spriteCommon->LoadTexture(1, "wakka.jpg");
+
 	Sprite* sprite2 = new Sprite();
-	sprite2->Initialize(spriteCommon);
+
+	sprite2->Initialize(spriteCommon,1);
+	sprite2->SetTextureIndex(1);
+	sprite2->SetSize({ 100,100 });
 
 	XMFLOAT2 position = sprite2->GetPosition();
 
@@ -77,11 +88,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	/*sprite2->SetIsFlipY(true);*/
 
-	spriteCommon->LoadTexture(0, "meemu.jpg");
-	spriteCommon->LoadTexture(1, "wakka.jpg");
 
-	sprite2->SetTextureIndex(1);
 
+
+	float f[2] = { 100,100 };
 #pragma endregion 最初のシーンの初期化
 
 	//DIrectX初期化処理ここまで
@@ -104,10 +114,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 
+		char buf[10] = {};
+		sprite2->SetPozition({ f[0],f[1] });
+
 		//DirectX舞フレーム処理　ここから
 		input->Update();
 		object3d->Update();
-		//sprite2->Update();
+
+		//ImGui::SetWindowSize({ 500,100 },0);
+		
+		ImGuiMan->Bigin();
+
+		ImGui::SetWindowSize({ 500,100 });
+		ImGui::SliderFloat2("position", &f[0], 0.0f, 1280.0f,"%.1f");
+
+
+		//デモウィンドウの表示ON
+		//ImGui::ShowDemoWindow();
+
+		ImGuiMan->End();
+
+		
 #pragma endregion 基盤システムの更新
 
 #pragma region 最初のシーンの更新
@@ -133,6 +160,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Object3d::PostDraw();
 
+		ImGuiMan->Draw();
+
 		dxCommon->PostDraw();
 		//// 5.リソースバリアを戻す
 
@@ -144,9 +173,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 #pragma endregion 最初のシーンの終了
-
+	ImGuiMan->Finalize();
 
 #pragma region 基盤システムの終了
+	//ImGuiの開放
+	delete ImGuiMan;
 	//入力開放
 	delete input;
 	//3Dオブジェクトの解放

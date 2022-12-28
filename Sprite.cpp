@@ -1,6 +1,6 @@
 #include"Sprite.h"
 
-void Sprite::Initialize(SpriteCommon* spritecommon_)
+void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 {
 
 	spritecomon = spritecommon_;
@@ -111,7 +111,13 @@ void Sprite::Initialize(SpriteCommon* spritecommon_)
 	// 値を書き込むと自動的に転送される
 	constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
 
-
+	//テクスチャサイズをイメージに合わせる
+	if (texturerIndex != UINT32_MAX) {
+		textureIndex_ = texturerIndex;
+		AdjustTextureSize();
+		//テクスチャサイズをスプライトのサイズに適応
+		size_ = textureSize;
+	}
 
 }
 
@@ -246,5 +252,17 @@ void Sprite::SetIsFlipX(bool isFlipX)
 	this->isFlipX = isFlipX;
 
 	Update();
+}
+
+void Sprite::AdjustTextureSize()
+{
+	ID3D12Resource* textureBuffer = spritecomon->GetTextureBuffer(textureIndex_);
+	assert(textureBuffer);
+
+	//テクスチャ情報取得
+	D3D12_RESOURCE_DESC resDesc = textureBuffer->GetDesc();
+
+	textureSize.x = static_cast<float>(resDesc.Width);
+	textureSize.y = static_cast<float>(resDesc.Height);
 }
 

@@ -32,7 +32,7 @@ public:
 	};
 public:
 	//初期化
-	void Initialize(SpriteCommon* spritecommon_);
+	void Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex = UINT32_MAX);
 
 	void Draw();
 
@@ -80,6 +80,9 @@ public:
 	/// 左右反転の設定
 	void SetIsFlipX(bool isFlipX);
 
+	//テクスチャサイズをイメージに合わせる
+	void AdjustTextureSize();
+
 private:
 	SpriteCommon* spritecomon;
 	HRESULT result;
@@ -125,7 +128,7 @@ private:
 	ID3D12Resource* constBuffMaterial = nullptr;
 
 	Vertex vertices_[4];
-	
+
 	Vertex* vertMap = nullptr;
 
 	//テクスチャ番号
