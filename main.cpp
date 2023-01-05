@@ -7,13 +7,15 @@
 #include "Object3d.h"
 #include "ImGuiManager.h"
 #include <imgui.h>
-
+#include "Audio.h"
 
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 基盤システムの初期化
+
+	HRESULT result;
 	WinApp* winApp = nullptr;
 
 	//WindowsAPIの初期化
@@ -27,10 +29,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	MSG msg{};//メッセージ
 
+	Audio* audio = nullptr;
+	audio = new Audio();
+	audio->Initialize();
+	
 
-	ImGuiManager* ImGuiMan = nullptr;
-	ImGuiMan = new ImGuiManager();
-	ImGuiMan->Initialize(winApp,dxCommon);
+
+	//SoundData soundData1 = SoundLoadWave("Resources/se_amd06.wav");
+	audio->LoadWave("title.mp3");
+	audio->PlayWave("title.mp3");
+	//SoundPlayWave(xAudio2.Get(), soundData1);
+
+	//ImGuiManager* ImGuiMan = nullptr;
+	//ImGuiMan = new ImGuiManager();
+	//ImGuiMan->Initialize(winApp,dxCommon);
 
 	//ポインタ
 	Input* input = nullptr;
@@ -123,16 +135,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//ImGui::SetWindowSize({ 500,100 },0);
 		
-		ImGuiMan->Bigin();
+		//ImGuiMan->Bigin();
 
-		ImGui::SetWindowSize({ 500,100 });
-		ImGui::SliderFloat2("position", &f[0], 0.0f, 1280.0f,"%.1f");
+		////ImGui::SetWindowSize({ 500,100 });
+		////ImGui::SliderFloat2("position", &f[0], 0.0f, 1280.0f,"%.1f");
+		////デモウィンドウの表示ON
+		////ImGui::ShowDemoWindow();
 
-
-		//デモウィンドウの表示ON
-		//ImGui::ShowDemoWindow();
-
-		ImGuiMan->End();
+		//ImGuiMan->End();
 
 		
 #pragma endregion 基盤システムの更新
@@ -160,7 +170,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Object3d::PostDraw();
 
-		ImGuiMan->Draw();
+		//ImGuiMan->Draw();
 
 		dxCommon->PostDraw();
 		//// 5.リソースバリアを戻す
@@ -173,11 +183,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 #pragma endregion 最初のシーンの終了
-	ImGuiMan->Finalize();
+
+	audio->Finalize();
+	//ImGuiMan->Finalize();
 
 #pragma region 基盤システムの終了
+	//Audioの解放
+	delete audio;
 	//ImGuiの開放
-	delete ImGuiMan;
+	//delete ImGuiMan;
 	//入力開放
 	delete input;
 	//3Dオブジェクトの解放
