@@ -36,13 +36,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	//SoundData soundData1 = SoundLoadWave("Resources/se_amd06.wav");
-	audio->LoadWave("title.mp3");
-	audio->PlayWave("title.mp3");
+	audio->LoadWave("se_amd06.wav");
+	audio->PlayWave("se_amd06.wav");
 	//SoundPlayWave(xAudio2.Get(), soundData1);
 
-	//ImGuiManager* ImGuiMan = nullptr;
-	//ImGuiMan = new ImGuiManager();
-	//ImGuiMan->Initialize(winApp,dxCommon);
+	ImGuiManager* ImGuiMan = nullptr;
+	ImGuiMan = new ImGuiManager();
+	ImGuiMan->Initialize(winApp,dxCommon);
 
 	//ポインタ
 	Input* input = nullptr;
@@ -127,7 +127,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		char buf[10] = {};
-		sprite2->SetPozition({ f[0],f[1] });
+		sprite2->SetPozition({ f[0],f[1]});
 
 		//DirectX舞フレーム処理　ここから
 		input->Update();
@@ -135,14 +135,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//ImGui::SetWindowSize({ 500,100 },0);
 		
-		//ImGuiMan->Bigin();
+		ImGuiMan->Bigin();
 
-		////ImGui::SetWindowSize({ 500,100 });
-		////ImGui::SliderFloat2("position", &f[0], 0.0f, 1280.0f,"%.1f");
-		////デモウィンドウの表示ON
-		////ImGui::ShowDemoWindow();
+		ImGui::SetWindowSize({ 500,100 });
+		ImGui::SliderFloat2("position", &f[0], 0.0f, 1280.0f,"%.1f");
+		//デモウィンドウの表示ON
+		//ImGui::ShowDemoWindow();
 
-		//ImGuiMan->End();
+		ImGuiMan->End();
 
 		
 #pragma endregion 基盤システムの更新
@@ -170,7 +170,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Object3d::PostDraw();
 
-		//ImGuiMan->Draw();
+		ImGuiMan->Draw();
 
 		dxCommon->PostDraw();
 		//// 5.リソースバリアを戻す
@@ -185,13 +185,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion 最初のシーンの終了
 
 	audio->Finalize();
-	//ImGuiMan->Finalize();
+	ImGuiMan->Finalize();
 
 #pragma region 基盤システムの終了
 	//Audioの解放
 	delete audio;
 	//ImGuiの開放
-	//delete ImGuiMan;
+	delete ImGuiMan;
 	//入力開放
 	delete input;
 	//3Dオブジェクトの解放
