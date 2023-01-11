@@ -44,8 +44,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	audio = new Audio();
 	audio->Initialize();
 
-
-
+	audio->LoadWave("se_amd06.wav");
+	audio->PlayWave("se_amd06.wav", true,2.0f,1.0f);
 	// 3Dオブジェクト静的初期化
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
 
@@ -181,8 +181,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion 最初のシーンの終了
 	ImGuiMan->Finalize();
-
+	audio->Finalize();
 #pragma region 基盤システムの終了
+	delete audio;
 	//ImGuiの開放
 	delete ImGuiMan;
 	//入力開放
