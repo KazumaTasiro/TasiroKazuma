@@ -145,12 +145,17 @@
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="FPS.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object3d.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteCommon.cpp" />
     <ClCompile Include="Triangle.cpp" />
@@ -167,13 +172,18 @@
   <ItemGroup>
     <ClInclude Include="Audio.h" />
     <ClInclude Include="DirectXCommon.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="ErrorException.h" />
     <ClInclude Include="FPS.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Object3d.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteCommon.h" />
     <ClInclude Include="Triangle.h" />

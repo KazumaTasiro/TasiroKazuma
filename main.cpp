@@ -8,6 +8,7 @@
 #include "ImGuiManager.h"
 #include <imgui.h>
 #include "Audio.h"
+#include"GameScene.h"
 
 
 //Windowsアプリでのエントリーポイント(main関数)
@@ -29,20 +30,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	MSG msg{};//メッセージ
 
-	Audio* audio = nullptr;
-	audio = new Audio();
-	audio->Initialize();
-	
+	//Audio* audio = nullptr;
+	//audio = new Audio();
+	//audio->Initialize();
+	//
 
 
-	//SoundData soundData1 = SoundLoadWave("Resources/se_amd06.wav");
-	audio->LoadWave("se_amd06.wav");
-	audio->PlayWave("se_amd06.wav");
-	//SoundPlayWave(xAudio2.Get(), soundData1);
+	////SoundData soundData1 = SoundLoadWave("Resources/se_amd06.wav");
+	//audio->LoadWave("se_amd06.wav");
+	//audio->PlayWave("se_amd06.wav");
+	////SoundPlayWave(xAudio2.Get(), soundData1);
 
 	ImGuiManager* ImGuiMan = nullptr;
 	ImGuiMan = new ImGuiManager();
-	ImGuiMan->Initialize(winApp,dxCommon);
+	ImGuiMan->Initialize(winApp, dxCommon);
 
 	//ポインタ
 	Input* input = nullptr;
@@ -80,12 +81,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Sprite* sprite2 = new Sprite();
 
-	sprite2->Initialize(spriteCommon,1);
+	sprite2->Initialize(spriteCommon, 1);
 	sprite2->SetTextureIndex(1);
 	sprite2->SetSize({ 100,100 });
 
 	XMFLOAT2 position = sprite2->GetPosition();
+	XMFLOAT2 posE = { 0,20 };
 
+	object3d->SetEye({posE.x,posE.y,-50 });
+	object3d->SetTarget({ posE.x,posE.y,0 });
 	position.x += 100;
 
 	position.y += 50;
@@ -112,6 +116,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	FPS* fps = new FPS;
 
+
+	GameScene* gameScene = nullptr;
+	// ゲームシーンの初期化
+	gameScene = new GameScene();
+	gameScene->Initialize();
 	//ゲームループ
 	while (true) {
 #pragma region 基盤システムの更新
@@ -127,24 +136,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		char buf[10] = {};
-		sprite2->SetPozition({ f[0],f[1]});
+		sprite2->SetPozition({ f[0],f[1] });
 
 		//DirectX舞フレーム処理　ここから
 		input->Update();
 		object3d->Update();
 
 		//ImGui::SetWindowSize({ 500,100 },0);
-		
+
 		ImGuiMan->Bigin();
 
 		ImGui::SetWindowSize({ 500,100 });
-		ImGui::SliderFloat2("position", &f[0], 0.0f, 1280.0f,"%.1f");
+		ImGui::SliderFloat2("position", &f[0], 0.0f, 1280.0f, "%.1f");
 		//デモウィンドウの表示ON
 		//ImGui::ShowDemoWindow();
 
 		ImGuiMan->End();
 
-		
+
 #pragma endregion 基盤システムの更新
 
 #pragma region 最初のシーンの更新
@@ -160,8 +169,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sprite2->Draw();
 
 #pragma endregion 最初のシーンの描画
-		
-		
+
+
 		/*dxCommon->ClearDepthBuffer();*/
 
 		Object3d::PreDraw(dxCommon->GetCommandList());
@@ -184,12 +193,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion 最初のシーンの終了
 
-	audio->Finalize();
+	//audio->Finalize();
 	ImGuiMan->Finalize();
 
 #pragma region 基盤システムの終了
 	//Audioの解放
-	delete audio;
+	//delete audio;
 	//ImGuiの開放
 	delete ImGuiMan;
 	//入力開放
