@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
@@ -164,6 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="ErrorException.h" />
     <ClInclude Include="FPS.h" />

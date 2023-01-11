@@ -7,6 +7,7 @@
 #include "Object3d.h"
 #include "ImGuiManager.h"
 #include <imgui.h>
+#include "Audio.h"
 
 
 
@@ -38,6 +39,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//入力の初期化
 	input = new Input();
 	input->Initalize(winApp);
+
+	Audio* audio = nullptr;
+	audio = new Audio();
+	audio->Initialize();
+
+
 
 	// 3Dオブジェクト静的初期化
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
