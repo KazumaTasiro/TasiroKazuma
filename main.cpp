@@ -65,6 +65,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Object3d* object3d = Object3d::Create();
 	object3d->SetModel(model);
+	object3d->SetRotetion({ 30,30,30 });
 
 	object3d->Update();
 #pragma endregion Šî”ÕƒVƒXƒeƒ€‚Ì‰Šú‰»
@@ -88,8 +89,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	XMFLOAT2 position = sprite2->GetPosition();
 	XMFLOAT2 posE = { 0,20 };
 
-	object3d->SetEye({posE.x,posE.y,-50 });
-	object3d->SetTarget({ posE.x,posE.y,0 });
+	//object3d->SetEye({posE.x,posE.y,-50 });
+	//object3d->SetTarget({ posE.x,posE.y,0 });
 	position.x += 100;
 
 	position.y += 50;

@@ -244,6 +244,10 @@ public: // メンバ関数
 
 	XMMATRIX GetMatProjection() { return matProjection; }
 
+	void SetRotetion(XMFLOAT3 rotation_) { rotation = rotation_; }
+
+	void SetScale(XMFLOAT3 scale_) { scale = scale_; }
+
 private: // メンバ変数
 	//ComPtr<ID3D12Resource> constBuff; // 定数バッファ
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
