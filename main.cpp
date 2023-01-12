@@ -45,7 +45,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	audio->Initialize();
 
 	audio->LoadWave("se_amd06.wav");
-	audio->PlayWave("se_amd06.wav", true,2.0f,1.0f);
+	/*audio->PlayWave("se_amd06.wav", true,2.0f,1.0f);*/
 	// 3Dオブジェクト静的初期化
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
 
@@ -67,17 +67,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DIrectX初期化処理ここから
 #pragma region 最初のシーンの初期化
 
-	/*Sprite* sprite = new Sprite();
-	sprite->Initialize(spriteCommon);*/
+	
 
 	spriteCommon->LoadTexture(0, "meemu.jpg");
-	spriteCommon->LoadTexture(1, "wakka.jpg");
+	spriteCommon->LoadTexture(1, "meemu.jpg");
+	spriteCommon->LoadTexture(2, "wakka.jpg");
+
+	Sprite* sprite = new Sprite();
+	sprite->Initialize(spriteCommon,0);
 
 	Sprite* sprite2 = new Sprite();
 
 	sprite2->Initialize(spriteCommon,1);
-	sprite2->SetTextureIndex(1);
+	//sprite2->SetTextureIndex(1);
 	sprite2->SetSize({ 100,100 });
+
+
 
 	XMFLOAT2 position = sprite2->GetPosition();
 
@@ -93,6 +98,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	sprite2->SetSize(XMFLOAT2{ 100.0f,50.0f });
 
+	Sprite* sprite3 = new Sprite();
+
+	sprite3->Initialize(spriteCommon, 2);
+	//sprite3->SetTextureIndex(2);
+	sprite3->SetSize({ 100,100 });
+	sprite3->SetPozition({ 0,300 });
+	sprite3->SetColor({ 1,1,1,1 });
 	/*sprite2->SetIsFlipY(true);*/
 
 
@@ -152,10 +164,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 最初のシーンの描画
 		// 4.描画コマンドここまで
+		spriteCommon->PreDraw();
 
-		/*sprite->Draw();*/
+		sprite->Draw();
 		sprite2->Draw();
-
+		sprite3->Draw();
 #pragma endregion 最初のシーンの描画
 		
 		

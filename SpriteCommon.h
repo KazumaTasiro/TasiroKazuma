@@ -51,6 +51,10 @@ public:
 
 	ID3D12Resource* GetTextureBuffer(uint32_t index)const { return texBuff[index].Get(); }
 
+	void PreDraw();
+
+
+	void PostDraw();
 	//ID3D12Resource* GetConstBuffTransform() { return constBuffTransform; }
 
 	//ConstBufferDataTransform* GetConstMapTransform() { return constMapTransform; }
