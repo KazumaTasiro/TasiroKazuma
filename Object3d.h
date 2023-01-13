@@ -248,18 +248,22 @@ public: // メンバ関数
 
 	void SetScale(XMFLOAT3 scale_) { scale = scale_; }
 
-private: // メンバ変数
-	//ComPtr<ID3D12Resource> constBuff; // 定数バッファ
-	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
-	ComPtr<ID3D12Resource> constBuffB1; // 定数バッファ
-	// 色
-	XMFLOAT4 color = { 1,1,1,1 };
+	XMMATRIX GetmMatWorld() { return matWorld; }
+
+public:
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 	// X,Y,Z軸回りのローカル回転角
 	XMFLOAT3 rotation = { 0,0,0 };
 	// ローカル座標
 	XMFLOAT3 position = { 0,0,20 };
+private: // メンバ変数
+	//ComPtr<ID3D12Resource> constBuff; // 定数バッファ
+	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
+	ComPtr<ID3D12Resource> constBuffB1; // 定数バッファ
+	// 色
+	XMFLOAT4 color = { 1,1,1,1 };
+
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
 	// 親オブジェクト

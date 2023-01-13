@@ -29,7 +29,7 @@ public:
 
 private:
 	//ワールド変換データ
-	Object3d worldTransform_;
+	Object3d* worldTransform_;
 
 	//モデル
 	Model* model_ = nullptr;

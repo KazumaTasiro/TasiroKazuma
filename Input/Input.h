@@ -22,6 +22,8 @@ public://メンバー関数
 	bool PushKey(BYTE keyNunber);
 	//キーのトリガーをチェック
 	bool TriggerKey(BYTE keyNunber);
+
+
 private://メンバ変数
 	//キーボードのデバイス
 	IDirectInputDevice8* keyboard = nullptr;

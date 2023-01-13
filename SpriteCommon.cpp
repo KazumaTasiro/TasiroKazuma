@@ -312,44 +312,45 @@ void SpriteCommon::LoadTexture(uint32_t index, const std::string& fileName)
 		);
 		assert(SUCCEEDED(result));
 	}
-
 	// シェーダリソースビュー設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	/*D3D12_RESOURCE_DESC resDesc;*/
+	/*resDesc = texBuff[index]->GetDesc();*/
 	srvDesc.Format = resDesc.Format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = resDesc.MipLevels;
 
+	srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
 	srvHandle.ptr += (incrementSize * index);
 
 	// ハンドルの指す位置にシェーダーリソースビュー作成
 	dxcommon_->GetDevice()->CreateShaderResourceView(texBuff[index].Get(), &srvDesc, srvHandle);
-
 }
 
 void SpriteCommon::SetTextureCommands(uint32_t index)
 {
 
-	// パイプラインステートとルートシグネチャの設定コマンド
-	dxcommon_->GetCommandList()->SetPipelineState(pipelineState);
-	dxcommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature);
-
-
-	//プリミティブ形状の設定コマンド
-	dxcommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);//三角リスト
-
-
-
-
-
-	// SRVヒープの設定コマンド
-	dxcommon_->GetCommandList()->SetDescriptorHeaps(1, &srvHeap);
 	// SRVヒープの先頭ハンドルを取得（SRVを指しているはず）
 	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap->GetGPUDescriptorHandleForHeapStart();
 	// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
-
-	
-
 	srvGpuHandle.ptr += (incrementSize * index);
 	dxcommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
+}
+
+void SpriteCommon::SpritePreDraw()
+{
+	// パイプラインステートとルートシグネチャの設定コマンド
+	dxcommon_->GetCommandList()->SetPipelineState(pipelineState);
+	dxcommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature);
+	//プリミティブ形状の設定コマンド
+	dxcommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);//三角リスト
+	// SRVヒープの設定コマンド
+	dxcommon_->GetCommandList()->SetDescriptorHeaps(1, &srvHeap);
+
+}
+
+void SpriteCommon::SpritePostDraw()
+{
+
 }

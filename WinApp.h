@@ -6,6 +6,13 @@ public://静的メンバ関数
 	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 public:
+
+	/// <summary>
+	/// シングルトンインスタンスの取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
+	static WinApp* GetInstance();
+
 	void Initialize();
 
 	HWND GetHwnd()const { return hwnd; }

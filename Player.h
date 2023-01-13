@@ -19,8 +19,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Model* model, uint32_t textureHandle);
-	///<summary>
+	void Initialize(SpriteCommon* spriteCommon,Input* input);
 	///更新
 	///</summary>
 	void Update();
@@ -29,9 +28,11 @@ public:
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
-	XMFLOAT3 ConvertToVector3();
+	XMFLOAT3 ConvertToXMFLOAT3(const XMMATRIX &mat, XMFLOAT3 vec);
 
 	XMFLOAT3 GetWorldPosition();
+
+	XMFLOAT3 XMFLOAT3Normalize(XMFLOAT3& v);
 
 
 	///<summary>
@@ -56,17 +57,17 @@ public:
 
 	XMFLOAT3 clossV3V4(const XMFLOAT3& vec, const XMMATRIX& mat);
 
-	int MatrixInverse(XMMATRIX& pOut, XMMATRIX& pM);
+	/*int MatrixInverse(XMMATRIX& pOut, XMMATRIX& pM);*/
 	XMFLOAT3 AddVector(const XMFLOAT3 v1, const XMFLOAT3 v2);
 
 	void Reset();
 
 private:
 	//ワールド変換データ
-	Object3d worldTransform_;
+	Object3d* worldTransform_;
 
 	//3Dレティクル用ワールドトランスフォーム
-	Object3d worldTransform3DReticle_;
+	Object3d* worldTransform3DReticle_;
 
 	//モデル
 	Model* model_ = nullptr;
@@ -78,8 +79,8 @@ private:
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	//2Dレティクル用スプライト
-	std::unique_ptr<Sprite> sprite2DReticle_;
-
+	Sprite* sprite2DReticle_;
+	SpriteCommon* spriteCommon_ = nullptr;
 	//デスフラグ
 	bool isDead_ = false;
 

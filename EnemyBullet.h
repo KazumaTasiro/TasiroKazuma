@@ -14,7 +14,7 @@ public:
 	///初期化
 	///</summary>
 
-	void Initialize(Model* model, const XMFLOAT3& position, const XMFLOAT3& velocity);;
+	void Initialize( const XMFLOAT3& position, const XMFLOAT3& velocity);;
 
 
 
@@ -39,7 +39,7 @@ public:
 
 private:
 	//ワールド変換データ
-	Object3d worldTransform_;
+	Object3d* worldTransform_;
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル

@@ -16,92 +16,82 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 基盤システムの初期化
 
-	HRESULT result;
-	WinApp* winApp = nullptr;
-
-	//WindowsAPIの初期化
-	winApp = new WinApp();
-	winApp->Initialize();
-
-	//ポインタ
-	DirectXCommon* dxCommon = nullptr;
-	dxCommon = new DirectXCommon();
-	dxCommon->Initialize(winApp);
-
-	MSG msg{};//メッセージ
-
-	//Audio* audio = nullptr;
-	//audio = new Audio();
-	//audio->Initialize();
-	//
+	//ポインタ宣言
+	WinApp* winApp_ = nullptr;
+	winApp_ = new WinApp;
 
 
-	////SoundData soundData1 = SoundLoadWave("Resources/se_amd06.wav");
-	//audio->LoadWave("se_amd06.wav");
-	//audio->PlayWave("se_amd06.wav");
-	////SoundPlayWave(xAudio2.Get(), soundData1);
+	DirectXCommon* dxCommon_ = nullptr;
+	dxCommon_ = new DirectXCommon;
 
-	ImGuiManager* ImGuiMan = nullptr;
-	ImGuiMan = new ImGuiManager();
-	ImGuiMan->Initialize(winApp, dxCommon);
+	//winApp初期化
+	winApp_->Initialize();
 
-	//ポインタ
-	Input* input = nullptr;
+	MSG msg = {};
+	//DirectX初期化処理　ここから
+	dxCommon_->Initialize(winApp_);
 
-	//入力の初期化
-	input = new Input();
-	input->Initalize(winApp);
+	Input* input_ = nullptr;
+	input_ = new Input;
+	input_->Initalize(winApp_);
 
 	// 3Dオブジェクト静的初期化
-	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
+	Object3d::StaticInitialize(dxCommon_->GetDevice(), WinApp::window_width, WinApp::window_height);
 
 	SpriteCommon* spriteCommon = nullptr;
 	//スプライト共通部分の初期化
 	spriteCommon = new SpriteCommon;
-	spriteCommon->Initialize(dxCommon);
+	spriteCommon->Initialize(dxCommon_);
 
-	//OBJからモデルデータを読み込む
-	Model* model = Model::LoadFormOBJ("cube");
+	ImGuiManager* ImGuiMan = nullptr;
+	ImGuiMan = new ImGuiManager();
+	ImGuiMan->Initialize(winApp_, dxCommon_);
+	Audio* audio = nullptr;
+	audio = new Audio();
+	audio->Initialize();
 
-	Object3d* object3d = Object3d::Create();
-	object3d->SetModel(model);
-	object3d->SetRotetion({ 30,30,30 });
-
-	object3d->Update();
-#pragma endregion 基盤システムの初期化
-
-
-	//DIrectX初期化処理ここから
-#pragma region 最初のシーンの初期化
-
-	/*Sprite* sprite = new Sprite();
-	sprite->Initialize(spriteCommon);*/
-
-	spriteCommon->LoadTexture(0, "meemu.jpg");
-	spriteCommon->LoadTexture(1, "wakka.jpg");
-
-	Sprite* sprite2 = new Sprite();
-
-	sprite2->Initialize(spriteCommon, 1);
-	sprite2->SetTextureIndex(1);
-	sprite2->SetSize({ 100,100 });
-
-	XMFLOAT2 position = sprite2->GetPosition();
-	XMFLOAT2 posE = { 0,20 };
-
-	//object3d->SetEye({posE.x,posE.y,-50 });
-	//object3d->SetTarget({ posE.x,posE.y,0 });
-	position.x += 100;
-
-	position.y += 50;
-
-	sprite2->SetPozition(position);
-
-	XMFLOAT4 color = { 0,1,0,1 };
-
-	sprite2->SetColor(color);
-
-	sprite2->SetSize(XMFLOAT2{ 100.0f,50.0f });
+//	//OBJからモデルデータを読み込む
+//	Model* model = Model::LoadFormOBJ("cube");
+//
+//	Object3d* object3d = Object3d::Create();
+//	object3d->SetModel(model);
+//	object3d->SetRotetion({ 30,30,30 });
+//
+//	object3d->Update();
+//#pragma endregion 基盤システムの初期化
+//
+//
+//	//DIrectX初期化処理ここから
+//#pragma region 最初のシーンの初期化
+//
+//	/*Sprite* sprite = new Sprite();
+//	sprite->Initialize(spriteCommon);*/
+//
+//	spriteCommon->LoadTexture(0, "meemu.jpg");
+//	spriteCommon->LoadTexture(1, "wakka.jpg");
+//
+//	Sprite* sprite2 = new Sprite();
+//
+//	sprite2->Initialize(spriteCommon, 1);
+//	sprite2->SetTextureIndex(1);
+//	sprite2->SetSize({ 100,100 });
+//
+//	XMFLOAT2 position = sprite2->GetPosition();
+//	XMFLOAT2 posE = { 0,20 };
+//
+//	//object3d->SetEye({posE.x,posE.y,-50 });
+//	//object3d->SetTarget({ posE.x,posE.y,0 });
+//	position.x += 100;
+//
+//	position.y += 50;
+//
+//	sprite2->SetPozition(position);
+//
+//	XMFLOAT4 color = { 0,1,0,1 };
+//
+//	sprite2->SetColor(color);
+//
+//	sprite2->SetSize(XMFLOAT2{ 100.0f,50.0f });
 
 	/*sprite2->SetIsFlipY(true);*/
 
@@ -119,9 +109,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	GameScene* gameScene = nullptr;
-	// ゲームシーンの初期化
+	/* ゲームシーンの初期化*/
 	gameScene = new GameScene();
-	gameScene->Initialize();
+	gameScene->Initialize(dxCommon_,input_);
 	//ゲームループ
 	while (true) {
 #pragma region 基盤システムの更新
@@ -131,17 +121,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		fps->FpsControlBegin();
 
 		//Windowsのメッセージ処理
-		if (winApp->ProcessMessage()) {
+		if (winApp_->ProcessMessage()) {
 			//ゲームループを抜ける
 			break;
 		}
 
 		char buf[10] = {};
-		sprite2->SetPozition({ f[0],f[1] });
+		//sprite2->SetPozition({ f[0],f[1] });
 
 		//DirectX舞フレーム処理　ここから
-		input->Update();
-		object3d->Update();
+		input_->Update();
+		gameScene->Update();
+		//object3d->Update();
 
 		//ImGui::SetWindowSize({ 500,100 },0);
 
@@ -161,28 +152,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion 最初のシーンの更新
 
-		dxCommon->PreDraw();
+		dxCommon_->PreDraw();
 
 #pragma region 最初のシーンの描画
 		// 4.描画コマンドここまで
 
 		/*sprite->Draw();*/
-		sprite2->Draw();
+		//sprite2->Draw();
 
 #pragma endregion 最初のシーンの描画
 
-
+		gameScene->Draw();
 		/*dxCommon->ClearDepthBuffer();*/
 
-		Object3d::PreDraw(dxCommon->GetCommandList());
+		//Object3d::PreDraw(dxCommon->GetCommandList());
 
-		object3d->Draw();
+		//object3d->Draw();
 
-		Object3d::PostDraw();
+		//Object3d::PostDraw();
 
-		ImGuiMan->Draw();
+		//ImGuiMan->Draw();
 
-		dxCommon->PostDraw();
+		dxCommon_->PostDraw();
 		//// 5.リソースバリアを戻す
 
 				//FPS固定
@@ -194,7 +185,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion 最初のシーンの終了
 
-	//audio->Finalize();
+	audio->Finalize();
 	ImGuiMan->Finalize();
 
 #pragma region 基盤システムの終了
@@ -203,21 +194,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ImGuiの開放
 	delete ImGuiMan;
 	//入力開放
-	delete input;
-	//3Dオブジェクトの解放
-	delete object3d;
-	//3Dモデル開放
-	delete model;
+	delete input_;
+	////3Dオブジェクトの解放
+	//delete object3d;
+	////3Dモデル開放
+	//delete model;
 
 	//スプライトの開放
 	delete spriteCommon;
-	delete sprite2;
+	//delete sprite2;
 	//DirectX解放
-	delete dxCommon;
+	delete dxCommon_;
 	//WindowsAPIの終了処理
-	winApp->Finalize();
+	winApp_->Finalize();
 	//WindowsAPI解放
-	delete winApp;
+	delete winApp_;
 #pragma endregion 基盤システムの終了
 	return 0;
 }

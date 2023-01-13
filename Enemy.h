@@ -7,6 +7,7 @@
 #include <memory>
 #include <list>
 #include <EnemyBullet.h>
+#include <Player.h>
 
 
 
@@ -15,13 +16,13 @@
 ///</summary>
 
 class GameScene;
-class Player;
+//class Player;
 class Enemy {
 public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Model* model, uint32_t textureHandle, XMFLOAT3 EnemyPos);
+	void Initialize( XMFLOAT3 EnemyPos);
 	///<summary>
 	///更新
 	///</summary>
@@ -71,7 +72,7 @@ private:
 	GameScene* gameScene_ = nullptr;
 
 	//ワールド変換データ
-	Object3d worldTransform_;
+	Object3d* worldTransform_;
 	//モデル
 	Model* model_ = nullptr;
 	//モデル

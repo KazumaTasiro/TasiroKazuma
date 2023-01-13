@@ -64,8 +64,8 @@ void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int wind
 	//// テクスチャ読み込み
 	//LoadTexture("Resources/triangle_tex","");
 
-	// モデル生成
-	CreateModel();
+	//// モデル生成
+	//CreateModel();
 
 }
 
