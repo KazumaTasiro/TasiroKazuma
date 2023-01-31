@@ -64,90 +64,102 @@
     <Filter Include="ソース ファイル\PostEffect">
       <UniqueIdentifier>{b214702d-920a-4fc2-987c-76aeb9dabd8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameScene">
+      <UniqueIdentifier>{88ab049f-bcb6-44a1-b930-3c7a171d7920}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameScene">
+      <UniqueIdentifier>{f5bd4232-9323-4979-9fe5-6c02590e34d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\FPS">
+      <UniqueIdentifier>{88899035-39c6-4a30-ae15-8f044d89cba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\FPS">
+      <UniqueIdentifier>{dfa1efb7-08d6-436e-91e0-41d8000cb879}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Input\Input.cpp">
       <Filter>ソース ファイル\Input</Filter>
     </ClCompile>
-    <ClCompile Include="WinApp.cpp">
+    <ClCompile Include="2d\Sprite.cpp">
+      <Filter>ソース ファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="2d\SpriteCommon.cpp">
+      <Filter>ソース ファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="PostEffect\PostEffect.cpp">
+      <Filter>ソース ファイル\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Model.cpp">
+      <Filter>ソース ファイル\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Object3d.cpp">
+      <Filter>ソース ファイル\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="bace\WinApp.cpp">
       <Filter>ソース ファイル\WinApp</Filter>
     </ClCompile>
-    <ClCompile Include="DirectXCommon.cpp">
+    <ClCompile Include="bace\DirectXCommon.cpp">
       <Filter>ソース ファイル\DirectXCommon</Filter>
     </ClCompile>
-    <ClCompile Include="FPS.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteCommon.cpp">
-      <Filter>ソース ファイル\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>ソース ファイル\Sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="Object3d.cpp">
-      <Filter>ソース ファイル\Object3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>ソース ファイル\Object3d</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGuiManager.cpp">
+    <ClCompile Include="bace\ImGuiManager.cpp">
       <Filter>ソース ファイル\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
+    <ClCompile Include="Audio\Audio.cpp">
       <Filter>ソース ファイル\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="PostEffect.cpp">
-      <Filter>ソース ファイル\PostEffect</Filter>
+    <ClCompile Include="Scene\GameScene.cpp">
+      <Filter>ソース ファイル\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="bace\FPS.cpp">
+      <Filter>ソース ファイル\FPS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Triangle.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Input\Input.h">
       <Filter>ヘッダー ファイル\Input</Filter>
     </ClInclude>
-    <ClInclude Include="WinApp.h">
+    <ClInclude Include="2d\Sprite.h">
+      <Filter>ヘッダー ファイル\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\SpriteCommon.h">
+      <Filter>ヘッダー ファイル\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="PostEffect\PostEffect.h">
+      <Filter>ヘッダー ファイル\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Model.h">
+      <Filter>ヘッダー ファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Object3d.h">
+      <Filter>ヘッダー ファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="bace\WinApp.h">
       <Filter>ヘッダー ファイル\WinApp</Filter>
     </ClInclude>
-    <ClInclude Include="DirectXCommon.h">
-      <Filter>ヘッダー ファイル\DirectXCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="FPS.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ErrorException.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteCommon.h">
-      <Filter>ヘッダー ファイル\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>ヘッダー ファイル\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="Object3d.h">
-      <Filter>ヘッダー ファイル\Object3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>ヘッダー ファイル\Object3d</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiManager.h">
+    <ClInclude Include="bace\ImGuiManager.h">
       <Filter>ヘッダー ファイル\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
+    <ClInclude Include="bace\DirectXCommon.h">
+      <Filter>ヘッダー ファイル\DirectXCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Audio.h">
       <Filter>ヘッダー ファイル\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="PostEffect.h">
-      <Filter>ヘッダー ファイル\PostEffect</Filter>
+    <ClInclude Include="Scene\GameScene.h">
+      <Filter>ヘッダー ファイル\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="bace\ErrorException.h">
+      <Filter>ヘッダー ファイル\FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="bace\FPS.h">
+      <Filter>ヘッダー ファイル\FPS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

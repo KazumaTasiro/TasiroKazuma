@@ -8,7 +8,7 @@
 class PostEffect
 {
 private: // エイリアス
-// Microsoft::WRL::を省略
+	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -39,7 +39,7 @@ public: // サブクラス
 	static const int vertNum = 4;
 
 public:
-	
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -68,13 +68,17 @@ public:
 	/// <param name="cmdList"></param>
 	void PostDrawScene(ID3D12GraphicsCommandList* cmdList);
 
+	//画面クリアカラー
+	static const float clearColor[4];
+
+private:
+
 	/// <summary>
 	/// パイプライン生成
 	/// </summary>
 	void CreateGraphicsPipelineState(ID3D12Device* device);
 
-	//画面クリアカラー
-	static const float clearColor[4];
+
 
 private:
 	//メンバ変数
@@ -108,7 +112,7 @@ private:
 	// Z軸回りの回転角
 	float rotation = 0.0f;
 	// 座標
-	XMFLOAT2 position{};
+	XMFLOAT2 position{ 0.0f,0.0f };
 	// 色
 	XMFLOAT4 color = { 1, 1, 1, 1 };
 
