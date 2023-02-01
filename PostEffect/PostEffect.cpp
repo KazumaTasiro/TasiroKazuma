@@ -11,7 +11,7 @@ using namespace DirectX;
 using namespace Microsoft::WRL;
 
 //静的メンバ変数の実体
-const float PostEffect::clearColor[4] = { 0.1f,0.6f,0.1f,1.0f };//RGBA
+const float PostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };//RGBA
 
 PostEffect::PostEffect()
 {
@@ -36,10 +36,10 @@ void PostEffect::Initialize(ID3D12Device* device){
 
 	//頂点データ
 	VertexPosUv vertices[vertNum] = {
-		{{-0.5f,-0.5f,0.0f},{0.0f,1.0f}},//左下
-		{{-0.5f,+0.5f,0.0f},{0.0f,0.0f}},//左上
-		{{+0.5f,-0.5f,0.0f},{1.0f,1.0f}},//右下
-		{{+0.5f,+0.5f,0.0f},{1.0f,0.0f}},//右上
+		{{-1.0f,-1.0f,0.0f},{0.0f,1.0f}},//左下
+		{{-1.0f,+1.0f,0.0f},{0.0f,0.0f}},//左上
+		{{+1.0f,-1.0f,0.0f},{1.0f,1.0f}},//右下
+		{{+1.0f,+1.0f,0.0f},{1.0f,0.0f}},//右上
 	};
 
 	// 頂点バッファへのデータ転送
@@ -101,7 +101,7 @@ void PostEffect::Initialize(ID3D12Device* device){
 		const UINT depthPitch = rowPitch * WinApp::window_height;
 		//画像イメージ
 		UINT* img = new UINT[pixelCount];
-		for (int i = 0; i < pixelCount; i++) { img[i] = 0xff0000ff; }
+		for (int i = 0; i < pixelCount; i++) { img[i] = 0x00000000; }
 
 		//テクスチャバッファにデータ転送
 		result = texBuff->WriteToSubresource(0, nullptr,

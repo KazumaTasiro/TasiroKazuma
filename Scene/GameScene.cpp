@@ -73,9 +73,7 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon, Input* input_)
 	sprite3->SetColor({ 1,1,1,1 });
 	/*sprite2->SetIsFlipY(true);*/
 
-	posteffect = new PostEffect();
 
-	posteffect->Initialize(dxCommon_->GetDevice());
 
 	object3d->SetPosition({ 0,0,20 });
 }
@@ -118,35 +116,69 @@ void GameScene::Draw()
 	switch (phase_)
 	{
 	case GameScene::Phase::TITLE:
-		spriteCommon->PreDraw();
+		//spriteCommon->PreDraw();
 
-		sprite->Draw();
-		sprite2->Draw();
-		sprite3->Draw();
+		//sprite->Draw();
+		//sprite2->Draw();
+		//sprite3->Draw();
 
-		/*ImGuiMan->Draw();*/
-
-		posteffect->PostDrawScene(dxCommon_->GetCommandList());
-
-		posteffect->Draw(dxCommon_->GetCommandList());
-
-		posteffect->PreDrawScene(dxCommon_->GetCommandList());
+	
 
 		/*dxCommon->ClearDepthBuffer();*/
 
+		
 		Object3d::PreDraw(dxCommon_->GetCommandList());
 
 		object3d->Draw();
 
 		Object3d::PostDraw();
 
+		/*ImGuiMan->Draw();*/
+
+		
+
+		
+
+		break;
+	case GameScene::Phase::GAME:
+
+		
+
+		
+		break;
+	}
+	
+}
+
+void GameScene::Draw2()
+{
+	switch (phase_)
+	{
+	case GameScene::Phase::TITLE:
+		spriteCommon->PreDraw();
+
+		sprite->Draw();
+		sprite2->Draw();
+		sprite3->Draw();
+
+
+
+		/*dxCommon->ClearDepthBuffer();*/
+
+		/*ImGuiMan->Draw();*/
+
+
+
+
+
 		break;
 	case GameScene::Phase::GAME:
 
 
+
+
 		break;
 	}
-	
 }
 
 void GameScene::Finalize()

@@ -5,8 +5,8 @@ SamplerState smp : register(s0);      // 0番スロットに設定されたサ�
 
 float4 main(VSOutput input) : SV_TARGET
 {
-	float uPixel = 3.0f / 1280.0f;
-	float vPixel = 3.0f / 720.0f;
+	float uPixel = 1.5f / 1280.0f;
+	float vPixel = 1.5f / 720.0f;
 
 	float4 texcolor = { 0,0,0,0 };
 
@@ -36,8 +36,7 @@ float4 main(VSOutput input) : SV_TARGET
 	}
 	/*float4 texcolor = tex.Sample(smp,input.uv);*/
 
-	return float4(texcolor.rgb / (200 * 9), 1);
-	;
+	return float4(texcolor.rgb / (200 * 9), texcolor.a);
 	/*return float4(texcolor.rgb,1);*/
 	//float4 color = float4(0.0f, 0.0f, 0.0f, 1.0f);
 

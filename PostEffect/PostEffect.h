@@ -114,7 +114,7 @@ private:
 	// 座標
 	XMFLOAT2 position{ 0.0f,0.0f };
 	// 色
-	XMFLOAT4 color = { 1, 1, 1, 1 };
+	XMFLOAT4 color = { 1, 1, 1, 0 };
 
 	// テクスチャの最大枚数
 	const int srvCount = 512;

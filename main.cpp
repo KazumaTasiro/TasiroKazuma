@@ -3,6 +3,7 @@
 #include "DirectXCommon.h"
 #include "FPS.h"
 #include "GameScene.h"
+#include "PostEffect.h"
 
 
 
@@ -32,7 +33,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	input = new Input();
 	input->Initalize(winApp);
 
+	PostEffect* posteffect = nullptr;
 
+	posteffect = new PostEffect();
+
+	posteffect->Initialize(dxCommon->GetDevice());
 	
 	// 3Dオブジェクト静的初期化
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
@@ -87,20 +92,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion 最初のシーンの更新
 
+		
+		//posteffect->Draw(dxCommon_->GetCommandList());
+		/*posteffect->Draw(dxCommon_->GetCommandList());*/
+		posteffect->PreDrawScene(dxCommon->GetCommandList());
+
+
+		gameScene->Draw();
+
+		posteffect->PostDrawScene(dxCommon->GetCommandList());
+
 		dxCommon->PreDraw();
 
 #pragma region 最初のシーンの描画
 		// 4.描画コマンドここまで
 #pragma endregion 最初のシーンの描画
 		
-		gameScene->Draw();
+		
 
 	/*	ImGuiMan->Draw();*/
 		
 		
-
+		posteffect->Draw(dxCommon->GetCommandList());
 	
-
+		gameScene->Draw2();
 		
 
 		dxCommon->PostDraw();

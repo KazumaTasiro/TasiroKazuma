@@ -39,6 +39,8 @@ public:
 	/// </summary>
 	void Draw();
 
+	void Draw2();
+
 	/// <summary>
 	/// ‰ğ•úˆ—
 	/// </summary>
@@ -74,7 +76,7 @@ private:
 	Sprite* sprite3 = nullptr;
 	Object3d* object3d =nullptr;
 
-	PostEffect* posteffect = nullptr;
+	
 	
 	float f[2] = { 100,100 };
 
