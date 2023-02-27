@@ -50,9 +50,9 @@ public:
 
 	XMFLOAT4 GetColor() { return color; }
 
-	void SetScale(const XMFLOAT3& scale_) { scale = scale_; }
+	//void SetScale(const XMFLOAT3& scale_) { scale = scale_; }
 
-	XMFLOAT3 GetScale() { return scale; }
+	//XMFLOAT3 GetScale() { return scale; }
 
 	void SetAnchorPoint(const XMFLOAT2& anchorPoint_) { anchorPoint = anchorPoint_; }
 
@@ -109,7 +109,6 @@ private:
 
 	//ç¿ïW
 
-	XMFLOAT3 scale{ 0.5f, 0.5f, 1.0f };
 
 	XMFLOAT2 size_ = { 100.0f,100.0f };
 

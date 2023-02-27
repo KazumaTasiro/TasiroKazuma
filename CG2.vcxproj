@@ -152,6 +152,7 @@
     <ClCompile Include="bace\FPS.cpp" />
     <ClCompile Include="bace\ImGuiManager.cpp" />
     <ClCompile Include="bace\WinApp.cpp" />
+    <ClCompile Include="Depth\Depth.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PostEffect\PostEffect.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="bace\FPS.h" />
     <ClInclude Include="bace\ImGuiManager.h" />
     <ClInclude Include="bace\WinApp.h" />
+    <ClInclude Include="Depth\Depth.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="PostEffect\PostEffect.h" />

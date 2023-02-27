@@ -76,6 +76,12 @@
     <Filter Include="ヘッダー ファイル\FPS">
       <UniqueIdentifier>{dfa1efb7-08d6-436e-91e0-41d8000cb879}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Depth">
+      <UniqueIdentifier>{457d91c9-0996-4aab-9e76-8f260f7cc1ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Depth">
+      <UniqueIdentifier>{0832bca6-5307-455a-a8da-447150e2117f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -116,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="bace\FPS.cpp">
       <Filter>ソース ファイル\FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="Depth\Depth.cpp">
+      <Filter>ソース ファイル\Depth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="bace\FPS.h">
       <Filter>ヘッダー ファイル\FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="Depth\Depth.h">
+      <Filter>ヘッダー ファイル\Depth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

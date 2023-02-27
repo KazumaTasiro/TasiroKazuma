@@ -80,7 +80,7 @@ void PostEffect::Initialize(ID3D12Device* device){
 	CD3DX12_HEAP_PROPERTIES heapProp(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
 		D3D12_MEMORY_POOL_L0);
 
-	CD3DX12_CLEAR_VALUE cleVal(DXGI_FORMAT_R8G8B8A8_UNORM, clearColor);
+	CD3DX12_CLEAR_VALUE cleVal(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 
 	//テクスチャバッファの生成
 	result = device->CreateCommittedResource(
@@ -139,9 +139,14 @@ void PostEffect::Initialize(ID3D12Device* device){
 	//RTV用デスクリプタヒープを生成
 	result = device->CreateDescriptorHeap(&rtvDescHeapDesc, IID_PPV_ARGS(&descHeapRTV));
 	assert(SUCCEEDED(result));
+
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	// シェーダーの計算結果をSRGBに変換して書き込む
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 	//デスクリプタヒープにRTV作成
 	device->CreateRenderTargetView(texBuff.Get(),
-		nullptr,
+		&rtvDesc,
 		descHeapRTV->GetCPUDescriptorHandleForHeapStart()
 	);
 
@@ -226,7 +231,7 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList){
 	cmdList->SetGraphicsRootConstantBufferView(0, this->constBuff->GetGPUVirtualAddress());
 	// シェーダリソースビューをセット
 	//cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), this->texNumber, descriptorHandleIncrementSize));
-	cmdList->SetGraphicsRootDescriptorTable(1, descHeap->GetGPUDescriptorHandleForHeapStart());
+	cmdList->SetGraphicsRootDescriptorTable(1, descHeapSRV->GetGPUDescriptorHandleForHeapStart());
 	// 描画コマンド
 	cmdList->DrawInstanced(4, 1, 0, 0);
 
@@ -387,7 +392,7 @@ void PostEffect::CreateGraphicsPipelineState(ID3D12Device* device)
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
 	gpipeline.NumRenderTargets = 1;	// 描画対象は1つ
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
+	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
