@@ -27,7 +27,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WinApp* winApp,DirectXCommon* dxcomon, Input* input_);
+	void Initialize(DirectXCommon* dxcomon, Input* input_);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -38,19 +38,10 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
-
-	void Draw2();
-
 	/// <summary>
 	/// 解放処理
 	/// </summary>
 	void Finalize();
-
-	//ゲームフェーズ
-	enum class Phase {
-		TITLE,//タイトル
-		GAME,//本編
-	};
 
 private:
 	Input* input = nullptr;
@@ -69,18 +60,4 @@ private:
 
 	//OBJからモデルデータを読み込む
 	Model* model = nullptr;
-
-	
-	Sprite* sprite = nullptr;
-	Sprite* sprite2 = nullptr;
-	Sprite* sprite3 = nullptr;
-	Object3d* object3d =nullptr;
-
-	
-	
-	float f[2] = { 100,100 };
-
-	//フェーズ
-	Phase phase_ = Phase::TITLE;
-
 };

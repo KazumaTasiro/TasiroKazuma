@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
 
 	GameScene* gameScene = new GameScene();
-	gameScene->Initialize(winApp, dxCommon, input);
+	gameScene->Initialize( dxCommon, input);
 	
 #pragma endregion 基盤システムの初期化
 
@@ -95,12 +95,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 		//posteffect->Draw(dxCommon_->GetCommandList());
 		/*posteffect->Draw(dxCommon_->GetCommandList());*/
-		posteffect->PreDrawScene(dxCommon->GetCommandList());
+		//posteffect->PreDrawScene(dxCommon->GetCommandList());
 
 
-		gameScene->Draw();
+		//
 
-		posteffect->PostDrawScene(dxCommon->GetCommandList());
+		//posteffect->PostDrawScene(dxCommon->GetCommandList());
 
 		dxCommon->PreDraw();
 
@@ -111,12 +111,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 
 	/*	ImGuiMan->Draw();*/
+		gameScene->Draw();
 		
-		
-		posteffect->Draw(dxCommon->GetCommandList());
-	
-		gameScene->Draw2();
-		
+		//posteffect->Draw(dxCommon->GetCommandList());
+		//
 
 		dxCommon->PostDraw();
 		//// 5.リソースバリアを戻す
@@ -134,7 +132,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//入力開放
 	delete input;
-	
+	delete gameScene;
 	//DirectX解放
 	delete dxCommon;
 	//WindowsAPIの終了処理

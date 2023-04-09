@@ -155,6 +155,13 @@
     <ClCompile Include="Depth\Depth.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MATH\Affin.cpp" />
+    <ClCompile Include="MATH\ConvertXM.cpp" />
+    <ClCompile Include="MATH\Matrix4.cpp" />
+    <ClCompile Include="MATH\Quaternion.cpp" />
+    <ClCompile Include="MATH\Vector2.cpp" />
+    <ClCompile Include="MATH\Vector3.cpp" />
+    <ClCompile Include="MATH\Vector4.cpp" />
     <ClCompile Include="PostEffect\PostEffect.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
   </ItemGroup>
@@ -179,7 +186,13 @@
     <ClInclude Include="bace\WinApp.h" />
     <ClInclude Include="Depth\Depth.h" />
     <ClInclude Include="Input\Input.h" />
-    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MATH\Affin.h" />
+    <ClInclude Include="MATH\ConvertXM.h" />
+    <ClInclude Include="MATH\Matrix4.h" />
+    <ClInclude Include="MATH\Quaternion.h" />
+    <ClInclude Include="MATH\Vector2.h" />
+    <ClInclude Include="MATH\Vector3.h" />
+    <ClInclude Include="MATH\Vector4.h" />
     <ClInclude Include="PostEffect\PostEffect.h" />
     <ClInclude Include="Scene\GameScene.h" />
   </ItemGroup>
