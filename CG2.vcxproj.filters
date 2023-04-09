@@ -88,9 +88,6 @@
     <Filter Include="ソース ファイル\RailCamera">
       <UniqueIdentifier>{fcd0de83-ad39-4ee2-a58d-8a3c631697d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\NewFilter1">
-      <UniqueIdentifier>{acdfe970-2830-4aa6-956e-2a6ad5a489d4}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
