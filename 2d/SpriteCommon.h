@@ -4,6 +4,12 @@
 #include <array>
 #include <string>
 
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix4.h"
+#include "Affin.h"
+
 using namespace DirectX;
 
 
@@ -21,7 +27,7 @@ public:
 	};
 	//定数バッファ用構造体（３D変換行列）
 	struct ConstBufferDataTransform {
-		XMMATRIX mat;	//3D変換行列
+		Matrix4 mat;	//3D変換行列
 	};
 public:
 	//初期化

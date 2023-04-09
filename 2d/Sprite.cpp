@@ -72,7 +72,7 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 	}
 
 	//並行投影行列の計算
-	constMapTransform->mat = XMMatrixIdentity();
+	constMapTransform->mat = Affin::matUnit();
 
 	// ヒープ設定
 	D3D12_HEAP_PROPERTIES cbHeapProp{};
@@ -88,10 +88,10 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 	cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
 	// 射影行列計算
-	matProjection = XMMatrixOrthographicOffCenterLH(
+	matProjection.MakeOrthogonalL(
 		0.0f, (float)WinApp::window_width,
 		(float)WinApp::window_height, 0.0f,
-		0.0f, 1.0f);
+		0.0f, 1.0f, matProjection);
 
 	// 定数バッファの生成
 	result = spritecomon->GetDxCommon()->GetDevice()->CreateCommittedResource(
@@ -109,7 +109,7 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 	assert(SUCCEEDED(result));
 
 	//// 値を書き込むと自動的に転送される
-	//constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
+	//constMapMaterial->color = Vector4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
 
 	//テクスチャサイズをイメージに合わせる
 	if (texturerIndex != UINT32_MAX) {
@@ -123,12 +123,11 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 
 void Sprite::Draw()
 {
-	matRot = XMMatrixIdentity();
-	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation));//Z軸周りに0度回転してから
-	matTrans = XMMatrixTranslation(position.x, position.y, 0.0f);//(-50,0,0)平行移動
+	matRot = Affin::matUnit();
+	matRot *= Affin::matRotateZ(XMConvertToRadians(rotation));//Z軸周りに0度回転してから
+	matTrans = Affin::matTrans(position.x, position.y, 0.0f);//(-50,0,0)平行移動
 
-	matWorld = XMMatrixIdentity();//変形をリセット
-	//matWorld *= matScale;//ワールド行列にスケーリングを反映
+	matWorld = Affin::matUnit();//変形をリセット
 	matWorld *= matRot;//ワールド行列にスケーリングを反映
 	matWorld *= matTrans;
 
@@ -223,7 +222,7 @@ void Sprite::Update()
 
 }
 
-void Sprite::SetPozition(const XMFLOAT2& position_)
+void Sprite::SetPozition(const Vector2& position_)
 {
 	position = position_;
 	Update();
@@ -235,7 +234,7 @@ void Sprite::SetRotation(float rotation_)
 	Update();
 }
 
-void Sprite::SetSize(XMFLOAT2 size)
+void Sprite::SetSize(Vector2 size)
 {
 	size_ = size;
 	Update();
