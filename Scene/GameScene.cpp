@@ -6,8 +6,9 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+
 }
-void GameScene::Initialize(DirectXCommon* dxcomon, Input* input_)
+void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon, Input* input_)
 {
 	assert(dxcomon);
 	assert(input_);
@@ -74,4 +75,5 @@ void GameScene::Finalize()
 
 	//スプライトの開放
 	delete spriteCommon;
+
 }

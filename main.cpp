@@ -4,6 +4,8 @@
 #include "FPS.h"
 #include "GameScene.h"
 #include "PostEffect.h"
+//#include "fbxsdk.h"
+
 
 
 
@@ -11,6 +13,8 @@
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 基盤システムの初期化
+	//FbxManager* fbxManager = FbxManager::Create();
+
 	WinApp* winApp = nullptr;
 
 	//WindowsAPIの初期化
@@ -43,7 +47,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
 
 	GameScene* gameScene = new GameScene();
-	gameScene->Initialize( dxCommon, input);
+	gameScene->Initialize(winApp, dxCommon, input);
 	
 #pragma endregion 基盤システムの初期化
 
@@ -95,12 +99,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 		//posteffect->Draw(dxCommon_->GetCommandList());
 		/*posteffect->Draw(dxCommon_->GetCommandList());*/
-		//posteffect->PreDrawScene(dxCommon->GetCommandList());
+		posteffect->PreDrawScene(dxCommon->GetCommandList());
 
+		gameScene->Draw();
+		
 
-		//
-
-		//posteffect->PostDrawScene(dxCommon->GetCommandList());
+		posteffect->PostDrawScene(dxCommon->GetCommandList());
 
 		dxCommon->PreDraw();
 
@@ -111,10 +115,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 
 	/*	ImGuiMan->Draw();*/
-		gameScene->Draw();
 		
-		//posteffect->Draw(dxCommon->GetCommandList());
-		//
+		
+		posteffect->Draw(dxCommon->GetCommandList());
+		
 
 		dxCommon->PostDraw();
 		//// 5.リソースバリアを戻す
@@ -133,6 +137,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//入力開放
 	delete input;
 	delete gameScene;
+	delete posteffect;
+	delete fps;
+	
 	//DirectX解放
 	delete dxCommon;
 	//WindowsAPIの終了処理

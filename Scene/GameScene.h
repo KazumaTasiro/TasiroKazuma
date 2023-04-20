@@ -27,7 +27,7 @@ public:
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
-	void Initialize(DirectXCommon* dxcomon, Input* input_);
+	void Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_);
 
 	/// <summary>
 	/// –ˆƒtƒŒ[ƒ€ˆ—
