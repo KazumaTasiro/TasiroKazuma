@@ -88,6 +88,12 @@
     <Filter Include="ヘッダー ファイル\Math">
       <UniqueIdentifier>{af974ed8-d028-4472-8f74-e9b2c546db2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\FBX">
+      <UniqueIdentifier>{e9fabe1c-058c-4a79-a8da-c6f479fd4938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\FBX">
+      <UniqueIdentifier>{0ff11e97-86f3-44f8-9f75-50ee3e64477e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -153,6 +159,9 @@
     <ClCompile Include="MATH\Vector4.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
+    <ClCompile Include="3d\FbxLoader.cpp">
+      <Filter>ソース ファイル\FBX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\Input.h">
@@ -217,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="MATH\Vector4.h">
       <Filter>ヘッダー ファイル\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FbxLoader.h">
+      <Filter>ヘッダー ファイル\FBX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

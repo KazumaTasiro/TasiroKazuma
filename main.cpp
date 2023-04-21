@@ -4,6 +4,7 @@
 #include "FPS.h"
 #include "GameScene.h"
 #include "PostEffect.h"
+#include "FbxLoader.h"
 //#include "fbxsdk.h"
 
 
@@ -14,6 +15,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region Šî”ÕƒVƒXƒeƒ€‚Ì‰Šú‰»
 	//FbxManager* fbxManager = FbxManager::Create();
+	FbxLoader::GetInstance()->
 
 	WinApp* winApp = nullptr;
 
