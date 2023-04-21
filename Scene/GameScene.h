@@ -10,6 +10,7 @@
 #include "WinApp.h"
 #include "ImGuiManager.h"
 #include <imgui.h>
+#include "FbxLoader.h"
 
 
 class GameScene {

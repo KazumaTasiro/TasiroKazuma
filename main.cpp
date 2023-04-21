@@ -15,7 +15,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region 基盤システムの初期化
 	//FbxManager* fbxManager = FbxManager::Create();
-	FbxLoader::GetInstance()->
+
 
 	WinApp* winApp = nullptr;
 
@@ -30,7 +30,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	MSG msg{};//メッセージ
 
-
+	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	//ポインタ
 	Input* input = nullptr;
@@ -134,6 +134,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion 最初のシーンの終了
 	gameScene->Finalize();
+	FbxLoader::GetInstance()->Finalize();
 #pragma region 基盤システムの終了
 
 	//入力開放

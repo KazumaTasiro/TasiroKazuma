@@ -30,6 +30,9 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon, Input* input_)
 	spriteCommon = new SpriteCommon;
 	spriteCommon->Initialize(dxCommon_);
 
+	//モデル名を指定してファイルに読み込み
+	FbxLoader::GetInstance()->LoadModelFromFile("cube");
+
 }
 void GameScene::Update()
 {
