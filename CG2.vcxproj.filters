@@ -162,6 +162,9 @@
     <ClCompile Include="3d\FbxLoader.cpp">
       <Filter>ソース ファイル\FBX</Filter>
     </ClCompile>
+    <ClCompile Include="3d\FbxModel.cpp">
+      <Filter>ソース ファイル\FBX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\Input.h">
@@ -228,6 +231,9 @@
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
     <ClInclude Include="3d\FbxLoader.h">
+      <Filter>ヘッダー ファイル\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FbxModel.h">
       <Filter>ヘッダー ファイル\FBX</Filter>
     </ClInclude>
   </ItemGroup>

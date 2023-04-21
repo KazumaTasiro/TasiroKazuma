@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "fbxsdk.h"
+#include "FbxModel.h"
 
 #include <d3d12.h>
 #include <d3dx12.h>
@@ -54,4 +55,12 @@ private:
 	FbxLoader(const FbxLoader& obj) = delete;
 	// コピー代入演算子を禁止（シングルトンパターン）
 	void operator=(const FbxLoader& obj) = delete;
+
+	/// <summary>
+	/// 再帰的にノード構成を解析
+	/// </summary>
+	/// <param name="model">読み込み先モデルオブジェクト</param>
+	/// <param name="fbxNode">解析対象のノード</param>
+	/// <param name="parent">親ノード</param>
+	void ParseNodeRecursive(FbxModel* model, FbxNode* fbxNode, Node* parent = nullptr);
 };
