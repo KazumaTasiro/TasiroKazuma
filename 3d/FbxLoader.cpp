@@ -15,6 +15,15 @@ FbxLoader* FbxLoader::GetInstance()
     return &instance;
 }
 
+void FbxLoader::ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxAMatrix& src)
+{
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            dst->r[i].m128_f32[j] = (float)src.Get(i, j);
+        }
+    }
+}
+
 void FbxLoader::Initialize(ID3D12Device* device)
 {
     // 再初期化チェック
@@ -41,104 +50,199 @@ void FbxLoader::Finalize()
     fbxManager->Destroy();
 }
 
-void FbxLoader::LoadModelFromFile(const string& modelName)
+FbxModel* FbxLoader::LoadModelFromFile(const string& modelName)
 {
- //モデルと同じ名前のフォルダから読み込む
+    // モデルと同じ名前のフォルダから読み込む
     const string directoryPath = baseDirectory + modelName + "/";
-    //拡張子.fbxを付加
+    // 拡張子.fbxを付加
     const string fileName = modelName + ".fbx";
-    //連結してフルパスを得る
+    // 連結してフルパスを得る
     const string fullpath = directoryPath + fileName;
 
-    //ファイル名を指定してFBXファイルを読み込む
+    // ファイル名を指定してFBXファイルを読み込む
     if (!fbxImporter->Initialize(fullpath.c_str(), -1, fbxManager->GetIOSettings())) {
         assert(0);
     }
+
     // シーン生成
     FbxScene* fbxScene = FbxScene::Create(fbxManager, "fbxScene");
 
     // ファイルからロードしたFBXの情報をシーンにインポート
     fbxImporter->Import(fbxScene);
 
-    //モデル生成
-    FbxModel* fbxModel = new FbxModel();
-    fbxModel->name = modelName;
-
-    //FBXノードの数を取得
+    // モデル生成
+    FbxModel* model = new FbxModel();
+    model->name = modelName;
+    // FBXノードの数を取得
     int nodeCount = fbxScene->GetNodeCount();
-    //あらかじめ必要数分のメモリを確保することで、アドレスがずれるのを予防
-    fbxModel->nodes.reserve(nodeCount);
-
-    //ルートノードから順に解析してモデルに流し込む
-    ParseNodeRecursive(fbxModel, fbxScene->GetRootNode());
-    //FBXシーンの解放
-    fbxScene->Destroy();
-
+    // あらかじめ必要数分のメモリを確保することで、アドレスがずれるのを予防
+    model->nodes.reserve(nodeCount);
+    // ルートノードから順に解析してモデルに流し込む
+    ParseNodeRecursive(model, fbxScene->GetRootNode());
+    // FBXシーン解放
+    model->fbxScene = fbxScene;
     // バッファ生成
-    fbxModel->CreateBuffers(device);
+    model->CreateBuffers(device);
 
+    return model;
+
+}
+
+void FbxLoader::ParseSkin(FbxModel* model, FbxMesh* fbxMesh)
+{
+    FbxSkin* fbxSkin = static_cast<FbxSkin*>(fbxMesh->GetDeformer(0, FbxDeformer::eSkin));
+
+    if (fbxSkin == nullptr) {
+
+        //各頂点について処理
+        for (int i = 0; i < model->vertices.size(); i++) {
+            //最初のボーン(単位行列)の影響を100%にする
+            model->vertices[i].boneIndex[0] = 0;
+            model->vertices[i].boneWeight[0] = 1.0f;
+        }
+
+        return;
+    }
+
+    std::vector<FbxModel::Bone>& bones = model->bones;
+
+    int clusterCount = fbxSkin->GetClusterCount();
+    bones.reserve(clusterCount);
+
+    for (int i = 0; i < clusterCount; i++) {
+
+        FbxCluster* fbxCluster = fbxSkin->GetCluster(i);
+
+        const char* boneName = fbxCluster->GetLink()->GetName();
+
+        bones.emplace_back(FbxModel::Bone(boneName));
+        FbxModel::Bone& bone = bones.back();
+
+        bone.fbxCluster = fbxCluster;
+
+        FbxAMatrix fbxMat;
+        fbxCluster->GetTransformLinkMatrix(fbxMat);
+
+        XMMATRIX initialPose;
+        ConvertMatrixFromFbx(&initialPose, fbxMat);
+
+        bone.invInitialPose = XMMatrixInverse(nullptr, initialPose);
+
+    }
+
+    struct WeightSet {
+        UINT index;
+        float weight;
+    };
+
+    std::vector<std::list<WeightSet>> weightLists(model->vertices.size());
+
+    for (int i = 0; i < clusterCount; i++) {
+
+        FbxCluster* fbxCluster = fbxSkin->GetCluster(i);
+
+        int controlPointIndicesCount = fbxCluster->GetControlPointIndicesCount();
+
+        int* controlPointIndices = fbxCluster->GetControlPointIndices();
+        double* controlPointWeights = fbxCluster->GetControlPointWeights();
+
+        for (int j = 0; j < controlPointIndicesCount; j++) {
+            int vertIndex = controlPointIndices[j];
+
+            float weight = (float)controlPointWeights[j];
+
+            weightLists[vertIndex].emplace_back(WeightSet{ (UINT)i,weight });
+        }
+    }
+
+    auto& vertices = model->vertices;
+
+    for (int i = 0; i < vertices.size(); i++) {
+
+        auto& weightList = weightLists[i];
+
+        weightList.sort([](auto const& lhs, auto const& rhs) {
+
+            return lhs.weight > rhs.weight;
+            });
+
+        int weightArrayIndex = 0;
+
+        for (auto& weightSet : weightList) {
+
+            vertices[i].boneIndex[weightArrayIndex] = weightSet.index;
+            vertices[i].boneWeight[weightArrayIndex] = weightSet.weight;
+
+            if (++weightArrayIndex >= FbxModel::MAX_BONE_INDICES) {
+                float weight = 0.0f;
+
+                for (int j = 1; j < FbxModel::MAX_BONE_INDICES; j++) {
+                    weight += vertices[i].boneWeight[j];
+                }
+                vertices[i].boneWeight[0] = 1.0f - weight;
+                break;
+            }
+
+        }
+
+    }
 }
 
 void FbxLoader::ParseNodeRecursive(FbxModel* model, FbxNode* fbxNode, Node* parent)
 {
     //// ノード名を取得
-   string name = fbxNode->GetName();
-   // モデルにノードを追加
-   model->nodes.emplace_back();
-   Node& node = model->nodes.back();
-   // ノード名を取得
-   node.name = fbxNode->GetName();
+    //string name = fbxNode->GetName();
+    // モデルにノードを追加
+    model->nodes.emplace_back();
+    Node& node = model->nodes.back();
+    // ノード名を取得
+    node.name = fbxNode->GetName();
 
-   // FBXノードのローカル移動情報
-   FbxDouble3 rotation = fbxNode->LclRotation.Get();
-   FbxDouble3 scaling = fbxNode->LclScaling.Get();
-   FbxDouble3 translation = fbxNode->LclTranslation.Get();
+    // FBXノードのローカル移動情報
+    FbxDouble3 rotation = fbxNode->LclRotation.Get();
+    FbxDouble3 scaling = fbxNode->LclScaling.Get();
+    FbxDouble3 translation = fbxNode->LclTranslation.Get();
 
-   // 形式変換して代入
-   node.rotation = { (float)rotation[0], (float)rotation[1], (float)rotation[2], 0.0f };
-   node.scaling = { (float)scaling[0], (float)scaling[1], (float)scaling[2], 0.0f };
-   node.translation = { (float)translation[0], (float)translation[1], (float)translation[2], 1.0f };
+    // 形式変換して代入
+    node.rotation = { (float)rotation[0], (float)rotation[1], (float)rotation[2], 0.0f };
+    node.scaling = { (float)scaling[0], (float)scaling[1], (float)scaling[2], 0.0f };
+    node.translation = { (float)translation[0], (float)translation[1], (float)translation[2], 1.0f };
 
-   //回転角をDegree（度）からラジアンに変換
-   node.rotation.m128_f32[0] = XMConvertToRadians(node.rotation.m128_f32[0]);
-   node.rotation.m128_f32[1] = XMConvertToRadians(node.rotation.m128_f32[1]);
-   node.rotation.m128_f32[2] = XMConvertToRadians(node.rotation.m128_f32[2]);
+    // スケール、回転、平行移動行列の計算
+    XMMATRIX matScaling, matRotation, matTranslation;
+    matScaling = XMMatrixScalingFromVector(node.scaling);
+    matRotation = XMMatrixRotationRollPitchYawFromVector(node.rotation);
+    matTranslation = XMMatrixTranslationFromVector(node.translation);
 
-   // スケール、回転、平行移動行列の計算
-   XMMATRIX matScaling, matRotation, matTranslation;
-   matScaling = XMMatrixScalingFromVector(node.scaling);
-   matRotation = XMMatrixRotationRollPitchYawFromVector(node.rotation);
-   matTranslation = XMMatrixTranslationFromVector(node.translation);
+    // ローカル変形行列の計算
+    node.transform = XMMatrixIdentity();
+    node.transform *= matScaling; // ワールド行列にスケーリングを反映
+    node.transform *= matRotation; // ワールド行列に回転を反映
+    node.transform *= matTranslation; // ワールド行列に平行移動を反映
 
-   // ローカル変形行列の計算
-   node.transform = XMMatrixIdentity();
-   node.transform *= matScaling; // ワールド行列にスケーリングを反映
-   node.transform *= matRotation; // ワールド行列に回転を反映
-   node.transform *= matTranslation; // ワールド行列に平行移動を反映
+    //グローバル変形行列の計算
+    node.globalTransform = node.transform;
+    if (parent) {
+        node.parent = parent;
+        // 親の変形を乗算
+        node.globalTransform *= parent->globalTransform;
+    }
 
-   //グローバル変形行列の計算
-   node.globalTransform = node.transform;
-   if (parent) {
-       node.parent = parent;
-       // 親の変形を乗算
-       node.globalTransform *= parent->globalTransform;
-   }
+    // FBXノードのメッシュ情報を解析
+    FbxNodeAttribute* fbxNodeAttribute = fbxNode->GetNodeAttribute();
 
-   // FBXノードのメッシュ情報を解析
-   FbxNodeAttribute* fbxNodeAttribute = fbxNode->GetNodeAttribute();
+    if (fbxNodeAttribute) {
+        if (fbxNodeAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
+        {
+            model->meshNode = &node;
+            ParseMesh(model, fbxNode);
+        }
+    }
 
-   if (fbxNodeAttribute) {
-       if (fbxNodeAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
-       {
-           model->meshNode = &node;
-           ParseMesh(model, fbxNode);
-       }
-   }
-
-   // 子ノードに対して再帰呼び出し
-   for (int i = 0; i < fbxNode->GetChildCount(); i++) {
-       ParseNodeRecursive(model, fbxNode->GetChild(i),&node);
-   }
+    // 子ノードに対して再帰呼び出し
+    for (int i = 0; i < fbxNode->GetChildCount(); i++) {
+        ParseNodeRecursive(model, fbxNode->GetChild(i), &node);
+    }
 
 }
 
@@ -153,6 +257,9 @@ void FbxLoader::ParseMesh(FbxModel* model, FbxNode* fbxNode)
     ParseMeshFaces(model, fbxMesh);
     // マテリアルの読み取り
     ParseMaterial(model, fbxNode);
+
+    //スキニング情報の読み取り
+    ParseSkin(model, fbxMesh);
 
 }
 

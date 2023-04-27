@@ -24,6 +24,17 @@ public:
 	/// </summary>
 	/// <returns>インスタンス</returns>
 	static FbxLoader* GetInstance();
+
+public://静的メンバ関数
+
+	/// <summary>
+	/// FBXの行列をXMMatrixに変換
+	/// </summary>
+	/// <param name="dst">書き込み先</param>
+	/// <param name="src">もととなるFBX行列</param>
+	static void ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxAMatrix& src);
+
+
 public:
 	/// <summary>
 	/// 初期化
@@ -40,7 +51,11 @@ public:
 	/// ファイルからFBXモデル読込
 	/// </summary>
 	/// <param name="modelName">モデル名</param>
-	void LoadModelFromFile(const string& modelName);
+	FbxModel* LoadModelFromFile(const string& modelName);
+
+
+	void ParseSkin(FbxModel* model, FbxMesh* fbxMesh);
+
 private:
 	// D3D12デバイス
 	ID3D12Device* device = nullptr;
@@ -48,6 +63,7 @@ private:
 	FbxManager* fbxManager = nullptr;
 	// FBXインポータ
 	FbxImporter* fbxImporter = nullptr;
+
 private:
 	// privateなコンストラクタ（シングルトンパターン）
 	FbxLoader() = default;

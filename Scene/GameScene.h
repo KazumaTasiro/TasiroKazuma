@@ -11,6 +11,10 @@
 #include "ImGuiManager.h"
 #include <imgui.h>
 #include "FbxLoader.h"
+#include "FbxModel.h"
+
+#include "Object3dF.h"
+#include "Camera.h"
 
 
 class GameScene {
@@ -58,7 +62,10 @@ private:
 
 	SpriteCommon* spriteCommon = nullptr;
 
-
+	Camera* camera = nullptr;
 	//OBJからモデルデータを読み込む
 	Model* model = nullptr;
+
+	FbxModel* model1 = nullptr;
+	Object3dF* object1 = nullptr;
 };

@@ -12,32 +12,34 @@ float4 main(VSOutput input) : SV_TARGET
 
 	
 
-	float4 texcolor = { 0,0,0,0 };
+	float4 texcolor = { 0,1,0,1 };
 
-	for (int i = 1; i < 21; i++) {
-		for (int j = 1; j < 11; j++) {
-			float2 uvv = { -uPixel * i,-vPixel * j };
-			texcolor += tex.Sample(smp, input.uv + uvv);
-			uvv = float2(0.0f, -vPixel * j);
-			texcolor += tex.Sample(smp, input.uv + uvv);
-			uvv = float2 (uPixel * i, -vPixel * j);
-			texcolor += tex.Sample(smp, input.uv + uvv);
+	//for (int i = 1; i < 21; i++) {
+	//	for (int j = 1; j < 11; j++) {
+	//		float2 uvv = { -uPixel * i,-vPixel * j };
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
+	//		uvv = float2(0.0f, -vPixel * j);
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
+	//		uvv = float2 (uPixel * i, -vPixel * j);
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
 
-			uvv = float2(-uPixel * i, 0.0f);
-			texcolor += tex.Sample(smp, input.uv + uvv);
-			uvv = float2(0.0f, 0.0f);
-			texcolor += tex.Sample(smp, input.uv + uvv);
-			uvv = float2(uPixel * i, 0.0f);
-			texcolor += tex.Sample(smp, input.uv + uvv);
+	//		uvv = float2(-uPixel * i, 0.0f);
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
+	//		uvv = float2(0.0f, 0.0f);
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
+	//		uvv = float2(uPixel * i, 0.0f);
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
 
-			uvv = float2(-uPixel * i, vPixel * j);
-			texcolor += tex.Sample(smp, input.uv + uvv);
-			uvv = float2(0.0f, vPixel * j);
-			texcolor += tex.Sample(smp, input.uv + uvv);
-			uvv = float2(uPixel * i, vPixel * j);
-			texcolor += tex.Sample(smp, input.uv + uvv);
-		}
-	}
+	//		uvv = float2(-uPixel * i, vPixel * j);
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
+	//		uvv = float2(0.0f, vPixel * j);
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
+	//		uvv = float2(uPixel * i, vPixel * j);
+	//		texcolor += tex.Sample(smp, input.uv + uvv);
+	//	}
+	//}
 
-	return float4(texcolor.rgb / (200 * 9), texcolor.a);
+	/*return float4(texcolor.rgb / (200 * 9), texcolor.a);*/
+
+	return texcolor;
 }

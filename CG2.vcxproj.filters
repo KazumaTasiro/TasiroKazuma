@@ -94,6 +94,12 @@
     <Filter Include="ヘッダー ファイル\FBX">
       <UniqueIdentifier>{0ff11e97-86f3-44f8-9f75-50ee3e64477e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{61e29b15-411e-473b-8fc8-0eee9ec5d3f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Camera">
+      <UniqueIdentifier>{c05dfa38-6fe5-4b95-85f2-76ebeb39062d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -164,6 +170,12 @@
     </ClCompile>
     <ClCompile Include="3d\FbxModel.cpp">
       <Filter>ソース ファイル\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Object3dF.cpp">
+      <Filter>ソース ファイル\Object3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +248,12 @@
     <ClInclude Include="3d\FbxModel.h">
       <Filter>ヘッダー ファイル\FBX</Filter>
     </ClInclude>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>ヘッダー ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Object3dF.h">
+      <Filter>ヘッダー ファイル\Object3d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -262,6 +280,12 @@
     <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\FBXPS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\FBXVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -274,6 +298,9 @@
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\PostEffectTest.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\FBX.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>

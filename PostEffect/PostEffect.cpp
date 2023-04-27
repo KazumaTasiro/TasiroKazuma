@@ -11,7 +11,7 @@ using namespace DirectX;
 using namespace Microsoft::WRL;
 
 //静的メンバ変数の実体
-const float PostEffect::clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };//RGBA
+const float PostEffect::clearColor[4] = { 0.0f,1.0f,0.0f,1.0f };//RGBA
 
 PostEffect::PostEffect()
 {
@@ -36,10 +36,10 @@ void PostEffect::Initialize(ID3D12Device* device){
 
 	//頂点データ
 	VertexPosUv vertices[vertNum] = {
-		{{-1.0f,-1.0f,0.0f},{0.0f,1.0f}},//左下
-		{{-1.0f,+1.0f,0.0f},{0.0f,0.0f}},//左上
-		{{+1.0f,-1.0f,0.0f},{1.0f,1.0f}},//右下
-		{{+1.0f,+1.0f,0.0f},{1.0f,0.0f}},//右上
+		{{-0.5f,-0.5f,0.0f},{0.0f,1.0f}},//左下
+		{{-0.5f,+0.5f,0.0f},{0.0f,0.0f}},//左上
+		{{+0.5f,-0.5f,0.0f},{1.0f,1.0f}},//右下
+		{{+0.5f,+0.5f,0.0f},{1.0f,0.0f}},//右上
 	};
 
 	// 頂点バッファへのデータ転送
