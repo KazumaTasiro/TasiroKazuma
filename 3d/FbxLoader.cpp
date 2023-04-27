@@ -7,6 +7,7 @@ using namespace DirectX;
 /// 静的メンバ変数の実体
 /// </summary>
 const std::string FbxLoader::baseDirectory = "Resources/";
+const std::string FbxLoader::defaultTextureFileName = "white1x1.png";
 
 FbxLoader* FbxLoader::GetInstance()
 {
@@ -72,6 +73,9 @@ void FbxLoader::LoadModelFromFile(const string& modelName)
     ParseNodeRecursive(fbxModel, fbxScene->GetRootNode());
     //FBXシーンの解放
     fbxScene->Destroy();
+
+    // バッファ生成
+    fbxModel->CreateBuffers(device);
 
 }
 
