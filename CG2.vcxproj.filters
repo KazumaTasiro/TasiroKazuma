@@ -106,6 +106,12 @@
     <Filter Include="ヘッダー ファイル\Particle">
       <UniqueIdentifier>{bb0df57f-ae04-4b53-b5dc-d2d858e95b61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Json">
+      <UniqueIdentifier>{95266482-b2d7-49b9-9e64-b34abadd004c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Json">
+      <UniqueIdentifier>{60c697c6-17e1-4624-b8d4-11ab596344a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="Particle\ParticleManager2.cpp">
       <Filter>ソース ファイル\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Json\JsonLoader.cpp">
+      <Filter>ソース ファイル\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +265,9 @@
     </ClInclude>
     <ClInclude Include="Particle\ParticleManager2.h">
       <Filter>ヘッダー ファイル\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Json\JsonLoader.h">
+      <Filter>ヘッダー ファイル\Json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

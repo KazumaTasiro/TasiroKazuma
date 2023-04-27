@@ -13,6 +13,7 @@
 #include <imgui.h>
 #include"ParticleManager.h"
 #include"ParticleManager2.h"
+#include "JsonLoader.h"
 
 class GameScene {
 public:
@@ -63,17 +64,12 @@ private:
 
 	SpriteCommon* spriteCommon = nullptr;
 
-	Sprite* sprite = nullptr;
-	Sprite* sprite2 = nullptr;
+	Model* modelSkydome = nullptr;
+	Model* modelGround = nullptr;
+	Model* modelFighter = nullptr;
+	Model* modelSphere = nullptr;
 
-	Object3d* obj = nullptr;
-	Object3d* obj2 = nullptr;
+	std::map<std::string, Model*> models;
+	std::vector<Object3d*> objects;
 
-	//OBJからモデルデータを読み込む
-	Model* model = nullptr;
-	Model* model2 = nullptr;
-
-	//パーティクルクラスの初期化 
-	ParticleManager* particleManager = nullptr;
-	ParticleManager2* particleManager2 = nullptr;
 };
