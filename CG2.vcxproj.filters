@@ -94,6 +94,12 @@
     <Filter Include="ヘッダー ファイル\FBX">
       <UniqueIdentifier>{0ff11e97-86f3-44f8-9f75-50ee3e64477e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{ca7d947b-4818-4219-87a7-2e90acf0dd61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Camera">
+      <UniqueIdentifier>{38910cff-37d4-41b7-b718-477a5a4b5573}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -165,6 +171,12 @@
     <ClCompile Include="3d\FbxModel.cpp">
       <Filter>ソース ファイル\FBX</Filter>
     </ClCompile>
+    <ClCompile Include="3d\Object3dFbx.cpp">
+      <Filter>ソース ファイル\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\Camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\Input.h">
@@ -235,6 +247,12 @@
     </ClInclude>
     <ClInclude Include="3d\FbxModel.h">
       <Filter>ヘッダー ファイル\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Object3dFbx.h">
+      <Filter>ヘッダー ファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\Camera.h">
+      <Filter>ヘッダー ファイル\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

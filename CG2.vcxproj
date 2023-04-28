@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir);$(ProjectDir)camera;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,7 +136,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir);$(ProjectDir)camera;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -154,11 +154,13 @@
     <ClCompile Include="3d\FbxModel.cpp" />
     <ClCompile Include="3d\Model.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
+    <ClCompile Include="3d\Object3dFbx.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="bace\DirectXCommon.cpp" />
     <ClCompile Include="bace\FPS.cpp" />
     <ClCompile Include="bace\ImGuiManager.cpp" />
     <ClCompile Include="bace\WinApp.cpp" />
+    <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="Depth\Depth.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -187,12 +189,14 @@
     <ClInclude Include="3d\FbxModel.h" />
     <ClInclude Include="3d\Model.h" />
     <ClInclude Include="3d\Object3d.h" />
+    <ClInclude Include="3d\Object3dFbx.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="bace\DirectXCommon.h" />
     <ClInclude Include="bace\ErrorException.h" />
     <ClInclude Include="bace\FPS.h" />
     <ClInclude Include="bace\ImGuiManager.h" />
     <ClInclude Include="bace\WinApp.h" />
+    <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="Depth\Depth.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="MATH\Affin.h" />
