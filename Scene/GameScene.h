@@ -15,6 +15,8 @@
 #include"ParticleManager2.h"
 #include "JsonLoader.h"
 
+struct LevelData;
+
 class GameScene {
 public:
 	/// <summary>
@@ -64,9 +66,9 @@ private:
 
 	SpriteCommon* spriteCommon = nullptr;
 
-	Model* modelSkydome = nullptr;
-	Model* modelGround = nullptr;
-	Model* modelFighter = nullptr;
+	LevelData* levelData = nullptr;
+
+	Model* modelBox = nullptr;
 	Model* modelSphere = nullptr;
 
 	std::map<std::string, Model*> models;

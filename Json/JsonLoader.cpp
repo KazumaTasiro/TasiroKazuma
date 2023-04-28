@@ -4,7 +4,7 @@
 #include <fstream>
 #include <cassert>
 
-const std::string JsonLoader::kDefaultBaseDirectory = "Resources/Jsons/";
+const std::string JsonLoader::kDefaultBaseDirectory = "Resources/";
 const std::string JsonLoader::kExtension = ".json";
 
 LevelData* JsonLoader::LoadFile(const std::string& filename)
@@ -23,7 +23,6 @@ LevelData* JsonLoader::LoadFile(const std::string& filename)
 		assert(0);
 	}
 
-	//ファイルチェック
 	//JSON文字列から解凍したデータ
 	nlohmann::json deserialized;
 
@@ -52,37 +51,41 @@ LevelData* JsonLoader::LoadFile(const std::string& filename)
 		std::string type = object["type"].get<std::string>();
 
 		//種類ごとの処理
-		// MESH
+		//MESH
 		if (type.compare("MESH") == 0) {
-			// 要素追加
+			//要素追加
 			levelData->objects.emplace_back(LevelData::ObjectData{});
 			// 今追加した要素の参照を得る
 			LevelData::ObjectData& objectData = levelData->objects.back();
 
 			if (object.contains("file_name")) {
-				// ファイル名
+				//ファイル名
 				objectData.filename = object["file_name"];
 			}
 
-			// トランスフォームのパラメータ読み込み
+			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
-			// 平行移動
-			objectData.translation.x = (float)transform["translation"][1];
-			objectData.translation.y = (float)transform["translation"][2];
-			objectData.translation.z = (float)transform["translation"][0];
+			//平行移動
+			objectData.translation.x = transform["translation"][1];
+			objectData.translation.y = transform["translation"][2];
+			objectData.translation.z = transform["translation"][0];
 			objectData.translation.z = -objectData.translation.z;
 			objectData.translation.w = 1.0f;
-			// 回転角
-			objectData.rotation.x = (float)transform["rotation"][1];
+
+
+			//回転角
+			objectData.rotation.x = transform["rotation"][1];
 			objectData.rotation.x = -objectData.rotation.x;
-			objectData.rotation.y = (float)transform["rotation"][2];
+			objectData.rotation.y = transform["rotation"][2];
 			objectData.rotation.y = -objectData.rotation.y;
-			objectData.rotation.z = (float)transform["rotation"][0];
+			objectData.rotation.z = transform["rotation"][0];
 			objectData.rotation.w = 0.0f;
-			// スケーリング
-			objectData.scaling.x = (float)transform["scaling"][1];
-			objectData.scaling.y = (float)transform["scaling"][2];
-			objectData.scaling.z = (float)transform["scaling"][0];
+
+
+			//スケーリング
+			objectData.scaling.x = transform["scaling"][1];
+			objectData.scaling.y = transform["scaling"][2];
+			objectData.scaling.z = transform["scaling"][0];
 			objectData.scaling.w = 0.0f;
 		}
 
@@ -93,5 +96,5 @@ LevelData* JsonLoader::LoadFile(const std::string& filename)
 		}
 	}
 
-	return nullptr;
+	return levelData;
 }
