@@ -6,6 +6,8 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	delete camera;
+	delete levelData;
 }
 void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_)
 {
@@ -47,7 +49,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	levelData = JsonLoader::LoadFile("jsonTest");
 
 	modelBox = Model::LoadFromOBJ("cube");
-	modelSphere = Model::LoadFromOBJ("boll");
+	modelSphere = Model::LoadFromOBJ("gorilla");
 
 	models.insert(std::make_pair("spher", modelSphere));
 	models.insert(std::make_pair("box", modelBox));
