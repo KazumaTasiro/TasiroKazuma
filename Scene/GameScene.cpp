@@ -6,9 +6,10 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-
+	delete object1;
+	delete model1;
 }
-void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon, Input* input_)
+void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_)
 {
 	assert(dxcomon);
 	assert(input_);
@@ -21,7 +22,9 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon, Input* input_)
 
 	audio = new Audio();
 	audio->Initialize();
-	
+
+	// カメラ生成
+	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
 	ImGuiMan = new ImGuiManager();
 	ImGuiMan->Initialize(winApp, dxCommon_);
@@ -30,9 +33,16 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon, Input* input_)
 	spriteCommon = new SpriteCommon;
 	spriteCommon->Initialize(dxCommon_);
 
+	Object3dFbx::SetDevice(dxCommon_->GetDevice());
+	Object3dFbx::SetCamera(camera);
+	Object3dFbx::CreateGraphicsPipeline();
 	//モデル名を指定してファイルに読み込み
-	FbxLoader::GetInstance()->LoadModelFromFile("cube");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("cube");
 
+
+	object1 = new Object3dFbx;
+	object1->Initialize();
+	object1->SetModel(model1);
 }
 void GameScene::Update()
 {
@@ -41,7 +51,7 @@ void GameScene::Update()
 
 	ImGui::SetWindowSize({ 500,100 });
 
-
+	object1->Update();
 	//デモウィンドウの表示ON
 	ImGui::ShowDemoWindow();
 
@@ -51,15 +61,16 @@ void GameScene::Draw()
 {
 
 
-		
-		Object3d::PreDraw(dxCommon_->GetCommandList());
+
+	Object3d::PreDraw(dxCommon_->GetCommandList());
+
+	object1->Draw(dxCommon_->GetCommandList());
+
+	Object3d::PostDraw();
+
+	/*ImGuiMan->Draw();*/
 
 
-		Object3d::PostDraw();
-
-		/*ImGuiMan->Draw();*/
-
-		
 
 }
 

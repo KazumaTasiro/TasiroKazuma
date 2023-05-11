@@ -40,7 +40,7 @@ public:
 	/// ファイルからFBXモデル読込
 	/// </summary>
 	/// <param name="modelName">モデル名</param>
-	void LoadModelFromFile(const string& modelName);
+	FbxModel* LoadModelFromFile(const string& modelName);
 private:
 	// D3D12デバイス
 	ID3D12Device* device = nullptr;
