@@ -41,6 +41,16 @@ public:
 	/// </summary>
 	/// <param name="modelName">モデル名</param>
 	FbxModel* LoadModelFromFile(const string& modelName);
+
+	void ParseSkin(FbxModel* model, FbxMesh* fbxMesh);
+public://静的メンバ関数
+
+	/// <summary>
+	/// FBXの行列をXMMatrixに変換
+	/// </summary>
+	/// <param name="dst">書き込み先</param>
+	/// <param name="src">もととなるFBX行列</param>
+	static void ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxAMatrix& src);
 private:
 	// D3D12デバイス
 	ID3D12Device* device = nullptr;
