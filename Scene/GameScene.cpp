@@ -46,13 +46,13 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	spriteCommon->LoadTexture(1, "wakka.jpg");
 
 	//レベルデータ
-	levelData = JsonLoader::LoadFile("jsonTest");
+	levelData = JsonLoader::LoadFile("Test");
 
-	modelBox = Model::LoadFromOBJ("cube");
+	modelBox = Model::LoadFromOBJ("trakku");
 	modelSphere = Model::LoadFromOBJ("gorilla");
 
-	models.insert(std::make_pair("spher", modelSphere));
-	models.insert(std::make_pair("box", modelBox));
+	models.insert(std::make_pair("trakku", modelBox));
+	models.insert(std::make_pair("Gorilla", modelSphere));
 
 	// レベルデータからオブジェクトを生成、配置
 	for (auto& objectData : levelData->objects) {

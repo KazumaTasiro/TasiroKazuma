@@ -2,28 +2,6 @@
     "name": "scene",
     "objects": [
         {
-            "type": "MESH",
-            "name": "Cube",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "box"
-        },
-        {
             "type": "LIGHT",
             "name": "Light",
             "transform": {
@@ -67,11 +45,11 @@
         },
         {
             "type": "MESH",
-            "name": "ICO球",
+            "name": "球",
             "transform": {
                 "translation": [
                     0.0,
-                    -5.567589282989502,
+                    -7.348731994628906,
                     0.0
                 ],
                 "rotation": [
@@ -85,15 +63,15 @@
                     1.0
                 ]
             },
-            "file_name": "spher"
+            "file_name": "Gorilla"
         },
         {
             "type": "MESH",
-            "name": "ICO球.001",
+            "name": "立方体.001_立方体.002",
             "transform": {
                 "translation": [
-                    -8.85627269744873,
                     0.0,
+                    9.549965858459473,
                     0.0
                 ],
                 "rotation": [
@@ -107,15 +85,15 @@
                     1.0
                 ]
             },
-            "file_name": "spher"
+            "file_name": "trakku"
         },
         {
             "type": "MESH",
-            "name": "ICO球.002",
+            "name": "立方体.001_立方体.001",
             "transform": {
                 "translation": [
-                    5.6746439933776855,
-                    5.3386945724487305,
+                    6.9437150955200195,
+                    2.226036548614502,
                     0.0
                 ],
                 "rotation": [
@@ -129,7 +107,29 @@
                     1.0
                 ]
             },
-            "file_name": "spher"
+            "file_name": "trakku"
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.001_立方体.003",
+            "transform": {
+                "translation": [
+                    -14.81668472290039,
+                    -6.418270111083984,
+                    -3.174079418182373
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "trakku"
         }
     ]
 }
