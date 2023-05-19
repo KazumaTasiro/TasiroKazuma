@@ -7,7 +7,7 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	delete object1;
-	delete model1;
+	//delete model1;
 }
 void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_)
 {
@@ -37,25 +37,31 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	Object3dFbx::SetCamera(camera);
 	Object3dFbx::CreateGraphicsPipeline();
 	//モデル名を指定してファイルに読み込み
-	model1 = FbxLoader::GetInstance()->LoadModelFromFile("cube");
+	model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
 
 	object1 = new Object3dFbx;
 	object1->Initialize();
 	object1->SetModel(model1);
+	object1->PlayAnimation();
+	
 }
 void GameScene::Update()
 {
+	camera->SetEye({ -1,0,0, });
+	camera->Update();
+	object1->Update();
 
 	ImGuiMan->Bigin();
 
 	ImGui::SetWindowSize({ 500,100 });
 
-	object1->Update();
+
 	//デモウィンドウの表示ON
 	ImGui::ShowDemoWindow();
 
 	ImGuiMan->End();
+
 }
 void GameScene::Draw()
 {

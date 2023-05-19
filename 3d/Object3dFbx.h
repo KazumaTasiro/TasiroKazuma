@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FbxModel.h"
+#include "FbxLoader.h"
 #include "Camera.h"
 
 #include <Windows.h>
@@ -28,6 +29,16 @@ public: // サブクラス
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
 	};
+
+public: // 定数
+	//ボーンの最大数
+	static const int MAX_BONES = 32;
+
+	//定数バッファ用のデータ構造体
+	struct ConstBufferDataSkin
+	{
+		XMMATRIX bones[MAX_BONES];
+	};
 public: // メンバ関数
 	/// <summary>
 	/// 初期化
@@ -45,6 +56,11 @@ public: // メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
 	void SetModel(FbxModel* model) { this->model = model; }
+
+	/// <summary>
+	/// アニメーション開始
+	/// </summary>
+	void PlayAnimation();
 public:
 	/// <summary>
 	/// グラフィックパイプラインの生成
@@ -77,4 +93,18 @@ protected: // メンバ変数
 	XMMATRIX matWorld;
 	// モデル
 	FbxModel* model = nullptr;
+
+	//定数バッファ(スキン)
+	ComPtr<ID3D12Resource> constBuffSkin;
+
+	//1フレームの時間
+	FbxTime frameTime;
+	//アニメーション開始時間
+	FbxTime startTime;
+	//アニメーション終了時間
+	FbxTime endTime;
+	//現在時間(アニメーション)
+	FbxTime currentTime;
+	//アニメーション再生中
+	bool isPlay = false;
 };

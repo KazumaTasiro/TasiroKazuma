@@ -117,7 +117,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 
 	/*	ImGuiMan->Draw();*/
-		
+		/*gameScene->Draw();*/
 		
 		posteffect->Draw(dxCommon->GetCommandList());
 		
