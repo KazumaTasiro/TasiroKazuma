@@ -3,6 +3,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include <DirectXMath.h>
+#include "Input.h"
 
 
 class PostEffect
@@ -48,7 +49,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(ID3D12Device* device);
+	void Initialize(ID3D12Device* device,Input* input_);
 
 	/// <summary>
 	/// 描画コマンドの発行
@@ -82,7 +83,7 @@ private:
 
 private:
 	//メンバ変数
-	Microsoft::WRL::ComPtr<ID3D12Resource> texBuff;
+	Microsoft::WRL::ComPtr<ID3D12Resource> texBuff[2];
 	//SRV用のデスクリプタヒープ
 	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> descHeapSRV;
 
@@ -118,6 +119,10 @@ private:
 
 	// テクスチャの最大枚数
 	const int srvCount = 512;
+
+	Input* input = nullptr;
+
+	ID3D12Device* device_ = nullptr;
 
 };
 

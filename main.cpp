@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	posteffect = new PostEffect();
 
-	posteffect->Initialize(dxCommon->GetDevice());
+	posteffect->Initialize(dxCommon->GetDevice(),input);
 	
 	// 3Dオブジェクト静的初期化
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
