@@ -11,7 +11,7 @@ using namespace DirectX;
 using namespace Microsoft::WRL;
 
 //静的メンバ変数の実体
-const float PostEffect::clearColor[4] = { 0.0f,0.5f,0.0f,0.0f };//RGBA
+const float PostEffect::clearColor[4] = { 0.0f,1.0f,0.0f,1.0f };//RGBA
 
 PostEffect::PostEffect()
 {
@@ -40,10 +40,10 @@ void PostEffect::Initialize(ID3D12Device* device, Input* input_) {
 
 	//頂点データ
 	VertexPosUv vertices[vertNum] = {
-		{{-0.5f,-0.5f,0.0f},{0.0f,1.0f}},//左下
-		{{-0.5f,+0.5f,0.0f},{0.0f,0.0f}},//左上
-		{{+0.5f,-0.5f,0.0f},{1.0f,1.0f}},//右下
-		{{+0.5f,+0.5f,0.0f},{1.0f,0.0f}},//右上
+		{{-1.0f,-1.0f,0.0f},{0.0f,1.0f}},//左下
+		{{-1.0f,+1.0f,0.0f},{0.0f,0.0f}},//左上
+		{{+1.0f,-1.0f,0.0f},{1.0f,1.0f}},//右下
+		{{+1.0f,+1.0f,0.0f},{1.0f,0.0f}},//右上
 	};
 
 	// 頂点バッファへのデータ転送
@@ -81,8 +81,7 @@ void PostEffect::Initialize(ID3D12Device* device, Input* input_) {
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
 	);
 
-	CD3DX12_HEAP_PROPERTIES heapProp(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
-		D3D12_MEMORY_POOL_L0);
+	CD3DX12_HEAP_PROPERTIES heapProp(D3D12_HEAP_TYPE_DEFAULT);
 
 	CD3DX12_CLEAR_VALUE cleVal(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 
@@ -97,24 +96,6 @@ void PostEffect::Initialize(ID3D12Device* device, Input* input_) {
 			IID_PPV_ARGS(&texBuff[i]));
 		assert(SUCCEEDED(result));
 
-
-		{//テクスチャを赤クリア
-			//画素数(1280 x 720 = 921600ピクセル)
-			const UINT pixelCount = WinApp::window_width * WinApp::window_height;
-			//画像1行分のデータサイズ
-			const UINT rowPitch = sizeof(UINT) * WinApp::window_width;
-			//画像全体のデータサイズ
-			const UINT depthPitch = rowPitch * WinApp::window_height;
-			//画像イメージ
-			UINT* img = new UINT[pixelCount];
-			for (int j = 0; j < pixelCount; j++) { img[j] = 0x00000000; }
-
-			//テクスチャバッファにデータ転送
-			result = texBuff[i]->WriteToSubresource(0, nullptr,
-				img, rowPitch, depthPitch);
-			assert(SUCCEEDED(result));
-			delete[] img;
-		}
 	}
 
 	//SRV用のデスクリプタヒープ設定
@@ -214,23 +195,6 @@ void PostEffect::Initialize(ID3D12Device* device, Input* input_) {
 }
 
 void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList) {
-
-	//if (input->TriggerKey(DIK_0)) {
-	//	//デスクリプタヒープにSRV作成
-	//	static int tex = 0;
-	//	//テスクチャ番号を0と1で切り替え
-	//	tex = (tex + 1) % 2;
-
-	//	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{ };//設定構造体
-	//	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	//	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテスクチャ
-	//	srvDesc.Texture2D.MipLevels = 1;
-	//	device_->CreateShaderResourceView(texBuff[tex].Get(),
-	//		&srvDesc,
-	//		descHeapSRV->GetCPUDescriptorHandleForHeapStart()
-	//	);
-	//}
 
 	// ワールド行列の更新
 	this->matWorld = XMMatrixIdentity();
