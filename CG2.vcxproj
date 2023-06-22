@@ -78,9 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,10 +120,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir);$(ProjectDir)camera;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,16 +137,152 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir);$(ProjectDir)camera;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libfbxsdk-mt.lib;libxml2-mt.lib;zlib-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="2d\Sprite.cpp" />
+    <ClCompile Include="2d\SpriteCommon.cpp" />
+    <ClCompile Include="3d\FbxLoader.cpp" />
+    <ClCompile Include="3d\FbxModel.cpp" />
+    <ClCompile Include="3d\Model.cpp" />
+    <ClCompile Include="3d\Object3d.cpp" />
+    <ClCompile Include="3d\Object3dFbx.cpp" />
+    <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="bace\DirectXCommon.cpp" />
+    <ClCompile Include="bace\FPS.cpp" />
+    <ClCompile Include="bace\ImGuiManager.cpp" />
+    <ClCompile Include="bace\WinApp.cpp" />
+    <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="Depth\Depth.cpp" />
+    <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MATH\Affin.cpp" />
+    <ClCompile Include="MATH\ConvertXM.cpp" />
+    <ClCompile Include="MATH\Matrix4.cpp" />
+    <ClCompile Include="MATH\Quaternion.cpp" />
+    <ClCompile Include="MATH\Vector2.cpp" />
+    <ClCompile Include="MATH\Vector3.cpp" />
+    <ClCompile Include="MATH\Vector4.cpp" />
+    <ClCompile Include="PostEffect\PostEffect.cpp" />
+    <ClCompile Include="Scene\GameScene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
+      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
+    <ProjectReference Include="imgui\imgui.vcxproj">
+      <Project>{843e4272-3f84-4219-8f7c-32cf0f568010}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="2d\Sprite.h" />
+    <ClInclude Include="2d\SpriteCommon.h" />
+    <ClInclude Include="3d\FbxLoader.h" />
+    <ClInclude Include="3d\FbxModel.h" />
+    <ClInclude Include="3d\Model.h" />
+    <ClInclude Include="3d\Object3d.h" />
+    <ClInclude Include="3d\Object3dFbx.h" />
+    <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="bace\DirectXCommon.h" />
+    <ClInclude Include="bace\ErrorException.h" />
+    <ClInclude Include="bace\FPS.h" />
+    <ClInclude Include="bace\ImGuiManager.h" />
+    <ClInclude Include="bace\WinApp.h" />
+    <ClInclude Include="camera\Camera.h" />
+    <ClInclude Include="Depth\Depth.h" />
+    <ClInclude Include="Input\Input.h" />
+    <ClInclude Include="MATH\Affin.h" />
+    <ClInclude Include="MATH\ConvertXM.h" />
+    <ClInclude Include="MATH\Matrix4.h" />
+    <ClInclude Include="MATH\Quaternion.h" />
+    <ClInclude Include="MATH\Vector2.h" />
+    <ClInclude Include="MATH\Vector3.h" />
+    <ClInclude Include="MATH\Vector4.h" />
+    <ClInclude Include="PostEffect\PostEffect.h" />
+    <ClInclude Include="Scene\GameScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resources\shaders\BasicPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\BasicVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\FBXPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\FBXVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ObjPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ObjVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectTestPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\SpritePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shaders\Basic.hlsli" />
+    <None Include="Resources\shaders\FBX.hlsli" />
+    <None Include="Resources\shaders\Obj.hlsli" />
+    <None Include="Resources\shaders\PostEffectTest.hlsli" />
+    <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

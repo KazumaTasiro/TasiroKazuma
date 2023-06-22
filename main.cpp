@@ -1,79 +1,154 @@
-#include <Windows.h>
+#include "Input.h"
+#include "WinApp.h"
+#include "DirectXCommon.h"
+#include "FPS.h"
+#include "GameScene.h"
+#include "PostEffect.h"
+#include "FbxLoader.h"
+//#include "fbxsdk.h"
 
-//ウィンドウプロシージャ
-LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-	//メッセージに応じてゲーム固有の処理を行う
-	switch (msg) {
-	//ウィンドウが破壊された
-	case WM_DESTROY:
-		//OSに対して、アプリの終了を伝える
-		PostQuitMessage(0);
-		return 0;
-	}
 
-	//標準のメッセージ処理を行う
-	return DefWindowProc(hwnd, msg, wparam, lparam);
-}
+
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	//コンソールの文字出力
-	OutputDebugStringA("Hello,DirectX!!\n");
 
-	//ウィンドウサイズ
-	const int window_width = 1280;
-	const int window_height = 720;
+#pragma region 基盤システムの初期化
+	//FbxManager* fbxManager = FbxManager::Create();
 
-	//ウィンドウクラスの設定
-	WNDCLASSEX w{};
-	w.cbSize = sizeof(WNDCLASSEX);			//ウィンドウプロシージャを設定
-	w.lpfnWndProc = (WNDPROC)WindowProc;	//ウィンドウプロシージャを設定
-	w.lpszClassName = L"DirectXGame";		//ウィンドウクラス名
-	w.hInstance = GetModuleHandle(nullptr); //ウィンドウハンドル
-	w.hCursor = LoadCursor(NULL, IDC_ARROW);//カーソル指定
 
-	//ウィンドウクラスをOSに登録する
-	RegisterClassEx(&w);
-	//ウィンドウサイズ｛　X座標　Y座標　横幅　縦幅｝
-	RECT wrc = { 0,0,window_width,window_height };
-	//自動でサイズを調整する
-	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
-	//ウィンドウオブジェクトの生成
-	HWND hwnd = CreateWindow(w.lpszClassName,
-		L"DirectXGame",
-		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		wrc.right - wrc.left,
-		wrc.bottom - wrc.top,
-		nullptr,
-		nullptr,
-		w.hInstance,
-		nullptr);
+	WinApp* winApp = nullptr;
 
-	//ウィンドウを表示状態にする
-	ShowWindow(hwnd, SW_SHOW);
+	//WindowsAPIの初期化
+	winApp = new WinApp();
+	winApp->Initialize();
+
+	//ポインタ
+	DirectXCommon* dxCommon = nullptr;
+	dxCommon = new DirectXCommon();
+	dxCommon->Initialize(winApp);
 
 	MSG msg{};//メッセージ
 
+	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
+
+	//ポインタ
+	Input* input = nullptr;
+
+	//入力の初期化
+	input = new Input();
+	input->Initalize(winApp);
+
+	PostEffect* posteffect = nullptr;
+
+	posteffect = new PostEffect();
+
+	posteffect->Initialize(dxCommon->GetDevice(),input);
+	
+	// 3Dオブジェクト静的初期化
+	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
+
+	GameScene* gameScene = new GameScene();
+	gameScene->Initialize(winApp, dxCommon, input);
+	
+#pragma endregion 基盤システムの初期化
+
+
+	//DIrectX初期化処理ここから
+#pragma region 最初のシーンの初期化
+
+	
+	
+#pragma endregion 最初のシーンの初期化
+
 	//DIrectX初期化処理ここまで
+	// 描画初期化処理
+	// 頂点データ構造体
+
+	FPS* fps = new FPS;
 
 	//ゲームループ
 	while (true) {
+#pragma region 基盤システムの更新
 		//メッセージがある？
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);//キー入力メッセージの処理
-			DispatchMessage(&msg);//プロシージャにメッセージを送る
-		}
 
-		// Xボタンで終了メッセージが来たらゲームループを抜ける
-		if (msg.message == WM_QUIT) {
+		//fps制限
+		fps->FpsControlBegin();
+
+		//Windowsのメッセージ処理
+		if (winApp->ProcessMessage()) {
+			//ゲームループを抜ける
 			break;
 		}
-		//DirectX舞フレーム処理　ここまで
-	}
 
-	//ウィンドウクラスを登録解除
-	UnregisterClass(w.lpszClassName, w.hInstance);
+		
+
+		//DirectX舞フレーム処理　ここから
+		input->Update();
+		gameScene->Update();
+
+		//ImGui::SetWindowSize({ 500,100 },0);
+		
+		
+
+		
+#pragma endregion 基盤システムの更新
+
+#pragma region 最初のシーンの更新
+
+#pragma endregion 最初のシーンの更新
+
+		
+		//posteffect->Draw(dxCommon_->GetCommandList());
+		/*posteffect->Draw(dxCommon_->GetCommandList());*/
+		posteffect->PreDrawScene(dxCommon->GetCommandList());
+
+		gameScene->Draw();
+		
+
+		posteffect->PostDrawScene(dxCommon->GetCommandList());
+
+		dxCommon->PreDraw();
+
+#pragma region 最初のシーンの描画
+		// 4.描画コマンドここまで
+#pragma endregion 最初のシーンの描画
+		
+		
+
+	/*	ImGuiMan->Draw();*/
+		/*gameScene->Draw();*/
+		
+		posteffect->Draw(dxCommon->GetCommandList());
+		
+
+		dxCommon->PostDraw();
+		//// 5.リソースバリアを戻す
+
+				//FPS固定
+		fps->FpsControlEnd();
+
+	}
+#pragma region 最初のシーンの終了
+
+
+#pragma endregion 最初のシーンの終了
+	gameScene->Finalize();
+	FbxLoader::GetInstance()->Finalize();
+#pragma region 基盤システムの終了
+
+	//入力開放
+	delete input;
+	delete gameScene;
+	delete posteffect;
+	delete fps;
+	
+	//DirectX解放
+	delete dxCommon;
+	//WindowsAPIの終了処理
+	winApp->Finalize();
+	//WindowsAPI解放
+	delete winApp;
+#pragma endregion 基盤システムの終了
 	return 0;
 }
