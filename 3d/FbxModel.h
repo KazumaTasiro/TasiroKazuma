@@ -1,8 +1,13 @@
 #pragma once
+
+#pragma warning(push)
+#pragma warning(disable:26813)
+#include <DirectXTex.h>
+#pragma warning(pop)
+
 #include <string>
 #include <DirectXMath.h>
 #include <vector>
-#include <DirectXTex.h>
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>

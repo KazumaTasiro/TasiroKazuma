@@ -73,6 +73,8 @@ Quaternion Quaternion::Normalize()
 		return result;
 	}
 
+	return result;
+
 }
 
 Quaternion Quaternion::Inverse()
@@ -236,7 +238,7 @@ Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t)
 
 	if (dot >= 1.0f - epsilon)
 	{
-		return (1.0 - t) * r0 + t * r1;
+		return (1.0f - t) * r0 + t * r1;
 	}
 
 	//•âŠÔŒã‚ÌQuaternion‚ğ‹‚ß‚é

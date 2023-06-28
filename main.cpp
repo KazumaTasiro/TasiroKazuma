@@ -9,8 +9,9 @@
 
 
 
+
 //Windowsアプリでのエントリーポイント(main関数)
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 #pragma region 基盤システムの初期化
 	//FbxManager* fbxManager = FbxManager::Create();

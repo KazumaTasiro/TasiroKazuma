@@ -77,7 +77,7 @@ Matrix4 Matrix4::MakeInverse(const Matrix4* mat)
 	for (int i = 0; i < 4; i++)
 	{
 		//Å‘å‚Ìâ‘Î’l‚ð’–Ú‘ÎŠp¬•ª‚Ìâ‘Î’l‚Æ‰¼’è
-		float max = fabs(sweep[i][i]);
+		float max = static_cast<float>(fabs(sweep[i][i]));
 		int maxIndex = i;
 
 		//i—ñ–Ú‚ªÅ‘å‚Ìâ‘Î’l‚Æ‚È‚és‚ð’T‚·
@@ -85,7 +85,8 @@ Matrix4 Matrix4::MakeInverse(const Matrix4* mat)
 		{
 			if (fabs(sweep[j][i]) > max)
 			{
-				max = fabs(sweep[j][i]);
+
+				max = static_cast<float>(fabs(sweep[j][i]));
 				maxIndex = j;
 			}
 		}

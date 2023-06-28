@@ -1,6 +1,11 @@
 #pragma once
-#include"DirectXCommon.h"
+
+#pragma warning(push)
+#pragma warning(disable:26813)
 #include <DirectXTex.h>
+#pragma warning(pop)
+
+#include"DirectXCommon.h"
 #include <array>
 #include <string>
 

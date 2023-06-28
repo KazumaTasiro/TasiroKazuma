@@ -4,7 +4,10 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include "WinApp.h"
+#pragma warning(push)
+#pragma warning(disable:26813)
 #include <DirectXTex.h>
+#pragma warning(pop)
 
 //DirectXŠî”Õ
 class DirectXCommon 

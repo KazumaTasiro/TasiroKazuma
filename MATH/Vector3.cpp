@@ -122,5 +122,8 @@ const Vector3 operator*(float s, const Vector3& v) {
 
 const Vector3 operator/(const Vector3& v, float s) {
 	Vector3 temp(v);
-	return v / s;
+	temp.x = temp.x / s;
+	temp.y = temp.y / s;
+	temp.z = temp.z / s;
+	return temp;
 }

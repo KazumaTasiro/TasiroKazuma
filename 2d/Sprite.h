@@ -1,6 +1,8 @@
 #pragma once
 #include"SpriteCommon.h"
 #include <DirectXMath.h>
+#include "Vector2.h"
+
 
 using namespace DirectX;
 

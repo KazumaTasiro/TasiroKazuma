@@ -144,8 +144,6 @@ void Audio::PlayWave(const std::string filename, bool LoopFlag, float sourceRate
 
 void Audio::SetPitch(const std::string filename, float sourceRate, float targetRate)
 {
-	HRESULT result;
-
 	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);
 	assert(it != soundDatas_.end());
 
