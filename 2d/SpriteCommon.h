@@ -2,6 +2,7 @@
 
 #pragma warning(push)
 #pragma warning(disable:26813)
+#pragma warning(disable:5264)
 #include <DirectXTex.h>
 #pragma warning(pop)
 
