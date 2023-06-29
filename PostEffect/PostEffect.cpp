@@ -3,7 +3,11 @@
 #include "WinApp.h"
 #include<cmath>
 #include <d3dcompiler.h>
+#pragma warning(push)
+#pragma warning(disable:26813)
+#pragma warning(disable:5264)
 #include <DirectXTex.h>
+#pragma warning(pop)
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -11,7 +15,7 @@ using namespace DirectX;
 using namespace Microsoft::WRL;
 
 //静的メンバ変数の実体
-const float PostEffect::clearColor[4] = { 0.0f,1.0f,0.0f,1.0f };//RGBA
+const float PostEffect::clearColor[4] = { 0.0f,0.5f,0.0f,0.0f };//RGBA
 
 PostEffect::PostEffect()
 {
@@ -40,10 +44,10 @@ void PostEffect::Initialize(ID3D12Device* device, Input* input_) {
 
 	//頂点データ
 	VertexPosUv vertices[vertNum] = {
-		{{-1.0f,-1.0f,0.0f},{0.0f,1.0f}},//左下
-		{{-1.0f,+1.0f,0.0f},{0.0f,0.0f}},//左上
-		{{+1.0f,-1.0f,0.0f},{1.0f,1.0f}},//右下
-		{{+1.0f,+1.0f,0.0f},{1.0f,0.0f}},//右上
+		{{-screenSize,-screenSize,0.0f},{0.0f,1.0f}},//左下
+		{{-screenSize,+screenSize,0.0f},{0.0f,0.0f}},//左上
+		{{+screenSize,-screenSize,0.0f},{1.0f,1.0f}},//右下
+		{{+screenSize,+screenSize,0.0f},{1.0f,0.0f}},//右上
 	};
 
 	// 頂点バッファへのデータ転送

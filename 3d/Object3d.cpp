@@ -1,6 +1,10 @@
 ﻿#include "Object3d.h"
 #include <d3dcompiler.h>
+#pragma warning(push)
+#pragma warning(disable:26813)
+#pragma warning(disable:5264)
 #include <DirectXTex.h>
+#pragma warning(pop)
 #include <fstream>
 #include <sstream>
 #include <string>

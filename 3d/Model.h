@@ -8,7 +8,11 @@
 #include <vector>
 #include <d3d12.h>
 #include <d3dx12.h>
+#pragma warning(push)
+#pragma warning(disable:26813)
+#pragma warning(disable:5264)
 #include <DirectXTex.h>
+#pragma warning(pop)
 
 using namespace std;
 

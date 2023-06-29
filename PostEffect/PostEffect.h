@@ -124,5 +124,8 @@ private:
 
 	ID3D12Device* device_ = nullptr;
 
+private:
+	//ポストエフェクトの画面サイズ1.0fが最大
+	float screenSize = 0.5f;
 };
 
