@@ -126,6 +126,6 @@ private:
 
 private:
 	//ポストエフェクトの画面サイズ1.0fが最大
-	float screenSize = 0.5f;
+	float screenSize = 1.0f;
 };
 

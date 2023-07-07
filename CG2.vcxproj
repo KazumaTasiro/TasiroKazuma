@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Math;$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir);$(ProjectDir)camera;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Math;$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)camera;$(ProjectDir)Player;$(ProjectDir)Enemy;$(ProjectDir)Skydome;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -138,7 +138,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Math;$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir);$(ProjectDir)camera;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Math;$(ProjectDir)Scene;$(ProjectDir)Input;$(ProjectDir)bace;$(ProjectDir)PostEffect;$(ProjectDir)Audio;$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)camera;$(ProjectDir)Player;$(ProjectDir)Enemy;$(ProjectDir)Skydome;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -166,6 +166,7 @@
     <ClCompile Include="bace\WinApp.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="Depth\Depth.cpp" />
+    <ClCompile Include="Enemy\Enemy.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MATH\Affin.cpp" />
@@ -175,8 +176,12 @@
     <ClCompile Include="MATH\Vector2.cpp" />
     <ClCompile Include="MATH\Vector3.cpp" />
     <ClCompile Include="MATH\Vector4.cpp" />
+    <ClCompile Include="Player\Player.cpp" />
+    <ClCompile Include="Player\PlayerBullet.cpp" />
     <ClCompile Include="PostEffect\PostEffect.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
+    <ClCompile Include="Skydome\Skydome.cpp" />
+    <ClCompile Include="Skydome\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -202,6 +207,7 @@
     <ClInclude Include="bace\WinApp.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="Depth\Depth.h" />
+    <ClInclude Include="Enemy\Enemy.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="MATH\Affin.h" />
     <ClInclude Include="MATH\ConvertXM.h" />
@@ -210,8 +216,12 @@
     <ClInclude Include="MATH\Vector2.h" />
     <ClInclude Include="MATH\Vector3.h" />
     <ClInclude Include="MATH\Vector4.h" />
+    <ClInclude Include="Player\Player.h" />
+    <ClInclude Include="Player\PlayerBullet.h" />
     <ClInclude Include="PostEffect\PostEffect.h" />
     <ClInclude Include="Scene\GameScene.h" />
+    <ClInclude Include="Skydome\Skydome.h" />
+    <ClInclude Include="Skydome\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\BasicPS.hlsl">

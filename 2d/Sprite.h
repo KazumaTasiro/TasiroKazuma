@@ -1,7 +1,15 @@
 #pragma once
 #include"SpriteCommon.h"
-#include <DirectXMath.h>
+#pragma warning(push)
+#pragma warning(disable:26813)
+#pragma warning(disable:5264)
+#include <DirectXTex.h>
+#pragma warning(pop)
 #include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+
+
 
 
 using namespace DirectX;
@@ -10,15 +18,15 @@ using namespace DirectX;
 // 頂点データ構造体
 struct Vertex
 {
-	XMFLOAT3 pos; // xyz座標
-	XMFLOAT2 uv;  // uv座標
+	Vector3 pos; // xyz座標
+	Vector2 uv;  // uv座標
 };
 //スプライト
 class Sprite {
 public:
 	// 定数バッファ用データ構造体（マテリアル）
 	struct ConstBufferDataMaterial {
-		XMFLOAT4 color; // 色 (RGBA)
+		Vector4 color; // 色 (RGBA)
 	};
 	//定数バッファ用構造体（３D変換行列）
 	struct ConstBufferDataTransform {
@@ -40,41 +48,41 @@ public:
 
 	void Update();
 
-	void SetPozition(const XMFLOAT2& position_);
+	void SetPozition(const Vector2& position_);
 
-	const XMFLOAT2& GetPosition() const { return position; }
+	const Vector2& GetPosition() const { return position; }
 
 	void SetRotation(float rotation_);
 
 	float GetRotation() { return rotation; }
 
-	void SetColor(const XMFLOAT4& color_) { color = color_; }
+	void SetColor(const Vector4& color_) { color = color_; }
 
-	XMFLOAT4 GetColor() { return color; }
+	Vector4 GetColor() { return color; }
 
-	//void SetScale(const XMFLOAT3& scale_) { scale = scale_; }
+	//void SetScale(const Vector3& scale_) { scale = scale_; }
 
-	//XMFLOAT3 GetScale() { return scale; }
+	//Vector3 GetScale() { return scale; }
 
-	void SetAnchorPoint(const XMFLOAT2& anchorPoint_) { anchorPoint = anchorPoint_; }
+	void SetAnchorPoint(const Vector2& anchorPoint_) { anchorPoint = anchorPoint_; }
 
-	XMFLOAT2 GetAnchorPoint() { return anchorPoint; }
+	Vector2 GetAnchorPoint() { return anchorPoint; }
 
 	void SetTextureIndex(uint32_t texNmb) { textureIndex_ = texNmb; }
 
 	uint32_t GetTextureIndex() { return textureIndex_; }
 
-	void SetTexSize(XMFLOAT2 texSize) { textureSize = texSize; }
+	void SetTexSize(Vector2 texSize) { textureSize = texSize; }
 
-	XMFLOAT2 GetTexSize() { return textureSize; }
+	Vector2 GetTexSize() { return textureSize; }
 
-	XMFLOAT2 GetSize() { return size_; }
+	Vector2 GetSize() { return size_; }
 
-	void SetSize(XMFLOAT2 size);
+	void SetSize(Vector2 size);
 
-	/*void SetAnchorPoint(const XMFLOAT2& anchorpoint_) { anchorpoint = anchorpoint_; };*/
+	/*void SetAnchorPoint(const Vector2& anchorpoint_) { anchorpoint = anchorpoint_; };*/
 
-	XMFLOAT2 GetAnchorPonit() { return anchorpoint; }
+	Vector2 GetAnchorPonit() { return anchorpoint; }
 
 	/// 上下反転の設定
 	void SetIsFlipY(bool isFlipY);
@@ -96,7 +104,7 @@ private:
 		{{+0.4f, -0.7f, 0.0f}, {1.0f, 1.0f}}, // 右下
 		{{+0.4f, +0.7f, 0.0f}, {1.0f, 0.0f}}, // 右上
 	};
-	//XMFLOAT3 vertices[] = {
+	//Vector3 vertices[] = {
 	//{ -0.5f, -0.5f, 0.0f }, // 左下
 	//{ -0.5f, +0.5f, 0.0f }, // 左上
 	//{ +0.5f, -0.5f, 0.0f }, // 右下
@@ -112,14 +120,14 @@ private:
 	//座標
 
 
-	XMFLOAT2 size_ = { 100.0f,100.0f };
+	Vector2 size_ = { 100.0f,100.0f };
 
 	float rotation = 0.0f;
-	XMFLOAT2 position = { 0.0f, 0.0f };
+	Vector2 position = { 0.0f, 0.0f };
 
-	XMFLOAT4 color = { 1,1,1,1 };
+	Vector4 color = { 1,1,1,1 };
 
-	XMFLOAT2 anchorPoint = { 0.0f,0.0f };
+	Vector2 anchorPoint = { 0.0f,0.0f };
 
 	ID3D12Resource* constBuffTransform = nullptr;
 	ConstBufferDataTransform* constMapTransform = nullptr;
@@ -136,14 +144,14 @@ private:
 	uint32_t textureIndex_ = 0;
 
 	//テクスチャ左上座標
-	XMFLOAT2 textureLeftTop = { 0.0f,0.0f };
+	Vector2 textureLeftTop = { 0.0f,0.0f };
 	//テクスチャ切り出しサイズ
-	XMFLOAT2 textureSize = { 100.0f,100.0f };
+	Vector2 textureSize = { 100.0f,100.0f };
 
 	XMMATRIX matProjection;
 
 	// アンカーポイント
-	XMFLOAT2 anchorpoint = { 0, 0 };
+	Vector2 anchorpoint = { 0.5f, 0.5f };
 
 	// 頂点バッファの生成
 	ID3D12Resource* vertBuff = nullptr;

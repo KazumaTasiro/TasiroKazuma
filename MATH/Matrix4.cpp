@@ -48,6 +48,91 @@ Vector3 Matrix4::transform(const Vector3& v, const Matrix4& m) {
 	return result;
 }
 
+void Matrix4::MatrixInverse(Matrix4& pOut, Matrix4& pM)
+{
+	Matrix4 mat;
+	int i, j, loop;
+	double fDat, fDat2;
+	double mat_8x4[4][8];
+	int flag;
+	float* pF;
+	double* pD;
+
+	//8 x 4行列に値を入れる
+	for (i = 0; i < 4; i++) {
+		pF = pM.m[i];
+		for (j = 0; j < 4; j++, pF++) mat_8x4[i][j] = (double)(*pF);
+		pD = mat_8x4[i] + 4;
+		for (j = 0; j < 4; j++) {
+			if (i == j)   *pD = 1.0;
+			else         *pD = 0.0;
+			pD++;
+		}
+	}
+
+	flag = 1;
+	for (loop = 0; loop < 4; loop++) {
+		fDat = mat_8x4[loop][loop];
+		if (fDat != 1.0) {
+			if (fDat == 0.0) {
+				for (i = loop + 1; i < 4; i++) {
+					fDat = mat_8x4[i][loop];
+					if (fDat != 0.0) break;
+				}
+				if (i >= 4) {
+					flag = 0;
+					break;
+				}
+				//行を入れ替える
+				for (j = 0; j < 8; j++) {
+					fDat = mat_8x4[i][j];
+					mat_8x4[i][j] = mat_8x4[loop][j];
+					mat_8x4[loop][j] = fDat;
+				}
+				fDat = mat_8x4[loop][loop];
+			}
+
+			for (i = 0; i < 8; i++) mat_8x4[loop][i] /= fDat;
+		}
+		for (i = 0; i < 4; i++) {
+			if (i != loop) {
+				fDat = mat_8x4[i][loop];
+				if (fDat != 0.0f) {
+					//mat[i][loop]をmat[loop]の行にかけて
+					//(mat[j] - mat[loop] * fDat)を計算
+					for (j = 0; j < 8; j++) {
+						fDat2 = mat_8x4[loop][j] * fDat;
+						mat_8x4[i][j] -= fDat2;
+					}
+				}
+			}
+		}
+	}
+
+	if (flag) {
+		for (i = 0; i < 4; i++) {
+			pF = mat.m[i];
+			pD = mat_8x4[i] + 4;
+			for (j = 0; j < 4; j++) {
+				*pF = (float)(*pD);
+				pF++;
+				pD++;
+			}
+		}
+	}
+	else {
+		//単位行列を求める
+		mat = {
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1
+		};
+	}
+
+	pOut = mat;
+}
+
 Matrix4 Matrix4::MakeInverse(const Matrix4* mat)
 {
 	assert(mat);
@@ -149,6 +234,21 @@ Matrix4 Matrix4::MakeInverse(const Matrix4* mat)
 	}
 
 	return retMat;
+}
+
+Matrix4 Matrix4::Matrix4Identity()
+{
+	Matrix4 mat;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			mat.m[i][j] = 0.0f;
+		}
+	}
+	mat.m[0][0] = 1.0f;
+	mat.m[1][1] = 1.0f;
+	mat.m[2][2] = 1.0f;
+	mat.m[3][3] = 1.0f;
+	return mat;
 }
 
 void Matrix4::MakeOrthogonalL(float left, float right, float bottom, float top, float near_, float far_, Matrix4& matrix)

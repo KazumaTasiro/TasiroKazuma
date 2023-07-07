@@ -25,7 +25,7 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 void WinApp::Initialize()
 {
-	
+
 
 	//ウィンドウクラスの設定
 	/*WNDCLASSEX w{};*/
@@ -56,6 +56,12 @@ void WinApp::Initialize()
 
 	//ウィンドウを表示状態にする
 	ShowWindow(hwnd, SW_SHOW);
+}
+
+WinApp* WinApp::GetInstance()
+{
+	static WinApp instance;
+	return &instance;
 }
 
 void WinApp::Finalize()
