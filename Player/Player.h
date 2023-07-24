@@ -65,6 +65,10 @@ public:
 
 	void Reset();
 
+	Vector2 GetReticlePos();
+
+	Vector3 GetFarNear();
+	
 private:
 	//ワールド変換データ
 	Object3d* worldTransform_;
@@ -83,8 +87,17 @@ private:
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	//2Dレティクル用スプライト
 	Sprite* sprite2DReticle_;
+	Sprite* sprite2DReticleLock_;
 	SpriteCommon* spriteCommon_ = nullptr;
 	//デスフラグ
 	bool isDead_ = false;
 	WinApp* winApp = nullptr;
+
+	Vector3 farCre;
+	Vector3 nearCre;
+
+	Vector3 moveLimit = { 20,20,20 };
+	bool limitIn = false;
+
+	Vector3 playerResetPos = { 0,-2,0 };
 };

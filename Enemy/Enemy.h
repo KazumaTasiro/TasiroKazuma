@@ -6,24 +6,27 @@
 #include <memory>
 #include <list>
 #include "Vector3.h"
+#include "LockOnBullet.h"
+#include "Sprite.h"
+#include "Collision.h"
 
 ///<summary>
 ///敵キャラ
 ///</summary>
 
 class GameScene;
-//class Player;
+class Player;
 class Enemy {
 public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Vector3 EnemyPos);
+	void Initialize(Vector3 EnemyPos, Input* input,SpriteCommon* sptriteCommon);
 	///<summary>
 	///更新
 	///</summary>
 
-	void Update();
+	void Update(Player* player);
 
 	void Move();
 
@@ -35,6 +38,11 @@ public:
 	///描画
 	///</summary>
 	void Draw();
+	///<summary>
+	///描画
+	///</summary>
+	void DrawUI();
+
 	////行動フェーズ
 	//enum class Phase {
 	//	Approch,//接近する
@@ -58,19 +66,33 @@ public:
 
 	bool IsDead()const { return isDead_; }
 
+	void LockOnTrue();
+
+	void setPlayer(Player* player_) { player = player_; }
+
+	void OnColl();
+
+	//弾リストを取得
+	const std::list<std::unique_ptr<LockOnBullet>>& GetBullets() { return EnemyLockBullets_; }
+
 private:
 	//発射間隔
 	static const int kFireInterval = 100;
 
+	Input* input_ = nullptr;
 
 	GameScene* gameScene_ = nullptr;
 
 	//ワールド変換データ
 	Object3d* worldTransform_;
+	//ワールド変換データ
+	Object3d* worldTransformReticle_;
 	//モデル
 	Model* model_ = nullptr;
 	//モデル
 	Model* enemyBulletModel_ = nullptr;
+	//モデル
+	Model* enemyReticleModel_ = nullptr;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
@@ -81,8 +103,12 @@ private:
 	Vector3 ApprochMove = { 0,0,0.0f };
 	Vector3 LeaveMove = { -0.1f,0.1f,-0.1f };
 
+	//弾
+	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
 
 	int32_t time = 0;
+
+	Player* player = nullptr;
 
 	int EnemyHp = 1;
 
@@ -91,4 +117,6 @@ private:
 
 	bool lockOn = false;
 	float move = 0.1f;
+
+	Sprite* spriteLock = nullptr;
 };

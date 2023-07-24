@@ -22,11 +22,33 @@ public://メンバー関数
 	bool PushKey(BYTE keyNunber);
 	//キーのトリガーをチェック
 	bool TriggerKey(BYTE keyNunber);
+
+	//キーを押したかをチェック
+	//0　左クリック
+	//1　右クリック
+	//2　マウスカーソルクリック
+	bool PushMouse(int mouse_);
+	//キーのトリガーをチェック
+	//0　左クリック
+	//1　右クリック
+	//2　マウスカーソルクリック
+	bool TriggerMouse(int mouse_);
+	//マウスのリリースをチェック
+	//0　左クリック
+	//1　右クリック
+	//2　マウスカーソルクリック
+	bool ReleaseMouse(int mouse_);
 private://メンバ変数
 	//キーボードのデバイス
 	IDirectInputDevice8* keyboard = nullptr;
 	BYTE key[256] = {};
 	BYTE keyPre[256] = {};
+	//マウスのデバイス
+	IDirectInputDevice8* mouse = nullptr;
+	DIMOUSESTATE CurrentMouseState;		//!< マウスの現在の入力情報
+	DIMOUSESTATE PrevMouseState;			//!< マウスの一フレーム前の入力情報
+
+
 	//DirectInputのインスタンス
 	ComPtr<IDirectInput8> directInput;
 	//WindowsAPI

@@ -1,6 +1,14 @@
-#include "PlayerBullet.h"
+#include "LockOnBullet.h"
 
-void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity)
+LockOnBullet::LockOnBullet()
+{
+}
+
+LockOnBullet::~LockOnBullet()
+{
+}
+
+void LockOnBullet::Initialize(Model* model, const Vector3& position)
 {
 	assert(model);
 
@@ -10,25 +18,34 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	worldTransform_ = Object3d::Create();
 
 	//引数で受け取った初期座標をセット
-	worldTransform_->wtf.position=(position);
+	worldTransform_->wtf.position = (position);
 
-	//引数で受け取った速度をメンバ関数に代入
-	velocity_ = velocity;
+
 
 	//モデルをセットする
 	worldTransform_->SetModel(model_);
 
-	worldTransform_->wtf.scale={ 1,1,1 };
+	worldTransform_->wtf.scale = { 1,1,1 };
 }
 
-void PlayerBullet::Update()
+void LockOnBullet::Update(const Vector3& enemyPos)
 {
+	////引数で受け取った速度をメンバ関数に代入
+	//velocity_ = velocity;
+
 	//velocity_ = { 0,0,5 };
-	velocity_*= speed;
 
+	velocity_ = enemyPos - worldTransform_->wtf.position;
 
+	Vector3 position;
+	position.x = velocity_.x;
+	position.y = velocity_.y;
+	position.z = velocity_.z;
+
+	position.nomalize();
+	position *= speed;
 	//座標を移動させる(1フレーム文の移動量を足しこむ)
-	worldTransform_->wtf.position += velocity_;
+	worldTransform_->wtf.position += (position);
 
 	worldTransform_->Update();
 	//時間経過でデス
@@ -37,17 +54,17 @@ void PlayerBullet::Update()
 	}
 }
 
-void PlayerBullet::Draw()
+void LockOnBullet::Draw()
 {
 	worldTransform_->Draw();
 }
 
-void PlayerBullet::OnCollision()
+void LockOnBullet::OnCollision()
 {
 	isDead_ = true;
 }
 
-Vector3 PlayerBullet::GetWorldPosition()
+Vector3 LockOnBullet::GetWorldPosition()
 {
 	//ワールド座標を入れる変数
 	Vector3 worldPos;

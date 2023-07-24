@@ -198,7 +198,7 @@ void Camera::UpdateProjectionMatrix()
 	matProjection.MakePerspectiveL(
 		FieldOfViewY(),
 		aspectRatio,
-		0.1f, 100000.0f, matProjection
+		nearCam, farCam, matProjection
 	);
 }
 
@@ -235,4 +235,20 @@ void Camera::MoveVector(const Vector3& move)
 float Camera::FieldOfViewY()
 {
 	return static_cast<float> (2 * atan(sensor / (2 * focalLengs)));
+}
+
+Vector3 Camera::GetMatVec3()
+{
+	Vector3 vec = {1.0f,1.0f,1.0f};
+
+	Vector3 retVec = {};
+
+
+	retVec.x = vec.x * matProjection.m[0][0] + vec.y * matProjection.m[1][0] + vec.z * matProjection.m[2][0];
+
+	retVec.y = vec.x * matProjection.m[0][1] + vec.y * matProjection.m[1][1] + vec.z * matProjection.m[2][1];
+
+	retVec.z = vec.x * matProjection.m[0][2] + vec.y * matProjection.m[1][2] + vec.z * matProjection.m[2][2];
+
+	return retVec;
 }

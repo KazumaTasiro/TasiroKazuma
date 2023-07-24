@@ -35,16 +35,22 @@ void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp
 	worldTransform_->wtf.position = { 0, 0, 0 };
 
 	bulletModel_ = Model::LoadFormOBJ("bullet");
+
+	worldTransform3DReticle_->SetModel(bulletModel_);
 	//スプライト生成
 	sprite2DReticle_ = new Sprite();
 	sprite2DReticle_->Initialize(spriteCommon, 0);
 
+	sprite2DReticleLock_ = new Sprite();
+	sprite2DReticleLock_->Initialize(spriteCommon, 1);
 
+	worldTransform_->wtf.position = playerResetPos;
 
 }
 
 void Player::Update()
 {
+
 	//デスフラグの立った弾を削除
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
 		return bullet->IsDead();
@@ -59,6 +65,7 @@ void Player::Update()
 	}
 
 	MouseReticle();
+	sprite2DReticleLock_->SetPozition(sprite2DReticle_->GetPosition());
 }
 
 void Player::Move()
@@ -102,7 +109,7 @@ void Player::Move()
 	sprite2DReticle_->SetPozition({ min(worldTransform_->wtf.position.x, 0),min(worldTransform_->wtf.position.y, 0) });
 
 	//worldTransform_->wtf.position = { 0,0,-30 };
-	
+
 	worldTransform_->Update();
 }
 
@@ -140,6 +147,7 @@ Vector3 Player::GetWorldPosition()
 void Player::Draw()
 {
 
+	worldTransform3DReticle_->Draw();
 	worldTransform_->Draw();
 	/*model_->Draw(worldTransform_, viewProjection_, textureHandle_);*/
 //弾描画
@@ -152,7 +160,7 @@ void Player::Draw()
 
 void Player::Attack()
 {
-	if (input_->TriggerKey(DIK_SPACE))
+	if (input_->TriggerMouse(0))
 	{
 		//弾の速度
 		const float kBulletSpeed = 0.01f;
@@ -162,10 +170,7 @@ void Player::Attack()
 		velocity = ConvertToVector3(worldTransform_->wtf.matWorld, velocity);
 
 		//自機から標準オブジェクトへのベクトル
-		velocity = {
-		worldTransform3DReticle_->wtf.matWorld.m[3][0] - worldTransform_->wtf.matWorld.m[3][0],
-		worldTransform3DReticle_->wtf.matWorld.m[3][1] - worldTransform_->wtf.matWorld.m[3][1],
-		worldTransform3DReticle_->wtf.matWorld.m[3][2] - worldTransform_->wtf.matWorld.m[3][2] };
+		velocity = worldTransform3DReticle_->wtf.position - worldTransform_->wtf.position;
 		Vec3Normalize(&velocity, &velocity);
 		//弾を生成し、初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
@@ -201,8 +206,14 @@ int Player::Vec3Normalize(Vector3* pOut, Vector3* pV)
 
 void Player::DrawUI()
 {
-	/*sprite2DReticle_->SetPozition({ 0,0 });*/
-	sprite2DReticle_->Draw();
+
+	if (input_->PushMouse(1)) {
+		sprite2DReticleLock_->Draw();
+	}
+	else {
+		sprite2DReticle_->Draw();
+	}
+
 }
 
 Vector3 Player::clossV3V4(const Vector3& vec, const XMMATRIX& mat)
@@ -311,6 +322,8 @@ void Player::MouseReticle()
 		posNear = clossV3V4(posNear, ConvertXM::ConvertMat4toXMMAT(matInverseVPV));
 		posFar = clossV3V4(posFar, ConvertXM::ConvertMat4toXMMAT(matInverseVPV));
 
+		farCre = posNear;
+		farCre = posFar;
 		//マウスの前方ベクトルを計算する
 		//マウスレイの方向
 		Vector3 mouseDirection;
@@ -336,6 +349,20 @@ void Player::MouseReticle()
 
 void Player::Reset()
 {
-	worldTransform_->wtf.position = { 0, 0, 5 };
+	worldTransform_->wtf.position = playerResetPos;
 	bullets_.clear();
 }
+
+Vector2 Player::GetReticlePos()
+{
+	Vector2 pos = { worldTransform3DReticle_->GetWorldPosition().x,worldTransform3DReticle_->GetWorldPosition().y };
+	return pos;
+}
+
+Vector3 Player::GetFarNear()
+{
+	Vector3 vec = farCre - nearCre;
+	vec.nomalize();
+	return vec;
+}
+

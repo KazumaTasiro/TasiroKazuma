@@ -161,6 +161,11 @@ public: // メンバ関数
 
 	float FieldOfViewY();
 
+	float GetNear() { return nearCam; }
+	float GetFar() { return farCam; }
+
+	Vector3 GetMatVec3();
+
 protected: // メンバ変数
 	// ビュー行列
 	Matrix4 matView = ConvertXM::ConvertXMMATtoMat4(DirectX::XMMatrixIdentity());
@@ -187,4 +192,7 @@ protected: // メンバ変数
 
 	float focalLengs = 50;
 	float sensor = 35;
+
+	float nearCam = 0.1f;
+	float farCam = 1000.0f;
 };

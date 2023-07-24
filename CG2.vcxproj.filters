@@ -160,6 +160,12 @@
     <Filter Include="ソース ファイル\Game\Skydome">
       <UniqueIdentifier>{a97099c1-9d32-4b68-aa00-8de46b055be8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3D\Collision">
+      <UniqueIdentifier>{b46bbd48-6bd2-479c-981e-f622337ae8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3D\Collision">
+      <UniqueIdentifier>{3e26cf7d-eb52-4e9c-a6d6-e82627add00f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -252,6 +258,24 @@
     <ClCompile Include="Skydome\Transform.cpp">
       <Filter>ソース ファイル\Engine\3D\WorldTransform</Filter>
     </ClCompile>
+    <ClCompile Include="Collision\Collision.cpp">
+      <Filter>ソース ファイル\Engine\3D\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\CollisionPrimitive.cpp">
+      <Filter>ソース ファイル\Engine\3D\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\EnemyManager.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\LockOnBullet.cpp">
+      <Filter>ソース ファイル\Game\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\SplinePosition.cpp">
+      <Filter>ソース ファイル\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Easing.cpp">
+      <Filter>ソース ファイル\Engine\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\Input.h">
@@ -343,6 +367,24 @@
     </ClInclude>
     <ClInclude Include="Skydome\Transform.h">
       <Filter>ヘッダー ファイル\Engine\3D\WorldTransform</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collision.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\CollisionPrimitive.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\EnemyManager.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\LockOnBullet.h">
+      <Filter>ヘッダー ファイル\Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\SplinePosition.h">
+      <Filter>ヘッダー ファイル\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Easing.h">
+      <Filter>ヘッダー ファイル\Engine\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
