@@ -13,6 +13,10 @@
 #include "FbxLoader.h"
 #include "Object3dFbx.h"
 #include "Camera.h"
+#include "Player.h"
+#include "Skydome.h"
+#include "Collision.h"
+#include "EnemyManager.h"
 
 
 class GameScene {
@@ -46,7 +50,45 @@ public:
 	/// </summary>
 	void Finalize();
 
+	/// <summary>
+	/// Õ“Ë”»’è‚Æ‰“š
+	/// </summary>
+	void CheckAllCollisions();
+
+	///// <summary>
+	///// Õ“Ë”»’è‚Æ‰“š
+	///// </summary>
+	//void AddEnemyBullet(std::unique_ptr<EnemyBullet>& enemyBullet);
+
+
+
+
+
+
+
+	////’eƒŠƒXƒg‚ğæ“¾
+	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets2_; }
+
+	void PhaseReset();
+
+
+
+
 private:
+	enum Scene
+	{
+		Title,
+		Game,
+		GameOver,
+		GameClear
+	};
+	Scene scene;
+private:
+	///©ƒLƒƒƒ‰
+	Player* player_ = nullptr;
+
+	//std::list<std::unique_ptr<Enemy>> enemy_;
+
 	Input* input = nullptr;
 
 	WinApp* winApp_ = nullptr;
@@ -54,7 +96,7 @@ private:
 	DirectXCommon* dxCommon_ = nullptr;
 
 	ImGuiManager* ImGuiMan = nullptr;
-	
+
 
 	Audio* audio = nullptr;
 
@@ -67,4 +109,13 @@ private:
 
 	FbxModel* model1 = nullptr;
 	Object3dFbx* object1 = nullptr;
+
+
+	Skydome* skydome = nullptr;
+
+	EnemyManager* enemyManager = nullptr;
+
+	Sprite* stert = nullptr;
+
+	bool playMove = true;
 };

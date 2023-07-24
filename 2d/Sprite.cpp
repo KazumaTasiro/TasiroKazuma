@@ -109,7 +109,7 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 	assert(SUCCEEDED(result));
 
 	//// 値を書き込むと自動的に転送される
-	//constMapMaterial->color = XMFLOAT4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
+	//constMapMaterial->color = Vector4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
 
 	//テクスチャサイズをイメージに合わせる
 	if (texturerIndex != UINT32_MAX) {
@@ -223,7 +223,7 @@ void Sprite::Update()
 
 }
 
-void Sprite::SetPozition(const XMFLOAT2& position_)
+void Sprite::SetPozition(const Vector2& position_)
 {
 	position = position_;
 	Update();
@@ -235,7 +235,7 @@ void Sprite::SetRotation(float rotation_)
 	Update();
 }
 
-void Sprite::SetSize(XMFLOAT2 size)
+void Sprite::SetSize(Vector2 size)
 {
 	size_ = size;
 	Update();

@@ -1,44 +1,76 @@
 #pragma once
 
-#include "FbxModel.h"
-#include "FbxLoader.h"
-#include "Camera.h"
-
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
 #include <d3dx12.h>
-#include <DirectXMath.h>
 #include <string>
+
+#include <DirectXMath.h>
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix4.h"
+#include "Affin.h"
+
+#include "FbxLoader.h"
+#include "FBXModel.h"
+
+#include "Camera.h"
+#include "Transform.h"
 
 
 class Object3dFbx {
-protected:
+protected: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::省略
+	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
-public: // サブクラス
-	// 定数バッファ用データ構造体（座標変換行列用）
-	struct ConstBufferDataTransform
+
+public:
+	// 定数バッファ用データ構造体
+	struct ConstBufferDataB0
 	{
-		XMMATRIX viewproj;    // ビュープロジェクション行列
-		XMMATRIX world; // ワールド行列
-		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
+		Matrix4 mat;	// ３Ｄ変換行列
 	};
 
-public: // 定数
 	//ボーンの最大数
 	static const int MAX_BONES = 32;
 
-	//定数バッファ用のデータ構造体
+	//定数バッファ用のデータ構造体(スキニング)
 	struct ConstBufferDataSkin
 	{
 		XMMATRIX bones[MAX_BONES];
 	};
+
+
+public: // 静的メンバ関数
+	/// <summary>
+	/// グラフィックパイプラインの生成
+	/// </summary>
+	static void CreateGraphicsPipeline();
+
+	/// <summary>
+	/// グラフィックパイプラインの生成
+	/// </summary>
+	// setter
+	static void SetDevice(ID3D12Device* device) { Object3dFbx::device = device; }
+	static void SetCamera(Camera* camera) { Object3dFbx::camera = camera; }
+
+
+private: // 静的メンバ変数
+	// デバイス
+	static ID3D12Device* device;
+	// カメラ
+	static Camera* camera;
+	// ルートシグネチャ
+	static ComPtr<ID3D12RootSignature> rootsignature;
+	// パイプラインステートオブジェクト
+	static ComPtr<ID3D12PipelineState> pipelinestate;
+
+
 public: // メンバ関数
 	/// <summary>
 	/// 初期化
@@ -55,56 +87,41 @@ public: // メンバ関数
 	/// </summary>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
-	void SetModel(FbxModel* model) { this->model = model; }
+	void SetModel(FbxModel* fbxmodel) { this->fbxmodel = fbxmodel; }
 
 	/// <summary>
 	/// アニメーション開始
 	/// </summary>
-	void PlayAnimation();
-public:
-	/// <summary>
-	/// グラフィックパイプラインの生成
-	/// </summary>
-	static void CreateGraphicsPipeline();
+	void PlayAnimation(float speed = 1.0f, bool isLoop = true);
 
-	static void SetDevice(ID3D12Device* device) { Object3dFbx::device = device; }
-	static void SetCamera(Camera* camera) { Object3dFbx::camera = camera; }
-public:
-	// 定数バッファ
-	ComPtr<ID3D12Resource> constBuffTransform;
-	//デバイス
-	static ID3D12Device* device;
-	//カメラ
-	static Camera* camera;
+	void StopAnimation() { isPlay = false; };
 
-	// ルートシグネチャ
-	static ComPtr<ID3D12RootSignature> rootsignature;
-	// パイプラインステートオブジェクト
-	static ComPtr<ID3D12PipelineState> pipelinestate;
+	bool GetAnimationFin() { return isFin; };
 
 protected: // メンバ変数
-	// ローカルスケール
-	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
-	// X,Y,Z軸回りのローカル回転角
-	XMFLOAT3 rotation = { 0,0,0 };
-	// ローカル座標
-	XMFLOAT3 position = { 0,0,0 };
-	// ローカルワールド変換行列
-	XMMATRIX matWorld;
-	// モデル
-	FbxModel* model = nullptr;
-
-	//定数バッファ(スキン)
+	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
+	// 定数バッファ(スキン)
 	ComPtr<ID3D12Resource> constBuffSkin;
+	// モデル
+	FbxModel* fbxmodel = nullptr;
 
 	//1フレームの時間
 	FbxTime frameTime;
+	FbxTime animationTime;
 	//アニメーション開始時間
 	FbxTime startTime;
 	//アニメーション終了時間
 	FbxTime endTime;
 	//現在時間(アニメーション)
 	FbxTime currentTime;
+	int frame = 0;
 	//アニメーション再生中
 	bool isPlay = false;
+	//アニメーションループ
+	bool isLoop;
+	//アニメーション終了
+	bool isFin;
+
+public:
+	Transform wtf;
 };

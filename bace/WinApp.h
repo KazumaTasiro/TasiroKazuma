@@ -12,6 +12,9 @@ public:
 	
 	HINSTANCE GetHInstance()const { return w.hInstance; }
 
+	static WinApp* GetInstance();
+
+
 	//ウィンドウサイズ
 	static const int window_width = 1280;
 	static const int window_height = 720;

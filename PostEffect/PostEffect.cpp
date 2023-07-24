@@ -15,7 +15,7 @@ using namespace DirectX;
 using namespace Microsoft::WRL;
 
 //Ã“Iƒƒ“ƒo•Ï”‚ÌÀ‘Ì
-const float PostEffect::clearColor[4] = { 0.0f,0.5f,0.0f,0.0f };//RGBA
+const float PostEffect::clearColor[4] = { 0.1f,0.25f, 0.5f,0.0f };//RGBA
 
 PostEffect::PostEffect()
 {
