@@ -201,7 +201,7 @@ void EnemyManager::EnemyCollision(Player* player)
 			//自弾の座標
 			posR = player->GetReticlePos();
 
-			if (Collision::RaySphere({0,0,0}, posA, 2.5f, player->GetFarNear())) {
+			if (Collision::RaySphere({0,0,0}, posA, 3.0f, player->GetFarNear())) {
 				if (input_->PushMouse(1)) {
 					//敵キャラの衝突時コールバックを呼び出す
 					enemy->LockOnTrue();
