@@ -69,6 +69,8 @@ public:
 
 	Vector3 GetFarNear();
 	
+	void ReticleLimit();
+
 private:
 	//ワールド変換データ
 	Object3d* worldTransform_;
@@ -99,5 +101,5 @@ private:
 	Vector3 moveLimit = { 20,20,20 };
 	bool limitIn = false;
 
-	Vector3 playerResetPos = { 0,-2,0 };
+	Vector3 playerResetPos = { 0,-2.5f,0 };
 };

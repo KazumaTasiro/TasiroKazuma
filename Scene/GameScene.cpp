@@ -25,7 +25,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	
 	// ƒJƒƒ‰¶¬
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	camera->SetEye({ 0,0,-100 });
+	camera->SetEye({ 0,0,-150 });
 	Object3d::SetCamera(camera);
 
 	ImGuiMan = new ImGuiManager();
@@ -102,6 +102,7 @@ void GameScene::Update()
 		//}
 
 		//camera->SetEye({ 0,-300,300, });
+		camera->SetTarget({ (player_->GetReticlePos().x/100),(player_->GetReticlePos().y/100),camera->GetTarget().z});
 		camera->Update();
 		player_->Update();
 		if (input->TriggerKey(DIK_Q)) {

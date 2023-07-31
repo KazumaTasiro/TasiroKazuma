@@ -24,11 +24,12 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 void PlayerBullet::Update()
 {
 	//velocity_ = { 0,0,5 };
-	velocity_*= speed;
+	Vector3 vec = velocity_;
+	vec*= speed;
 
 
 	//座標を移動させる(1フレーム文の移動量を足しこむ)
-	worldTransform_->wtf.position += velocity_;
+	worldTransform_->wtf.position += vec;
 
 	worldTransform_->Update();
 	//時間経過でデス

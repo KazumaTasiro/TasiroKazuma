@@ -29,6 +29,8 @@ public:
 
 	Vector3 GetWorldPosition();
 
+
+
 private:
 	//ワールド変換データ
 	Object3d* worldTransform_;
@@ -40,7 +42,7 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	//弾の速度
-	float speed = 1.5f;
+	float speed = 1.2f;
 
 	//速度
 	Vector3 velocity_;

@@ -65,7 +65,9 @@ void Player::Update()
 	}
 
 	MouseReticle();
+	ReticleLimit();
 	sprite2DReticleLock_->SetPozition(sprite2DReticle_->GetPosition());
+
 }
 
 void Player::Move()
@@ -306,6 +308,8 @@ void Player::MouseReticle()
 
 		//マウス座標を2Dレティクルのスプライトに代入する
 		sprite2DReticle_->SetPozition(Vector2(static_cast<float> (mousePosition.x), static_cast<float> (mousePosition.y)));
+		ReticleLimit();
+		mousePosition = { static_cast<long>(sprite2DReticle_->GetPosition().x),static_cast<long>(sprite2DReticle_->GetPosition().y) };
 
 		//ビュー行列、射影変換、ビューポート行列の合成行列を計算する
 		Matrix4 matVPV = worldTransform_->camera->GetViewMatrix() * worldTransform_->camera->GetProjectionMatrix() * Viewport;
@@ -333,7 +337,7 @@ void Player::MouseReticle()
 		mouseDirection = mouseDirection.nomalize();
 		//ニアクリップ面上のワールド座標から一定距離前進したところに3Dレティクルを配置
 		//カメラから照準オブジェクトの距離
-		const float kDistanceTestObject = 60.0f;
+		const float kDistanceTestObject = 120.0f;
 		worldTransform3DReticle_->wtf.position = (AddVector(posNear, { mouseDirection.x * kDistanceTestObject,mouseDirection.y * kDistanceTestObject,mouseDirection.z * kDistanceTestObject }));
 
 		/*debugText_->SetPos(50, 150);
@@ -364,5 +368,21 @@ Vector3 Player::GetFarNear()
 	Vector3 vec = farCre - nearCre;
 	vec.nomalize();
 	return vec;
+}
+
+void Player::ReticleLimit()
+{
+	if (sprite2DReticle_->GetPosition().x <= 0) {
+		sprite2DReticle_->SetPozition({ 0,sprite2DReticle_->GetPosition().y });
+	}
+	if (sprite2DReticle_->GetPosition().y <= 0) {
+		sprite2DReticle_->SetPozition({ sprite2DReticle_->GetPosition().x,0 });
+	}
+	if (sprite2DReticle_->GetPosition().x >= winApp->window_width) {
+		sprite2DReticle_->SetPozition({ winApp->window_width,sprite2DReticle_->GetPosition().y });
+	}
+	if (sprite2DReticle_->GetPosition().y >= winApp->window_height) {
+		sprite2DReticle_->SetPozition({ sprite2DReticle_->GetPosition().x,winApp->window_height });
+	}
 }
 
