@@ -186,6 +186,7 @@
     <ClCompile Include="Player\PlayerBullet.cpp" />
     <ClCompile Include="PostEffect\PostEffect.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
+    <ClCompile Include="Skydome\Road.cpp" />
     <ClCompile Include="Skydome\Skydome.cpp" />
     <ClCompile Include="Skydome\Transform.cpp" />
   </ItemGroup>
@@ -232,6 +233,7 @@
     <ClInclude Include="Player\PlayerBullet.h" />
     <ClInclude Include="PostEffect\PostEffect.h" />
     <ClInclude Include="Scene\GameScene.h" />
+    <ClInclude Include="Skydome\Road.h" />
     <ClInclude Include="Skydome\Skydome.h" />
     <ClInclude Include="Skydome\Transform.h" />
   </ItemGroup>

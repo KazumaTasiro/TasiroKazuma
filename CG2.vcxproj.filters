@@ -166,6 +166,12 @@
     <Filter Include="ソース ファイル\Engine\3D\Collision">
       <UniqueIdentifier>{3e26cf7d-eb52-4e9c-a6d6-e82627add00f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\Road">
+      <UniqueIdentifier>{7bd28a10-984d-462a-90df-cca5c3c2d651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Road">
+      <UniqueIdentifier>{13c27f2d-5692-4ed2-bcc6-3eaa745ca618}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -276,6 +282,9 @@
     <ClCompile Include="Math\Easing.cpp">
       <Filter>ソース ファイル\Engine\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Skydome\Road.cpp">
+      <Filter>ソース ファイル\Game\Road</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\Input.h">
@@ -385,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="Math\Easing.h">
       <Filter>ヘッダー ファイル\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome\Road.h">
+      <Filter>ヘッダー ファイル\Game\Road</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

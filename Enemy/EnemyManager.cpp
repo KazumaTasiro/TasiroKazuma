@@ -26,9 +26,11 @@ void EnemyManager::Update()
 
 	//デスフラグの立った弾を削除
 	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) {
+
 		return enemy->IsDead();
 		});
 	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+		clearCount += enemy->ReturnOnColl();
 		enemy->SetGameScene(gameScene_);
 		enemy->Update(player_);
 	}
@@ -183,12 +185,12 @@ void EnemyManager::EnemyCollision(Player* player)
 			//自弾の座標
 			posB = bullet->GetWorldPosition();
 
-			if (Collision::CircleCollision(posB,posA,1.5f,1.5f)) {
+			if (Collision::CircleCollision(posB,posA,2.0f,2.0f)) {
 				//敵キャラの衝突時コールバックを呼び出す
 				enemy->OnCollision();
 				//自弾の衝突時コールバックを呼び出す
 				bullet->OnCollision();
-
+				
 			}
 		}
 	}
@@ -242,6 +244,18 @@ void EnemyManager::EnemyReset()
 		enemy->OnCollision();
 	}
 	EnemyPopComandReset();
+	clearCount = 0;
+	//clearNum = 0;
 	Update();
 
+}
+
+bool EnemyManager::Clear()
+{
+
+	if (clearNum == clearCount) {
+		return true;
+	}
+
+	return false;
 }

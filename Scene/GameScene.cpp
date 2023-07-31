@@ -25,7 +25,9 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	
 	// カメラ生成
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	camera->SetEye({ 0,0,-150 });
+	camera->SetEye({ 0,0,-10 });
+	
+	camera->Update();
 	Object3d::SetCamera(camera);
 
 	ImGuiMan = new ImGuiManager();
@@ -46,6 +48,10 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	stert->Initialize(spriteCommon, 3);
 	stert->SetPozition({ winApp->window_width/2,winApp->window_height/2 });
 
+	road = new Road();
+	road->Initialize();
+
+
 	//Object3dFbx::SetDevice(dxCommon_->GetDevice());
 	//Object3dFbx::SetCamera(camera);
 	//Object3dFbx::CreateGraphicsPipeline();
@@ -60,7 +66,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	
 	player_ = new Player();
 	player_->Initialize(spriteCommon, input,winApp);
-
+	
 	
 	
 	
@@ -68,9 +74,11 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	enemyManager->Initialize(dxCommon_,input,spriteCommon,camera);
 
 	enemyManager->SetGameScene(this);
+	PhaseReset();
+	//player_->Update();
 
 	scene = Scene::Title;
-
+	camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
 }
 void GameScene::Update()
 {
@@ -78,7 +86,7 @@ void GameScene::Update()
 
 	ImGui::SetWindowSize({ 500,100 });
 
-
+	
 	//デモウィンドウの表示ON
 	ImGui::ShowDemoWindow();
 
@@ -86,11 +94,14 @@ void GameScene::Update()
 	switch (scene)
 	{
 	case GameScene::Title:
+		road->BeforeUpdate();
+		//player_->Update();
 		if (input->TriggerKey(DIK_Q)) {
 			scene = Scene::Game;
 		}
 		break;
 	case GameScene::Game:
+		road->Update();
 		enemyManager->SetPlayer(player_);
 		enemyManager->Update();
 		enemyManager->EnemyCollision(player_);
@@ -105,7 +116,7 @@ void GameScene::Update()
 		camera->SetTarget({ (player_->GetReticlePos().x/100),(player_->GetReticlePos().y/100),camera->GetTarget().z});
 		camera->Update();
 		player_->Update();
-		if (input->TriggerKey(DIK_Q)) {
+		if (enemyManager->Clear()==true) {
 			scene = Scene::GameClear;
 		}
 		if (input->TriggerKey(DIK_E)) {
@@ -137,22 +148,29 @@ void GameScene::Draw()
 	switch (scene)
 	{
 	case GameScene::Title:
+		player_->Draw();
+		road->Draw();
 		break;
 	case GameScene::Game:
 	
-	
+		road->Draw();
 		enemyManager->Draw();
 		player_->Draw();
-		skydome->Draw();
+		
 
 		break;
 	case GameScene::GameOver:
+		player_->Draw();
+		road->Draw();
 		break;
 	case GameScene::GameClear:
+		player_->Draw();
+		road->Draw();
 		break;
 	default:
 		break;
 	}
+	skydome->Draw();
 
 	Object3d::PostDraw();
 	
@@ -169,7 +187,7 @@ void GameScene::Draw()
 	case GameScene::Game:
 		player_->DrawUI();
 		enemyManager->DrawUI();
-		ImGuiMan->Draw();
+		//ImGuiMan->Draw();
 		break;
 	case GameScene::GameOver:
 		stert->Draw();
@@ -213,6 +231,7 @@ void GameScene::PhaseReset()
 	//自キャラの初期化
 	player_->Reset();
 	enemyManager->EnemyReset();
+	road->Reset();
 }
 
 

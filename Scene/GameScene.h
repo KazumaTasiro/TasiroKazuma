@@ -17,6 +17,7 @@
 #include "Skydome.h"
 #include "Collision.h"
 #include "EnemyManager.h"
+#include "Road.h"
 
 
 class GameScene {
@@ -110,6 +111,7 @@ private:
 	FbxModel* model1 = nullptr;
 	Object3dFbx* object1 = nullptr;
 
+	Road* road = nullptr;
 
 	Skydome* skydome = nullptr;
 

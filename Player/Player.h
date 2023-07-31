@@ -71,6 +71,8 @@ public:
 	
 	void ReticleLimit();
 
+	void PlayerLimit();
+
 private:
 	//ワールド変換データ
 	Object3d* worldTransform_;
@@ -102,4 +104,6 @@ private:
 	bool limitIn = false;
 
 	Vector3 playerResetPos = { 0,-2.5f,0 };
+
+	const float speed = 0.5f;
 };

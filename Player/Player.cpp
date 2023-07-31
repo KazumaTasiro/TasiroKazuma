@@ -76,7 +76,7 @@ void Player::Move()
 	Vector3 move = { 0,0,0 };
 	Vector3 camMove = { 0,0,0 };
 	Vector3 pos = worldTransform_->wtf.position;
-	const float speed = 1.0f;
+
 	const float RotSpeed = 0.05f;
 	if (input_->PushKey(DIK_A)) {
 		move.x -= speed;
@@ -111,7 +111,7 @@ void Player::Move()
 	sprite2DReticle_->SetPozition({ min(worldTransform_->wtf.position.x, 0),min(worldTransform_->wtf.position.y, 0) });
 
 	//worldTransform_->wtf.position = { 0,0,-30 };
-
+	PlayerLimit();
 	worldTransform_->Update();
 }
 
@@ -149,7 +149,7 @@ Vector3 Player::GetWorldPosition()
 void Player::Draw()
 {
 
-	worldTransform3DReticle_->Draw();
+	/*worldTransform3DReticle_->Draw();*/
 	worldTransform_->Draw();
 	/*model_->Draw(worldTransform_, viewProjection_, textureHandle_);*/
 //’e•`‰æ
@@ -355,6 +355,7 @@ void Player::Reset()
 {
 	worldTransform_->wtf.position = playerResetPos;
 	bullets_.clear();
+	worldTransform_->Update();
 }
 
 Vector2 Player::GetReticlePos()
@@ -383,6 +384,16 @@ void Player::ReticleLimit()
 	}
 	if (sprite2DReticle_->GetPosition().y >= winApp->window_height) {
 		sprite2DReticle_->SetPozition({ sprite2DReticle_->GetPosition().x,winApp->window_height });
+	}
+}
+
+void Player::PlayerLimit()
+{
+	if (worldTransform_->wtf.position.x < -4) {
+		worldTransform_->wtf.position.x = -4;
+	}
+	if (worldTransform_->wtf.position.x > 4) {
+		worldTransform_->wtf.position.x = 4;
 	}
 }
 

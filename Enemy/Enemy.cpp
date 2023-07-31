@@ -48,11 +48,11 @@ void Enemy::Update(Player* player)
 	}
 	//キャラクター移動処理
 	Move();
-	OnColl();
 	spriteLock->SetPozition({ GetWorldPosition().x,GetWorldPosition().y });
 	if (EnemyHp <= 0) {
 		isDead_ = true;
 	}
+	OnColl();
 }
 
 void Enemy::Move()
@@ -107,6 +107,7 @@ void Enemy::DrawUI()
 void Enemy::OnCollision()
 {
 	EnemyHp--;
+	
 }
 
 void Enemy::LockOnTrue()
@@ -133,4 +134,12 @@ void Enemy::OnColl()
 			bullet->OnCollision();
 		}
 	}
+}
+
+int Enemy::ReturnOnColl()
+{
+	if (EnemyHp <= 0) {
+		return 1;
+	}
+	return 0;
 }

@@ -72,6 +72,9 @@ public:
 
 	void OnColl();
 
+
+	int ReturnOnColl();
+
 	//’eƒŠƒXƒg‚ğæ“¾
 	const std::list<std::unique_ptr<LockOnBullet>>& GetBullets() { return EnemyLockBullets_; }
 

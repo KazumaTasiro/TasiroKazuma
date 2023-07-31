@@ -42,7 +42,7 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	//’e‚Ì‘¬“x
-	float speed = 1.2f;
+	float speed = 3.0f;
 
 	//‘¬“x
 	Vector3 velocity_;

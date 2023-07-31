@@ -50,6 +50,8 @@ public:
 	void EnemyCollision(Player* player);
 
 	void EnemyReset();
+
+	bool Clear();
 public:
 	//âπÇé~ÇﬂÇÈä÷êî
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
@@ -74,4 +76,6 @@ private:
 	bool waitflag = false;
 	int waitTimer = 0;
 	Camera* camera_ = nullptr;
+	int clearCount = 0;
+	int clearNum = 3;
 };
