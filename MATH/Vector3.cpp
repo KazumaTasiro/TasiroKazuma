@@ -41,6 +41,31 @@ const Vector3 Vector3::lerp(const Vector3& start, const Vector3& end, const floa
 	return start * (1.0f - t) + end * t;
 }
 
+const Vector3 Vector3::slerp(Vector3& stert, Vector3& end, float t)
+{
+	Vector3 s, e, out;
+	s = stert.nomalize();
+	e = end.nomalize();
+
+	// 2ƒxƒNƒgƒ‹ŠÔ‚ÌŠp“xi‰sŠp‘¤j
+	float dott = s.dot(e);
+	float angle = acos(dott);
+
+	// sinƒÆ
+	float SinTh = sin(angle);
+
+	// •âŠÔŒW”
+	float Ps = sin(angle * (1 - t));
+	float Pe = sin(angle * t);
+
+	out = (Ps * s + Pe * e) / SinTh;
+
+	// ˆê‰³‹K‰»‚µ‚Ä‹…–ÊüŒ`•âŠÔ‚É
+	out.nomalize();
+
+	return out;
+}
+
 Vector3 Vector3::Vector3Zero() {
 	Vector3 a = { 0, 0, 0 };
 	return a;
@@ -100,8 +125,7 @@ Vector3& Vector3::operator/=(float s) {
 	return*this;
 }
 
-//Vector3?N???X????????????Q
-//2?????Z?q
+
 const Vector3 operator+(const Vector3& v1, const Vector3& v2) {
 	Vector3 temp(v1);
 	return temp += v2;

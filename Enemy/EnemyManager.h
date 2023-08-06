@@ -15,7 +15,7 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
-	void Initialize(DirectXCommon* dxCommon, Input* input,SpriteCommon* spriteCommon, Camera* camera);
+	void Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera);
 
 	void Update();
 
@@ -77,5 +77,5 @@ private:
 	int waitTimer = 0;
 	Camera* camera_ = nullptr;
 	int clearCount = 0;
-	int clearNum = 3;
+	int clearNum = 8;
 };

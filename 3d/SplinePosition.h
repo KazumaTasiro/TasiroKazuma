@@ -27,11 +27,14 @@ public://基本関数
 	/// <param name="time">デフォMaxTime=1のうちのどこか</param>
 	void Update(float& time);
 
+	void Reset();
+
 private://プライベート関数
 	Vector3 SplinePositionUpdate(const std::vector<Vector3>& points, size_t& startIndex, float& t);
 
 public://Setter
 	void SetSplineMaxTime(const float& MaxTime) { this->MaxTime = MaxTime; }
+	size_t GetIndex() { return startIndex; }
 
 public://公開変数
 	Vector3 NowPos;

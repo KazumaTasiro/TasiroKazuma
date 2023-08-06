@@ -10,7 +10,7 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 	//ワールド変換の初期化
 	worldTransform_ = Object3d::Create();;
 	worldTransform_->wtf.position = EnemyPos;
-
+	
 	model_ = Model::LoadFormOBJ("cubeObj");
 	enemyBulletModel_ = Model::LoadFormOBJ("bullet");
 	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
@@ -18,7 +18,7 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 	worldTransformReticle_ = Object3d::Create();
 	worldTransformReticle_->wtf.position = EnemyPos;
 	worldTransformReticle_->SetModel(enemyReticleModel_);
-	worldTransformReticle_->wtf.scale = {10,10,10};
+	worldTransformReticle_->wtf.scale = { 10,10,10 };
 
 	spriteLock = new Sprite();
 	spriteLock->Initialize(sptriteCommon, 2);
@@ -28,15 +28,19 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 	worldTransform_->SetModel(model_);
 
 	worldTransform_->wtf.scale = { 3,3,3 };
+	EnemyMoveSpline0 = { worldTransform_->wtf.position.x + 100, worldTransform_->wtf.position.y - 25, 150.0f };
+	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
 }
 
 void Enemy::Update(Player* player)
 {
-	
+
 	assert(player);
 	this->player = player;
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->Update();
+	float time = 0.02f;
+	spline->Update(time);
 	//worldTransformReticle_->wtf.position.z = 0;
 	//デスフラグの立った弾を削除
 	EnemyLockBullets_.remove_if([](std::unique_ptr<LockOnBullet>& bullet) {
@@ -57,22 +61,30 @@ void Enemy::Update(Player* player)
 
 void Enemy::Move()
 {
-
-	if (worldTransform_->wtf.position.x >= 5 || worldTransform_->wtf.position.x <= -5) {
-		move = -move;
-	}
-	worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
-	worldTransform_->Update();
-	if (input_->ReleaseMouse(1)) {
-		if (lockOn == true) {
-			//弾を生成し、初期化
-			std::unique_ptr<LockOnBullet> newBullet = std::make_unique<LockOnBullet>();
-			newBullet->Initialize(enemyBulletModel_, player->GetWorldPosition());
-			//弾を発射する
-			EnemyLockBullets_.push_back(std::move(newBullet));
-			lockOn = false;
+	if (DemoEnemyMove == false) {
+		worldTransform_->wtf.position = spline->NowPos;
+		if (spline->NowPos.x == EnemyMoveSpline0.x && spline->NowPos.y == EnemyMoveSpline0.y && spline->NowPos.z == EnemyMoveSpline0.z) {
+			DemoEnemyMove = true;
 		}
 	}
+	if (DemoEnemyMove == true) {
+		if (worldTransform_->wtf.position.x >= 5 || worldTransform_->wtf.position.x <= -5) {
+			move = -move;
+		}
+		worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
+
+		if (input_->ReleaseMouse(1)) {
+			if (lockOn == true) {
+				//弾を生成し、初期化
+				std::unique_ptr<LockOnBullet> newBullet = std::make_unique<LockOnBullet>();
+				newBullet->Initialize(enemyBulletModel_, player->GetWorldPosition());
+				//弾を発射する
+				EnemyLockBullets_.push_back(std::move(newBullet));
+				lockOn = false;
+			}
+		}
+	}
+	worldTransform_->Update();
 }
 
 Vector3 Enemy::GetWorldPosition()
@@ -107,7 +119,7 @@ void Enemy::DrawUI()
 void Enemy::OnCollision()
 {
 	EnemyHp--;
-	
+
 }
 
 void Enemy::LockOnTrue()

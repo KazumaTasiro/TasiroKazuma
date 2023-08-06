@@ -9,6 +9,7 @@
 #include "LockOnBullet.h"
 #include "Sprite.h"
 #include "Collision.h"
+#include "SplinePosition.h"
 
 ///<summary>
 ///ìGÉLÉÉÉâ
@@ -21,7 +22,7 @@ public:
 	///<summary>
 	///èâä˙âª
 	///</summary>
-	void Initialize(Vector3 EnemyPos, Input* input,SpriteCommon* sptriteCommon);
+	void Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon);
 	///<summary>
 	///çXêV
 	///</summary>
@@ -106,6 +107,10 @@ private:
 	Vector3 ApprochMove = { 0,0,0.0f };
 	Vector3 LeaveMove = { -0.1f,0.1f,-0.1f };
 
+	Vector3 EnemyMoveSpline0 = { 0,0,0};
+	Vector3 EnemyMoveSpline1 = { -50,20,50 };
+	Vector3 EnemyMoveSpline2 = { -20,15,100 };
+
 	//íe
 	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
 
@@ -122,4 +127,8 @@ private:
 	float move = 0.1f;
 
 	Sprite* spriteLock = nullptr;
+
+	SplinePosition* spline = nullptr;
+	bool DemoEnemyMove = false;
+
 };
