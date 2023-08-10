@@ -77,5 +77,5 @@ private:
 	int waitTimer = 0;
 	Camera* camera_ = nullptr;
 	int clearCount = 0;
-	int clearNum = 8;
+	int clearNum = 3;
 };

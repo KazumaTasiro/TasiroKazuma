@@ -172,6 +172,12 @@
     <Filter Include="ヘッダー ファイル\Game\Road">
       <UniqueIdentifier>{13c27f2d-5692-4ed2-bcc6-3eaa745ca618}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\EngineMain\GameMain">
+      <UniqueIdentifier>{5dbf4682-ad25-46af-b29e-f9164c27b952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\EngineMain\GameMain">
+      <UniqueIdentifier>{c4a4501d-5608-469f-8815-bcf4b3b06f45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -285,6 +291,12 @@
     <ClCompile Include="Skydome\Road.cpp">
       <Filter>ソース ファイル\Game\Road</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy\Boss.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="bace\GameMain.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\Input.h">
@@ -397,6 +409,12 @@
     </ClInclude>
     <ClInclude Include="Skydome\Road.h">
       <Filter>ヘッダー ファイル\Game\Road</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Boss.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="bace\GameMain.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
