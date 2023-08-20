@@ -91,7 +91,7 @@ private:
 	int clearCount = 0;
 	int clearNum = 5;
 
-	int clearTime = 600;
+	int clearTime = 400;
 	int randEnemyNmb;
 
 	bool EfectEnd = false;

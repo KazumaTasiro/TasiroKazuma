@@ -44,6 +44,12 @@ void Boss::Update(Player* player)
 	Move();
 
 	//worldTransformReticle_->wtf.position.z = 0;
+	if (isDead_) {
+		for (std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_) {
+			//自弾の衝突時コールバックを呼び出す
+			enemyBullets->OnCollision();
+		}
+	}
 	//デスフラグの立った弾を削除
 	EnemyLockBullets_.remove_if([](std::unique_ptr<LockOnBullet>& bullet) {
 		return bullet->IsDead();

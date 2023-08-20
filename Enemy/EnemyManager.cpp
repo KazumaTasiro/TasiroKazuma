@@ -37,7 +37,7 @@ void EnemyManager::Update()
 {
 	clearTime--;
 	if (clearTime <= 0) {
-		clearTime = 600;
+		clearTime = 400;
 		EnemyPopComandReset();
 	}
 	UpdateEnemyPopCommands();
@@ -330,7 +330,7 @@ void EnemyManager::EnemyReset()
 	EnemyPopComandReset();
 	clearCount = 0;
 	//clearNum = 0;
-	clearTime = 600;
+	clearTime = 400;
 	Update();
 	EffectTime = 50;
 	EfectEnd = false;
