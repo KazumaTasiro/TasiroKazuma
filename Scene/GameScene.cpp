@@ -7,7 +7,6 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	delete player_;
-	//delete model1;
 }
 void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_)
 {
@@ -22,13 +21,14 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 
 	audio = new Audio();
 	audio->Initialize();
-	
+
 	// カメラ生成
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	camera->SetEye({ 0,0,-10 });
-	
+
 	camera->Update();
 	Object3d::SetCamera(camera);
+	ParticleManager::SetCamera(camera);
 
 	ImGuiMan = new ImGuiManager();
 	ImGuiMan->Initialize(winApp, dxCommon_);
@@ -46,7 +46,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 
 	stert = new Sprite();
 	stert->Initialize(spriteCommon, 3);
-	stert->SetPozition({ winApp->window_width/2,winApp->window_height/2 });
+	stert->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 });
 
 	road = new Road();
 	road->Initialize();
@@ -63,22 +63,24 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	//object1->Initialize();
 	//object1->SetModel(model1);
 	//object1->PlayAnimation();
-	
+
 	player_ = new Player();
-	player_->Initialize(spriteCommon, input,winApp);
-	
-	
-	
-	
+	player_->Initialize(spriteCommon, input, winApp);
+
+
+
+
 	enemyManager = new EnemyManager();
-	enemyManager->Initialize(dxCommon_,input,spriteCommon,camera);
+	enemyManager->Initialize(dxCommon_, input, spriteCommon, camera);
 
 	enemyManager->SetGameScene(this);
+	enemyManager->SetPlayer(player_);
 	PhaseReset();
 	//player_->Update();
 
 	scene = Scene::Title;
-	camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
+
+
 }
 void GameScene::Update()
 {
@@ -86,10 +88,11 @@ void GameScene::Update()
 
 	ImGui::SetWindowSize({ 500,100 });
 
-	
 	//デモウィンドウの表示ON
 	ImGui::ShowDemoWindow();
 
+	ImGui::SliderFloat("posz", &playPos, -100, 0);
+	player_->SetPos({ player_->GetWorldPosition().x ,player_->GetWorldPosition().y,playPos });
 	ImGuiMan->End();
 	switch (scene)
 	{
@@ -101,6 +104,7 @@ void GameScene::Update()
 		}
 		break;
 	case GameScene::Game:
+		camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
 		road->Update();
 		enemyManager->SetPlayer(player_);
 		enemyManager->Update();
@@ -113,13 +117,30 @@ void GameScene::Update()
 		//}
 
 		//camera->SetEye({ 0,-300,300, });
-		camera->SetTarget({ (player_->GetReticlePos().x/100),(player_->GetReticlePos().y/100),camera->GetTarget().z});
+		camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
 		camera->Update();
 		player_->Update();
-		if (enemyManager->Clear()==true) {
+		if (enemyManager->Clear() == true) {
+			scene = Scene::Boss;
+		}
+		if (player_->retrunIsDaed()) {
+			scene = Scene::GameOver;
+		}
+		break;
+	case GameScene::Boss:
+		camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
+		road->Update();
+		enemyManager->SetPlayer(player_);
+		enemyManager->BossUpdate();
+		enemyManager->Update();
+		enemyManager->EnemyCollision(player_);
+		camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
+		camera->Update();
+		player_->Update();
+		if (enemyManager->BossClear()) {
 			scene = Scene::GameClear;
 		}
-		if (input->TriggerKey(DIK_E)) {
+		if (player_->retrunIsDaed()) {
 			scene = Scene::GameOver;
 		}
 		break;
@@ -139,41 +160,43 @@ void GameScene::Update()
 		break;
 	}
 
-	
+
 
 }
 void GameScene::Draw()
 {
 	Object3d::PreDraw(dxCommon_->GetCommandList());
+
+	
+	skydome->Draw();
+	road->Draw();
+	player_->Draw();
+
 	switch (scene)
 	{
 	case GameScene::Title:
-		player_->Draw();
-		road->Draw();
-		break;
-	case GameScene::Game:
-	
-		road->Draw();
-		enemyManager->Draw();
-		player_->Draw();
-		
 
 		break;
+	case GameScene::Game:
+
+
+		enemyManager->Draw();
+		break;
+	case GameScene::Boss:
+		enemyManager->BossDraw();
+		break;
 	case GameScene::GameOver:
-		player_->Draw();
-		road->Draw();
 		break;
 	case GameScene::GameClear:
-		player_->Draw();
-		road->Draw();
+
 		break;
 	default:
 		break;
 	}
-	skydome->Draw();
+
 
 	Object3d::PostDraw();
-	
+
 
 
 
@@ -189,6 +212,10 @@ void GameScene::Draw()
 		enemyManager->DrawUI();
 		//ImGuiMan->Draw();
 		break;
+	case GameScene::Boss:
+		player_->DrawUI();
+		enemyManager->DrawUI();
+		break;
 	case GameScene::GameOver:
 		stert->Draw();
 		break;
@@ -199,7 +226,7 @@ void GameScene::Draw()
 		break;
 	}
 
-	
+	ImGuiMan->Draw();
 
 }
 

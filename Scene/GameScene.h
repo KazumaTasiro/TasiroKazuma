@@ -80,6 +80,7 @@ private:
 	{
 		Title,
 		Game,
+		Boss,
 		GameOver,
 		GameClear
 	};
@@ -120,4 +121,8 @@ private:
 	Sprite* stert = nullptr;
 
 	bool playMove = true;
+
+	float playPos = 0;
+
+	bool TitleEnd = false;
 };

@@ -178,6 +178,12 @@
     <Filter Include="ソース ファイル\Engine\EngineMain\GameMain">
       <UniqueIdentifier>{c4a4501d-5608-469f-8815-bcf4b3b06f45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\3D\Particle">
+      <UniqueIdentifier>{fd231813-89d5-4d10-b7d2-371f25bb674d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3D\Particle">
+      <UniqueIdentifier>{93cb3bcb-bb1b-409c-9060-23ff0d864751}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -296,6 +302,15 @@
     </ClCompile>
     <ClCompile Include="bace\GameMain.cpp">
       <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="bace\Framework.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\ParticleManager.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\EnemyBullet.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,6 +431,15 @@
     <ClInclude Include="bace\GameMain.h">
       <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
     </ClInclude>
+    <ClInclude Include="bace\Framework.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\ParticleManager.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -448,6 +472,15 @@
     <FxCompile Include="Resources\shaders\FBXVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleGS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -463,6 +496,9 @@
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\FBX.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\Particle.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>

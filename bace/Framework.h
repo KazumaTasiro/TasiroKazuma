@@ -1,0 +1,52 @@
+#pragma once
+#include "Input.h"
+#include "WinApp.h"
+#include "DirectXCommon.h"
+#include "FPS.h"
+#include "FbxLoader.h"
+
+//ゲーム全体
+class Framework
+{
+public://メンバ関数
+
+	//実行
+	void Run();
+
+	virtual ~Framework() = default;
+
+	//初期化
+	virtual void Initialize();
+
+	//終了
+	virtual void Finalize();
+
+	//毎フレーム処理
+	virtual void Update();
+
+	//描画
+	virtual void Draw() = 0;
+
+	//終了チェック
+	virtual bool IsEndRequst() { return endRequest_; }
+
+
+	WinApp* GetWinApp() { return winApp; }
+	DirectXCommon* GetDXCommon() { return dxCommon; }
+	Input* GetInput() { return input; }
+
+private:
+	//ゲーム終了フラグ
+	bool endRequest_ = false;
+	//WinApp
+	WinApp* winApp = nullptr;
+
+	//DXcommon
+	DirectXCommon* dxCommon = nullptr;
+	//インプット
+	Input* input = nullptr;
+	//FPS
+	FPS* fps = new FPS;
+	//メッセージ
+	MSG msg{};
+};

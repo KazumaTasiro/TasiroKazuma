@@ -1,19 +1,22 @@
 #include "Enemy.h"
 #include "Player.h"
 
-void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon)
+void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel, int EnemyNmb)
 {
 	assert(input);
 	assert(sptriteCommon);
+	assert(model);
+	assert(enemyBulletModel);
+	assert(enemyReticleModel);
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	//ワールド変換の初期化
 	worldTransform_ = Object3d::Create();;
 	worldTransform_->wtf.position = EnemyPos;
 	
-	model_ = Model::LoadFormOBJ("cubeObj");
-	enemyBulletModel_ = Model::LoadFormOBJ("bullet");
-	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
+	model_ = model;
+	enemyBulletModel_ = enemyBulletModel;
+	enemyReticleModel_ = enemyReticleModel;
 
 	worldTransformReticle_ = Object3d::Create();
 	worldTransformReticle_->wtf.position = EnemyPos;
@@ -25,11 +28,17 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 
 	input_ = input;
 
+	enemyNmb = EnemyNmb;
+
 	worldTransform_->SetModel(model_);
 
 	worldTransform_->wtf.scale = { 3,3,3 };
 	EnemyMoveSpline0 = { worldTransform_->wtf.position.x + 100, worldTransform_->wtf.position.y - 25, 150.0f };
+	EnemyReMoveSpline0 = { worldTransform_->wtf.position.x + 100, worldTransform_->wtf.position.y - 25, 150.0f };
+	EnemyReMoveSpline1 = { worldTransform_->wtf.position.x, 30 , -50.0f };
+	EnemyReMoveSpline2 = { worldTransform_->wtf.position.x, 30, 100.0f };
 	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
+	splineReMove = new SplinePosition(worldTransform_->wtf.position, EnemyReMoveSpline1, EnemyReMoveSpline2, EnemyReMoveSpline0);
 }
 
 void Enemy::Update(Player* player)
@@ -43,13 +52,13 @@ void Enemy::Update(Player* player)
 	spline->Update(time);
 	//worldTransformReticle_->wtf.position.z = 0;
 	//デスフラグの立った弾を削除
-	EnemyLockBullets_.remove_if([](std::unique_ptr<LockOnBullet>& bullet) {
-		return bullet->IsDead();
+	EnemyLockBullets_.remove_if([](std::unique_ptr<LockOnBullet>& LockBullet) {
+		return LockBullet->IsDead();
 		});
-	//弾更新
-	for (std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_) {
-		bullet->Update(GetWorldPosition());
-	}
+	EnemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& enemyBullet) {
+		return enemyBullet->IsDead();
+		});
+
 	//キャラクター移動処理
 	Move();
 	spriteLock->SetPozition({ GetWorldPosition().x,GetWorldPosition().y });
@@ -68,23 +77,86 @@ void Enemy::Move()
 		}
 	}
 	if (DemoEnemyMove == true) {
-		if (worldTransform_->wtf.position.x >= 5 || worldTransform_->wtf.position.x <= -5) {
-			move = -move;
+		Fire();
+		if (enemyNmb == 0) {
+			if (worldTransform_->wtf.position.x >= 5 || worldTransform_->wtf.position.x <= -5) {
+				move = -move;
+			}
+			worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
 		}
-		worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
-
-		if (input_->ReleaseMouse(1)) {
-			if (lockOn == true) {
-				//弾を生成し、初期化
-				std::unique_ptr<LockOnBullet> newBullet = std::make_unique<LockOnBullet>();
-				newBullet->Initialize(enemyBulletModel_, player->GetWorldPosition());
-				//弾を発射する
-				EnemyLockBullets_.push_back(std::move(newBullet));
-				lockOn = false;
+		if (TackleReMove) {
+			float time = 0.05f;
+			splineReMove->Update(time);
+			worldTransform_->wtf.position = splineReMove->NowPos;
+			if (splineReMove->NowPos.x == EnemyMoveSpline0.x && splineReMove->NowPos.y == EnemyMoveSpline0.y && splineReMove->NowPos.z == EnemyMoveSpline0.z) {
+				TackleReMove = false;
+				fireFlag = false;
 			}
 		}
+		else
+		{
+			splineReMove->Reset();
+
+		}
 	}
+
 	worldTransform_->Update();
+}
+
+void Enemy::Fire()
+{
+	fireTime--;
+	if (fireTime<=0) {
+		fireFlag = true;
+		fireTime = 45;
+
+	}
+	if (fireFlag == false) {
+		velocityTackle = player->GetWorldPosition() - worldTransform_->wtf.position;
+		velocityTackle.nomalize();
+		velocityTackle *= verocitySpeed;
+	}
+	if (fireFlag) {
+
+
+		if (enemyNmb == 0) {
+			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
+			velocity_.nomalize();
+			velocity_ *= verocitySpeed;
+			//弾を生成し、初期化
+			std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
+			newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
+			//弾を発射する
+			EnemyBullets_.push_back(std::move(newEnemyBullet));
+			fireFlag = false;
+		}
+		if (enemyNmb == 1) {
+			worldTransform_->wtf.position += velocityTackle;
+
+			if (worldTransform_->wtf.position.z <= -50) {
+				TackleReMove = true;
+			}
+
+		}
+	}
+	if (input_->ReleaseMouse(1)) {
+		if (lockOn == true) {
+			//弾を生成し、初期化
+			std::unique_ptr<LockOnBullet> newLockBullet = std::make_unique<LockOnBullet>();
+			newLockBullet->Initialize(enemyBulletModel_, player->GetWorldPosition());
+			//弾を発射する
+			EnemyLockBullets_.push_back(std::move(newLockBullet));
+			lockOn = false;
+		}
+	}
+	//弾更新
+	for (std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_) {
+		enemyBullet->Update();
+	}
+	//弾更新
+	for (std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_) {
+		LockBullet->Update(GetWorldPosition());
+	}
 }
 
 Vector3 Enemy::GetWorldPosition()
@@ -100,8 +172,12 @@ Vector3 Enemy::GetWorldPosition()
 void Enemy::Draw()
 {
 	//弾更新
-	for (std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_) {
-		bullet->Draw();
+	for (std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_) {
+		LockBullet->Draw();
+	}
+	//弾更新
+	for (std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_) {
+		enemyBullet->Draw();
 	}
 	worldTransform_->Draw();
 	if (lockOn) {
@@ -132,19 +208,45 @@ void Enemy::OnColl()
 	//判定対象AとBの座標
 	Vector3 posA, posB;
 
-	for (std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_) {
+	for (std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_) {
 		//敵キャラも座標
 		posA = GetWorldPosition();
 
 		//自弾の座標
-		posB = bullet->GetWorldPosition();
+		posB = LockBullet->GetWorldPosition();
 
 		if (Collision::CircleCollision(posB, posA, 2.0f, 2.0f)) {
 			//敵キャラの衝突時コールバックを呼び出す
 			OnCollision();
 			//自弾の衝突時コールバックを呼び出す
-			bullet->OnCollision();
+			LockBullet->OnCollision();
 		}
+	}
+	for (std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_) {
+		//敵キャラも座標
+		posA = player->GetWorldPosition();
+
+		//自弾の座標
+		posB = enemyBullets->GetWorldPosition();
+
+		if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
+			//敵キャラの衝突時コールバックを呼び出す
+			player->OnCollision();
+			//自弾の衝突時コールバックを呼び出す
+			enemyBullets->OnCollision();
+		}
+	}
+	//敵キャラも座標
+	posA = player->GetWorldPosition();
+
+	//自弾の座標
+	posB = worldTransform_->GetWorldPosition();
+
+	if (Collision::CircleCollision(posB, posA, 1.0f, 1.0f)) {
+		//敵キャラの衝突時コールバックを呼び出す
+		player->OnCollision();
+		//自弾の衝突時コールバックを呼び出す
+		CollTackle();
 	}
 }
 
@@ -154,4 +256,9 @@ int Enemy::ReturnOnColl()
 		return 1;
 	}
 	return 0;
+}
+
+void Enemy::CollTackle()
+{
+	isTackleDead_ = true;
 }

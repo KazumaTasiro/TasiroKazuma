@@ -1,48 +1,35 @@
 #pragma once
-#include "Input.h"
-#include "WinApp.h"
-#include "DirectXCommon.h"
-#include "FPS.h"
+
 #include "GameScene.h"
 #include "PostEffect.h"
-#include "FbxLoader.h"
+#include "Framework.h"
 
 //ゲーム全体
-class GameMain
+class GameMain:public Framework
 {
 public:
 	GameMain();
 	~GameMain();
 
 	//初期化処理
-	void Inirialize();
+	void Initialize() override;
 
 	//終了
-	void Finalize();
+	void Finalize() override;
 
 	//毎フレーム更新()
-	void Update();
+	void Update() override;
 
 	//描画
-	void Draw();
+	void Draw() override;
 
-	//終了フラグのチェック
-	bool isEndRequest() { return endRequest_; }
 
 private:
-	//WinApp
-	WinApp* winApp = nullptr;
-	//ゲーム終了フラグ
-	bool endRequest_ = false;
-	//DXcommon
-	DirectXCommon* dxCommon = nullptr;
-	//インプット
-	Input* input = nullptr;
+	
 	//ポストエフェクト
 	PostEffect* posteffect = nullptr;
-	//FPS
-	FPS* fps = new FPS;
+	
 	//GameScene
 	GameScene* gameScene = nullptr;
-	MSG msg{};//メッセージ
+
 };

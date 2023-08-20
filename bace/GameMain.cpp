@@ -8,40 +8,20 @@ GameMain::~GameMain()
 {
 }
 
-void GameMain::Inirialize()
+void GameMain::Initialize()
 {
 
-
-	//WindowsAPIの初期化
-	winApp = new WinApp();
-	winApp->Initialize();
-
-	//ポインタ
-	
-	dxCommon = new DirectXCommon();
-	dxCommon->Initialize(winApp);
-
-
-
-	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
-
-	
-
-	//入力の初期化
-	input = new Input();
-	input->Initalize(winApp);
-
-	
-
+	Framework::Initialize();
 	posteffect = new PostEffect();
 
-	posteffect->Initialize(dxCommon->GetDevice(), input);
+	posteffect->Initialize(Framework::GetDXCommon()->GetDevice(), Framework::GetInput());
 
 	// 3Dオブジェクト静的初期化
-	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
+	Object3d::StaticInitialize(Framework::GetDXCommon()->GetDevice(), WinApp::window_width, WinApp::window_height);
+	ParticleManager::StaticInitialize(Framework::GetDXCommon()->GetDevice(), Framework::GetDXCommon()->GetCommandList());
 
 	gameScene = new GameScene();
-	gameScene->Initialize(winApp, dxCommon, input);
+	gameScene->Initialize(Framework::GetWinApp(), Framework::GetDXCommon(), Framework::GetInput());
 
 }
 
@@ -50,59 +30,33 @@ void GameMain::Finalize()
 	gameScene->Finalize();
 	FbxLoader::GetInstance()->Finalize();
 
-	//入力開放
-	delete input;
+	
 	delete gameScene;
 	delete posteffect;
-	delete fps;
-
-	//DirectX解放
-	delete dxCommon;
-	//WindowsAPIの終了処理
-	winApp->Finalize();
-	//WindowsAPI解放
-	delete winApp;
+	
+	//基礎クラスの終了処理
+	Framework::Finalize();
 }
 
 void GameMain::Update()
 {
-	//メッセージがある？
-
-	//fps制限
-	fps->FpsControlBegin();
-
-	//Windowsのメッセージ処理
-	if (winApp->ProcessMessage()) {
-		//ゲームループを抜ける
-		endRequest_ = true;
-	}
-
-
-
-	//DirectX毎フレーム処理　ここから
-	input->Update();
+	Framework::Update();
 	gameScene->Update();
 }
 
 void GameMain::Draw()
 {
-	posteffect->PreDrawScene(dxCommon->GetCommandList());
+	posteffect->PreDrawScene(Framework::GetDXCommon()->GetCommandList());
 
 	gameScene->Draw();
 
+	posteffect->PostDrawScene(Framework::GetDXCommon()->GetCommandList());
 
-	posteffect->PostDrawScene(dxCommon->GetCommandList());
+	Framework::GetDXCommon()->PreDraw();
 
-	dxCommon->PreDraw();
+	posteffect->Draw(Framework::GetDXCommon()->GetCommandList());
 
-	// 4.描画コマンドここまで
-
-	posteffect->Draw(dxCommon->GetCommandList());
+	Framework::GetDXCommon()->PostDraw();
 
 
-	dxCommon->PostDraw();
-	// 5.リソースバリアを戻す
-
-	//FPS固定
-	fps->FpsControlEnd();
 }

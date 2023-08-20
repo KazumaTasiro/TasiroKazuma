@@ -159,10 +159,12 @@
     <ClCompile Include="3d\Model.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
     <ClCompile Include="3d\Object3dFbx.cpp" />
+    <ClCompile Include="3d\ParticleManager.cpp" />
     <ClCompile Include="3d\SplinePosition.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="bace\DirectXCommon.cpp" />
     <ClCompile Include="bace\FPS.cpp" />
+    <ClCompile Include="bace\Framework.cpp" />
     <ClCompile Include="bace\GameMain.cpp" />
     <ClCompile Include="bace\ImGuiManager.cpp" />
     <ClCompile Include="bace\WinApp.cpp" />
@@ -172,6 +174,7 @@
     <ClCompile Include="Depth\Depth.cpp" />
     <ClCompile Include="Enemy\Boss.cpp" />
     <ClCompile Include="Enemy\Enemy.cpp" />
+    <ClCompile Include="Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Enemy\EnemyManager.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -208,11 +211,13 @@
     <ClInclude Include="3d\Model.h" />
     <ClInclude Include="3d\Object3d.h" />
     <ClInclude Include="3d\Object3dFbx.h" />
+    <ClInclude Include="3d\ParticleManager.h" />
     <ClInclude Include="3d\SplinePosition.h" />
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="bace\DirectXCommon.h" />
     <ClInclude Include="bace\ErrorException.h" />
     <ClInclude Include="bace\FPS.h" />
+    <ClInclude Include="bace\Framework.h" />
     <ClInclude Include="bace\GameMain.h" />
     <ClInclude Include="bace\ImGuiManager.h" />
     <ClInclude Include="bace\WinApp.h" />
@@ -222,6 +227,7 @@
     <ClInclude Include="Depth\Depth.h" />
     <ClInclude Include="Enemy\Boss.h" />
     <ClInclude Include="Enemy\Enemy.h" />
+    <ClInclude Include="Enemy\EnemyBullet.h" />
     <ClInclude Include="Enemy\EnemyManager.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="MATH\Affin.h" />
@@ -278,6 +284,24 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleGS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Resources\shaders\PostEffectTestPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -311,6 +335,7 @@
     <None Include="Resources\shaders\Basic.hlsli" />
     <None Include="Resources\shaders\FBX.hlsli" />
     <None Include="Resources\shaders\Obj.hlsli" />
+    <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\PostEffectTest.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>

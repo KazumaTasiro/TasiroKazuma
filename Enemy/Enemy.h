@@ -10,6 +10,7 @@
 #include "Sprite.h"
 #include "Collision.h"
 #include "SplinePosition.h"
+#include "EnemyBullet.h"
 
 ///<summary>
 ///敵キャラ
@@ -22,7 +23,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon);
+	void Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon, Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb);
 	///<summary>
 	///更新
 	///</summary>
@@ -32,7 +33,7 @@ public:
 	void Move();
 
 
-	//void Fire();
+	void Fire();
 
 	Vector3 GetWorldPosition();
 	///<summary>
@@ -67,6 +68,8 @@ public:
 
 	bool IsDead()const { return isDead_; }
 
+	bool IsTackleDead()const { return isTackleDead_; }
+
 	void LockOnTrue();
 
 	void setPlayer(Player* player_) { player = player_; }
@@ -78,6 +81,8 @@ public:
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<LockOnBullet>>& GetBullets() { return EnemyLockBullets_; }
+
+	void CollTackle();
 
 private:
 	//発射間隔
@@ -91,11 +96,11 @@ private:
 	Object3d* worldTransform_;
 	//ワールド変換データ
 	Object3d* worldTransformReticle_;
-	//モデル
+	//敵モデル
 	Model* model_ = nullptr;
-	//モデル
+	//敵の弾モデル
 	Model* enemyBulletModel_ = nullptr;
-	//モデル
+	//敵の照準モデル
 	Model* enemyReticleModel_ = nullptr;
 
 	//テクスチャハンドル
@@ -111,8 +116,13 @@ private:
 	Vector3 EnemyMoveSpline1 = { -50,20,50 };
 	Vector3 EnemyMoveSpline2 = { -20,15,100 };
 
+	Vector3 EnemyReMoveSpline0 = { 0,0,0 };
+	Vector3 EnemyReMoveSpline1 = { -50,30,-50 };
+	Vector3 EnemyReMoveSpline2 = { -20,30,100 };
+
 	//弾
 	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
+	std::list<std::unique_ptr<EnemyBullet>> EnemyBullets_;
 
 	int32_t time = 0;
 
@@ -122,6 +132,8 @@ private:
 
 	//デスフラグ
 	bool isDead_ = false;
+	//デスフラグ
+	bool isTackleDead_ = false;
 
 	bool lockOn = false;
 	float move = 0.1f;
@@ -129,6 +141,19 @@ private:
 	Sprite* spriteLock = nullptr;
 
 	SplinePosition* spline = nullptr;
+	SplinePosition* splineReMove = nullptr;
 	bool DemoEnemyMove = false;
 
+	bool fireFlag = false;
+
+	int fireTime = 45;
+
+	float verocitySpeed = 3.0f;
+
+	int enemyNmb = 1;
+
+	bool TackleReMove = false;
+
+	Vector3 velocity_;
+	Vector3 velocityTackle;
 };

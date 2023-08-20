@@ -7,6 +7,8 @@
 #include "Input.h"
 #include "SpriteCommon.h"
 #include "LockOnBullet.h"
+#include "ParticleManager.h"
+#include "Boss.h"
 
 class Player;
 
@@ -19,7 +21,11 @@ public:
 
 	void Update();
 
+	void BossUpdate();
+
 	void Draw();
+
+	void BossDraw();
 
 	void DrawUI();
 
@@ -52,6 +58,12 @@ public:
 	void EnemyReset();
 
 	bool Clear();
+
+	bool BossClear();
+
+	void EnemyDeadParticle(Vector3 EnemyPos);
+
+	void BossDeadParticle(Vector3 EnemyPos);
 public:
 	//‰¹‚ğ~‚ß‚éŠÖ”
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
@@ -77,5 +89,22 @@ private:
 	int waitTimer = 0;
 	Camera* camera_ = nullptr;
 	int clearCount = 0;
-	int clearNum = 3;
+	int clearNum = 5;
+
+	int clearTime = 600;
+	int randEnemyNmb;
+
+	bool EfectEnd = false;
+	int EffectTime = 50;
+
+	ParticleManager* enemyDeadParticle;
+
+	//“Gƒ‚ƒfƒ‹
+	Model* enemyModel_ = nullptr;
+	//“G‚Ì’eƒ‚ƒfƒ‹
+	Model* enemyBulletModel_ = nullptr;
+	//“G‚ÌÆ€ƒ‚ƒfƒ‹
+	Model* enemyReticleModel_ = nullptr;
+
+	Boss* boss = nullptr;
 };
