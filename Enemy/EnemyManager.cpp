@@ -11,6 +11,7 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera)
 {
+
 	assert(camera);
 	assert(input);
 	assert(spriteCommon);
