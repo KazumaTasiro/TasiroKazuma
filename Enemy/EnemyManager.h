@@ -7,6 +7,8 @@
 #include "Input.h"
 #include "SpriteCommon.h"
 #include "LockOnBullet.h"
+#include "ParticleManager.h"
+#include "Boss.h"
 
 class Player;
 
@@ -15,11 +17,15 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
-	void Initialize(DirectXCommon* dxCommon, Input* input,SpriteCommon* spriteCommon, Camera* camera);
+	void Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera);
 
 	void Update();
 
+	void BossUpdate();
+
 	void Draw();
+
+	void BossDraw();
 
 	void DrawUI();
 
@@ -50,6 +56,14 @@ public:
 	void EnemyCollision(Player* player);
 
 	void EnemyReset();
+
+	bool Clear();
+
+	bool BossClear();
+
+	void EnemyDeadParticle(Vector3 EnemyPos);
+
+	void BossDeadParticle(Vector3 EnemyPos);
 public:
 	//âπÇé~ÇﬂÇÈä÷êî
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
@@ -74,4 +88,23 @@ private:
 	bool waitflag = false;
 	int waitTimer = 0;
 	Camera* camera_ = nullptr;
+	int clearCount = 0;
+	int clearNum = 5;
+
+	int clearTime = 400;
+	int randEnemyNmb;
+
+	bool EfectEnd = false;
+	int EffectTime = 50;
+
+	ParticleManager* enemyDeadParticle;
+
+	//ìGÉÇÉfÉã
+	Model* enemyModel_ = nullptr;
+	//ìGÇÃíeÉÇÉfÉã
+	Model* enemyBulletModel_ = nullptr;
+	//ìGÇÃè∆èÄÉÇÉfÉã
+	Model* enemyReticleModel_ = nullptr;
+
+	Boss* boss = nullptr;
 };

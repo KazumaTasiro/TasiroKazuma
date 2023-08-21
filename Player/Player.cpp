@@ -34,7 +34,7 @@ void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp
 
 	worldTransform_->wtf.position = { 0, 0, 0 };
 
-	bulletModel_ = Model::LoadFormOBJ("bullet");
+	bulletModel_ = Model::LoadFormOBJ("playerBullet");
 
 	worldTransform3DReticle_->SetModel(bulletModel_);
 	//スプライト生成
@@ -46,15 +46,26 @@ void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp
 
 	worldTransform_->wtf.position = playerResetPos;
 
+	////パーティクル生成
+	//playerDeadParticle = new ParticleManager();
+	//playerDeadParticle->Initialize();
+	//playerDeadParticle->LoadTexture("Explosion.png");
+	///*playerDeadParticle->Update();*/
+
+	playerHp = 10;
 }
 
 void Player::Update()
 {
-
+	
 	//デスフラグの立った弾を削除
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
 		return bullet->IsDead();
 		});
+	if (playerHp <= 0) {
+		/*DeadParticle = true;*/
+		isDead_ = true;
+	}
 	//キャラクター移動処理
 	Move();
 	//キャラクター攻撃更新
@@ -67,7 +78,15 @@ void Player::Update()
 	MouseReticle();
 	ReticleLimit();
 	sprite2DReticleLock_->SetPozition(sprite2DReticle_->GetPosition());
+	//playerDeadParticle->Update();
+	if (DeadParticle) {
+		EffectWaiteTime--;
+		PlayerDeadParticle();
 
+	}
+	//if (EffectWaiteTime <= 0) {
+	//	isDead_ = true;
+	//}
 }
 
 void Player::Move()
@@ -76,7 +95,7 @@ void Player::Move()
 	Vector3 move = { 0,0,0 };
 	Vector3 camMove = { 0,0,0 };
 	Vector3 pos = worldTransform_->wtf.position;
-	const float speed = 1.0f;
+
 	const float RotSpeed = 0.05f;
 	if (input_->PushKey(DIK_A)) {
 		move.x -= speed;
@@ -111,14 +130,14 @@ void Player::Move()
 	sprite2DReticle_->SetPozition({ min(worldTransform_->wtf.position.x, 0),min(worldTransform_->wtf.position.y, 0) });
 
 	//worldTransform_->wtf.position = { 0,0,-30 };
-
+	PlayerLimit();
 	worldTransform_->Update();
 }
 
 void Player::OnCollision()
 {
-	//デスフラグ
-	bool isDead_ = false;
+
+	playerHp--;
 }
 
 Vector3 Player::ConvertToVector3(const Matrix4& mat, Vector3 vec)
@@ -149,7 +168,7 @@ Vector3 Player::GetWorldPosition()
 void Player::Draw()
 {
 
-	worldTransform3DReticle_->Draw();
+	/*worldTransform3DReticle_->Draw();*/
 	worldTransform_->Draw();
 	/*model_->Draw(worldTransform_, viewProjection_, textureHandle_);*/
 //弾描画
@@ -158,6 +177,7 @@ void Player::Draw()
 	}
 	////3Dレティクルを描画
 	//model_->Draw(worldTransform3DReticle_, viewProjection_, textureHandle_);
+	//playerDeadParticle->Draw();
 }
 
 void Player::Attack()
@@ -355,6 +375,11 @@ void Player::Reset()
 {
 	worldTransform_->wtf.position = playerResetPos;
 	bullets_.clear();
+	playerHp = 10;
+	isDead_ = false;
+	DeadParticle = false;
+	EffectWaiteTime = 50;
+	worldTransform_->Update();
 }
 
 Vector2 Player::GetReticlePos()
@@ -384,5 +409,46 @@ void Player::ReticleLimit()
 	if (sprite2DReticle_->GetPosition().y >= winApp->window_height) {
 		sprite2DReticle_->SetPozition({ sprite2DReticle_->GetPosition().x,winApp->window_height });
 	}
+}
+
+void Player::PlayerLimit()
+{
+	if (worldTransform_->wtf.position.x < -4) {
+		worldTransform_->wtf.position.x = -4;
+	}
+	if (worldTransform_->wtf.position.x > 4) {
+		worldTransform_->wtf.position.x = 4;
+	}
+}
+
+void Player::PlayerDeadParticle()
+{
+	////パーティクル範囲
+	//for (int i = 0; i < 5; i++) {
+	//	//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+	//	const float rnd_pos = 5.0f;
+	//	Vector3 pos = worldTransform_->wtf.position;
+	//	pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	//	pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	//	pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+	//	//速度
+	//	//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+	//	const float rnd_vel = 0.0f;
+	//	Vector3 vel{};
+	//	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	//	vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	//	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+	//	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+	//	const float rnd_acc = 0.0000f;
+	//	Vector3 acc{};
+	//	acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+	//	acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+
+	//	//追加
+	//	playerDeadParticle->Add(30, pos, vel, acc, 0.0f, 25.0f, 1);
+	//	playerDeadParticle->Add(30, pos, vel, acc, 0.0f, 25.0f, 2);
+	//	playerDeadParticle->Update();
+	//}
 }
 

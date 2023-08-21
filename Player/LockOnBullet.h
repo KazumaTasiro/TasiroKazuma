@@ -41,7 +41,7 @@ private:
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
-	float speed = 8.0f;
+	float speed = 3.0f;
 
 	//速度
 	Vector3 velocity_;
@@ -52,5 +52,7 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 
+	float time = 0;
 
+	Vector3 worldNormal;
 };

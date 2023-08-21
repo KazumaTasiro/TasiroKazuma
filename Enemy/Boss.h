@@ -12,18 +12,19 @@
 #include "SplinePosition.h"
 #include "EnemyBullet.h"
 
-///<summary>
-///敵キャラ
-///</summary>
 
 class GameScene;
 class Player;
-class Enemy {
+class Boss
+{
 public:
+	Boss();
+	~Boss();
+
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon, Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb);
+	void Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* input);
 	///<summary>
 	///更新
 	///</summary>
@@ -33,58 +34,32 @@ public:
 	void Move();
 
 
-	void Fire();
+	//void Fire();
 
 	Vector3 GetWorldPosition();
 	///<summary>
 	///描画
 	///</summary>
 	void Draw();
-	///<summary>
-	///描画
-	///</summary>
-	void DrawUI();
-
-	////行動フェーズ
-	//enum class Phase {
-	//	Approch,//接近する
-	//	Leave,//離脱する
-	//};
-	//void Approch();
-
-	//void Leave();
-
-
-	////ベクトルを正規化する
-	//int Vec3Normalize(Vector3* pOut, Vector3* pV);
-
-	//衝突を検出したら呼び出されるコールバック関数
-	void OnCollision();
-
-	////弾リストを取得
-	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets2_; }
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 	bool IsDead()const { return isDead_; }
 
-	bool IsTackleDead()const { return isTackleDead_; }
-
 	void LockOnTrue();
-
-	void setPlayer(Player* player_) { player = player_; }
 
 	void OnColl();
 
+	//衝突を検出したら呼び出されるコールバック関数
+	void OnCollision();
 
-	int ReturnOnColl();
+	void Reset();
 
-	//弾リストを取得
-	const std::list<std::unique_ptr<LockOnBullet>>& GetBullets() { return EnemyLockBullets_; }
+	bool isDead();
 
-	void CollTackle();
-
+	void Fire();
 private:
+
 	//発射間隔
 	static const int kFireInterval = 100;
 
@@ -112,13 +87,9 @@ private:
 	Vector3 ApprochMove = { 0,0,0.0f };
 	Vector3 LeaveMove = { -0.1f,0.1f,-0.1f };
 
-	Vector3 EnemyMoveSpline0 = { 0,0,0};
-	Vector3 EnemyMoveSpline1 = { -50,20,50 };
-	Vector3 EnemyMoveSpline2 = { -20,15,100 };
-
-	Vector3 EnemyReMoveSpline0 = { 0,0,0 };
-	Vector3 EnemyReMoveSpline1 = { -50,30,-50 };
-	Vector3 EnemyReMoveSpline2 = { -20,30,100 };
+	Vector3 EnemyMoveSpline0 = { 0,0,0 };
+	Vector3 EnemyMoveSpline1 = { 0,150,200 };
+	Vector3 EnemyMoveSpline2 = { 0,100,200 };
 
 	//弾
 	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
@@ -128,12 +99,10 @@ private:
 
 	Player* player = nullptr;
 
-	int EnemyHp = 1;
+	int EnemyHp = 10;
 
 	//デスフラグ
 	bool isDead_ = false;
-	//デスフラグ
-	bool isTackleDead_ = false;
 
 	bool lockOn = false;
 	float move = 0.1f;
@@ -141,8 +110,9 @@ private:
 	Sprite* spriteLock = nullptr;
 
 	SplinePosition* spline = nullptr;
-	SplinePosition* splineReMove = nullptr;
 	bool DemoEnemyMove = false;
+
+	float PI = 3.141592f;
 
 	bool fireFlag = false;
 
@@ -150,10 +120,5 @@ private:
 
 	float verocitySpeed = 3.0f;
 
-	int enemyNmb = 1;
-
-	bool TackleReMove = false;
-
 	Vector3 velocity_;
-	Vector3 velocityTackle;
 };

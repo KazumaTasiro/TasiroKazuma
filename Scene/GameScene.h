@@ -17,6 +17,7 @@
 #include "Skydome.h"
 #include "Collision.h"
 #include "EnemyManager.h"
+#include "Road.h"
 
 
 class GameScene {
@@ -79,6 +80,7 @@ private:
 	{
 		Title,
 		Game,
+		Boss,
 		GameOver,
 		GameClear
 	};
@@ -110,6 +112,7 @@ private:
 	FbxModel* model1 = nullptr;
 	Object3dFbx* object1 = nullptr;
 
+	Road* road = nullptr;
 
 	Skydome* skydome = nullptr;
 
@@ -118,4 +121,8 @@ private:
 	Sprite* stert = nullptr;
 
 	bool playMove = true;
+
+	float playPos = 0;
+
+	bool TitleEnd = false;
 };

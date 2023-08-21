@@ -20,7 +20,7 @@ void LockOnBullet::Initialize(Model* model, const Vector3& position)
 	//引数で受け取った初期座標をセット
 	worldTransform_->wtf.position = (position);
 
-
+	worldNormal = worldTransform_->wtf.position;
 
 	//モデルをセットする
 	worldTransform_->SetModel(model_);
@@ -31,21 +31,20 @@ void LockOnBullet::Initialize(Model* model, const Vector3& position)
 void LockOnBullet::Update(const Vector3& enemyPos)
 {
 	////引数で受け取った速度をメンバ関数に代入
-	//velocity_ = velocity;
-
-	//velocity_ = { 0,0,5 };
-
+	Vector3 toEnemy = enemyPos;
 	velocity_ = enemyPos - worldTransform_->wtf.position;
 
-	Vector3 position;
-	position.x = velocity_.x;
-	position.y = velocity_.y;
-	position.z = velocity_.z;
+	/*toEnemy.nomalize();*/
+	/*velocity_.nomalize();*/
 
-	position.nomalize();
-	position *= speed;
+	time = 0.5f;
+
+	Vector3 position;
+	velocity_ = Vector3::slerp(velocity_, toEnemy, time) * speed;
+
+	//position.nomalize();
 	//座標を移動させる(1フレーム文の移動量を足しこむ)
-	worldTransform_->wtf.position += (position);
+	worldTransform_->wtf.position += velocity_;
 
 	worldTransform_->Update();
 	//時間経過でデス

@@ -11,6 +11,8 @@
 #include "Vector3.h"
 #include "ConvertXM.h"
 #include "Affin.h"
+#include "ImGuiManager.h"
+#include "ParticleManager.h"
 
 ///<summary>
 ///自キャラ
@@ -71,6 +73,13 @@ public:
 	
 	void ReticleLimit();
 
+	void PlayerLimit();
+
+	bool retrunIsDaed() { return isDead_; }
+
+	void SetPos(Vector3 Pos) { worldTransform_->wtf.position = Pos; }
+
+	void PlayerDeadParticle();
 private:
 	//ワールド変換データ
 	Object3d* worldTransform_;
@@ -102,4 +111,14 @@ private:
 	bool limitIn = false;
 
 	Vector3 playerResetPos = { 0,-2.5f,0 };
+
+	const float speed = 0.5f;
+
+	int playerHp;
+
+	bool DeadParticle = false;
+
+	int EffectWaiteTime = 50;
+
+	//ParticleManager* playerDeadParticle;
 };
