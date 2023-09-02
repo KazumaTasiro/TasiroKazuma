@@ -24,7 +24,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_);
+	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_,ParticleManager* particle);
 	///更新
 	///</summary>
 	void Update();
@@ -80,6 +80,8 @@ public:
 	void SetPos(Vector3 Pos) { worldTransform_->wtf.position = Pos; }
 
 	void PlayerDeadParticle();
+
+	void ParticleDraw();
 private:
 	//ワールド変換データ
 	Object3d* worldTransform_;
@@ -120,5 +122,5 @@ private:
 
 	int EffectWaiteTime = 50;
 
-	//ParticleManager* playerDeadParticle;
+	ParticleManager* playerDeadParticle;
 };

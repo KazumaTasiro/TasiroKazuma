@@ -9,10 +9,11 @@ EnemyManager::~EnemyManager()
 {
 }
 
-void EnemyManager::Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera)
+void EnemyManager::Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera,ParticleManager* particle)
 {
 
 	assert(camera);
+	assert(particle);
 	assert(input);
 	assert(spriteCommon);
 	camera_ = camera;
@@ -24,9 +25,7 @@ void EnemyManager::Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommo
 	LoadEnemyPopData();
 
 	//パーティクル生成
-	enemyDeadParticle = new ParticleManager();
-	enemyDeadParticle->Initialize();
-	enemyDeadParticle->LoadTexture("Explosion.png");
+	enemyDeadParticle = particle;
 	/*enemyDeadParticle->Update();*/
 
 	boss = new Boss();
@@ -86,13 +85,12 @@ void EnemyManager::Draw()
 		//敵キャラの描画
 		enemy->Draw();
 	}
-	enemyDeadParticle->Draw();
+
 }
 
 void EnemyManager::BossDraw()
 {
 	boss->Draw();
-	enemyDeadParticle->Draw();
 }
 
 void EnemyManager::DrawUI()
@@ -326,7 +324,7 @@ void EnemyManager::EnemyCollision(Player* player)
 void EnemyManager::EnemyReset()
 {
 	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		enemy->OnCollision();
+		enemy->CollTackle();
 	}
 	EnemyPopComandReset();
 	clearCount = 0;
@@ -418,4 +416,9 @@ void EnemyManager::BossDeadParticle(Vector3 EnemyPos)
 		enemyDeadParticle->Add(40, pos, vel, acc, 0.0f, 50.0f, 2);
 		enemyDeadParticle->Update();
 	}
+}
+
+void EnemyManager::ParticleDraw()
+{
+	enemyDeadParticle->Draw();
 }

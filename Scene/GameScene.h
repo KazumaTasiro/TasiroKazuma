@@ -18,7 +18,7 @@
 #include "Collision.h"
 #include "EnemyManager.h"
 #include "Road.h"
-
+#include "ParticleManager.h"
 
 class GameScene {
 public:
@@ -125,4 +125,13 @@ private:
 	float playPos = 0;
 
 	bool TitleEnd = false;
+
+	ParticleManager* ParticleMana;
+
+	Sprite* blind;
+
+	bool blindFlag = false;
+	int blindTime = 30;
+	int blindTimeReset = 30;
+	float blindW = 0;
 };

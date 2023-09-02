@@ -17,7 +17,7 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
-	void Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera);
+	void Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
 
 	void Update();
 
@@ -64,6 +64,8 @@ public:
 	void EnemyDeadParticle(Vector3 EnemyPos);
 
 	void BossDeadParticle(Vector3 EnemyPos);
+
+	void ParticleDraw();
 public:
 	//âπÇé~ÇﬂÇÈä÷êî
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };

@@ -14,9 +14,10 @@ Player::~Player()
 	//delete worldTransform3DReticle_;
 }
 
-void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_)
+void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, ParticleManager* particle)
 {
 	assert(spriteCommon);
+	assert(particle);
 	assert(input);
 	assert(winApp_);
 
@@ -47,10 +48,7 @@ void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp
 	worldTransform_->wtf.position = playerResetPos;
 
 	////パーティクル生成
-	//playerDeadParticle = new ParticleManager();
-	//playerDeadParticle->Initialize();
-	//playerDeadParticle->LoadTexture("Explosion.png");
-	///*playerDeadParticle->Update();*/
+	playerDeadParticle = particle;
 
 	playerHp = 10;
 }
@@ -63,8 +61,11 @@ void Player::Update()
 		return bullet->IsDead();
 		});
 	if (playerHp <= 0) {
-		/*DeadParticle = true;*/
-		isDead_ = true;
+		if (DeadParticle == false) {
+			PlayerDeadParticle();
+		}
+		DeadParticle = true;
+		//isDead_ = true;
 	}
 	//キャラクター移動処理
 	Move();
@@ -78,15 +79,14 @@ void Player::Update()
 	MouseReticle();
 	ReticleLimit();
 	sprite2DReticleLock_->SetPozition(sprite2DReticle_->GetPosition());
-	//playerDeadParticle->Update();
+	playerDeadParticle->Update();
 	if (DeadParticle) {
 		EffectWaiteTime--;
-		PlayerDeadParticle();
 
 	}
-	//if (EffectWaiteTime <= 0) {
-	//	isDead_ = true;
-	//}
+	if (EffectWaiteTime <= 0) {
+		isDead_ = true;
+	}
 }
 
 void Player::Move()
@@ -169,7 +169,9 @@ void Player::Draw()
 {
 
 	/*worldTransform3DReticle_->Draw();*/
-	worldTransform_->Draw();
+	if (DeadParticle==false) {
+		worldTransform_->Draw();
+	}
 	/*model_->Draw(worldTransform_, viewProjection_, textureHandle_);*/
 //弾描画
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
@@ -177,7 +179,7 @@ void Player::Draw()
 	}
 	////3Dレティクルを描画
 	//model_->Draw(worldTransform3DReticle_, viewProjection_, textureHandle_);
-	//playerDeadParticle->Draw();
+
 }
 
 void Player::Attack()
@@ -423,32 +425,37 @@ void Player::PlayerLimit()
 
 void Player::PlayerDeadParticle()
 {
-	////パーティクル範囲
-	//for (int i = 0; i < 5; i++) {
-	//	//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-	//	const float rnd_pos = 5.0f;
-	//	Vector3 pos = worldTransform_->wtf.position;
-	//	pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-	//	pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-	//	pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+	//パーティクル範囲
+	for (int i = 0; i < 5; i++) {
+		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = 5.0f;
+		Vector3 pos = worldTransform_->wtf.position;
+		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 
-	//	//速度
-	//	//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-	//	const float rnd_vel = 0.0f;
-	//	Vector3 vel{};
-	//	vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//	vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//	vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-	//	//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-	//	const float rnd_acc = 0.0000f;
-	//	Vector3 acc{};
-	//	acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-	//	acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		//速度
+		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+		const float rnd_vel = 0.0f;
+		Vector3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+		const float rnd_acc = 0.0000f;
+		Vector3 acc{};
+		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
-	//	//追加
-	//	playerDeadParticle->Add(30, pos, vel, acc, 0.0f, 25.0f, 1);
-	//	playerDeadParticle->Add(30, pos, vel, acc, 0.0f, 25.0f, 2);
-	//	playerDeadParticle->Update();
-	//}
+		//追加
+		playerDeadParticle->Add(30, pos, vel, acc, 0.0f, 25.0f, 1);
+		playerDeadParticle->Add(30, pos, vel, acc, 0.0f, 25.0f, 2);
+		playerDeadParticle->Update();
+	}
+}
+
+void Player::ParticleDraw()
+{
+	playerDeadParticle->Draw();
 }
 
