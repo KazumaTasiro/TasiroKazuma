@@ -40,6 +40,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	spriteCommon->LoadTexture(1, "ReticleLock.png");
 	spriteCommon->LoadTexture(2, "EnemyLock.png");
 	spriteCommon->LoadTexture(3, "stert.png");
+	spriteCommon->LoadTexture(4, "GameBlind.png");
 
 	skydome = new Skydome();
 	skydome->Initalize();
@@ -47,6 +48,12 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	stert = new Sprite();
 	stert->Initialize(spriteCommon, 3);
 	stert->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 });
+
+	blind = new Sprite();
+	blind->Initialize(spriteCommon, 4);
+	blind->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 });
+	blind->SetSize({ winApp->window_width,winApp->window_height});
+	blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
 
 	road = new Road();
 	road->Initialize();
@@ -64,19 +71,22 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	//object1->SetModel(model1);
 	//object1->PlayAnimation();
 
+	ParticleMana = new ParticleManager();
+	ParticleMana->Initialize();
+	ParticleMana->LoadTexture("Explosion.png");
+
 	player_ = new Player();
-	player_->Initialize(spriteCommon, input, winApp);
-
-
-
+	player_->Initialize(spriteCommon, input, winApp,ParticleMana);
 
 	enemyManager = new EnemyManager();
-	enemyManager->Initialize(dxCommon_, input, spriteCommon, camera);
+	enemyManager->Initialize(dxCommon_, input, spriteCommon, camera,ParticleMana);
 
 	enemyManager->SetGameScene(this);
 	enemyManager->SetPlayer(player_);
 	PhaseReset();
 	//player_->Update();
+
+
 
 	scene = Scene::Title;
 
@@ -100,10 +110,34 @@ void GameScene::Update()
 		road->BeforeUpdate();
 		//player_->Update();
 		if (input->TriggerKey(DIK_Q)) {
+			blindFlag = true;
+		}
+		if (blindFlag) {
+			blindTime--;
+			if (blindW < 1) {
+				blindW += (1.0f / blindTimeReset);
+			}
+			blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
+			blind->Update();
+		}
+		if (blindTime <= -10) {
 			scene = Scene::Game;
 		}
 		break;
 	case GameScene::Game:
+		if (blindFlag) {
+			blindTime++;
+			if (blindTime >= 0) {
+				if (blindW > 0) {
+					blindW -= (1.0f / blindTimeReset);
+				}
+			}
+			blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
+			blind->Update();
+		}
+		if (blindTime >= blindTimeReset) {
+			blindFlag = false;
+		}
 		camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
 		road->Update();
 		enemyManager->SetPlayer(player_);
@@ -181,9 +215,11 @@ void GameScene::Draw()
 
 
 		enemyManager->Draw();
+		enemyManager->ParticleDraw();
 		break;
 	case GameScene::Boss:
 		enemyManager->BossDraw();
+		enemyManager->ParticleDraw();
 		break;
 	case GameScene::GameOver:
 		break;
@@ -195,6 +231,7 @@ void GameScene::Draw()
 	}
 
 
+	player_->ParticleDraw();
 	Object3d::PostDraw();
 
 
@@ -206,10 +243,12 @@ void GameScene::Draw()
 	{
 	case GameScene::Title:
 		stert->Draw();
+		blind->Draw();
 		break;
 	case GameScene::Game:
 		player_->DrawUI();
 		enemyManager->DrawUI();
+		blind->Draw();
 		//ImGuiMan->Draw();
 		break;
 	case GameScene::Boss:
