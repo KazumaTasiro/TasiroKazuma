@@ -118,6 +118,7 @@ private:
 
 	EnemyManager* enemyManager = nullptr;
 
+
 	Sprite* stert = nullptr;
 
 	bool playMove = true;
