@@ -170,7 +170,9 @@ void Player::Draw()
 
 	/*worldTransform3DReticle_->Draw();*/
 	if (DeadParticle==false) {
-		worldTransform_->Draw();
+		if (worldTransform_->wtf.position.z < 100) {
+			worldTransform_->Draw();
+		}
 	}
 	/*model_->Draw(worldTransform_, viewProjection_, textureHandle_);*/
 //’e•`‰æ
@@ -457,5 +459,12 @@ void Player::PlayerDeadParticle()
 void Player::ParticleDraw()
 {
 	playerDeadParticle->Draw();
+}
+
+void Player::ClearMove()
+{
+	Vector3 move = { 0,0,1 };
+	worldTransform_->wtf.position += move;
+	worldTransform_->Update();
 }
 

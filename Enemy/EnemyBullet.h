@@ -38,6 +38,9 @@ public:
 
 	Vector3 GetWorldPosition();
 
+	void SetSize(Vector3 Size) { worldTransform_->wtf.scale = Size; }
+
+
 private:
 	//ワールド変換データ
 	Object3d* worldTransform_;
