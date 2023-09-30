@@ -203,6 +203,7 @@ void EnemyManager::UpdateEnemyPopCommands()
 
 void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 {
+
 	randEnemyNmb = rand() % 2;
 	randEnemyRoot = rand() % 2;
 	//“GƒLƒƒƒ‰‚Ì¶¬
