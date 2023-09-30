@@ -23,7 +23,9 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon, Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb);
+	/// EnemyNmb 敵の行動の種類
+	/// EnemyRootNmb 敵の行動ルート　0:左 1:右
+	void Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon, Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb, int EnemyRootNmb);
 	///<summary>
 	///更新
 	///</summary>
@@ -84,6 +86,8 @@ public:
 
 	void CollTackle();
 
+	bool GetMoveFlag(){return DemoEnemyMove;}
+
 private:
 	//発射間隔
 	static const int kFireInterval = 100;
@@ -119,6 +123,9 @@ private:
 	Vector3 EnemyReMoveSpline0 = { 0,0,0 };
 	Vector3 EnemyReMoveSpline1 = { -50,30,-50 };
 	Vector3 EnemyReMoveSpline2 = { -20,30,100 };
+
+	//移動フラグ
+	bool moveEndFlag = false;
 
 	//弾
 	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
@@ -156,4 +163,6 @@ private:
 
 	Vector3 velocity_;
 	Vector3 velocityTackle;
+
+	int EnemyRootNmb_ = 0;
 };

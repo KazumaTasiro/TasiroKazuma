@@ -34,7 +34,13 @@ void Boss::Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* 
 
 void Boss::Update(Player* player)
 {
+
+	
 	assert(player);
+	if (fireCount >= 4.0f) {
+		randBossAttackNmb = rand() % 2;
+		fireCount = 0;
+	}
 	this->player = player;
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->Update();
@@ -155,11 +161,21 @@ void Boss::OnColl()
 		//自弾の座標
 		posB = enemyBullets->GetWorldPosition();
 
-		if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
-			//敵キャラの衝突時コールバックを呼び出す
-			player->OnCollision();
-			//自弾の衝突時コールバックを呼び出す
-			enemyBullets->OnCollision();
+		if (randBossAttackNmb == 0) {
+			if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
+				//プレイヤーの衝突時コールバックを呼び出す
+				player->OnCollision();
+				//自弾の衝突時コールバックを呼び出す
+				enemyBullets->OnCollision();
+			}
+		}
+		else if (randBossAttackNmb == 1) {
+			if (Collision::CircleCollision(posB, posA, 4.0f, 4.0f)) {
+				//プレイヤーの衝突時コールバックを呼び出す
+				player->OnCollision();
+				//自弾の衝突時コールバックを呼び出す
+				enemyBullets->OnCollision();
+			}
 		}
 	}
 }
@@ -196,20 +212,42 @@ void Boss::Fire()
 {
 	fireTime--;
 	if (fireTime <= 0) {
-		fireFlag = true;
-		fireTime = 45;
+		if (randBossAttackNmb == 0) {
+			fireFlag = true;
+			fireTime = 35;
+		}
+		else if (randBossAttackNmb == 1) {
+			fireFlag = true;
+			fireTime = 70;
+		}
 
 	}
 	if (fireFlag) {
-		velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
-		velocity_.nomalize();
-		velocity_ *= verocitySpeed;
-		//弾を生成し、初期化
-		std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
-		newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
-		//弾を発射する
-		EnemyBullets_.push_back(std::move(newEnemyBullet));
-		fireFlag = false;
+		if (randBossAttackNmb == 0) {
+			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
+			velocity_.nomalize();
+			velocity_ *= verocitySpeed;
+			//弾を生成し、初期化
+			std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
+			newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
+			//弾を発射する
+			EnemyBullets_.push_back(std::move(newEnemyBullet));
+			fireFlag = false;
+			fireCount += 0.5f;
+		}
+		if (randBossAttackNmb == 1) {
+			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
+			velocity_.nomalize();
+			velocity_ *= verocitySpeed;
+			//弾を生成し、初期化
+			std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
+			newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
+			newEnemyBullet->SetSize({ 4.0f,4.0f,4.0f });
+			//弾を発射する
+			EnemyBullets_.push_back(std::move(newEnemyBullet));
+			fireFlag = false;
+			fireCount += 1.0f;
+		}
 	}
 	//弾更新
 	for (std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_) {

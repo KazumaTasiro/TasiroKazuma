@@ -65,6 +65,12 @@ void EnemyManager::Update()
 
 void EnemyManager::BossUpdate()
 {
+	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+		enemy->CollTackle();
+	}
+	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) {
+		return enemy->IsTackleDead();
+		});
 	enemyDeadParticle->Update();
 	boss->Update(player_);
 	if (boss->isDead()) {
@@ -198,9 +204,10 @@ void EnemyManager::UpdateEnemyPopCommands()
 void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 {
 	randEnemyNmb = rand() % 2;
+	randEnemyRoot = rand() % 2;
 	//敵キャラの生成
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-	newEnemy->Initialize(EnemyPos, input_, spriteCommon_, enemyModel_, enemyBulletModel_, enemyReticleModel_,randEnemyNmb);
+	newEnemy->Initialize(EnemyPos, input_, spriteCommon_, enemyModel_, enemyBulletModel_, enemyReticleModel_,randEnemyNmb, randEnemyRoot);
 
 	//リストに登録する
 	enemy_.push_back(std::move(newEnemy));
@@ -250,13 +257,15 @@ void EnemyManager::EnemyCollision(Player* player)
 		posA = enemy->GetWorldPosition();
 
 		Vector2 posR;
-		//自弾の座標
+		//レティクルの座標
 		posR = player->GetReticlePos();
 
 		if (Collision::RaySphere({ 0,0,0 }, posA, 3.0f, player->GetFarNear())) {
-			if (input_->PushMouse(1)) {
-				//敵キャラの衝突時コールバックを呼び出す
-				enemy->LockOnTrue();
+			if (enemy->GetMoveFlag() == true) {
+				if (input_->PushMouse(1)) {
+					//敵キャラのロックオンコールバックを呼び出す
+					enemy->LockOnTrue();
+				}
 			}
 		}
 	}

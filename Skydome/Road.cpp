@@ -9,7 +9,7 @@ void Road::Initialize()
 		road_[i]->Initialize();
 		road_[i]->SetModel(roadModel);
 		road_[i]->wtf.position = { 0,-2.5f,-50.0f + (50 * i) };
-		road_[i]->wtf.scale = { 5,2,2 };
+		road_[i]->wtf.scale = { 6,2,2 };
 	}
 
 }

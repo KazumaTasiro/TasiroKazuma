@@ -82,6 +82,8 @@ public:
 	void PlayerDeadParticle();
 
 	void ParticleDraw();
+
+	void ClearMove();
 private:
 	//ワールド変換データ
 	Object3d* worldTransform_;

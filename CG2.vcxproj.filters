@@ -273,9 +273,6 @@
     <ClCompile Include="Skydome\Skydome.cpp">
       <Filter>ソース ファイル\Game\Skydome</Filter>
     </ClCompile>
-    <ClCompile Include="Skydome\Transform.cpp">
-      <Filter>ソース ファイル\Engine\3D\WorldTransform</Filter>
-    </ClCompile>
     <ClCompile Include="Collision\Collision.cpp">
       <Filter>ソース ファイル\Engine\3D\Collision</Filter>
     </ClCompile>
@@ -310,6 +307,12 @@
       <Filter>ソース ファイル\Engine\3D\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Enemy\EnemyBullet.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Transform.cpp">
+      <Filter>ソース ファイル\Engine\3D\WorldTransform</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\BossSubordinate.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
@@ -401,9 +404,6 @@
     <ClInclude Include="Skydome\Skydome.h">
       <Filter>ヘッダー ファイル\Game\Skydome</Filter>
     </ClInclude>
-    <ClInclude Include="Skydome\Transform.h">
-      <Filter>ヘッダー ファイル\Engine\3D\WorldTransform</Filter>
-    </ClInclude>
     <ClInclude Include="Collision\Collision.h">
       <Filter>ヘッダー ファイル\Engine\3D\Collision</Filter>
     </ClInclude>
@@ -438,6 +438,12 @@
       <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Enemy\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Transform.h">
+      <Filter>ヘッダー ファイル\Engine\3D\WorldTransform</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\BossSubordinate.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

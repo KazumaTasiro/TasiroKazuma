@@ -56,14 +56,9 @@ public:
 	/// </summary>
 	void CheckAllCollisions();
 
-	///// <summary>
-	///// è’ìÀîªíËÇ∆âûìö
-	///// </summary>
-	//void AddEnemyBullet(std::unique_ptr<EnemyBullet>& enemyBullet);
+	void ClearSpriteUpdate();
 
-
-
-
+	void GameOverSpriteUpdate();
 
 
 
@@ -118,7 +113,11 @@ private:
 
 	EnemyManager* enemyManager = nullptr;
 
+
 	Sprite* stert = nullptr;
+	Sprite* gameClear = nullptr;
+	Sprite* gameOver = nullptr;
+	Vector2 spriteEnd;
 
 	bool playMove = true;
 

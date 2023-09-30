@@ -1,13 +1,15 @@
 #include "Enemy.h"
 #include "Player.h"
 
-void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel, int EnemyNmb)
+void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel, int EnemyNmb,int EnemyRootNmb)
 {
 	assert(input);
 	assert(sptriteCommon);
 	assert(model);
 	assert(enemyBulletModel);
 	assert(enemyReticleModel);
+
+	EnemyRootNmb_ = EnemyRootNmb;
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	//ワールド変換の初期化
@@ -33,10 +35,25 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 	worldTransform_->SetModel(model_);
 
 	worldTransform_->wtf.scale = { 3,3,3 };
-	EnemyMoveSpline0 = { worldTransform_->wtf.position.x + 100, worldTransform_->wtf.position.y - 25, 150.0f };
-	EnemyReMoveSpline0 = { worldTransform_->wtf.position.x + 100, worldTransform_->wtf.position.y - 25, 150.0f };
-	EnemyReMoveSpline1 = { worldTransform_->wtf.position.x, 30 , -50.0f };
-	EnemyReMoveSpline2 = { worldTransform_->wtf.position.x, 30, 100.0f };
+	if (EnemyRootNmb_ == 0) {
+		EnemyMoveSpline0 = { 0,0,0 };
+		EnemyMoveSpline1 = { -50,20,50 };
+		EnemyMoveSpline2 = { -20,15,100 };
+		EnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - 25, 150.0f };
+		EnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - 25, 150.0f };
+		EnemyReMoveSpline1 = { worldTransform_->wtf.position.x - 100, 30 , -50.0f };
+		EnemyReMoveSpline2 = { worldTransform_->wtf.position.x - 100, 30, 100.0f };
+	}
+	else if (EnemyRootNmb_ == 1) {
+		EnemyMoveSpline0 = { 0,0,0 };
+		EnemyMoveSpline1 = { +50,20,50 };
+		EnemyMoveSpline2 = { +20,15,100 };
+		EnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - 25, 150.0f };
+		EnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - 25, 150.0f };
+		EnemyReMoveSpline1 = { worldTransform_->wtf.position.x + 100, 30 , -50.0f };
+		EnemyReMoveSpline2 = { worldTransform_->wtf.position.x + 100, 30, 100.0f };
+	}
+
 	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
 	splineReMove = new SplinePosition(worldTransform_->wtf.position, EnemyReMoveSpline1, EnemyReMoveSpline2, EnemyReMoveSpline0);
 }

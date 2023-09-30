@@ -95,6 +95,7 @@ private:
 
 	int clearTime = 400;
 	int randEnemyNmb;
+	int randEnemyRoot;
 
 	bool EfectEnd = false;
 	int EffectTime = 50;
