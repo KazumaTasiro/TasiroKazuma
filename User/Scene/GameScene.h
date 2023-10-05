@@ -19,6 +19,7 @@
 #include "EnemyManager.h"
 #include "Road.h"
 #include "ParticleManager.h"
+#include "Title.h"
 
 class GameScene {
 public:
@@ -66,6 +67,7 @@ public:
 	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets2_; }
 
 	void PhaseReset();
+	void TitleReset();
 
 
 
@@ -133,4 +135,9 @@ private:
 	int blindTime = 30;
 	int blindTimeReset = 30;
 	float blindW = 0;
+
+	Vector3 cameraTitle = { 0,0,10 };
+	Vector3 cameraGame = { 0,0,-10 };
+
+	Titles* title = nullptr;
 };

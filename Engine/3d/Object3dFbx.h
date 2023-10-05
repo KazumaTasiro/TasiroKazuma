@@ -33,11 +33,12 @@ public:
 	// 定数バッファ用データ構造体
 	struct ConstBufferDataB0
 	{
-		Matrix4 mat;	// ３Ｄ変換行列
+		Matrix4 viewproj; // ビュープロジェクション行列
+		Matrix4 world; // ワールド行列
 	};
 
 	//ボーンの最大数
-	static const int MAX_BONES = 32;
+	static const int MAX_BONES = 128;
 
 	//定数バッファ用のデータ構造体(スキニング)
 	struct ConstBufferDataSkin
@@ -63,8 +64,7 @@ public: // 静的メンバ関数
 private: // 静的メンバ変数
 	// デバイス
 	static ID3D12Device* device;
-	// カメラ
-	static Camera* camera;
+
 	// ルートシグネチャ
 	static ComPtr<ID3D12RootSignature> rootsignature;
 	// パイプラインステートオブジェクト
@@ -98,6 +98,8 @@ public: // メンバ関数
 
 	bool GetAnimationFin() { return isFin; };
 
+	Vector3 GetWorldPosition();
+
 protected: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 定数バッファ(スキン)
@@ -121,7 +123,9 @@ protected: // メンバ変数
 	bool isLoop;
 	//アニメーション終了
 	bool isFin;
-
+	
 public:
 	Transform wtf;
+	// カメラ
+	static Camera* camera;
 };

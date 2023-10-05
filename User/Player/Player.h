@@ -13,6 +13,9 @@
 #include "Affin.h"
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
+#include "FbxLoader.h"
+#include "Object3dFbx.h"
+#include "DirectXCommon.h"
 
 ///<summary>
 ///自キャラ
@@ -24,7 +27,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_,ParticleManager* particle);
+	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, DirectXCommon* dxCommon, ParticleManager* particle);
 	///更新
 	///</summary>
 	void Update();
@@ -42,6 +45,8 @@ public:
 	///描画
 	///</summary>
 	void Draw();
+
+	void DrawFbx();
 	///<summary>
 	///攻撃
 	///</summary>
@@ -70,7 +75,7 @@ public:
 	Vector2 GetReticlePos();
 
 	Vector3 GetFarNear();
-	
+
 	void ReticleLimit();
 
 	void PlayerLimit();
@@ -84,20 +89,26 @@ public:
 	void ParticleDraw();
 
 	void ClearMove();
+
+	void TitleMove();
 private:
 	//ワールド変換データ
-	Object3d* worldTransform_;
+	Object3dFbx* worldTransform_;
 
 	//3Dレティクル用ワールドトランスフォーム
 	Object3d* worldTransform3DReticle_;
 
+	//Object3dFbx* fbxWorldTransform_ = nullptr;
+	//FbxModel* fbxModel_ = nullptr;
+
 	//モデル
-	Model* model_ = nullptr;
+	FbxModel* model_ = nullptr;
 	//弾モデル
 	Model* bulletModel_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	Input* input_ = nullptr;
+
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	//2Dレティクル用スプライト
@@ -107,6 +118,7 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 	WinApp* winApp = nullptr;
+	DirectXCommon* dxCommon_ = nullptr;
 
 	Vector3 farCre;
 	Vector3 nearCre;
@@ -114,7 +126,7 @@ private:
 	Vector3 moveLimit = { 20,20,20 };
 	bool limitIn = false;
 
-	Vector3 playerResetPos = { 0,-2.5f,0 };
+	Vector3 playerResetPos = { 0,-2.5f,-30 };
 
 	const float speed = 0.5f;
 

@@ -55,9 +55,10 @@ void Object3dFbx::Update()
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
-	resultMat = wtf.matWorld * camera->GetViewProjectionMatrix();	// 行列の合成
+	resultMat = camera->GetViewProjectionMatrix();	// 行列の合成
 
-	constMap->mat = resultMat;
+	constMap->viewproj = resultMat;
+	constMap->world = wtf.matWorld;
 	constBuffB0->Unmap(0, nullptr);
 
 	std::vector<FbxModel::Bone>& bones = fbxmodel->GetBones();
@@ -138,6 +139,11 @@ void Object3dFbx::PlayAnimation(float speed, bool isLoop)
 	isFin = false;
 	//ループ再生する
 	this->isLoop = isLoop;
+}
+
+Vector3 Object3dFbx::GetWorldPosition()
+{
+	return { wtf.matWorld.m[3][0],wtf.matWorld.m[3][1] ,wtf.matWorld.m[3][2] };
 }
 
 //void Object3dFbx::PlayAnimation()

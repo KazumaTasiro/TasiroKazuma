@@ -12,6 +12,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 {
 	assert(dxcomon);
 	assert(input_);
+	assert(winApp);
 
 	input = input_;
 
@@ -24,7 +25,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 
 	// カメラ生成
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	camera->SetEye({ 0,0,-10 });
+	camera->SetEye(cameraTitle);
 
 	camera->Update();
 	Object3d::SetCamera(camera);
@@ -69,9 +70,9 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	road->Initialize();
 
 
-	//Object3dFbx::SetDevice(dxCommon_->GetDevice());
-	//Object3dFbx::SetCamera(camera);
-	//Object3dFbx::CreateGraphicsPipeline();
+	Object3dFbx::SetDevice(dxCommon_->GetDevice());
+	Object3dFbx::SetCamera(camera);
+	Object3dFbx::CreateGraphicsPipeline();
 	////モデル名を指定してファイルに読み込み
 	//model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
@@ -86,18 +87,20 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	ParticleMana->LoadTexture("Explosion.png");
 
 	player_ = new Player();
-	player_->Initialize(spriteCommon, input, winApp, ParticleMana);
+	player_->Initialize(spriteCommon, input, winApp_,dxCommon_, ParticleMana);
 
 	enemyManager = new EnemyManager();
 	enemyManager->Initialize(dxCommon_, input, spriteCommon, camera, ParticleMana);
 
 	enemyManager->SetGameScene(this);
 	enemyManager->SetPlayer(player_);
-	PhaseReset();
+
 	//player_->Update();
 
+	title = new Titles();
+	title->Initialize();
 
-
+	PhaseReset();
 	scene = Scene::Title;
 
 
@@ -118,7 +121,8 @@ void GameScene::Update()
 	{
 	case GameScene::Title:
 		road->BeforeUpdate();
-		//player_->Update();
+		title->Update();
+		player_->Update();
 		if (input->TriggerKey(DIK_Q)) {
 			blindFlag = true;
 		}
@@ -134,6 +138,7 @@ void GameScene::Update()
 			blind->Update();
 		}
 		if (blindTime <= -10) {
+			camera->SetEye(cameraGame);
 			scene = Scene::Game;
 		}
 
@@ -235,6 +240,7 @@ void GameScene::Draw()
 	{
 	case GameScene::Title:
 		player_->Draw();
+		title->Draw();
 		break;
 	case GameScene::Game:
 		player_->Draw();
@@ -261,7 +267,26 @@ void GameScene::Draw()
 	player_->ParticleDraw();
 	Object3d::PostDraw();
 
+	switch (scene)
+	{
+	case GameScene::Title:
+		player_->DrawFbx();
+		break;
+	case GameScene::Game:
+		player_->DrawFbx();
+		break;
+	case GameScene::Boss:
+		player_->DrawFbx();
+		break;
+	case GameScene::GameOver:
+		break;
+	case GameScene::GameClear:
+		player_->DrawFbx();
 
+		break;
+	default:
+		break;
+	}
 
 
 	spriteCommon->PreDraw();
@@ -343,6 +368,13 @@ void GameScene::PhaseReset()
 	player_->Reset();
 	enemyManager->EnemyReset();
 	road->Reset();
+	camera->SetEye(cameraTitle);
+	title->Reset();
+}
+
+void GameScene::TitleReset()
+{
+
 }
 
 

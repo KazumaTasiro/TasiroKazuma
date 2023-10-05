@@ -14,26 +14,32 @@ Player::~Player()
 	//delete worldTransform3DReticle_;
 }
 
-void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, ParticleManager* particle)
+void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, DirectXCommon* dxCommon, ParticleManager* particle)
 {
 	assert(spriteCommon);
 	assert(particle);
 	assert(input);
 	assert(winApp_);
+	assert(dxCommon);
 
 	input_ = input;
 	winApp = winApp_;
+	dxCommon_ = dxCommon;
 	//引数として受け取ったデータをメンバ変数に記録する
 	//spriteCommon_ = spriteCommon;
 	//ワールド変換の初期化
-	worldTransform_ = Object3d::Create();
+	worldTransform_ = new Object3dFbx;
+	/*worldTransform_ = Object3d::Create();*/
 	worldTransform3DReticle_ = Object3d::Create();
 
-	model_ = Model::LoadFormOBJ("trakku");
+	model_ = FbxLoader::GetInstance()->LoadModelFromFile("player2");
+	/*model_ = Model::LoadFormOBJ("trakku");*/
 
+	worldTransform_->Initialize();
 	worldTransform_->SetModel(model_);
-
-	worldTransform_->wtf.position = { 0, 0, 0 };
+	worldTransform_->PlayAnimation();
+	worldTransform_->wtf.position = { 0, 0, -10 };
+	worldTransform_->wtf.scale = { 0.5f, 0.5f, 0.5f };
 
 	bulletModel_ = Model::LoadFormOBJ("playerBullet");
 
@@ -169,11 +175,7 @@ void Player::Draw()
 {
 
 	/*worldTransform3DReticle_->Draw();*/
-	if (DeadParticle==false) {
-		if (worldTransform_->wtf.position.z < 100) {
-			worldTransform_->Draw();
-		}
-	}
+	
 	/*model_->Draw(worldTransform_, viewProjection_, textureHandle_);*/
 //弾描画
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
@@ -182,6 +184,15 @@ void Player::Draw()
 	////3Dレティクルを描画
 	//model_->Draw(worldTransform3DReticle_, viewProjection_, textureHandle_);
 
+}
+
+void Player::DrawFbx()
+{
+	if (DeadParticle == false) {
+		if (worldTransform_->wtf.position.z < 100) {
+			worldTransform_->Draw(dxCommon_->GetCommandList());
+		}
+	}
 }
 
 void Player::Attack()
@@ -466,5 +477,10 @@ void Player::ClearMove()
 	Vector3 move = { 0,0,1 };
 	worldTransform_->wtf.position += move;
 	worldTransform_->Update();
+}
+
+void Player::TitleMove()
+{
+	worldTransform_->wtf.rotation.y;
 }
 
