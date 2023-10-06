@@ -10,6 +10,7 @@
 #include "ParticleManager.h"
 #include "Boss.h"
 
+
 class Player;
 
 class EnemyManager {
@@ -17,7 +18,7 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
-	void Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
+	void Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
 
 	void Update();
 
@@ -37,22 +38,22 @@ public:
 	bool IsAllEnemyDead();
 
 	/// <summary>
-	/// “G‚ÌCSV‚Ì“Ç‚İ‚İ
+	/// æ•µã®CSVã®èª­ã¿è¾¼ã¿
 	/// </summary>
 	void LoadEnemyPopData();
 
-	//CSVƒŠƒZƒbƒg
+	//CSVãƒªã‚»ãƒƒãƒˆ
 	void EnemyPopComandReset();
 
 	/// <summary>
-	/// “G‚ÌCSV‚Ì‰ğÍ
+	/// æ•µã®CSVã®è§£æ
 	/// </summary>
 	void UpdateEnemyPopCommands();
 
-	//“G‚Ì“o˜^
+	//æ•µã®ç™»éŒ²
 	void ExistenceEnemy(const Vector3& EnemyPos);
 
-	//“G‚Æ‚Ì“–‚½‚è”»’è
+	//æ•µã¨ã®å½“ãŸã‚Šåˆ¤å®š
 	void EnemyCollision(Player* player);
 
 	void EnemyReset();
@@ -67,7 +68,7 @@ public:
 
 	void ParticleDraw();
 public:
-	//‰¹‚ğ~‚ß‚éŠÖ”
+	//éŸ³ã‚’æ­¢ã‚ã‚‹é–¢æ•°
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
 
 private:
@@ -84,7 +85,7 @@ private:
 
 	std::list<std::unique_ptr<Enemy>> enemy_;
 
-	//“G”­¶ƒRƒ}ƒ“ƒh
+	//æ•µç™ºç”Ÿã‚³ãƒãƒ³ãƒ‰
 	std::stringstream enemyPopCommands;
 
 	bool waitflag = false;
@@ -102,11 +103,11 @@ private:
 
 	ParticleManager* enemyDeadParticle;
 
-	//“Gƒ‚ƒfƒ‹
+	//æ•µãƒ¢ãƒ‡ãƒ«
 	Model* enemyModel_ = nullptr;
-	//“G‚Ì’eƒ‚ƒfƒ‹
+	//æ•µã®å¼¾ãƒ¢ãƒ‡ãƒ«
 	Model* enemyBulletModel_ = nullptr;
-	//“G‚ÌÆ€ƒ‚ƒfƒ‹
+	//æ•µã®ç…§æº–ãƒ¢ãƒ‡ãƒ«
 	Model* enemyReticleModel_ = nullptr;
 
 	Boss* boss = nullptr;

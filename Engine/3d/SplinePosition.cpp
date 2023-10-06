@@ -2,9 +2,10 @@
 
 SplinePosition::SplinePosition(Vector3& Start, Vector3& p1, Vector3& p2, Vector3& end)
 {
-	std::vector<Vector3> points{ Start, Start, p1, p2, end, end };
-	this->points = points;
+	std::vector<Vector3> points_{ Start, Start, p1, p2, end, end };
+	this->points = points_;
 }
+
 
 SplinePosition::SplinePosition(const std::vector<Vector3>& points)
 {
@@ -35,17 +36,17 @@ void SplinePosition::Reset()
 	timeRate_ = 0.0f;
 }
 
-Vector3 SplinePosition::SplinePositionUpdate(const std::vector<Vector3>& points, size_t& startIndex, float& t)
+Vector3 SplinePosition::SplinePositionUpdate(const std::vector<Vector3>& points_, size_t& startIndex_, float& t)
 {
-	size_t n = points.size() - 2;
+	size_t n = points_.size() - 2;
 
-	if (startIndex > n)return points[n];
-	if (startIndex < 1)return points[1];
+	if (startIndex_ > n)return points_[n];
+	if (startIndex_ < 1)return points_[1];
 
-	Vector3 p0 = points[startIndex - 1];
-	Vector3 p1 = points[startIndex];
-	Vector3 p2 = points[startIndex + 1];
-	Vector3 p3 = points[startIndex + 2];
+	Vector3 p0 = points_[startIndex_ - 1];
+	Vector3 p1 = points_[startIndex_];
+	Vector3 p2 = points_[startIndex_ + 1];
+	Vector3 p3 = points_[startIndex_ + 2];
 
 	Vector3 position = 0.5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * (t * t) + (-p0 + 3 * p1 - 3 * p2 + p3) * (t * t * t));
 

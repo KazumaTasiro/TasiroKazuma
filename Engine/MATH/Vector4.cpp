@@ -19,6 +19,7 @@ float Vector4::Length() const
 	return sqrtf(len);
 }
 
+
 float Vector4::LengthSquared() const
 {
 	return Dot(*this);

@@ -11,8 +11,9 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 
 	EnemyRootNmb_ = EnemyRootNmb;
 
-	//ˆø”‚Æ‚µ‚Äó‚¯æ‚Á‚½ƒf[ƒ^‚ğƒƒ“ƒo•Ï”‚É‹L˜^‚·‚é
-	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
+
+	//å¼•æ•°ã¨ã—ã¦å—ã‘å–ã£ãŸãƒ‡ãƒ¼ã‚¿ã‚’ãƒ¡ãƒ³ãƒå¤‰æ•°ã«è¨˜éŒ²ã™ã‚‹
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ã®åˆæœŸåŒ–
 	worldTransform_ = Object3d::Create();;
 	worldTransform_->wtf.position = EnemyPos;
 	
@@ -58,17 +59,17 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 	splineReMove = new SplinePosition(worldTransform_->wtf.position, EnemyReMoveSpline1, EnemyReMoveSpline2, EnemyReMoveSpline0);
 }
 
-void Enemy::Update(Player* player)
+void Enemy::Update(Player* player_)
 {
 
-	assert(player);
-	this->player = player;
+	assert(player_);
+	this->player = player_;
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->Update();
-	float time = 0.02f;
-	spline->Update(time);
+	float time_ = 0.02f;
+	spline->Update(time_);
 	//worldTransformReticle_->wtf.position.z = 0;
-	//ƒfƒXƒtƒ‰ƒO‚Ì—§‚Á‚½’e‚ğíœ
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°ã®ç«‹ã£ãŸå¼¾ã‚’å‰Šé™¤
 	EnemyLockBullets_.remove_if([](std::unique_ptr<LockOnBullet>& LockBullet) {
 		return LockBullet->IsDead();
 		});
@@ -76,7 +77,7 @@ void Enemy::Update(Player* player)
 		return enemyBullet->IsDead();
 		});
 
-	//ƒLƒƒƒ‰ƒNƒ^[ˆÚ“®ˆ—
+	//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ç§»å‹•å‡¦ç†
 	Move();
 	spriteLock->SetPozition({ GetWorldPosition().x,GetWorldPosition().y });
 	if (EnemyHp <= 0) {
@@ -102,8 +103,8 @@ void Enemy::Move()
 			worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
 		}
 		if (TackleReMove) {
-			float time = 0.05f;
-			splineReMove->Update(time);
+			float time_ = 0.05f;
+			splineReMove->Update(time_);
 			worldTransform_->wtf.position = splineReMove->NowPos;
 			if (splineReMove->NowPos.x == EnemyMoveSpline0.x && splineReMove->NowPos.y == EnemyMoveSpline0.y && splineReMove->NowPos.z == EnemyMoveSpline0.z) {
 				TackleReMove = false;
@@ -140,10 +141,10 @@ void Enemy::Fire()
 			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
 			velocity_.nomalize();
 			velocity_ *= verocitySpeed;
-			//’e‚ğ¶¬‚µA‰Šú‰»
+			//å¼¾ã‚’ç”Ÿæˆã—ã€åˆæœŸåŒ–
 			std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
 			newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
-			//’e‚ğ”­Ë‚·‚é
+			//å¼¾ã‚’ç™ºå°„ã™ã‚‹
 			EnemyBullets_.push_back(std::move(newEnemyBullet));
 			fireFlag = false;
 		}
@@ -158,19 +159,19 @@ void Enemy::Fire()
 	}
 	if (input_->ReleaseMouse(1)) {
 		if (lockOn == true) {
-			//’e‚ğ¶¬‚µA‰Šú‰»
+			//å¼¾ã‚’ç”Ÿæˆã—ã€åˆæœŸåŒ–
 			std::unique_ptr<LockOnBullet> newLockBullet = std::make_unique<LockOnBullet>();
 			newLockBullet->Initialize(enemyBulletModel_, player->GetWorldPosition());
-			//’e‚ğ”­Ë‚·‚é
+			//å¼¾ã‚’ç™ºå°„ã™ã‚‹
 			EnemyLockBullets_.push_back(std::move(newLockBullet));
 			lockOn = false;
 		}
 	}
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_) {
 		enemyBullet->Update();
 	}
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_) {
 		LockBullet->Update(GetWorldPosition());
 	}
@@ -178,9 +179,9 @@ void Enemy::Fire()
 
 Vector3 Enemy::GetWorldPosition()
 {
-	//ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	Vector3 worldPos;
-	//ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª‚ğæ“¾iƒ[ƒ‹ƒhÀ•Wj
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—ï¼ˆãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ï¼‰
 	worldPos = worldTransform_->GetWorldPosition();
 
 	return worldPos;
@@ -188,11 +189,11 @@ Vector3 Enemy::GetWorldPosition()
 
 void Enemy::Draw()
 {
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_) {
 		LockBullet->Draw();
 	}
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_) {
 		enemyBullet->Draw();
 	}
@@ -222,47 +223,47 @@ void Enemy::LockOnTrue()
 
 void Enemy::OnColl()
 {
-	//”»’è‘ÎÛA‚ÆB‚ÌÀ•W
+	//åˆ¤å®šå¯¾è±¡Aã¨Bã®åº§æ¨™
 	Vector3 posA, posB;
 
 	for (std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_) {
-		//“GƒLƒƒƒ‰‚àÀ•W
+		//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 		posA = GetWorldPosition();
 
-		//©’e‚ÌÀ•W
+		//è‡ªå¼¾ã®åº§æ¨™
 		posB = LockBullet->GetWorldPosition();
 
 		if (Collision::CircleCollision(posB, posA, 2.0f, 2.0f)) {
-			//“GƒLƒƒƒ‰‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+			//æ•µã‚­ãƒ£ãƒ©ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 			OnCollision();
-			//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+			//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 			LockBullet->OnCollision();
 		}
 	}
 	for (std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_) {
-		//“GƒLƒƒƒ‰‚àÀ•W
+		//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 		posA = player->GetWorldPosition();
 
-		//©’e‚ÌÀ•W
+		//è‡ªå¼¾ã®åº§æ¨™
 		posB = enemyBullets->GetWorldPosition();
 
 		if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
-			//“GƒLƒƒƒ‰‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+			//æ•µã‚­ãƒ£ãƒ©ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 			player->OnCollision();
-			//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+			//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 			enemyBullets->OnCollision();
 		}
 	}
-	//“GƒLƒƒƒ‰‚àÀ•W
+	//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 	posA = player->GetWorldPosition();
 
-	//©’e‚ÌÀ•W
+	//è‡ªå¼¾ã®åº§æ¨™
 	posB = worldTransform_->GetWorldPosition();
 
 	if (Collision::CircleCollision(posB, posA, 1.0f, 1.0f)) {
-		//“GƒLƒƒƒ‰‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+		//æ•µã‚­ãƒ£ãƒ©ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 		player->OnCollision();
-		//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+		//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 		CollTackle();
 	}
 }

@@ -234,9 +234,6 @@
     <ClCompile Include="Engine\camera\Camera.cpp">
       <Filter>ソース ファイル\Engine\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Depth\Depth.cpp">
-      <Filter>ソース ファイル\Engine\Depth</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\bace\DirectXCommon.cpp">
       <Filter>ソース ファイル\Engine\EngineMain\DirectXCommon</Filter>
     </ClCompile>
@@ -292,9 +289,6 @@
       <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="User\Enemy\Boss.cpp">
-      <Filter>ソース ファイル\Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="User\Enemy\BossSubordinate.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="User\Enemy\Enemy.cpp">
@@ -365,9 +359,6 @@
     <ClInclude Include="Engine\camera\Camera.h">
       <Filter>ヘッダー ファイル\Engine\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Depth\Depth.h">
-      <Filter>ヘッダー ファイル\Engine\Depth</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\bace\DirectXCommon.h">
       <Filter>ヘッダー ファイル\Engine\EngineMain\DirectXCommon</Filter>
     </ClInclude>
@@ -426,9 +417,6 @@
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="User\Enemy\Boss.h">
-      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="User\Enemy\BossSubordinate.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="User\Enemy\Enemy.h">

@@ -1,6 +1,7 @@
-﻿#include "Camera.h"
+#include "Camera.h"
 
 using namespace DirectX;
+
 
 Camera::Camera(int window_width, int window_height)
 {

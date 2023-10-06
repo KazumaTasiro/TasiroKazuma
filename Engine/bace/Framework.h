@@ -5,29 +5,30 @@
 #include "FPS.h"
 #include "FbxLoader.h"
 
-//ƒQ[ƒ€‘S‘Ì
+//ã‚²ãƒ¼ãƒ å…¨ä½“
 class Framework
 {
-public://ƒƒ“ƒoŠÖ”
+public://ãƒ¡ãƒ³ãƒé–¢æ•°
 
-	//Às
+	//å®Ÿè¡Œ
 	void Run();
+
 
 	virtual ~Framework() = default;
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	virtual void Initialize();
 
-	//I—¹
+	//çµ‚äº†
 	virtual void Finalize();
 
-	//–ˆƒtƒŒ[ƒ€ˆ—
+	//æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 	virtual void Update();
 
-	//•`‰æ
+	//æç”»
 	virtual void Draw() = 0;
 
-	//I—¹ƒ`ƒFƒbƒN
+	//çµ‚äº†ãƒã‚§ãƒƒã‚¯
 	virtual bool IsEndRequst() { return endRequest_; }
 
 
@@ -36,17 +37,17 @@ public://ƒƒ“ƒoŠÖ”
 	Input* GetInput() { return input; }
 
 private:
-	//ƒQ[ƒ€I—¹ƒtƒ‰ƒO
+	//ã‚²ãƒ¼ãƒ çµ‚äº†ãƒ•ãƒ©ã‚°
 	bool endRequest_ = false;
 	//WinApp
 	WinApp* winApp = nullptr;
 
 	//DXcommon
 	DirectXCommon* dxCommon = nullptr;
-	//ƒCƒ“ƒvƒbƒg
+	//ã‚¤ãƒ³ãƒ—ãƒƒãƒˆ
 	Input* input = nullptr;
 	//FPS
 	FPS* fps = new FPS;
-	//ƒƒbƒZ[ƒW
+	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 	MSG msg{};
 };

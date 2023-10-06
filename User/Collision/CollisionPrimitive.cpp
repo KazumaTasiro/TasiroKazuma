@@ -2,6 +2,7 @@
 
 using namespace DirectX;
 
+
 void Triangle::ComputeNormal()
 {
 

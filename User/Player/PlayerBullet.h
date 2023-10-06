@@ -5,26 +5,27 @@
 #include "Input.h"
 #include "Vector3.h"
 
+
 ///<summary>
-///©ƒLƒƒƒ‰
+///è‡ªã‚­ãƒ£ãƒ©
 ///</summary>
 class PlayerBullet {
 public:
 	///<summary>
-	///‰Šú‰»
+	///åˆæœŸåŒ–
 	///</summary>
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);;
 	///<summary>
-	///XV
+	///æ›´æ–°
 	///</summary>
 	void Update();
 	///<summary>
-	///•`‰æ
+	///æç”»
 	///</summary>
 	void Draw();
 	bool IsDead()const { return isDead_; }
 
-	//Õ“Ë‚ğŒŸo‚µ‚½‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	//è¡çªã‚’æ¤œå‡ºã—ãŸã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	void OnCollision();
 
 	Vector3 GetWorldPosition();
@@ -32,24 +33,24 @@ public:
 
 
 private:
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	Object3d* worldTransform_;
 
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
 
-	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0u;
 
-	//’e‚Ì‘¬“x
+	//å¼¾ã®é€Ÿåº¦
 	float speed = 3.0f;
 
-	//‘¬“x
+	//é€Ÿåº¦
 	Vector3 velocity_;
-	//õ–½<fim>
+	//å¯¿å‘½<fim>
 	static const int32_t kLifeTime = 60 * 5;
-	//ƒfƒXƒ^ƒCƒ}[
+	//ãƒ‡ã‚¹ã‚¿ã‚¤ãƒãƒ¼
 	int32_t deathTimer_ = kLifeTime;
-	//ƒfƒXƒtƒ‰ƒO
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°
 	bool isDead_ = false;
 };

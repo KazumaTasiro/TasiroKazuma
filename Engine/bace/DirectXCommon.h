@@ -10,11 +10,12 @@
 #include <DirectXTex.h>
 #pragma warning(pop)
 
-//DirectXŠî”Õ
+
+//DirectXåŸºç›¤
 class DirectXCommon 
 {
-public://ƒƒ“ƒoŠÖ”
-	//‰Šú‰»
+public://ãƒ¡ãƒ³ãƒé–¢æ•°
+	//åˆæœŸåŒ–
 	void Initialize(WinApp* winApp);
 
 	void InitializeDevice();
@@ -31,26 +32,26 @@ public://ƒƒ“ƒoŠÖ”
 
 	void ClearDepthBuffer();
 
-	//•`‰æ‘Oˆ—
+	//æç”»å‰å‡¦ç†
 	void PreDraw();
-	//•`‰æŒãˆ—
+	//æç”»å¾Œå‡¦ç†
 	void PostDraw();
 
-	//ƒfƒoƒCƒXæ“¾
+	//ãƒ‡ãƒã‚¤ã‚¹å–å¾—
 	ID3D12Device* GetDevice() const { return device.Get(); }
 
-	//ƒRƒ}ƒ“ƒhƒŠƒXƒgæ“¾
+	//ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆå–å¾—
 	ID3D12GraphicsCommandList* GetCommandList()const { return commandList.Get(); }
 
-	//ƒoƒbƒNƒoƒbƒtƒ@‚Ì”‚ğæ“¾
+	//ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã®æ•°ã‚’å–å¾—
 	size_t GetBufferCount()const { return backBuffers.size(); }
 
 private:
-	//DirectX12ƒfƒoƒCƒX
+	//DirectX12ãƒ‡ãƒã‚¤ã‚¹
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
-	//DXGIƒtƒ@ƒNƒgƒŠ
+	//DXGIãƒ•ã‚¡ã‚¯ãƒˆãƒª
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory;
-	//ƒoƒbƒNƒoƒbƒtƒ@
+	//ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> backBuffers;
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};

@@ -55,12 +55,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\bace;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Extrmal\imgui;$(ProjectDir)Extrmal\DirectXTex;$(ProjectDir)Extrmal;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -71,7 +73,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -80,6 +82,8 @@
       <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\bace;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Extrmal\imgui;$(ProjectDir)Extrmal\DirectXTex;$(ProjectDir)Extrmal;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -109,7 +113,6 @@
     <ClCompile Include="Engine\bace\ImGuiManager.cpp" />
     <ClCompile Include="Engine\bace\WinApp.cpp" />
     <ClCompile Include="Engine\camera\Camera.cpp" />
-    <ClCompile Include="Engine\Depth\Depth.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\MATH\Affin.cpp" />
     <ClCompile Include="Engine\MATH\ConvertXM.cpp" />
@@ -124,7 +127,6 @@
     <ClCompile Include="User\Collision\Collision.cpp" />
     <ClCompile Include="User\Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="User\Enemy\Boss.cpp" />
-    <ClCompile Include="User\Enemy\BossSubordinate.cpp" />
     <ClCompile Include="User\Enemy\Enemy.cpp" />
     <ClCompile Include="User\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="User\Enemy\EnemyManager.cpp" />
@@ -156,7 +158,6 @@
     <ClInclude Include="Engine\bace\ImGuiManager.h" />
     <ClInclude Include="Engine\bace\WinApp.h" />
     <ClInclude Include="Engine\camera\Camera.h" />
-    <ClInclude Include="Engine\Depth\Depth.h" />
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\MATH\Affin.h" />
     <ClInclude Include="Engine\MATH\ConvertXM.h" />
@@ -170,7 +171,6 @@
     <ClInclude Include="User\Collision\Collision.h" />
     <ClInclude Include="User\Collision\CollisionPrimitive.h" />
     <ClInclude Include="User\Enemy\Boss.h" />
-    <ClInclude Include="User\Enemy\BossSubordinate.h" />
     <ClInclude Include="User\Enemy\Enemy.h" />
     <ClInclude Include="User\Enemy\EnemyBullet.h" />
     <ClInclude Include="User\Enemy\EnemyManager.h" />

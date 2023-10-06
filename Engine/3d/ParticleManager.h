@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <Windows.h>
 #include <wrl.h>
@@ -12,6 +12,7 @@
 
 #include "Camera.h"
 #include <array>
+
 
 /// <summary>
 /// 3Dオブジェクト
@@ -183,7 +184,7 @@ public: // メンバ関数
 	/// 0.通常,1.徐々に速く,2.徐々に遅く
 	void Add(int life, Vector3 position, Vector3 velociy, Vector3 speed, float start_scale, float end_scale,int particleNmb);
 
-	static void SetCamera(Camera* camera) { ParticleManager::camera = camera; }
+	static void SetCamera(Camera* camera_) { ParticleManager::camera = camera_; }
 
 	void SetTransform(Transform wtf) { wtf_ = wtf; };
 

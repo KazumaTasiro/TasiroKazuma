@@ -1,8 +1,7 @@
 #include "Framework.h"
 #include "GameMain.h"
 
-
-//WindowsƒAƒvƒŠ‚Å‚ÌƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg(mainŠÖ”)
+//Windowsã‚¢ãƒ—ãƒªã§ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼ãƒã‚¤ãƒ³ãƒˆ(mainé–¢æ•°)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	Framework* game = nullptr;
 	game = new GameMain();

@@ -3,32 +3,31 @@
 #include "Model.h"
 #include <cassert>
 
-
 ///<summary>
-///“V‹…
+///å¤©çƒ
 ///</summary>
 class Skydome {
 public:
 	///<summary>
-	///‰Šú‰»
+	///åˆæœŸåŒ–
 	///</summary>
 	void Initalize();
 
 	///<summary>
-	///XV
+	///æ›´æ–°
 	///</summary>
 	void Update();
 
 	///<summary>
-	///•`‰æ
+	///æç”»
 	///</summary>
 	void Draw();
 
 
 private:
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	Object3d* worldTransform_ = nullptr;
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
 
 };

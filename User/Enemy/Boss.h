@@ -12,7 +12,6 @@
 #include "SplinePosition.h"
 #include "EnemyBullet.h"
 
-
 class GameScene;
 class Player;
 class Boss
@@ -22,11 +21,11 @@ public:
 	~Boss();
 
 	///<summary>
-	///‰Šú‰»
+	///åˆæœŸåŒ–
 	///</summary>
 	void Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* input);
 	///<summary>
-	///XV
+	///æ›´æ–°
 	///</summary>
 
 	void Update(Player* player);
@@ -38,7 +37,7 @@ public:
 
 	Vector3 GetWorldPosition();
 	///<summary>
-	///•`‰æ
+	///æç”»
 	///</summary>
 	void Draw();
 
@@ -50,7 +49,7 @@ public:
 
 	void OnColl();
 
-	//Õ“Ë‚ğŒŸo‚µ‚½‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	//è¡çªã‚’æ¤œå‡ºã—ãŸã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	void OnCollision();
 
 	void Reset();
@@ -62,30 +61,30 @@ private:
 
 	int randBossAttackNmb = 0;
 
-	//”­ËŠÔŠu
+	//ç™ºå°„é–“éš”
 	static const int kFireInterval = 100;
 
 	Input* input_ = nullptr;
 
 	GameScene* gameScene_ = nullptr;
 
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	Object3d* worldTransform_;
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	Object3d* worldTransformReticle_;
-	//“Gƒ‚ƒfƒ‹
+	//æ•µãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
-	//“G‚Ì’eƒ‚ƒfƒ‹
+	//æ•µã®å¼¾ãƒ¢ãƒ‡ãƒ«
 	Model* enemyBulletModel_ = nullptr;
-	//“G‚ÌÆ€ƒ‚ƒfƒ‹
+	//æ•µã®ç…§æº–ãƒ¢ãƒ‡ãƒ«
 	Model* enemyReticleModel_ = nullptr;
 
-	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0u;
 
-	////ƒtƒF[ƒY
+	////ãƒ•ã‚§ãƒ¼ã‚º
 	//Phase phase_ = Phase::Approch;
-	//ƒLƒƒƒ‰ƒNƒ^[‚ÌˆÚ“®ƒxƒNƒgƒ‹
+	//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 ApprochMove = { 0,0,0.0f };
 	Vector3 LeaveMove = { -0.1f,0.1f,-0.1f };
 
@@ -93,7 +92,7 @@ private:
 	Vector3 EnemyMoveSpline1 = { 0,150,200 };
 	Vector3 EnemyMoveSpline2 = { 0,100,200 };
 
-	//’e
+	//å¼¾
 	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
 	std::list<std::unique_ptr<EnemyBullet>> EnemyBullets_;
 
@@ -103,7 +102,7 @@ private:
 
 	int EnemyHp = 10;
 
-	//ƒfƒXƒtƒ‰ƒO
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°
 	bool isDead_ = false;
 
 	bool lockOn = false;

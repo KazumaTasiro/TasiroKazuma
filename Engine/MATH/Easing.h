@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.h"
 
+
 class Easing
 {
 public:
@@ -10,11 +11,11 @@ public:
 	double easeIn(double time, double stert, double end, double endTime);
 	double easeInCubic(double x);
 private:
-	//�J�n���Ԃ��
+	//開始時間やで
 	double time_;
-	//�ŏ��̈ʒu���
+	//最初の位置やで
 	Vector3 stert_;
-	//�Ō�̈ʒu���
+	//最後の位置やで
 	Vector3 end_;
 	double endTime_;
 

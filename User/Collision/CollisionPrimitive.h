@@ -1,10 +1,11 @@
 #pragma once
 /// <summary>
-///“–‚½‚è”»’èƒvƒŠƒ~ƒeƒBƒu
+///å½“ãŸã‚Šåˆ¤å®šãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–
 /// </summary>
 
 #include"Vector3.h"
 #include<DirectXMath.h>
+
 
 struct Sphere {
 	Vector3 center = { 0,0,0};

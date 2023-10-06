@@ -18,6 +18,7 @@ void Road::Initialize()
 		Bill_[i]->wtf.position = { 0,-2.5f,-50.0f + (50 * i) };
 		Bill_[i]->wtf.scale = { RoasdSize };
 
+
 	}
 
 }

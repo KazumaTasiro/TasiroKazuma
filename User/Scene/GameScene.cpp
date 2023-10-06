@@ -2,6 +2,7 @@
 
 GameScene::GameScene()
 {
+
 }
 
 GameScene::~GameScene()
@@ -23,7 +24,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	audio = new Audio();
 	audio->Initialize();
 
-	// ƒJƒƒ‰¶¬
+	// ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	camera->SetEye(cameraTitle);
 
@@ -34,7 +35,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	ImGuiMan = new ImGuiManager();
 	ImGuiMan->Initialize(winApp, dxCommon_);
 
-	//ƒXƒvƒ‰ƒCƒg‹¤’Ê•”•ª‚Ì‰Šú‰»
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šéƒ¨åˆ†ã®åˆæœŸåŒ–
 	spriteCommon = new SpriteCommon;
 	spriteCommon->Initialize(dxCommon_);
 	spriteCommon->LoadTexture(0, "Reticle.png");
@@ -73,7 +74,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	Object3dFbx::SetDevice(dxCommon_->GetDevice());
 	Object3dFbx::SetCamera(camera);
 	Object3dFbx::CreateGraphicsPipeline();
-	////ƒ‚ƒfƒ‹–¼‚ğw’è‚µ‚Äƒtƒ@ƒCƒ‹‚É“Ç‚İ‚İ
+	////ãƒ¢ãƒ‡ãƒ«åã‚’æŒ‡å®šã—ã¦ãƒ•ã‚¡ã‚¤ãƒ«ã«èª­ã¿è¾¼ã¿
 	//model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
 
@@ -90,7 +91,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	player_->Initialize(spriteCommon, input, winApp_,dxCommon_, ParticleMana);
 
 	enemyManager = new EnemyManager();
-	enemyManager->Initialize(dxCommon_, input, spriteCommon, camera, ParticleMana);
+	enemyManager->Initialize( input, spriteCommon, camera, ParticleMana);
 
 	enemyManager->SetGameScene(this);
 	enemyManager->SetPlayer(player_);
@@ -111,7 +112,7 @@ void GameScene::Update()
 
 	ImGui::SetWindowSize({ 500,100 });
 
-	//ƒfƒ‚ƒEƒBƒ“ƒhƒE‚Ì•\¦ON
+	//ãƒ‡ãƒ¢ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®è¡¨ç¤ºON
 	ImGui::ShowDemoWindow();
 
 	ImGui::SliderFloat("posz", &playPos, -100, 0);
@@ -330,13 +331,13 @@ void GameScene::Finalize()
 	audio->Finalize();
 
 	delete audio;
-	//ImGui‚ÌŠJ•ú
+	//ImGuiã®é–‹æ”¾
 	delete ImGuiMan;
 
-	//3Dƒ‚ƒfƒ‹ŠJ•ú
+	//3Dãƒ¢ãƒ‡ãƒ«é–‹æ”¾
 	delete model;
 
-	//ƒXƒvƒ‰ƒCƒg‚ÌŠJ•ú
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®é–‹æ”¾
 	delete spriteCommon;
 
 }
@@ -364,7 +365,7 @@ void GameScene::GameOverSpriteUpdate()
 void GameScene::PhaseReset()
 {
 	//gameClear->SetPozition({ winApp_->window_width / 2,-30 });
-	//©ƒLƒƒƒ‰‚Ì‰Šú‰»
+	//è‡ªã‚­ãƒ£ãƒ©ã®åˆæœŸåŒ–
 	player_->Reset();
 	enemyManager->EnemyReset();
 	road->Reset();

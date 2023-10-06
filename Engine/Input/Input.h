@@ -1,55 +1,56 @@
 #pragma once
-#define DIRECTINPUT_VERSION  0x0800//DirectInput‚Ìƒo[ƒWƒ‡ƒ“w’è
+#define DIRECTINPUT_VERSION  0x0800//DirectInputã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³æŒ‡å®š
 #include <dinput.h>
 #include <cassert>
 #include <wrl.h>
 #include <windows.h>
 #include "WinApp.h"
 
+
 using namespace Microsoft::WRL;
 
 class Input {
 public:
-	//namespaceÈ—ª
+	//namespaceçœç•¥
 	template<class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
-public://ƒƒ“ƒo[ŠÖ”
-	//‰Šú‰»
+public://ãƒ¡ãƒ³ãƒãƒ¼é–¢æ•°
+	//åˆæœŸåŒ–
 	void Initalize(WinApp* winApp);
-	//XV
+	//æ›´æ–°
 	void Update();
 
-	//ƒL[‚ğ‰Ÿ‚µ‚½‚©‚ğƒ`ƒFƒbƒN
+	//ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‹ã‚’ãƒã‚§ãƒƒã‚¯
 	bool PushKey(BYTE keyNunber);
-	//ƒL[‚ÌƒgƒŠƒK[‚ğƒ`ƒFƒbƒN
+	//ã‚­ãƒ¼ã®ãƒˆãƒªã‚¬ãƒ¼ã‚’ãƒã‚§ãƒƒã‚¯
 	bool TriggerKey(BYTE keyNunber);
 
-	//ƒL[‚ğ‰Ÿ‚µ‚½‚©‚ğƒ`ƒFƒbƒN
-	//0@¶ƒNƒŠƒbƒN
-	//1@‰EƒNƒŠƒbƒN
-	//2@ƒ}ƒEƒXƒJ[ƒ\ƒ‹ƒNƒŠƒbƒN
+	//ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‹ã‚’ãƒã‚§ãƒƒã‚¯
+	//0ã€€å·¦ã‚¯ãƒªãƒƒã‚¯
+	//1ã€€å³ã‚¯ãƒªãƒƒã‚¯
+	//2ã€€ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚¯ãƒªãƒƒã‚¯
 	bool PushMouse(int mouse_);
-	//ƒL[‚ÌƒgƒŠƒK[‚ğƒ`ƒFƒbƒN
-	//0@¶ƒNƒŠƒbƒN
-	//1@‰EƒNƒŠƒbƒN
-	//2@ƒ}ƒEƒXƒJ[ƒ\ƒ‹ƒNƒŠƒbƒN
+	//ã‚­ãƒ¼ã®ãƒˆãƒªã‚¬ãƒ¼ã‚’ãƒã‚§ãƒƒã‚¯
+	//0ã€€å·¦ã‚¯ãƒªãƒƒã‚¯
+	//1ã€€å³ã‚¯ãƒªãƒƒã‚¯
+	//2ã€€ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚¯ãƒªãƒƒã‚¯
 	bool TriggerMouse(int mouse_);
-	//ƒ}ƒEƒX‚ÌƒŠƒŠ[ƒX‚ğƒ`ƒFƒbƒN
-	//0@¶ƒNƒŠƒbƒN
-	//1@‰EƒNƒŠƒbƒN
-	//2@ƒ}ƒEƒXƒJ[ƒ\ƒ‹ƒNƒŠƒbƒN
+	//ãƒã‚¦ã‚¹ã®ãƒªãƒªãƒ¼ã‚¹ã‚’ãƒã‚§ãƒƒã‚¯
+	//0ã€€å·¦ã‚¯ãƒªãƒƒã‚¯
+	//1ã€€å³ã‚¯ãƒªãƒƒã‚¯
+	//2ã€€ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã‚¯ãƒªãƒƒã‚¯
 	bool ReleaseMouse(int mouse_);
-private://ƒƒ“ƒo•Ï”
-	//ƒL[ƒ{[ƒh‚ÌƒfƒoƒCƒX
+private://ãƒ¡ãƒ³ãƒå¤‰æ•°
+	//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã®ãƒ‡ãƒã‚¤ã‚¹
 	IDirectInputDevice8* keyboard = nullptr;
 	BYTE key[256] = {};
 	BYTE keyPre[256] = {};
-	//ƒ}ƒEƒX‚ÌƒfƒoƒCƒX
+	//ãƒã‚¦ã‚¹ã®ãƒ‡ãƒã‚¤ã‚¹
 	IDirectInputDevice8* mouse = nullptr;
-	DIMOUSESTATE CurrentMouseState;		//!< ƒ}ƒEƒX‚ÌŒ»İ‚Ì“ü—Íî•ñ
-	DIMOUSESTATE PrevMouseState;			//!< ƒ}ƒEƒX‚ÌˆêƒtƒŒ[ƒ€‘O‚Ì“ü—Íî•ñ
+	DIMOUSESTATE CurrentMouseState;		//!< ãƒã‚¦ã‚¹ã®ç¾åœ¨ã®å…¥åŠ›æƒ…å ±
+	DIMOUSESTATE PrevMouseState;			//!< ãƒã‚¦ã‚¹ã®ä¸€ãƒ•ãƒ¬ãƒ¼ãƒ å‰ã®å…¥åŠ›æƒ…å ±
 
 
-	//DirectInput‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+	//DirectInputã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
 	ComPtr<IDirectInput8> directInput;
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;

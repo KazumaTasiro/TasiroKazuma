@@ -18,6 +18,7 @@ void Titles::Initialize()
 	titleBoss->wtf.position = { TitleBossPos };
 }
 
+
 void Titles::Update()
 {
 	if (gravityStert) {

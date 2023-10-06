@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #pragma warning(push)
 #pragma warning(disable:26495)
@@ -10,7 +10,8 @@
 #include <d3d12.h>
 #include <d3dx12.h>
 #include <string>
-
+#include "Affin.h"
+#include "Matrix4.h"
 
 class FbxLoader
 {
