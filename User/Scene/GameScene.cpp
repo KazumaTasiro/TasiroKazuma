@@ -52,6 +52,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	spriteCommon->LoadTexture(11,"GameBlindFaceUnder2.png");
 	spriteCommon->LoadTexture(12,"GameBlindFaceUnder3.png");
 
+
 	skydome = new Skydome();
 	skydome->Initalize();
 
