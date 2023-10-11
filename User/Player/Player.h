@@ -17,23 +17,24 @@
 #include "Object3dFbx.h"
 #include "DirectXCommon.h"
 
+
 ///<summary>
-///©ƒLƒƒƒ‰
+///è‡ªã‚­ãƒ£ãƒ©
 ///</summary>
 class Player {
 public:
 	Player();
 	~Player();
 	///<summary>
-	///‰Šú‰»
+	///åˆæœŸåŒ–
 	///</summary>
-	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, DirectXCommon* dxCommon, ParticleManager* particle);
-	///XV
+	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, ParticleManager* particle);
+	///æ›´æ–°
 	///</summary>
 	void Update();
 	void Move();
 
-	//Õ“Ë‚ğŒŸo‚µ‚½‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	//è¡çªã‚’æ¤œå‡ºã—ãŸã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	void OnCollision();
 
 	Vector3 ConvertToVector3(const Matrix4& mat, Vector3 vec);
@@ -42,24 +43,24 @@ public:
 
 
 	///<summary>
-	///•`‰æ
+	///æç”»
 	///</summary>
 	void Draw();
 
 	void DrawFbx();
 	///<summary>
-	///UŒ‚
+	///æ”»æ’ƒ
 	///</summary>
 	void Attack();
 
-	//’eƒŠƒXƒg‚ğæ“¾
+	//å¼¾ãƒªã‚¹ãƒˆã‚’å–å¾—
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
-	//ƒxƒNƒgƒ‹‚ğ³‹K‰»‚·‚é
+	//ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–ã™ã‚‹
 	int Vec3Normalize(Vector3* pOut, Vector3* pV);
 
 	///<summary>
-	///UI•`‰æ
+	///UIæç”»
 	///</summary>
 	void DrawUI();
 
@@ -92,33 +93,32 @@ public:
 
 	void TitleMove();
 private:
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
-	Object3dFbx* worldTransform_;
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
+	Object3d* worldTransform_;
 
-	//3DƒŒƒeƒBƒNƒ‹—pƒ[ƒ‹ƒhƒgƒ‰ƒ“ƒXƒtƒH[ƒ€
+	//3Dãƒ¬ãƒ†ã‚£ã‚¯ãƒ«ç”¨ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ 
 	Object3d* worldTransform3DReticle_;
 
 	//Object3dFbx* fbxWorldTransform_ = nullptr;
 	//FbxModel* fbxModel_ = nullptr;
 
-	//ƒ‚ƒfƒ‹
-	FbxModel* model_ = nullptr;
-	//’eƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
+	Model* model_ = nullptr;
+	//å¼¾ãƒ¢ãƒ‡ãƒ«
 	Model* bulletModel_ = nullptr;
-	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0u;
 	Input* input_ = nullptr;
 
-	//’e
+	//å¼¾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-	//2DƒŒƒeƒBƒNƒ‹—pƒXƒvƒ‰ƒCƒg
+	//2Dãƒ¬ãƒ†ã‚£ã‚¯ãƒ«ç”¨ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 	Sprite* sprite2DReticle_;
 	Sprite* sprite2DReticleLock_;
 	SpriteCommon* spriteCommon_ = nullptr;
-	//ƒfƒXƒtƒ‰ƒO
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°
 	bool isDead_ = false;
 	WinApp* winApp = nullptr;
-	DirectXCommon* dxCommon_ = nullptr;
 
 	Vector3 farCre;
 	Vector3 nearCre;
@@ -126,7 +126,7 @@ private:
 	Vector3 moveLimit = { 20,20,20 };
 	bool limitIn = false;
 
-	Vector3 playerResetPos = { 0,-2.5f,-30 };
+	Vector3 playerResetPos = { 0,-2.5f,0 };
 
 	const float speed = 0.5f;
 

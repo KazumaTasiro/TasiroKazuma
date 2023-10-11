@@ -7,9 +7,10 @@ EnemyManager::EnemyManager()
 
 EnemyManager::~EnemyManager()
 {
+
 }
 
-void EnemyManager::Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommon* spriteCommon, Camera* camera,ParticleManager* particle)
+void EnemyManager::Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera,ParticleManager* particle)
 {
 
 	assert(camera);
@@ -24,7 +25,7 @@ void EnemyManager::Initialize(DirectXCommon* dxCommon, Input* input, SpriteCommo
 	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
 	LoadEnemyPopData();
 
-	//ƒp[ƒeƒBƒNƒ‹¶¬
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ç”Ÿæˆ
 	enemyDeadParticle = particle;
 	/*enemyDeadParticle->Update();*/
 
@@ -43,13 +44,13 @@ void EnemyManager::Update()
 	UpdateEnemyPopCommands();
 	
 	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		//“GƒLƒƒƒ‰‚Ì•`‰æ
+		//æ•µã‚­ãƒ£ãƒ©ã®æç”»
 		if (enemy->IsDead()) {
 			EnemyDeadParticle(enemy->GetWorldPosition());
 		}
 	}
 	enemyDeadParticle->Update();
-	//ƒfƒXƒtƒ‰ƒO‚Ì—§‚Á‚½’e‚ğíœ
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°ã®ç«‹ã£ãŸå¼¾ã‚’å‰Šé™¤
 	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) {
 	return enemy->IsDead();
 		});
@@ -88,7 +89,7 @@ void EnemyManager::BossUpdate()
 void EnemyManager::Draw()
 {
 	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		//“GƒLƒƒƒ‰‚Ì•`‰æ
+		//æ•µã‚­ãƒ£ãƒ©ã®æç”»
 		enemy->Draw();
 	}
 
@@ -114,15 +115,15 @@ bool EnemyManager::IsAllEnemyDead()
 
 void EnemyManager::LoadEnemyPopData()
 {
-	//ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 	std::ifstream file;
 	file.open("Resources/enemyPop2.csv");
 	assert(file.is_open());
 
-	//ƒtƒ@ƒCƒ‹‚ğ“à—e‚ğ•¶š—ñƒXƒgƒŠ[ƒ€‚ÉƒRƒs[
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å†…å®¹ã‚’æ–‡å­—åˆ—ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«ã‚³ãƒ”ãƒ¼
 	enemyPopCommands << file.rdbuf();
 
-	//ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
 	file.close();
 }
 
@@ -140,61 +141,61 @@ void EnemyManager::UpdateEnemyPopCommands()
 		waitTimer--;
 		if (waitTimer <= 0)
 		{
-			//‘Ò‹@Š®—¹
+			//å¾…æ©Ÿå®Œäº†
 			waitflag = false;
 		}
 		return;
 	}
 
-	//1s•ª‚Ì•¶š—ñ‚ğ“ü‚ê‚é•Ï”
+	//1è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	std::string line;
 
-	//ƒRƒ}ƒ“ƒhÀsƒ‹[ƒv
+	//ã‚³ãƒãƒ³ãƒ‰å®Ÿè¡Œãƒ«ãƒ¼ãƒ—
 	while (getline(enemyPopCommands, line))
 	{
-		//1s•ª‚Ì•¶š—ñ‚ğƒXƒgƒŠ[ƒ€‚É•ÏŠ·‚µ‚Ä‰ğÍ‚µ‚â‚·‚­‚·‚é
+		//1è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«å¤‰æ›ã—ã¦è§£æã—ã‚„ã™ãã™ã‚‹
 		std::istringstream line_stream(line);
 
 		std::string word;
-		//,‹æØ‚è‚Ås‚Ìæ“ª•¶š—ñ‚ğæ“¾
+		//,åŒºåˆ‡ã‚Šã§è¡Œã®å…ˆé ­æ–‡å­—åˆ—ã‚’å–å¾—
 		getline(line_stream, word, ',');
 
-		//"//"‚©‚çn‚Ü‚és‚ÍƒRƒƒ“ƒg
+		//"//"ã‹ã‚‰å§‹ã¾ã‚‹è¡Œã¯ã‚³ãƒ¡ãƒ³ãƒˆ
 		if (word.find("//") == 0)
 		{
-			//ƒRƒƒ“ƒgs‚Í”ò‚Î‚·
+			//ã‚³ãƒ¡ãƒ³ãƒˆè¡Œã¯é£›ã°ã™
 			continue;
 		}
 
-		//POPƒRƒ}ƒ“ƒh
+		//POPã‚³ãƒãƒ³ãƒ‰
 		if (word.find("POP") == 0)
 		{
-			//xÀ•W
+			//xåº§æ¨™
 			getline(line_stream, word, ',');
 			float x = (float)std::atof(word.c_str());
-			//yÀ•W
+			//yåº§æ¨™
 			getline(line_stream, word, ',');
 			float y = (float)std::atof(word.c_str());
-			//zÀ•W
+			//zåº§æ¨™
 			getline(line_stream, word, ',');
 			float z = (float)std::atof(word.c_str());
-			//“G‚ğ”­¶‚³‚¹‚é
+			//æ•µã‚’ç™ºç”Ÿã•ã›ã‚‹
 			ExistenceEnemy(Vector3(x, y, z));
 		}
 
-		//WAITƒRƒ}ƒ“ƒh
+		//WAITã‚³ãƒãƒ³ãƒ‰
 		else if (word.find("WAIT") == 0)
 		{
 			getline(line_stream, word, ',');
 
-			//‘Ò‚¿ŠÔ
+			//å¾…ã¡æ™‚é–“
 			int32_t waitTime = atoi(word.c_str());
 
-			//‘Ò‹@ŠJn
+			//å¾…æ©Ÿé–‹å§‹
 			waitflag = true;
 			waitTimer = waitTime;
 
-			//ƒRƒ}ƒ“ƒhƒ‹[ƒv‚ğ”²‚¯‚é
+			//ã‚³ãƒãƒ³ãƒ‰ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 			break;
 		}
 
@@ -206,47 +207,47 @@ void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 
 	randEnemyNmb = rand() % 2;
 	randEnemyRoot = rand() % 2;
-	//“GƒLƒƒƒ‰‚Ì¶¬
+	//æ•µã‚­ãƒ£ãƒ©ã®ç”Ÿæˆ
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
 	newEnemy->Initialize(EnemyPos, input_, spriteCommon_, enemyModel_, enemyBulletModel_, enemyReticleModel_,randEnemyNmb, randEnemyRoot);
 
-	//ƒŠƒXƒg‚É“o˜^‚·‚é
+	//ãƒªã‚¹ãƒˆã«ç™»éŒ²ã™ã‚‹
 	enemy_.push_back(std::move(newEnemy));
 }
 
 void EnemyManager::EnemyCollision(Player* player)
 {
-	//”»’è‘ÎÛA‚ÆB‚ÌÀ•W
+	//åˆ¤å®šå¯¾è±¡Aã¨Bã®åº§æ¨™
 	Vector3 posA, posB;
 
-	//©’eƒŠƒXƒg‚Ìæ“¾
+	//è‡ªå¼¾ãƒªã‚¹ãƒˆã®å–å¾—
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullets();
 
 
 
-#pragma region ©ƒLƒƒƒ‰‚Æ“G’e‚Ì“–‚½‚è”»’è
+#pragma region è‡ªã‚­ãƒ£ãƒ©ã¨æ•µå¼¾ã®å½“ãŸã‚Šåˆ¤å®š
 #pragma endregion
 
-	//©ƒLƒƒƒ‰‚àÀ•W
+	//è‡ªã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 	posA = player->GetWorldPosition();
 
 
-#pragma region ©’e‚Æ“GƒLƒƒƒ‰‚Ì“–‚½‚è”»’è
+#pragma region è‡ªå¼¾ã¨æ•µã‚­ãƒ£ãƒ©ã®å½“ãŸã‚Šåˆ¤å®š
 #pragma endregion
 	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		//©’e‚Æ“G‚·‚×‚Ä‚Ì“–‚½‚è”»’è
+		//è‡ªå¼¾ã¨æ•µã™ã¹ã¦ã®å½“ãŸã‚Šåˆ¤å®š
 		for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
 
-			//“GƒLƒƒƒ‰‚àÀ•W
+			//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 			posA = enemy->GetWorldPosition();
 
-			//©’e‚ÌÀ•W
+			//è‡ªå¼¾ã®åº§æ¨™
 			posB = bullet->GetWorldPosition();
 
 			if (Collision::CircleCollision(posB, posA, 2.0f, 2.0f)) {
-				//“GƒLƒƒƒ‰‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//æ•µã‚­ãƒ£ãƒ©ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				enemy->OnCollision();
-				//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				bullet->OnCollision();
 
 			}
@@ -254,17 +255,17 @@ void EnemyManager::EnemyCollision(Player* player)
 	}
 	for (std::unique_ptr<Enemy>& enemy : enemy_) {
 
-		//“GƒLƒƒƒ‰‚àÀ•W
+		//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 		posA = enemy->GetWorldPosition();
 
 		Vector2 posR;
-		//ƒŒƒeƒBƒNƒ‹‚ÌÀ•W
+		//ãƒ¬ãƒ†ã‚£ã‚¯ãƒ«ã®åº§æ¨™
 		posR = player->GetReticlePos();
 
 		if (Collision::RaySphere({ 0,0,0 }, posA, 3.0f, player->GetFarNear())) {
 			if (enemy->GetMoveFlag() == true) {
 				if (input_->PushMouse(1)) {
-					//“GƒLƒƒƒ‰‚ÌƒƒbƒNƒIƒ“ƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+					//æ•µã‚­ãƒ£ãƒ©ã®ãƒ­ãƒƒã‚¯ã‚ªãƒ³ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 					enemy->LockOnTrue();
 				}
 			}
@@ -272,47 +273,47 @@ void EnemyManager::EnemyCollision(Player* player)
 	}
 
 	if (clearNum <= clearCount) {
-		//©’e‚Æƒ{ƒX‚Ì“–‚½‚è”»’è
+		//è‡ªå¼¾ã¨ãƒœã‚¹ã®å½“ãŸã‚Šåˆ¤å®š
 		for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
 
-			//“GƒLƒƒƒ‰‚àÀ•W
+			//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 			posA = boss->GetWorldPosition();
 
-			//©’e‚ÌÀ•W
+			//è‡ªå¼¾ã®åº§æ¨™
 			posB = bullet->GetWorldPosition();
 
 			if (Collision::CircleCollision(posB, posA, 50.0f, 50.0f)) {
-				//“GƒLƒƒƒ‰‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//æ•µã‚­ãƒ£ãƒ©ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				boss->OnCollision();
-				//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				bullet->OnCollision();
 
 			}
 		}
-		//“GƒLƒƒƒ‰‚àÀ•W
+		//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 		posA = boss->GetWorldPosition();
 
 		Vector2 posR;
-		//©’e‚ÌÀ•W
+		//è‡ªå¼¾ã®åº§æ¨™
 		posR = player->GetReticlePos();
 
 		if (Collision::RaySphere({ 0,0,0 }, posA, 50.0f, player->GetFarNear())) {
 			if (input_->PushMouse(1)) {
-				//“GƒLƒƒƒ‰‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//æ•µã‚­ãƒ£ãƒ©ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				boss->LockOnTrue();
 			}
 		}
 	}
 
-#pragma region ©ƒLƒƒƒ‰‚Æ“G’e‚Ì“–‚½‚è”»’è
+#pragma region è‡ªã‚­ãƒ£ãƒ©ã¨æ•µå¼¾ã®å½“ãŸã‚Šåˆ¤å®š
 #pragma endregion
 
-	////©ƒLƒƒƒ‰‚àÀ•W
+	////è‡ªã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 	//posA = player_->GetWorldPosition();
 
-	////“GƒLƒƒƒ‰‚Æ“G’e‚·‚×‚Ä‚Ì“–‚½‚è”»’è
+	////æ•µã‚­ãƒ£ãƒ©ã¨æ•µå¼¾ã™ã¹ã¦ã®å½“ãŸã‚Šåˆ¤å®š
 	//for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
-	//	//“G’e‚ÌÀ•W
+	//	//æ•µå¼¾ã®åº§æ¨™
 	//	posB = bullet->GetWorldPosition();
 
 	//	float lol = { (posB.x - posA.x) * (posB.x - posA.x) + (posB.y - posA.y) * (posB.y - posA.y) + (posB.z - posA.z) * (posB.z - posA.z) };
@@ -320,9 +321,9 @@ void EnemyManager::EnemyCollision(Player* player)
 	//	float radius = { (1 + 1) * (1 + 1) };
 
 	//	if (lol <= radius) {
-	//		//©ƒLƒƒƒ‰‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+	//		//è‡ªã‚­ãƒ£ãƒ©ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 	//		player_->OnCollision();
-	//		//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+	//		//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 	//		bullet->OnCollision();
 
 	//		PlayerDead = true;
@@ -368,29 +369,29 @@ bool EnemyManager::BossClear()
 
 void EnemyManager::EnemyDeadParticle(Vector3 EnemyPos)
 {
-	//ƒp[ƒeƒBƒNƒ‹”ÍˆÍ
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ç¯„å›²
 	for (int i = 0; i < 5; i++) {
-		//X,Y,Z‘S‚Ä[-5.0f,+5.0f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//X,Y,Zå…¨ã¦[-5.0f,+5.0f]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_pos = 5.0f;
 		Vector3 pos = EnemyPos;
 		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 
-		//‘¬“x
-		//X,Y,Z‘S‚Ä[-0.05f,+0.05f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//é€Ÿåº¦
+		//X,Y,Zå…¨ã¦[-0.05f,+0.05f]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_vel = 0.0f;
 		Vector3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//d—Í‚ÉŒ©—§‚Ä‚ÄY‚Ì‚İ[-0.001f,0]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//é‡åŠ›ã«è¦‹ç«‹ã¦ã¦Yã®ã¿[-0.001f,0]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_acc = 0.0000f;
 		Vector3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
-		//’Ç‰Á
+		//è¿½åŠ 
 		enemyDeadParticle->Add(30, pos, vel, acc, 0.0f, 20.0f, 1);
 		enemyDeadParticle->Add(30, pos, vel, acc, 0.0f, 20.0f, 2);
 		enemyDeadParticle->Update();
@@ -399,29 +400,29 @@ void EnemyManager::EnemyDeadParticle(Vector3 EnemyPos)
 
 void EnemyManager::BossDeadParticle(Vector3 EnemyPos)
 {
-	//ƒp[ƒeƒBƒNƒ‹”ÍˆÍ
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ç¯„å›²
 	for (int i = 0; i < 10; i++) {
-		//X,Y,Z‘S‚Ä[-5.0f,+5.0f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//X,Y,Zå…¨ã¦[-5.0f,+5.0f]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_pos = 5.0f;
 		Vector3 pos = EnemyPos;
 		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 
-		//‘¬“x
-		//X,Y,Z‘S‚Ä[-0.05f,+0.05f]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//é€Ÿåº¦
+		//X,Y,Zå…¨ã¦[-0.05f,+0.05f]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_vel = 0.0f;
 		Vector3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		//d—Í‚ÉŒ©—§‚Ä‚ÄY‚Ì‚İ[-0.001f,0]‚Åƒ‰ƒ“ƒ_ƒ€‚É•ª•z
+		//é‡åŠ›ã«è¦‹ç«‹ã¦ã¦Yã®ã¿[-0.001f,0]ã§ãƒ©ãƒ³ãƒ€ãƒ ã«åˆ†å¸ƒ
 		const float rnd_acc = 0.0000f;
 		Vector3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
-		//’Ç‰Á
+		//è¿½åŠ 
 		enemyDeadParticle->Add(40, pos, vel, acc, 0.0f, 50.0f, 1);
 		enemyDeadParticle->Add(40, pos, vel, acc, 0.0f, 50.0f, 2);
 		enemyDeadParticle->Update();

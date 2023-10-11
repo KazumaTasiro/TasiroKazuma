@@ -2,70 +2,69 @@
 
 void Framework::Run()
 {
-	//ƒQ[ƒ€‚Ì‰Šú‰»
+	//ã‚²ãƒ¼ãƒ ã®åˆæœŸåŒ–
 	Initialize();
 	while (true)
 	{
-		//–ˆƒtƒŒ[ƒ€XV
+		//æ¯Žãƒ•ãƒ¬ãƒ¼ãƒ æ›´æ–°
 		Update();
-		//I—¹ƒŠƒNƒGƒXƒg‚ª—ˆ‚½‚ç”²‚¯‚é
+		//çµ‚äº†ãƒªã‚¯ã‚¨ã‚¹ãƒˆãŒæ¥ãŸã‚‰æŠœã‘ã‚‹
 		if (IsEndRequst()) {
 			break;
 		}
-		//•`‰æ
+		//æç”»
 		Draw();
 	}
-	//ƒQ[ƒ€‚ÌI—¹
+	//ã‚²ãƒ¼ãƒ ã®çµ‚äº†
 	Finalize();
-
 }
 
 void Framework::Initialize()
 {
-	//WindowsAPI‚Ì‰Šú‰»
+	//WindowsAPIã®åˆæœŸåŒ–
 	winApp = new WinApp();
 	winApp->Initialize();
 
-	//ƒ|ƒCƒ“ƒ^
+	//ãƒã‚¤ãƒ³ã‚¿
 
 	dxCommon = new DirectXCommon();
 	dxCommon->Initialize(winApp);
 
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
-	//“ü—Í‚Ì‰Šú‰»
+	//å…¥åŠ›ã®åˆæœŸåŒ–
 	input = new Input();
 	input->Initalize(winApp);
 }
 
 void Framework::Finalize()
 {
-	//“ü—ÍŠJ•ú
+	//å…¥åŠ›é–‹æ”¾
 	delete input;
 	delete fps;
 
-	//DirectX‰ð•ú
+	//DirectXè§£æ”¾
 	delete dxCommon;
-	//WindowsAPI‚ÌI—¹ˆ—
+	//WindowsAPIã®çµ‚äº†å‡¦ç†
 	winApp->Finalize();
-	//WindowsAPI‰ð•ú
+	//WindowsAPIè§£æ”¾
 	delete winApp;
 }
 
 void Framework::Update()
 {
-	//ƒƒbƒZ[ƒW‚ª‚ ‚éH
+	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãŒã‚ã‚‹ï¼Ÿ
 
-	//fps§ŒÀ
+	//fpsåˆ¶é™
 	fps->FpsControlBegin();
 
-	//Windows‚ÌƒƒbƒZ[ƒWˆ—
+	//Windowsã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†
 	if (winApp->ProcessMessage()) {
-		//ƒQ[ƒ€ƒ‹[ƒv‚ð”²‚¯‚é
+		//ã‚²ãƒ¼ãƒ ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 		endRequest_ = true;
 	}
-	//DirectX–ˆƒtƒŒ[ƒ€ˆ—@‚±‚±‚©‚ç
+	//DirectXæ¯Žãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†ã€€ã“ã“ã‹ã‚‰
 	input->Update();
 
-	//FPSŒÅ’è
+	//FPSå›ºå®š
 	fps->FpsControlEnd();
 }

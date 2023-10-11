@@ -15,6 +15,7 @@ void Skydome::Initalize()
 
 void Skydome::Update()
 {
+
 }
 
 void Skydome::Draw()

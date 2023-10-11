@@ -4,29 +4,30 @@
 #include "PostEffect.h"
 #include "Framework.h"
 
-//ƒQ[ƒ€‘S‘Ì
+//ã‚²ãƒ¼ãƒ å…¨ä½“
 class GameMain:public Framework
 {
+
 public:
 	GameMain();
 	~GameMain();
 
-	//‰Šú‰»ˆ—
+	//åˆæœŸåŒ–å‡¦ç†
 	void Initialize() override;
 
-	//I—¹
+	//çµ‚äº†
 	void Finalize() override;
 
-	//–ˆƒtƒŒ[ƒ€XV()
+	//æ¯ãƒ•ãƒ¬ãƒ¼ãƒ æ›´æ–°()
 	void Update() override;
 
-	//•`‰æ
+	//æç”»
 	void Draw() override;
 
 
 private:
 	
-	//ƒ|ƒXƒgƒGƒtƒFƒNƒg
+	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 	PostEffect* posteffect = nullptr;
 	
 	//GameScene

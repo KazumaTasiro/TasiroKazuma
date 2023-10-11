@@ -7,6 +7,7 @@ Boss::Boss()
 
 Boss::~Boss()
 {
+
 }
 
 void Boss::Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* input)
@@ -32,35 +33,35 @@ void Boss::Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* 
 	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
 }
 
-void Boss::Update(Player* player)
+void Boss::Update(Player* player_)
 {
 
 	
-	assert(player);
+	assert(player_);
 	if (fireCount >= 4.0f) {
 		randBossAttackNmb = rand() % 2;
 		fireCount = 0;
 	}
-	this->player = player;
+	this->player = player_;
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->Update();
-	float time = 0.02f;
-	spline->Update(time);
-	//ƒLƒƒƒ‰ƒNƒ^[ˆÚ“®ˆ—
+	float time_ = 0.02f;
+	spline->Update(time_);
+	//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ç§»å‹•å‡¦ç†
 	Move();
 
 	//worldTransformReticle_->wtf.position.z = 0;
 	if (isDead_) {
 		for (std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_) {
-			//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+			//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 			enemyBullets->OnCollision();
 		}
 	}
-	//ƒfƒXƒtƒ‰ƒO‚Ì—§‚Á‚½’e‚ğíœ
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°ã®ç«‹ã£ãŸå¼¾ã‚’å‰Šé™¤
 	EnemyLockBullets_.remove_if([](std::unique_ptr<LockOnBullet>& bullet) {
 		return bullet->IsDead();
 		});
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_) {
 		bullet->Update(GetWorldPosition());
 	}
@@ -90,10 +91,10 @@ void Boss::Move()
 		Fire();
 		if (input_->ReleaseMouse(1)) {
 			if (lockOn == true) {
-				//’e‚ğ¶¬‚µA‰Šú‰»
+				//å¼¾ã‚’ç”Ÿæˆã—ã€åˆæœŸåŒ–
 				std::unique_ptr<LockOnBullet> newBullet = std::make_unique<LockOnBullet>();
 				newBullet->Initialize(enemyBulletModel_, player->GetWorldPosition());
-				//’e‚ğ”­Ë‚·‚é
+				//å¼¾ã‚’ç™ºå°„ã™ã‚‹
 				EnemyLockBullets_.push_back(std::move(newBullet));
 				lockOn = false;
 			}
@@ -104,9 +105,9 @@ void Boss::Move()
 
 Vector3 Boss::GetWorldPosition()
 {
-	//ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	Vector3 worldPos;
-	//ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª‚ğæ“¾iƒ[ƒ‹ƒhÀ•Wj
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—ï¼ˆãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ï¼‰
 	worldPos = worldTransform_->GetWorldPosition();
 
 	return worldPos;
@@ -114,11 +115,11 @@ Vector3 Boss::GetWorldPosition()
 
 void Boss::Draw()
 {
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_) {
 		bullet->Draw();
 	}
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_) {
 		enemyBullet->Draw();
 	}
@@ -137,43 +138,43 @@ void Boss::LockOnTrue()
 
 void Boss::OnColl()
 {
-	//”»’è‘ÎÛA‚ÆB‚ÌÀ•W
+	//åˆ¤å®šå¯¾è±¡Aã¨Bã®åº§æ¨™
 	Vector3 posA, posB;
 
 	for (std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_) {
-		//“GƒLƒƒƒ‰‚àÀ•W
+		//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 		posA = GetWorldPosition();
 
-		//©’e‚ÌÀ•W
+		//è‡ªå¼¾ã®åº§æ¨™
 		posB = bullet->GetWorldPosition();
 
 		if (Collision::CircleCollision(posB, posA, 50.0f, 50.0f)) {
-			//“GƒLƒƒƒ‰‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+			//æ•µã‚­ãƒ£ãƒ©ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 			OnCollision();
-			//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+			//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 			bullet->OnCollision();
 		}
 	}
 	for (std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_) {
-		//“GƒLƒƒƒ‰‚àÀ•W
+		//æ•µã‚­ãƒ£ãƒ©ã‚‚åº§æ¨™
 		posA = player->GetWorldPosition();
 
-		//©’e‚ÌÀ•W
+		//è‡ªå¼¾ã®åº§æ¨™
 		posB = enemyBullets->GetWorldPosition();
 
 		if (randBossAttackNmb == 0) {
 			if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
-				//ƒvƒŒƒCƒ„[‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				player->OnCollision();
-				//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				enemyBullets->OnCollision();
 			}
 		}
 		else if (randBossAttackNmb == 1) {
 			if (Collision::CircleCollision(posB, posA, 4.0f, 4.0f)) {
-				//ƒvƒŒƒCƒ„[‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				player->OnCollision();
-				//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+				//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 				enemyBullets->OnCollision();
 			}
 		}
@@ -193,11 +194,11 @@ void Boss::Reset()
 	worldTransform_->wtf.position = { 100,200,200 };
 	EnemyHp = 10;
 	for (std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_) {
-		//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+		//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 		bullet->OnCollision();
 	}
 	for (std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_) {
-		//©’e‚ÌÕ“ËƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ño‚·
+		//è‡ªå¼¾ã®è¡çªæ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã³å‡ºã™
 		enemyBullets->OnCollision();
 	}
 	spline->Reset();
@@ -227,10 +228,10 @@ void Boss::Fire()
 			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
 			velocity_.nomalize();
 			velocity_ *= verocitySpeed;
-			//’e‚ğ¶¬‚µA‰Šú‰»
+			//å¼¾ã‚’ç”Ÿæˆã—ã€åˆæœŸåŒ–
 			std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
 			newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
-			//’e‚ğ”­Ë‚·‚é
+			//å¼¾ã‚’ç™ºå°„ã™ã‚‹
 			EnemyBullets_.push_back(std::move(newEnemyBullet));
 			fireFlag = false;
 			fireCount += 0.5f;
@@ -239,17 +240,17 @@ void Boss::Fire()
 			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
 			velocity_.nomalize();
 			velocity_ *= verocitySpeed;
-			//’e‚ğ¶¬‚µA‰Šú‰»
+			//å¼¾ã‚’ç”Ÿæˆã—ã€åˆæœŸåŒ–
 			std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
 			newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
 			newEnemyBullet->SetSize({ 4.0f,4.0f,4.0f });
-			//’e‚ğ”­Ë‚·‚é
+			//å¼¾ã‚’ç™ºå°„ã™ã‚‹
 			EnemyBullets_.push_back(std::move(newEnemyBullet));
 			fireFlag = false;
 			fireCount += 1.0f;
 		}
 	}
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_) {
 		enemyBullet->Update();
 	}

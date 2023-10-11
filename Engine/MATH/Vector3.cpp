@@ -23,6 +23,7 @@ Vector3& Vector3::nomalize() {
 	return *this;
 }
 
+
 float Vector3::dot(const Vector3& v)const {
 	return(x * v.x) + (y * v.y) + (z * v.z);
 }
@@ -47,20 +48,20 @@ const Vector3 Vector3::slerp(Vector3& stert, Vector3& end, float t)
 	s = stert.nomalize();
 	e = end.nomalize();
 
-	// 2ƒxƒNƒgƒ‹ŠÔ‚ÌŠp“xi‰sŠp‘¤j
+	// 2ãƒ™ã‚¯ãƒˆãƒ«é–“ã®è§’åº¦ï¼ˆé‹­è§’å´ï¼‰
 	float dott = s.dot(e);
 	float angle = acos(dott);
 
-	// sinƒÆ
+	// sinÎ¸
 	float SinTh = sin(angle);
 
-	// •âŠÔŒW”
+	// è£œé–“ä¿‚æ•°
 	float Ps = sin(angle * (1 - t));
 	float Pe = sin(angle * t);
 
 	out = (Ps * s + Pe * e) / SinTh;
 
-	// ˆê‰³‹K‰»‚µ‚Ä‹…–ÊüŒ`•âŠÔ‚É
+	// ä¸€å¿œæ­£è¦åŒ–ã—ã¦çƒé¢ç·šå½¢è£œé–“ã«
 	out.nomalize();
 
 	return out;

@@ -20,40 +20,42 @@
 #include "Road.h"
 #include "ParticleManager.h"
 #include "Title.h"
+#include "SeenTransition.h"
+
 
 class GameScene {
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒNƒ‰ƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆã‚¯ãƒ©ã‚¿
 	/// </summary>
 	GameScene();
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~GameScene();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_);
 
 	/// <summary>
-	/// –ˆƒtƒŒ[ƒ€ˆ—
+	/// æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw();
 	/// <summary>
-	/// ‰ğ•úˆ—
+	/// è§£æ”¾å‡¦ç†
 	/// </summary>
 	void Finalize();
 
 	/// <summary>
-	/// Õ“Ë”»’è‚Æ‰“š
+	/// è¡çªåˆ¤å®šã¨å¿œç­”
 	/// </summary>
 	void CheckAllCollisions();
 
@@ -63,7 +65,7 @@ public:
 
 
 
-	////’eƒŠƒXƒg‚ğæ“¾
+	////å¼¾ãƒªã‚¹ãƒˆã‚’å–å¾—
 	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets2_; }
 
 	void PhaseReset();
@@ -83,7 +85,7 @@ private:
 	};
 	Scene scene;
 private:
-	///©ƒLƒƒƒ‰
+	///è‡ªã‚­ãƒ£ãƒ©
 	Player* player_ = nullptr;
 
 	//std::list<std::unique_ptr<Enemy>> enemy_;
@@ -103,7 +105,7 @@ private:
 
 	Camera* camera = nullptr;
 
-	//OBJ‚©‚çƒ‚ƒfƒ‹ƒf[ƒ^‚ğ“Ç‚İ‚Ş
+	//OBJã‹ã‚‰ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
 	Model* model = nullptr;
 
 	FbxModel* model1 = nullptr;
@@ -129,15 +131,12 @@ private:
 
 	ParticleManager* ParticleMana;
 
-	Sprite* blind;
 
-	bool blindFlag = false;
-	int blindTime = 30;
-	int blindTimeReset = 30;
-	float blindW = 0;
 
 	Vector3 cameraTitle = { 0,0,10 };
 	Vector3 cameraGame = { 0,0,-10 };
 
 	Titles* title = nullptr;
+
+	SeenTransition* seenTransition = nullptr;
 };

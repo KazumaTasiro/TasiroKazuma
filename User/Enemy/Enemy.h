@@ -13,21 +13,20 @@
 #include "EnemyBullet.h"
 
 ///<summary>
-///“GƒLƒƒƒ‰
+///æ•µã‚­ãƒ£ãƒ©
 ///</summary>
-
 class GameScene;
 class Player;
 class Enemy {
 public:
 	///<summary>
-	///‰Šú‰»
+	///åˆæœŸåŒ–
 	///</summary>
-	/// EnemyNmb “G‚Ìs“®‚Ìí—Ş
-	/// EnemyRootNmb “G‚Ìs“®ƒ‹[ƒg@0:¶ 1:‰E
+	/// EnemyNmb æ•µã®è¡Œå‹•ã®ç¨®é¡
+	/// EnemyRootNmb æ•µã®è¡Œå‹•ãƒ«ãƒ¼ãƒˆã€€0:å·¦ 1:å³
 	void Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon, Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb, int EnemyRootNmb);
 	///<summary>
-	///XV
+	///æ›´æ–°
 	///</summary>
 
 	void Update(Player* player);
@@ -39,31 +38,31 @@ public:
 
 	Vector3 GetWorldPosition();
 	///<summary>
-	///•`‰æ
+	///æç”»
 	///</summary>
 	void Draw();
 	///<summary>
-	///•`‰æ
+	///æç”»
 	///</summary>
 	void DrawUI();
 
-	////s“®ƒtƒF[ƒY
+	////è¡Œå‹•ãƒ•ã‚§ãƒ¼ã‚º
 	//enum class Phase {
-	//	Approch,//Ú‹ß‚·‚é
-	//	Leave,//—£’E‚·‚é
+	//	Approch,//æ¥è¿‘ã™ã‚‹
+	//	Leave,//é›¢è„±ã™ã‚‹
 	//};
 	//void Approch();
 
 	//void Leave();
 
 
-	////ƒxƒNƒgƒ‹‚ğ³‹K‰»‚·‚é
+	////ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–ã™ã‚‹
 	//int Vec3Normalize(Vector3* pOut, Vector3* pV);
 
-	//Õ“Ë‚ğŒŸo‚µ‚½‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+	//è¡çªã‚’æ¤œå‡ºã—ãŸã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	void OnCollision();
 
-	////’eƒŠƒXƒg‚ğæ“¾
+	////å¼¾ãƒªã‚¹ãƒˆã‚’å–å¾—
 	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets2_; }
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
@@ -81,7 +80,7 @@ public:
 
 	int ReturnOnColl();
 
-	//’eƒŠƒXƒg‚ğæ“¾
+	//å¼¾ãƒªã‚¹ãƒˆã‚’å–å¾—
 	const std::list<std::unique_ptr<LockOnBullet>>& GetBullets() { return EnemyLockBullets_; }
 
 	void CollTackle();
@@ -89,30 +88,30 @@ public:
 	bool GetMoveFlag(){return DemoEnemyMove;}
 
 private:
-	//”­ËŠÔŠu
+	//ç™ºå°„é–“éš”
 	static const int kFireInterval = 100;
 
 	Input* input_ = nullptr;
 
 	GameScene* gameScene_ = nullptr;
 
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	Object3d* worldTransform_;
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	Object3d* worldTransformReticle_;
-	//“Gƒ‚ƒfƒ‹
+	//æ•µãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
-	//“G‚Ì’eƒ‚ƒfƒ‹
+	//æ•µã®å¼¾ãƒ¢ãƒ‡ãƒ«
 	Model* enemyBulletModel_ = nullptr;
-	//“G‚ÌÆ€ƒ‚ƒfƒ‹
+	//æ•µã®ç…§æº–ãƒ¢ãƒ‡ãƒ«
 	Model* enemyReticleModel_ = nullptr;
 
-	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0u;
 
-	////ƒtƒF[ƒY
+	////ãƒ•ã‚§ãƒ¼ã‚º
 	//Phase phase_ = Phase::Approch;
-	//ƒLƒƒƒ‰ƒNƒ^[‚ÌˆÚ“®ƒxƒNƒgƒ‹
+	//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«
 	Vector3 ApprochMove = { 0,0,0.0f };
 	Vector3 LeaveMove = { -0.1f,0.1f,-0.1f };
 
@@ -124,10 +123,10 @@ private:
 	Vector3 EnemyReMoveSpline1 = { -50,30,-50 };
 	Vector3 EnemyReMoveSpline2 = { -20,30,100 };
 
-	//ˆÚ“®ƒtƒ‰ƒO
+	//ç§»å‹•ãƒ•ãƒ©ã‚°
 	bool moveEndFlag = false;
 
-	//’e
+	//å¼¾
 	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
 	std::list<std::unique_ptr<EnemyBullet>> EnemyBullets_;
 
@@ -137,9 +136,9 @@ private:
 
 	int EnemyHp = 1;
 
-	//ƒfƒXƒtƒ‰ƒO
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°
 	bool isDead_ = false;
-	//ƒfƒXƒtƒ‰ƒO
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°
 	bool isTackleDead_ = false;
 
 	bool lockOn = false;

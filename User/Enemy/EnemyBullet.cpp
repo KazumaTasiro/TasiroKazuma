@@ -4,28 +4,29 @@ void EnemyBullet::Initialize(const Vector3& position, const Vector3& velocity ,M
 {
 
 	model_ = bulletModel;
-	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	/*textureHandle_ = TextureManager::Load("EnemyBullet.jpg");*/
 
-	//ƒ[ƒ‹ƒhƒgƒ‰ƒ“ƒXƒtƒH[ƒ€‚Ì‰Šú‰»
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ ã®åˆæœŸåŒ–
 	worldTransform_ = Object3d::Create();
 
-	//ˆø”‚Åó‚¯æ‚Á‚½‰ŠúÀ•W‚ğƒZƒbƒg
+	//å¼•æ•°ã§å—ã‘å–ã£ãŸåˆæœŸåº§æ¨™ã‚’ã‚»ãƒƒãƒˆ
 	worldTransform_->wtf.position = position;
 	worldTransform_->SetModel(model_);
-	//ˆø”‚Åó‚¯æ‚Á‚½‘¬“x‚ğƒƒ“ƒoŠÖ”‚É‘ã“ü
+	//å¼•æ•°ã§å—ã‘å–ã£ãŸé€Ÿåº¦ã‚’ãƒ¡ãƒ³ãƒé–¢æ•°ã«ä»£å…¥
 	velocity_ = velocity;
+
 }
 
 void EnemyBullet::Update()
 {
 	Vector3 pos = velocity_;
-	//À•W‚ğˆÚ“®‚³‚¹‚é(1ƒtƒŒ[ƒ€•¶‚ÌˆÚ“®—Ê‚ğ‘«‚µ‚±‚Ş)
+	//åº§æ¨™ã‚’ç§»å‹•ã•ã›ã‚‹(1ãƒ•ãƒ¬ãƒ¼ãƒ æ–‡ã®ç§»å‹•é‡ã‚’è¶³ã—ã“ã‚€)
 
 	worldTransform_->wtf.position += velocity_;
 	worldTransform_->Update();
 	deathTimer_--;
-	//ŠÔŒo‰ß‚ÅƒfƒX
+	//æ™‚é–“çµŒéã§ãƒ‡ã‚¹
 	if (deathTimer_ <= 0) {
 		isDead_ = true;
 	}
@@ -43,9 +44,9 @@ void EnemyBullet::OnCollision()
 
 Vector3 EnemyBullet::GetWorldPosition()
 {
-	//ƒ[ƒ‹ƒhÀ•W‚ğ“ü‚ê‚é•Ï”
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å…¥ã‚Œã‚‹å¤‰æ•°
 	Vector3 worldPos;
-	//ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª‚ğæ“¾iƒ[ƒ‹ƒhÀ•Wj
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—ï¼ˆãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ï¼‰
 	worldPos = worldTransform_->GetWorldPosition();
 
 	return worldPos;

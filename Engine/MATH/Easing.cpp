@@ -16,6 +16,7 @@ Vector3 Easing::easeInVector3(double time, Vector3 stert, Vector3 end, double en
 	return ret;
 }
 
+
 double Easing::easeIn(double time, double stert, double end, double endTime)
 {
 	time_ = time / endTime;

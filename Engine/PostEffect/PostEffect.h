@@ -5,119 +5,118 @@
 #include <DirectXMath.h>
 #include "Input.h"
 
-
 class PostEffect
 {
-private: // ƒGƒCƒŠƒAƒX
-	// Microsoft::WRL::‚ğÈ—ª
+private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-public: // ƒTƒuƒNƒ‰ƒX
+public: // ã‚µãƒ–ã‚¯ãƒ©ã‚¹
 	/// <summary>
-	/// ’¸“_ƒf[ƒ^\‘¢‘Ì
+	/// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	/// </summary>
 	struct VertexPosUv
 	{
-		XMFLOAT3 pos; // xyzÀ•W
-		XMFLOAT2 uv;  // uvÀ•W
+		XMFLOAT3 pos; // xyzåº§æ¨™
+		XMFLOAT2 uv;  // uvåº§æ¨™
 	};
 
 	/// <summary>
-	/// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+	/// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	/// </summary>
 	struct ConstBufferData
 	{
-		XMFLOAT4 color;	// F (RGBA)
-		XMMATRIX mat;	// ‚R‚c•ÏŠ·s—ñ
+		XMFLOAT4 color;	// è‰² (RGBA)
+		XMMATRIX mat;	// ï¼“ï¼¤å¤‰æ›è¡Œåˆ—
 	};
 
-	// ’¸“_”
+	// é ‚ç‚¹æ•°
 	static const int vertNum = 4;
 
 public:
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	PostEffect();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize(ID3D12Device* device,Input* input_);
 
 	/// <summary>
-	/// •`‰æƒRƒ}ƒ“ƒh‚Ì”­s
+	/// æç”»ã‚³ãƒãƒ³ãƒ‰ã®ç™ºè¡Œ
 	/// </summary>
-	/// <param name="cmdList">ƒRƒ}ƒ“ƒhƒŠƒXƒg</param>
+	/// <param name="cmdList">ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
-	/// ƒV[ƒ“•`‰æ‘Oˆ—
+	/// ã‚·ãƒ¼ãƒ³æç”»å‰å‡¦ç†
 	/// </summary>
 	/// <param name="cmdList"></param>
 	void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
-	/// ƒV[ƒ“•`‰æŒãˆ—
+	/// ã‚·ãƒ¼ãƒ³æç”»å¾Œå‡¦ç†
 	/// </summary>
 	/// <param name="cmdList"></param>
 	void PostDrawScene(ID3D12GraphicsCommandList* cmdList);
 
-	//‰æ–ÊƒNƒŠƒAƒJƒ‰[
+	//ç”»é¢ã‚¯ãƒªã‚¢ã‚«ãƒ©ãƒ¼
 	static const float clearColor[4];
 
 private:
 
 	/// <summary>
-	/// ƒpƒCƒvƒ‰ƒCƒ“¶¬
+	/// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ç”Ÿæˆ
 	/// </summary>
 	void CreateGraphicsPipelineState(ID3D12Device* device);
 
 
 
 private:
-	//ƒƒ“ƒo•Ï”
+	//ãƒ¡ãƒ³ãƒå¤‰æ•°
 	Microsoft::WRL::ComPtr<ID3D12Resource> texBuff[2];
-	//SRV—p‚ÌƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	//SRVç”¨ã®ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> descHeapSRV;
 
-	//[“xƒoƒbƒtƒ@
+	//æ·±åº¦ãƒãƒƒãƒ•ã‚¡
 	Microsoft::WRL::ComPtr <ID3D12Resource> depthBuff;
-	//RTV—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	//RTVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> descHeapRTV;
-	//DSV—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	//DSVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> descHeapDSV;
 
 
-	//ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“
+	//ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³
 	Microsoft::WRL::ComPtr <ID3D12PipelineState> pipelineState;
-	//ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ
+	//ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£
 	Microsoft::WRL::ComPtr <ID3D12RootSignature> rootSignature;
-	// ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	ComPtr<ID3D12DescriptorHeap> descHeap;
 
-	// ’¸“_ƒoƒbƒtƒ@
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
 	ComPtr<ID3D12Resource> vertBuff;
-	// ’¸“_ƒoƒbƒtƒ@ƒrƒ…[
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
 	D3D12_VERTEX_BUFFER_VIEW vbView{};
-	// ’è”ƒoƒbƒtƒ@
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡
 	ComPtr<ID3D12Resource> constBuff;
-	// ƒ[ƒ‹ƒhs—ñ
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—
 	XMMATRIX matWorld{};
-	// Z²‰ñ‚è‚Ì‰ñ“]Šp
+	// Zè»¸å›ã‚Šã®å›è»¢è§’
 	float rotation = 0.0f;
-	// À•W
+	// åº§æ¨™
 	XMFLOAT2 position{ 0.0f,0.0f };
-	// F
+	// è‰²
 	XMFLOAT4 color = { 1, 1, 1, 0 };
 
-	// ƒeƒNƒXƒ`ƒƒ‚ÌÅ‘å–‡”
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æœ€å¤§æšæ•°
 	const int srvCount = 512;
 
 	Input* input = nullptr;
@@ -125,7 +124,7 @@ private:
 	ID3D12Device* device_ = nullptr;
 
 private:
-	//ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ì‰æ–ÊƒTƒCƒY1.0f‚ªÅ‘å
+	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ç”»é¢ã‚µã‚¤ã‚º1.0fãŒæœ€å¤§
 	float screenSize = 1.0f;
 };
 

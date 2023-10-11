@@ -4,35 +4,36 @@
 #include <d3dx12.h>
 #include "DirectXCommon.h"
 
-//ImGUI‚ÌŠÇ—
+
+//ImGUIã®ç®¡ç†
 class ImGuiManager
 {
 private:
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 public:
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize(WinApp* winApp,DirectXCommon* dxcommon);
 
 	/// <summary>
-	/// I—¹
+	/// çµ‚äº†
 	/// </summary>
 	void Finalize();
 
 	/// <summary>
-	/// ImGuió•tŠJn
+	/// ImGuiå—ä»˜é–‹å§‹
 	/// </summary>
 	void Bigin();
 
 	/// <summary>
-	/// ImGuió•tI—¹
+	/// ImGuiå—ä»˜çµ‚äº†
 	/// </summary>
 	void End();
 
 	/// <summary>
-	/// ‰æ–Ê‚Ö‚Ì•`‰æ
+	/// ç”»é¢ã¸ã®æç”»
 	/// </summary>
 	void Draw();
 
@@ -41,7 +42,7 @@ public:
 private:
 	DirectXCommon* dxcommon_ = nullptr;
 
-	// SRV—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	// SRVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	ComPtr<ID3D12DescriptorHeap> srvHeap_;
 
 };

@@ -1,4 +1,4 @@
-﻿#include "ParticleManager.h"
+#include "ParticleManager.h"
 #include <d3dcompiler.h>
 #include <DirectXTex.h>
 #include "Affin.h"
@@ -9,6 +9,7 @@
 
 using namespace DirectX;
 using namespace Microsoft::WRL;
+
 
 /// <summary>
 /// 静的メンバ変数の実体

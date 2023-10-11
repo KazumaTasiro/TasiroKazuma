@@ -14,6 +14,7 @@ Matrix4 ConvertXM::ConvertXMMATtoMat4(XMMATRIX XMMat) {
 	return result;
 }
 
+
 XMMATRIX ConvertXM::ConvertMat4toXMMAT(Matrix4 m) {
 	XMMATRIX result;
 	result = XMMatrixSet(

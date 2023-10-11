@@ -1,47 +1,45 @@
 #pragma once
-
-#pragma warning(push)
-#pragma warning(disable:26813)
-#pragma warning(disable:5264)
-#include <DirectXTex.h>
-#pragma warning(pop)
-
 #include"DirectXCommon.h"
+#include <DirectXTex.h>
 #include <array>
 #include <string>
 
-using namespace DirectX;
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix4.h"
+#include "Affin.h"
 
 
-//ƒXƒvƒ‰ƒCƒg‹¤’Ê•”•ª
+//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šéƒ¨åˆ†
 class SpriteCommon {
 public:
+	// Microsoft::WRL::ã‚’çœç•¥
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	struct Vertex
 	{
-		XMFLOAT3 pos; // xyzÀ•W
-		XMFLOAT2 uv;  // uvÀ•W
+		Vector3 pos; // xyzåº§æ¨™
+		Vector2 uv;  // uvåº§æ¨™
 	};
-	// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ìiƒ}ƒeƒŠƒAƒ‹j
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“ï¼ˆãƒãƒ†ãƒªã‚¢ãƒ«ï¼‰
 	struct ConstBufferDataMaterial {
-		XMFLOAT4 color; // F (RGBA)
+		Vector4 color; // è‰² (RGBA)
 	};
-	//’è”ƒoƒbƒtƒ@—p\‘¢‘Ìi‚RD•ÏŠ·s—ñj
+	//å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨æ§‹é€ ä½“ï¼ˆï¼“Då¤‰æ›è¡Œåˆ—ï¼‰
 	struct ConstBufferDataTransform {
-		XMMATRIX mat;	//3D•ÏŠ·s—ñ
+		Matrix4 mat;	//3Då¤‰æ›è¡Œåˆ—
 	};
 public:
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize(DirectXCommon* dxcommon);
 
 	DirectXCommon* GetDxCommon() { return dxcommon_; }
 
-	ID3D12RootSignature* GetRootSignature() { return rootSignature; }
+	ID3D12RootSignature* GetRootSignature() { return rootSignature.Get(); }
 
-	ID3D12PipelineState* GetPipelineState() { return pipelineState; }
+	ID3D12PipelineState* GetPipelineState() { return pipelineState.Get(); }
 
-	//ID3D12Resource* GetConstBuffMaterial() { return constBuffMaterial; }
-
-	ID3D12DescriptorHeap* GetSrvHeap() { return srvHeap; }
+	ID3D12DescriptorHeap* GetSrvHeap() { return srvHeap.Get(); }
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetSrvHandle() { return srvHandle; }
 
@@ -49,64 +47,50 @@ public:
 
 	D3D12_RESOURCE_DESC& GetResourceDesc() { return resDesc; }
 
-	void LoadTexture(uint32_t index,const std::string& fileName);
+	void LoadTexture(uint32_t index, const std::string& fileName);
 
 	void SetTextureCommands(uint32_t index);
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> GetTexBuff(uint32_t index) { return texBuff[index]; }
+	//Microsoft::WRL::ComPtr<ID3D12Resource> GetTexBuff(uint32_t index) { return texBuff[index]; }
 
-	ID3D12Resource* GetTextureBuffer(uint32_t index)const { return texBuff[index].Get(); }
+	Microsoft::WRL::ComPtr<ID3D12Resource> GetTextureBuffer(uint32_t index)const { return texBuff[index].Get(); }
 
-	void PreDraw();
+	//SRVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap = nullptr;
 
 
-	void PostDraw();
-	//ID3D12Resource* GetConstBuffTransform() { return constBuffTransform; }
-
-	//ConstBufferDataTransform* GetConstMapTransform() { return constMapTransform; }
-
-	//SRV—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
-	ID3D12DescriptorHeap* srvHeap = nullptr;
 private:
-	// ’¸“_ƒf[ƒ^
+	// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿
 	Vertex vertices[4] = {
 		// x      y     z       u     v
-		{{-0.4f, -0.7f, 0.0f}, {0.0f, 1.0f}}, // ¶‰º
-		{{-0.4f, +0.7f, 0.0f}, {0.0f, 0.0f}}, // ¶ã
-		{{+0.4f, -0.7f, 0.0f}, {1.0f, 1.0f}}, // ‰E‰º
-		{{+0.4f, +0.7f, 0.0f}, {1.0f, 0.0f}}, // ‰Eã
+		{{-0.4f, -0.7f, 0.0f}, {0.0f, 1.0f}}, // å·¦ä¸‹
+		{{-0.4f, +0.7f, 0.0f}, {0.0f, 0.0f}}, // å·¦ä¸Š
+		{{+0.4f, -0.7f, 0.0f}, {1.0f, 1.0f}}, // å³ä¸‹
+		{{+0.4f, +0.7f, 0.0f}, {1.0f, 0.0f}}, // å³ä¸Š
 	};
-	// SRV‚ÌÅ‘åŒÂ”
+	// SRVã®æœ€å¤§å€‹æ•°
 	static const size_t kMaxSRVCount = 2056;
 
-	DirectXCommon* dxcommon_ = nullptr;
-	ID3DBlob* vsBlob = nullptr; // ’¸“_ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
-	ID3DBlob* psBlob = nullptr; // ƒsƒNƒZƒ‹ƒVƒF[ƒ_ƒIƒuƒWƒFƒNƒg
-	ID3DBlob* errorBlob = nullptr; // ƒGƒ‰[ƒIƒuƒWƒFƒNƒg
+	DirectXCommon* dxcommon_;
+	ComPtr<ID3DBlob> vsBlob; // é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	ComPtr<ID3DBlob> psBlob; // ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	ComPtr<ID3DBlob> errorBlob; // ã‚¨ãƒ©ãƒ¼ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	HRESULT result;
 
+	// ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£
+	ComPtr<ID3D12RootSignature> rootSignature;
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã®ç”Ÿæˆ
+	ComPtr<ID3D12PipelineState> pipelineState;
+	std::array<ComPtr<ID3D12Resource>, kMaxSRVCount>texBuff;
 
-	// ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ
-	ID3D12RootSignature* rootSignature;
-
-
-	// ƒpƒCƒvƒ‰ƒ“ƒXƒe[ƒg‚Ì¶¬
-	ID3D12PipelineState* pipelineState = nullptr;
-
-
-	//// ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@
-	//ID3D12Resource* texBuff = nullptr;
-
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kMaxSRVCount>texBuff;
-
-	//‰¡•ûŒüƒsƒNƒZƒ‹”
+	//æ¨ªæ–¹å‘ãƒ”ã‚¯ã‚»ãƒ«æ•°
 	const size_t textureWidth = 256;
-	//c•ûŒüƒsƒNƒZƒ‹”
+	//ç¸¦æ–¹å‘ãƒ”ã‚¯ã‚»ãƒ«æ•°
 	const size_t textureHeight = 256;
-	//”z—ñ‚Ì—v‘f”
+	//é…åˆ—ã®è¦ç´ æ•°
 	const size_t imageDataCount = textureWidth * textureHeight;
 
-	//SRVƒq[ƒv‚Ìæ“ªƒnƒ“ƒhƒ‹‚ğæ“¾
+	//SRVãƒ’ãƒ¼ãƒ—ã®å…ˆé ­ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—
 	D3D12_CPU_DESCRIPTOR_HANDLE srvHandle;
 
 	TexMetadata metadata{};
@@ -115,19 +99,17 @@ private:
 	D3D12_RESOURCE_DESC textureResourceDesc{};
 
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
-	// ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“İ’è
+	// ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³è¨­å®š
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC pipelineDesc{};
-	// ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ìİ’è
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®è¨­å®š
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	
+
 	UINT sizeVB;
-	
+
 	D3D12_RESOURCE_DESC resDesc{};
 
-	//ƒfƒtƒHƒ‹ƒgƒeƒNƒXƒ`ƒƒŠi”[ƒfƒBƒŒƒNƒgƒŠ
+	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 	static std::string kDefaultTextureDirectoryPath;
 
-	UINT incrementSize ;
-
-
+	UINT incrementSize;
 };

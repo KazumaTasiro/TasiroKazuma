@@ -8,6 +8,7 @@ GameMain::~GameMain()
 {
 }
 
+
 void GameMain::Initialize()
 {
 
@@ -16,8 +17,8 @@ void GameMain::Initialize()
 
 	posteffect->Initialize(Framework::GetDXCommon()->GetDevice(), Framework::GetInput());
 
-	// 3DƒIƒuƒWƒFƒNƒgÃ“I‰Šú‰»
-	Object3d::StaticInitialize(Framework::GetDXCommon()->GetDevice(), WinApp::window_width, WinApp::window_height);
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé™çš„åˆæœŸåŒ–
+	Object3d::StaticInitialize(Framework::GetDXCommon()->GetDevice());
 	ParticleManager::StaticInitialize(Framework::GetDXCommon()->GetDevice(), Framework::GetDXCommon()->GetCommandList());
 
 	gameScene = new GameScene();
@@ -34,7 +35,7 @@ void GameMain::Finalize()
 	delete gameScene;
 	delete posteffect;
 	
-	//Šî‘bƒNƒ‰ƒX‚ÌI—¹ˆ—
+	//åŸºç¤Žã‚¯ãƒ©ã‚¹ã®çµ‚äº†å‡¦ç†
 	Framework::Finalize();
 }
 
