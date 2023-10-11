@@ -20,6 +20,7 @@
 #include "Road.h"
 #include "ParticleManager.h"
 #include "Title.h"
+#include "SeenTransition.h"
 
 
 class GameScene {
@@ -130,15 +131,12 @@ private:
 
 	ParticleManager* ParticleMana;
 
-	Sprite* blind;
 
-	bool blindFlag = false;
-	int blindTime = 30;
-	int blindTimeReset = 30;
-	float blindW = 0;
 
 	Vector3 cameraTitle = { 0,0,10 };
 	Vector3 cameraGame = { 0,0,-10 };
 
 	Titles* title = nullptr;
+
+	SeenTransition* seenTransition = nullptr;
 };

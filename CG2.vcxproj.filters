@@ -190,6 +190,12 @@
     <Filter Include="ヘッダー ファイル\Game\Title">
       <UniqueIdentifier>{153983d1-6461-4241-8686-340f0513ddc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Game\SeenTransition">
+      <UniqueIdentifier>{3c4cde67-a88c-4eaf-9465-3a00278c84c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Game\SeenTransition">
+      <UniqueIdentifier>{653be80e-ecfb-46b0-8cc6-ff25f397b8a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -318,6 +324,9 @@
     <ClCompile Include="Engine\3d\SplinePosition.cpp">
       <Filter>ソース ファイル\Engine\Math</Filter>
     </ClCompile>
+    <ClCompile Include="User\SeenTransition\SeenTransition.cpp">
+      <Filter>ソース ファイル\Game\SeenTransition</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -445,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\SplinePosition.h">
       <Filter>ヘッダー ファイル\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="User\SeenTransition\SeenTransition.h">
+      <Filter>ヘッダー ファイル\Game\SeenTransition</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

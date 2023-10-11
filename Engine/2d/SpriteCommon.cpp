@@ -16,7 +16,6 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	sizeVB = static_cast<UINT>(sizeof(vertices[0]) * _countof(vertices));
 
 	// リソース設定
-
 	resDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 	resDesc.Width = sizeVB; // 頂点データ全体のサイズ
 	resDesc.Height = 1;
@@ -82,8 +81,6 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	}, // (1行で書いたほうが見やすい)
 	};
 
-
-
 	// シェーダーの設定
 	pipelineDesc.VS.pShaderBytecode = vsBlob->GetBufferPointer();
 	pipelineDesc.VS.BytecodeLength = vsBlob->GetBufferSize();
@@ -96,11 +93,6 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	pipelineDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE; // カリングしない
 	pipelineDesc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID; // ポリゴン内塗りつぶし
 	pipelineDesc.RasterizerState.DepthClipEnable = true; // 深度クリッピングを有効に
-
-	pipelineDesc.DepthStencilState;
-	//// ブレンドステート
-	//pipelineDesc.BlendState.RenderTarget[0].RenderTargetWriteMask
-	//	= D3D12_COLOR_WRITE_ENABLE_ALL; // RBGA全てのチャンネルを描画
 
 	D3D12_RENDER_TARGET_BLEND_DESC& blenddesc = pipelineDesc.BlendState.RenderTarget[0];
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;// RBGA全てのチャンネルを描画
@@ -115,6 +107,12 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;         // ソースのアルファ値
 	blenddesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
 
+	// ブレンドステートの設定
+	pipelineDesc.BlendState.RenderTarget[0] = blenddesc;
+
+	// 深度バッファのフォーマット
+	pipelineDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+
 	// 頂点レイアウトの設定
 	pipelineDesc.InputLayout.pInputElementDescs = inputLayout;
 	pipelineDesc.InputLayout.NumElements = _countof(inputLayout);
@@ -127,12 +125,6 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	pipelineDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; // 0~255指定のRGBA
 	pipelineDesc.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
-	//// ルートパラメータの設定
-	//D3D12_ROOT_PARAMETER rootParam = {};
-	//rootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;    // 定数バッファビュー
-	//rootParam.Descriptor.ShaderRegister = 0;                    // 定数バッファ番号
-	//rootParam.Descriptor.RegisterSpace = 0;                     // デフォルト値
-	//rootParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;   //全てのシェーダから見える
 	// デスクリプタレンジの設定
 	D3D12_DESCRIPTOR_RANGE descriptorRange{};
 	descriptorRange.NumDescriptors = 1;         //一度の描画に使うテクスチャが1枚なので1
@@ -158,7 +150,6 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	rootParams[2].Descriptor.RegisterSpace = 0;                    // デフォルト値
 	rootParams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;  // 全てのシェーダから見える
 
-
 	// テクスチャサンプラーの設定
 	D3D12_STATIC_SAMPLER_DESC samplerDesc{};
 	samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;                 //横繰り返し（タイリング）
@@ -173,15 +164,11 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 
 
 	// ルートシグネチャの設定
-
-
 	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-
 	rootSignatureDesc.pParameters = rootParams;				//ルートパラメータの先頭アドレス
 	rootSignatureDesc.NumParameters = _countof(rootParams);	//ルートパラメータ数
 	rootSignatureDesc.pStaticSamplers = &samplerDesc;
 	rootSignatureDesc.NumStaticSamplers = 1;
-
 
 	// ルートシグネチャのシリアライズ
 	ID3DBlob* rootSigBlob = nullptr;
@@ -194,18 +181,9 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	rootSigBlob->Release();
 
 	// パイプラインにルートシグネチャをセット
-	pipelineDesc.pRootSignature = rootSignature;
-
-
+	pipelineDesc.pRootSignature = rootSignature.Get();
 	result = dxcommon_->GetDevice()->CreateGraphicsPipelineState(&pipelineDesc, IID_PPV_ARGS(&pipelineState));
 	assert(SUCCEEDED(result));
-
-
-
-
-
-
-
 
 	ScratchImage mipChain{};
 	// ミップマップ生成
@@ -220,15 +198,12 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	// 読み込んだディフューズテクスチャをSRGBとして扱う
 	metadata.format = MakeSRGB(metadata.format);
 
-
 	//ヒープ設定
-
 	textureHeapProp.Type = D3D12_HEAP_TYPE_CUSTOM;
 	textureHeapProp.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
 	textureHeapProp.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
 
 	// リソース設定
-
 	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	textureResourceDesc.Format = metadata.format;
 	textureResourceDesc.Width = metadata.width;
@@ -237,26 +212,16 @@ void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 	textureResourceDesc.MipLevels = (UINT16)metadata.mipLevels;
 	textureResourceDesc.SampleDesc.Count = 1;
 
-
-
 	// デスクリプタヒープの設定
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
 	srvHeapDesc.NumDescriptors = kMaxSRVCount;
 
-
-
 	// 設定を元にSRV用デスクリプタヒープを生成
-
-
 	result = dxcommon_->GetDevice()->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&srvHeap));
 	assert(SUCCEEDED(result));
-
-
 	incrementSize = dxcommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
 	srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
-
 }
 
 void SpriteCommon::LoadTexture(uint32_t index, const std::string& fileName)
@@ -278,50 +243,44 @@ void SpriteCommon::LoadTexture(uint32_t index, const std::string& fileName)
 		WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 
-	// テクスチャバッファの生成
-
 	// リソース設定
-
 	textureResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	textureResourceDesc.Format = metadata.format;
+	textureResourceDesc.Format =  MakeSRGB(metadata.format);
 	textureResourceDesc.Width = metadata.width;
 	textureResourceDesc.Height = (UINT)metadata.height;
 	textureResourceDesc.DepthOrArraySize = (UINT16)metadata.arraySize;
 	textureResourceDesc.MipLevels = (UINT16)metadata.mipLevels;
 	textureResourceDesc.SampleDesc.Count = 1;
-	for (std::size_t i = 0; i < texBuff.size(); ++i) {
-		result = dxcommon_->GetDevice()->CreateCommittedResource(
-			&textureHeapProp,
-			D3D12_HEAP_FLAG_NONE,
-			&textureResourceDesc,
-			D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(texBuff[index].GetAddressOf()));
 
-		// 全ミップマップについて
-		for (size_t j = 0; j < metadata.mipLevels; j++) {
-			// ミップマップレベルを指定してイメージを取得
-			const Image* img = scratchImg.GetImage(j, 0, 0);
-			// テクスチャバッファにデータ転送
-			result = texBuff[index]->WriteToSubresource(
-				(UINT)j,
-				nullptr,              // 全領域へコピー
-				img->pixels,          // 元データアドレス
-				(UINT)img->rowPitch,  // 1ラインサイズ
-				(UINT)img->slicePitch // 1枚サイズ
-			);
-			assert(SUCCEEDED(result));
-		}
+	result = dxcommon_->GetDevice()->CreateCommittedResource(
+		&textureHeapProp,
+		D3D12_HEAP_FLAG_NONE,
+		&textureResourceDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(texBuff[index].GetAddressOf()));
+
+	// 全ミップマップについて
+	for (size_t i = 0; i < metadata.mipLevels; i++) {
+		// ミップマップレベルを指定してイメージを取得
+		const Image* img = scratchImg.GetImage(i, 0, 0);
+		// テクスチャバッファにデータ転送
+		result = texBuff[index]->WriteToSubresource(
+			(UINT)i,
+			nullptr,              // 全領域へコピー
+			img->pixels,          // 元データアドレス
+			(UINT)img->rowPitch,  // 1ラインサイズ
+			(UINT)img->slicePitch // 1枚サイズ
+		);
+		assert(SUCCEEDED(result));
 	}
+
 	// シェーダリソースビュー設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	/*D3D12_RESOURCE_DESC resDesc;*/
-	/*resDesc = texBuff[index]->GetDesc();*/
 	srvDesc.Format = resDesc.Format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = resDesc.MipLevels;
-
 	srvHandle = srvHeap->GetCPUDescriptorHandleForHeapStart();
 	srvHandle.ptr += (incrementSize * index);
 
@@ -331,22 +290,17 @@ void SpriteCommon::LoadTexture(uint32_t index, const std::string& fileName)
 
 void SpriteCommon::SetTextureCommands(uint32_t index)
 {
-	
+	// パイプラインステートとルートシグネチャの設定コマンド
+	dxcommon_->GetCommandList()->SetPipelineState(pipelineState.Get());
+	dxcommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
+
+	//プリミティブ形状の設定コマンド
+	dxcommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);//三角リスト
+	// SRVヒープの設定コマンド
+	dxcommon_->GetCommandList()->SetDescriptorHeaps(1,srvHeap.GetAddressOf());
 	// SRVヒープの先頭ハンドルを取得（SRVを指しているはず）
 	D3D12_GPU_DESCRIPTOR_HANDLE srvGpuHandle = srvHeap->GetGPUDescriptorHandleForHeapStart();
 	// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
 	srvGpuHandle.ptr += (incrementSize * index);
 	dxcommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
-}
-
-void SpriteCommon::PreDraw()
-{
-	// パイプラインステートとルートシグネチャの設定コマンド
-	dxcommon_->GetCommandList()->SetPipelineState(pipelineState);
-	dxcommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature);
-	//プリミティブ形状の設定コマンド
-	dxcommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);//三角リスト
-	// SRVヒープの設定コマンド
-	dxcommon_->GetCommandList()->SetDescriptorHeaps(1, &srvHeap);
-
 }

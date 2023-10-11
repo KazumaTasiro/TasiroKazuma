@@ -28,7 +28,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, DirectXCommon* dxCommon, ParticleManager* particle);
+	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, ParticleManager* particle);
 	///更新
 	///</summary>
 	void Update();
@@ -94,7 +94,7 @@ public:
 	void TitleMove();
 private:
 	//ワールド変換データ
-	Object3dFbx* worldTransform_;
+	Object3d* worldTransform_;
 
 	//3Dレティクル用ワールドトランスフォーム
 	Object3d* worldTransform3DReticle_;
@@ -103,7 +103,7 @@ private:
 	//FbxModel* fbxModel_ = nullptr;
 
 	//モデル
-	FbxModel* model_ = nullptr;
+	Model* model_ = nullptr;
 	//弾モデル
 	Model* bulletModel_ = nullptr;
 	//テクスチャハンドル
@@ -119,7 +119,6 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 	WinApp* winApp = nullptr;
-	DirectXCommon* dxCommon_ = nullptr;
 
 	Vector3 farCre;
 	Vector3 nearCre;
@@ -127,7 +126,7 @@ private:
 	Vector3 moveLimit = { 20,20,20 };
 	bool limitIn = false;
 
-	Vector3 playerResetPos = { 0,-2.5f,-30 };
+	Vector3 playerResetPos = { 0,-2.5f,0 };
 
 	const float speed = 0.5f;
 

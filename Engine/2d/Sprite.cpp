@@ -1,18 +1,22 @@
 #include"Sprite.h"
 
-void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
+void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t textureIndex)
 {
-
 	spritecomon = spritecommon_;
+
+	//テクスチャサイズをイメージに合わせる
+	if (textureIndex != UINT32_MAX) {
+		textureIndex_ = textureIndex;
+		AdjustTextureSize();
+		//テクスチャサイズをスプライトのサイズに適用
+		size_ = textureSize;
+	}
 
 	// 頂点バッファの設定
 	D3D12_HEAP_PROPERTIES heapProp{}; // ヒープ設定
 	heapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPUへの転送用
 
-	
-
 	// 頂点バッファの生成
-	
 	result = spritecomon->GetDxCommon()->GetDevice()->CreateCommittedResource(
 		&heapProp, // ヒープ設定
 		D3D12_HEAP_FLAG_NONE,
@@ -21,8 +25,8 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 		nullptr,
 		IID_PPV_ARGS(&vertBuff));
 	assert(SUCCEEDED(result));
+	
 	// GPU上のバッファに対応した仮想メモリ(メインメモリ上)を取得
-
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	assert(SUCCEEDED(result));
 	// 全頂点に対して
@@ -39,7 +43,7 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 	// 頂点1つ分のデータサイズ
 	vbView.StrideInBytes = sizeof(vertices[0]);
 
-
+	Update();
 
 	{
 		// ヒープ設定
@@ -71,7 +75,7 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 	}
 
 	//並行投影行列の計算
-	constMapTransform->mat = XMMatrixIdentity();
+	constMapTransform->mat = Affin::matUnit();
 
 	// ヒープ設定
 	D3D12_HEAP_PROPERTIES cbHeapProp{};
@@ -86,11 +90,13 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 	cbResourceDesc.SampleDesc.Count = 1;
 	cbResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
+	
 	// 射影行列計算
-	matProjection = XMMatrixOrthographicOffCenterLH(
+	matProjection.MakeOrthogonalL(
 		0.0f, (float)WinApp::window_width,
 		(float)WinApp::window_height, 0.0f,
-		0.0f, 1.0f);
+		0.0f, 1.0f, matProjection);
+	
 
 	// 定数バッファの生成
 	result = spritecomon->GetDxCommon()->GetDevice()->CreateCommittedResource(
@@ -103,70 +109,23 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t texturerIndex)
 	assert(SUCCEEDED(result));
 
 	// 定数バッファのマッピング
-
 	result = constBuffMaterial->Map(0, nullptr, (void**)&constMapMaterial); // マッピング
 	assert(SUCCEEDED(result));
 
-	//// 値を書き込むと自動的に転送される
-	//constMapMaterial->color = Vector4(1, 0, 0, 0.5f);              // RGBAで半透明の赤
-
-	//テクスチャサイズをイメージに合わせる
-	if (texturerIndex != UINT32_MAX) {
-		textureIndex_ = texturerIndex;
-		AdjustTextureSize();
-		//テクスチャサイズをスプライトのサイズに適応
-		size_ = textureSize;
-	}
-	Update();
+	// 値を書き込むと自動的に転送される
+	constMapMaterial->color = Vector4(1, 1, 1, 1);              // RGBAで半透明の赤
 }
 
-void Sprite::Draw()
-{
-	matRot = XMMatrixIdentity();
-	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation));//Z軸周りに0度回転してから
-	matTrans = XMMatrixTranslation(position.x, position.y, 0.0f);//(-50,0,0)平行移動
 
-	matWorld = XMMatrixIdentity();//変形をリセット
-	//matWorld *= matScale;//ワールド行列にスケーリングを反映
-	matWorld *= matRot;//ワールド行列にスケーリングを反映
-	matWorld *= matTrans;
-
-
-	// 定数バッファにデータ転送
-	HRESULT result_ = constBuffTransform->Map(0, nullptr, (void**)&constMapTransform);
-	if (SUCCEEDED(result_)) {
-		constMapTransform->mat = matWorld * matProjection;	// 行列の合成	
-	}
-	result_= constBuffMaterial->Map(0, nullptr, (void**)&constMapMaterial);
-	if (SUCCEEDED(result_)) {
-		constMapMaterial->color = color;
-	}
-
-	//頂点バッファビューの設定コマンド
-	spritecomon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vbView);
-
-	// 定数バッファビュー(CBV)の設定コマンド
-	spritecomon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
-
-
-
-	// 定数バッファビュー(CBV)の設定コマンド
-	spritecomon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(2, constBuffTransform->GetGPUVirtualAddress());
-
-	spritecomon->SetTextureCommands(textureIndex_);
-
-	// 描画コマンド
-	spritecomon->GetDxCommon()->GetCommandList()->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
-}
 
 void Sprite::Update()
 {
-	ID3D12Resource* textureBuffer = spritecomon->GetTextureBuffer(textureIndex_);
+	ComPtr<ID3D12Resource> textureBuffer = spritecomon->GetTextureBuffer(textureIndex_);
 
 	float left = (0.0f - anchorpoint.x) * size_.x;
 	float right = (1.0f - anchorpoint.x) * size_.x;
-	float top = (0.0f - anchorpoint.y) * size_.y;
-	float bottom = (1.0f - anchorpoint.y) * size_.y;
+	float top = (0.0f - anchorpoint.x) * size_.y;
+	float bottom = (1.0f - anchorpoint.x) * size_.y;
 
 	if (isFlipX)
 	{// 左右入れ替え
@@ -201,25 +160,45 @@ void Sprite::Update()
 		vertices[RT].uv = { tex_right,tex_top };
 
 	}
-	////頂点データ
-	//vertices[LB].pos = { 0.0f,size_.y,0.0f };
-	//vertices[LT].pos = { 0.0f,0.0f,0.0f };
-	//vertices[RB].pos = { size_.x,size_.y,0.0f };
-	//vertices[RT].pos = { size_.x,0.0f,0.0f };
-
-
-	/*std::copy(std::begin(vertices), std::end(vertices), vertMap);*/
-
-	/*matScale = XMMatrixScaling(scale.x, scale.y, scale.z);*/
-
-
-
+	
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	if (SUCCEEDED(result)) {
 		memcpy(vertMap, vertices, sizeof(vertices));
 		vertBuff->Unmap(0, nullptr);
 	}
+}
 
+void Sprite::Draw()
+{
+	matRot = Affin::matUnit();
+	matRot *= Affin::matRotateZ(XMConvertToRadians(rotation));//Z軸周りに0度回転してから
+	matTrans = Affin::matTrans(position.x, position.y, 0.0f);//(-50,0,0)平行移動
+
+	matWorld = Affin::matUnit();//変形をリセット
+	matWorld *= matRot;//ワールド行列にスケーリングを反映
+	matWorld *= matTrans;
+
+
+	// 定数バッファにデータ転送
+	HRESULT result_ = constBuffTransform->Map(0, nullptr, (void**)&constMapTransform);
+	if (SUCCEEDED(result_)) {
+		constMapTransform->mat = matWorld * matProjection;	// 行列の合成	
+	}
+	result_ = constBuffMaterial->Map(0, nullptr, (void**)&constMapMaterial);
+	if (SUCCEEDED(result_)) {
+		constMapMaterial->color = color;
+	}
+
+	spritecomon->SetTextureCommands(textureIndex_);
+
+	//頂点バッファビューの設定コマンド
+	spritecomon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vbView);
+	// 定数バッファビュー(CBV)の設定コマンド
+	spritecomon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
+	// 定数バッファビュー(CBV)の設定コマンド
+	spritecomon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(2, constBuffTransform->GetGPUVirtualAddress());
+	// 描画コマンド
+	spritecomon->GetDxCommon()->GetCommandList()->DrawInstanced(_countof(vertices), 1, 0, 0); // 全ての頂点を使って描画
 }
 
 void Sprite::SetPozition(const Vector2& position_)
@@ -256,7 +235,7 @@ void Sprite::SetIsFlipX(bool isFlipX_)
 
 void Sprite::AdjustTextureSize()
 {
-	ID3D12Resource* textureBuffer = spritecomon->GetTextureBuffer(textureIndex_);
+	ComPtr<ID3D12Resource> textureBuffer = spritecomon->GetTextureBuffer(textureIndex_);
 	assert(textureBuffer);
 
 	//テクスチャ情報取得
@@ -265,4 +244,5 @@ void Sprite::AdjustTextureSize()
 	textureSize.x = static_cast<float>(resDesc.Width);
 	textureSize.y = static_cast<float>(resDesc.Height);
 }
+
 

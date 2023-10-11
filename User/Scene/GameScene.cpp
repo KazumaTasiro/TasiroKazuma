@@ -45,6 +45,12 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	spriteCommon->LoadTexture(4, "GameBlind.png");
 	spriteCommon->LoadTexture(5, "GameClear.png");
 	spriteCommon->LoadTexture(6, "GameOver.png");
+	spriteCommon->LoadTexture(7,"GameBlindFaceOver1.png");
+	spriteCommon->LoadTexture(8,"GameBlindFaceOver2.png");
+	spriteCommon->LoadTexture(9,"GameBlindFaceOver3.png");
+	spriteCommon->LoadTexture(10,"GameBlindFaceUnder1.png");
+	spriteCommon->LoadTexture(11,"GameBlindFaceUnder2.png");
+	spriteCommon->LoadTexture(12,"GameBlindFaceUnder3.png");
 
 	skydome = new Skydome();
 	skydome->Initalize();
@@ -61,11 +67,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	gameOver->Initialize(spriteCommon, 6);
 	gameOver->SetPozition({ winApp->window_width / 2,(winApp->window_height / 2 )-80 });
 
-	blind = new Sprite();
-	blind->Initialize(spriteCommon, 4);
-	blind->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 });
-	blind->SetSize({ winApp->window_width,winApp->window_height });
-	blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
+
 
 	road = new Road();
 	road->Initialize();
@@ -88,7 +90,7 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	ParticleMana->LoadTexture("Explosion.png");
 
 	player_ = new Player();
-	player_->Initialize(spriteCommon, input, winApp_,dxCommon_, ParticleMana);
+	player_->Initialize(spriteCommon, input, winApp_, ParticleMana);
 
 	enemyManager = new EnemyManager();
 	enemyManager->Initialize( input, spriteCommon, camera, ParticleMana);
@@ -97,6 +99,8 @@ void GameScene::Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_
 	enemyManager->SetPlayer(player_);
 
 	//player_->Update();
+	seenTransition = new SeenTransition();
+	seenTransition->Initialize(spriteCommon);
 
 	title = new Titles();
 	title->Initialize();
@@ -123,22 +127,16 @@ void GameScene::Update()
 	case GameScene::Title:
 		road->BeforeUpdate();
 		title->Update();
-		player_->Update();
+		seenTransition->Update();
+		//player_->Update();
 		if (input->TriggerKey(DIK_Q)) {
-			blindFlag = true;
+			seenTransition->OnSeenTrans();
 		}
 		if (input->TriggerKey(DIK_B)) {
 			scene = Scene::Boss;
 		}
-		if (blindFlag) {
-			blindTime--;
-			if (blindW < 1) {
-				blindW += (1.0f / blindTimeReset);
-			}
-			blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
-			blind->Update();
-		}
-		if (blindTime <= -10) {
+
+		if (seenTransition->ReturnSeenTrans()) {
 			camera->SetEye(cameraGame);
 			scene = Scene::Game;
 		}
@@ -151,32 +149,14 @@ void GameScene::Update()
 		}
 		break;
 	case GameScene::Game:
-		if (blindFlag) {
-			blindTime++;
-			if (blindTime >= 0) {
-				if (blindW > 0) {
-					blindW -= (1.0f / blindTimeReset);
-				}
-			}
-			blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
-			blind->Update();
-		}
-		if (blindTime >= blindTimeReset) {
-			blindFlag = false;
-		}
+
 		camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
 		road->Update();
 		enemyManager->SetPlayer(player_);
 		enemyManager->Update();
 		enemyManager->EnemyCollision(player_);
+		seenTransition->Update();
 
-
-
-		//for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		//	enemy->OnCollision();
-		//}
-
-		//camera->SetEye({ 0,-300,300, });
 		camera->SetTarget({ (player_->GetReticlePos().x / 100),(player_->GetReticlePos().y / 100),camera->GetTarget().z });
 		camera->Update();
 		player_->Update();
@@ -240,7 +220,7 @@ void GameScene::Draw()
 	switch (scene)
 	{
 	case GameScene::Title:
-		player_->Draw();
+		/*player_->Draw();*/
 		title->Draw();
 		break;
 	case GameScene::Game:
@@ -290,18 +270,16 @@ void GameScene::Draw()
 	}
 
 
-	spriteCommon->PreDraw();
-
 	switch (scene)
 	{
 	case GameScene::Title:
 		stert->Draw();
-		blind->Draw();
+		seenTransition->Draw();
 		break;
 	case GameScene::Game:
 		player_->DrawUI();
 		enemyManager->DrawUI();
-		blind->Draw();
+		seenTransition->Draw();
 		//ImGuiMan->Draw();
 		break;
 	case GameScene::Boss:
