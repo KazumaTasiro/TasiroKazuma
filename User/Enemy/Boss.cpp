@@ -204,10 +204,6 @@ void Boss::Reset()
 	spline->Reset();
 }
 
-bool Boss::isDead()
-{
-	return isDead_;
-}
 
 void Boss::Fire()
 {

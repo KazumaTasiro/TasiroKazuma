@@ -74,7 +74,7 @@ void EnemyManager::BossUpdate()
 		});
 	enemyDeadParticle->Update();
 	boss->Update(player_);
-	if (boss->isDead()) {
+	if (boss->IsDead()) {
 		if (EffectTime == 50) {
 			BossDeadParticle(boss->GetWorldPosition());
 		}
@@ -432,4 +432,9 @@ void EnemyManager::BossDeadParticle(Vector3 EnemyPos)
 void EnemyManager::ParticleDraw()
 {
 	enemyDeadParticle->Draw();
+}
+
+void EnemyManager::bossSeenTest()
+{
+	clearCount = 5;
 }

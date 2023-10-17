@@ -30,19 +30,25 @@ public:
 	///</summary>
 
 	void Update(Player* player);
-
+	///<summary>
+	////敵の動き
+	///</summary>
 	void Move();
 
-
+	///<summary>
+	////敵の間の発射
+	///</summary>
 	void Fire();
-
+	///<summary>
+	////敵の座標
+	///</summary>
 	Vector3 GetWorldPosition();
 	///<summary>
 	///描画
 	///</summary>
 	void Draw();
 	///<summary>
-	///描画
+	///UI描画
 	///</summary>
 	void DrawUI();
 
@@ -64,27 +70,49 @@ public:
 
 	////弾リストを取得
 	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets2_; }
-
+	///<summary>
+	////ゲームシーンのセット
+	///</summary>
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
-
+	///<summary>
+	////死亡判定
+	///</summary>
 	bool IsDead()const { return isDead_; }
-
+	///<summary>
+	////タックルで死んだときの判定
+	///</summary>
 	bool IsTackleDead()const { return isTackleDead_; }
-
+	///<summary>
+	////ロックオンをオンにする
+	///</summary>
 	void LockOnTrue();
-
+	///<summary>
+	////プレイヤーの設定
+	///</summary>
 	void setPlayer(Player* player_) { player = player_; }
-
+	///<summary>
+	////ロックオンの弾の当たり判定
+	///</summary>
 	void OnColl();
 
-
+	///<summary>
+	////敵を倒すと1を返す関数
+	///</summary>
 	int ReturnOnColl();
 
-	//弾リストを取得
+
+	///<summary>
+	////弾リストを取得
+	///</summary>
 	const std::list<std::unique_ptr<LockOnBullet>>& GetBullets() { return EnemyLockBullets_; }
 
+	///<summary>
+	////タックルの衝突反応
+	///</summary>
 	void CollTackle();
-
+	///<summary>
+	////敵の登場中じゃないか
+	///</summary>
 	bool GetMoveFlag(){return DemoEnemyMove;}
 
 private:

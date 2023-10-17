@@ -19,7 +19,7 @@
 
 
 ///<summary>
-///自キャラ
+///自キャラの行動
 ///</summary>
 class Player {
 public:
@@ -36,9 +36,13 @@ public:
 
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
-
+	///<summary>
+	////Matrix$をVector3に
+	///</summary>
 	Vector3 ConvertToVector3(const Matrix4& mat, Vector3 vec);
-
+	///<summary>
+	////プレイヤーの座標
+	///</summary>
 	Vector3 GetWorldPosition();
 
 
@@ -46,7 +50,9 @@ public:
 	///描画
 	///</summary>
 	void Draw();
-
+	///<summary>
+	////FBXの描画
+	///</summary>
 	void DrawFbx();
 	///<summary>
 	///攻撃
@@ -63,34 +69,64 @@ public:
 	///UI描画
 	///</summary>
 	void DrawUI();
-
+	///<summary>
+	////外積
+	///</summary>
 	Vector3 clossV3V4(const Vector3& vec, const XMMATRIX& mat);
 
 	/*int MatrixInverse(XMMATRIX& pOut, XMMATRIX& pM);*/
+	///<summary>
+	////Vector3を足すやつ
+	///</summary>
 	Vector3 AddVector(const Vector3 v1, const Vector3 v2);
-
+	///<summary>
+	////マウスをレティクル
+	///</summary>
 	void MouseReticle();
-
+	///<summary>
+	////リセット
+	///</summary>
 	void Reset();
-
+	///<summary>
+	////レティクルの座標
+	///</summary>
 	Vector2 GetReticlePos();
-
+	///<summary>
+	////ファークリップとニアクリップのベクトル
+	///</summary>
 	Vector3 GetFarNear();
-
+	///<summary>
+	////レティクルの行動限界
+	///</summary>
 	void ReticleLimit();
-
+	///<summary>
+	////プレイヤーの行動限界
+	///</summary>
 	void PlayerLimit();
-
+	///<summary>
+	////プレイヤーの死亡判定
+	///</summary>
 	bool retrunIsDaed() { return isDead_; }
-
+	///<summary>
+	////座標更新
+	///</summary>
 	void SetPos(Vector3 Pos) { worldTransform_->wtf.position = Pos; }
 
+	///<summary>
+	////死亡演出
+	///</summary>
 	void PlayerDeadParticle();
-
+	///<summary>
+	////演出描画
+	///</summary>
 	void ParticleDraw();
-
+	///<summary>
+	////クリア演出
+	///</summary>
 	void ClearMove();
-
+	///<summary>
+	////タイトル時の行動
+	///</summary>
 	void TitleMove();
 private:
 	//ワールド変換データ

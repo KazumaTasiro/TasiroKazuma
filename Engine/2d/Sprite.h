@@ -139,7 +139,7 @@ private:
 	Matrix4 matProjection;
 
 	// アンカーポイント
-	Vector2 anchorpoint = { 0, 0 };
+	Vector2 anchorpoint = { 0.5f, 0.5f };
 
 	// 頂点バッファの生成
 	ComPtr<ID3D12Resource> vertBuff = nullptr;

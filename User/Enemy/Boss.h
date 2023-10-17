@@ -14,6 +14,9 @@
 
 class GameScene;
 class Player;
+///<summary>
+///ボスの行動
+///</summary>
 class Boss
 {
 public:
@@ -29,33 +32,49 @@ public:
 	///</summary>
 
 	void Update(Player* player);
-
+	///<summary>
+	////ボスの行動
+	///</summary>
 	void Move();
 
 
 	//void Fire();
-
+	///<summary>
+	////座標
+	///</summary>
 	Vector3 GetWorldPosition();
 	///<summary>
 	///描画
 	///</summary>
 	void Draw();
-
+	///<summary>
+	////ゲームシーンの設定
+	///</summary>
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
-
+	///<summary>
+	///ボス消滅フラグ
+	///</summary>
 	bool IsDead()const { return isDead_; }
-
+	///<summary>
+	///ロックオンのコールバック関数
+	///</summary>
 	void LockOnTrue();
-
+	///<summary>
+	////衝突を検出する関数
+	///</summary>
 	void OnColl();
 
-	//衝突を検出したら呼び出されるコールバック関数
+	///<summary>
+	////衝突を検出したら呼び出されるコールバック関数
+	///</summary>
 	void OnCollision();
-
+	///<summary>
+	////リセット関数
+	///</summary>
 	void Reset();
-
-	bool isDead();
-
+	///<summary>
+	///ボスの弾発射関数
+	///</summary>
 	void Fire();
 private:
 

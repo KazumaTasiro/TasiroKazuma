@@ -22,7 +22,9 @@
 #include "Title.h"
 #include "SeenTransition.h"
 
-
+///<summary>
+///ボスの生成と行動
+///</summary>
 class GameScene {
 public:
 	/// <summary>
@@ -54,21 +56,19 @@ public:
 	/// </summary>
 	void Finalize();
 
-	/// <summary>
-	/// 衝突判定と応答
-	/// </summary>
-	void CheckAllCollisions();
-
-	void ClearSpriteUpdate();
-
-	void GameOverSpriteUpdate();
 
 
 
 	////弾リストを取得
 	//const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets2_; }
 
+	///<summary>
+	////シーンをまたぐときのリセット
+	///</summary>
 	void PhaseReset();
+	///<summary>
+	////タイトルに戻るときのリセット
+	///</summary>
 	void TitleReset();
 
 
@@ -139,4 +139,5 @@ private:
 	Titles* title = nullptr;
 
 	SeenTransition* seenTransition = nullptr;
+	bool seenFlag = false;
 };
