@@ -5,7 +5,9 @@
 #include <cassert>
 #include "Input.h"
 
-
+///<summary>
+///雑魚敵の行動
+///</summary>
 class EnemyBullet {
 public:
 	///<summary>
@@ -28,13 +30,22 @@ public:
 
 	void Draw();
 
+	///<summary>
+	////弾消滅
+	///</summary>
 	bool IsDead()const { return isDead_; }
 
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
+	///<summary>
+	////敵の座標
+	///</summary>
 	Vector3 GetWorldPosition();
 
+	///<summary>
+	////弾のサイズを変える
+	///</summary>
 	void SetSize(Vector3 Size) { worldTransform_->wtf.scale = Size; }
 
 

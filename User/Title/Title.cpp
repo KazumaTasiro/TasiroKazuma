@@ -88,10 +88,16 @@ void Titles::Reset()
 	playerRotNum = TitleRotReset;
 	titlePlayer->wtf.rotation.y = ( PI / 180 ) * playerRotNum;
 	titlePlayer->Update();
-	if ( posSpeed < 0 )
+	if ( playerSpeed < 0 )
 	{
-		posSpeed = -posSpeed;
+		playerSpeed = -playerSpeed;
 	}
+	if ( playerRotPlus < 0 )
+	{
+		playerRotPlus = -playerRotPlus;
+	}
+	playerWallFlagY = false;
+	playerWallFlagX = false;
 	bossGoFlag = false;
 }
 

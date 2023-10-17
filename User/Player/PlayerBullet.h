@@ -7,7 +7,7 @@
 
 
 ///<summary>
-///自キャラ
+///プレイヤーの通常の弾
 ///</summary>
 class PlayerBullet {
 public:
@@ -23,11 +23,18 @@ public:
 	///描画
 	///</summary>
 	void Draw();
+	///<summary>
+	///弾の消滅フラグ
+	///</summary>
 	bool IsDead()const { return isDead_; }
 
-	//衝突を検出したら呼び出されるコールバック関数
+	///<summary>
+	////衝突を検出したら呼び出されるコールバック関数
+	///</summary>
 	void OnCollision();
-
+	///<summary>
+	////弾の座標
+	///</summary>
 	Vector3 GetWorldPosition();
 
 

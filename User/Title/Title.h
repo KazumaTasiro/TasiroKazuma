@@ -3,23 +3,37 @@
 #include "Model.h"
 #include <cassert>
 
-
+///<summary>
+///タイトルのオブジェクトの生成と動き
+///</summary>
 class Titles
 {
 public:
 	Titles();
 	~Titles();
 
+	///<summary>
+	///初期化
+	///</summary>
 	void Initialize();
-
+	///<summary>
+	///更新
+	///</summary>
 	void Update();
-
+	///<summary>
+	///描画
+	///</summary>
 	void Draw();
-
+	///<summary>
+	///リセット
+	///</summary>
 	void Reset();
 
+	//プレイヤーの行動制限
 	void PlayerLimit();
-
+	///<summary>
+	///ゲーム移行するときに使う関数
+	///</summary>
 	void GameStertTrans();
 
 private:

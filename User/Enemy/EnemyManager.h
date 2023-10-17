@@ -12,29 +12,50 @@
 
 
 class Player;
-
+///<summary>
+///雑魚敵とボスの生成のまとめ
+///</summary>
 class EnemyManager {
 public:
 	EnemyManager();
 	~EnemyManager();
-
+	///<summary>
+	////初期化
+	///</summary>
 	void Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
-
+	///<summary>
+	////更新
+	///</summary>
 	void Update();
-
+	///<summary>
+	////ボス更新
+	///</summary>
 	void BossUpdate();
-
+	///<summary>
+	////描画
+	///</summary>
 	void Draw();
-
+	///<summary>
+	////ボス描画
+	///</summary>
 	void BossDraw();
-
+	///<summary>
+	////UI描画
+	///</summary>
 	void DrawUI();
 
-
+	///<summary>
+	////プレイヤーのセット
+	///</summary>
 	void SetPlayer(Player* player) { player_ = player; };
 
+	///<summary>
+	////ゲームシーンのセット
+	///</summary>
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
-
+	///<summary>
+	////敵をすべて倒す
+	///</summary>
 	bool IsAllEnemyDead();
 
 	/// <summary>
@@ -55,18 +76,35 @@ public:
 
 	//敵との当たり判定
 	void EnemyCollision(Player* player);
-
+	///<summary>
+	////敵のリセット
+	///</summary>
 	void EnemyReset();
-
+	///<summary>
+	////雑魚敵フェーズクリアフラグ
+	///</summary>
 	bool Clear();
-
+	///<summary>
+	////ボスクリアフラグ
+	///</summary>
 	bool BossClear();
-
+	///<summary>
+	////敵の死んだときのパーティクル
+	///</summary>
 	void EnemyDeadParticle(Vector3 EnemyPos);
-
+	///<summary>
+	////ボスが死んだときのパーティクル
+	///</summary>
 	void BossDeadParticle(Vector3 EnemyPos);
-
+	///<summary>
+	////パーティクルの描画
+	///</summary>
 	void ParticleDraw();
+
+	///<summary>
+	////ボステスト用
+	///</summary>
+	void bossSeenTest();
 public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };

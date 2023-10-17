@@ -45,13 +45,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Extarml\DirectXTex;$(SolutionDir)Extarml\imgui;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External\DirectXTex;$(SolutionDir)External\imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)External\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Extarml\DirectXTex;$(SolutionDir)Extarml\imgui;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External\DirectXTex;$(SolutionDir)External\imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)External\fbx_sdk\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -59,7 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\bace;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Extrmal\imgui;$(ProjectDir)Extrmal\DirectXTex;$(ProjectDir)Extrmal;$(ProjectDir);$(ProjectDir)User\SeenTransition;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\bace;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\SeenTransition;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -79,7 +79,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\bace;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Extrmal\imgui;$(ProjectDir)Extrmal\DirectXTex;$(ProjectDir)Extrmal;$(ProjectDir);$(ProjectDir)User\SeenTransition;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\bace;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\SeenTransition;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -135,6 +135,7 @@
     <ClCompile Include="User\Player\PlayerBullet.cpp" />
     <ClCompile Include="User\Scene\GameScene.cpp" />
     <ClCompile Include="User\SeenTransition\SeenTransition.cpp" />
+    <ClCompile Include="User\SeenTransition\StertCount.cpp" />
     <ClCompile Include="User\Skydome\Road.cpp" />
     <ClCompile Include="User\Skydome\Skydome.cpp" />
     <ClCompile Include="User\Title\Title.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="User\Player\PlayerBullet.h" />
     <ClInclude Include="User\Scene\GameScene.h" />
     <ClInclude Include="User\SeenTransition\SeenTransition.h" />
+    <ClInclude Include="User\SeenTransition\StertCount.h" />
     <ClInclude Include="User\Skydome\Road.h" />
     <ClInclude Include="User\Skydome\Skydome.h" />
     <ClInclude Include="User\Title\Title.h" />
@@ -273,10 +275,10 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Extrmal\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
+    <ProjectReference Include="External\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
-    <ProjectReference Include="Extrmal\imgui\imgui.vcxproj">
+    <ProjectReference Include="External\imgui\imgui.vcxproj">
       <Project>{843e4272-3f84-4219-8f7c-32cf0f568010}</Project>
     </ProjectReference>
   </ItemGroup>
