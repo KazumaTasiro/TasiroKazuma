@@ -7,6 +7,7 @@ StertCount::StertCount()
 
 StertCount::~StertCount()
 {
+
 }
 
 void StertCount::Initialize()
