@@ -330,6 +330,9 @@
     <ClCompile Include="User\SeenTransition\StertCount.cpp">
       <Filter>ソース ファイル\Game\SeenTransition</Filter>
     </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyAppearFont.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -463,6 +466,9 @@
     </ClInclude>
     <ClInclude Include="User\SeenTransition\StertCount.h">
       <Filter>ヘッダー ファイル\Game\SeenTransition</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyAppearFont.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
