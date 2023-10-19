@@ -9,73 +9,73 @@ GameScene::~GameScene()
 {
 	delete player_;
 }
-void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input_)
+void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 {
 	assert(dxcomon);
-	assert(input_);
+	assert(input);
 	assert(winApp);
 
-	input = input_;
+	input_ = input;
 
 	winApp_ = winApp;
 
 	dxCommon_ = dxcomon;
 
-	audio = new Audio();
-	audio->Initialize();
+	audio_ = new Audio();
+	audio_->Initialize();
 
 	// カメラ生成
-	camera = new Camera(WinApp::window_width,WinApp::window_height);
-	camera->SetEye(cameraTitle);
+	camera_ = new Camera(WinApp::window_width,WinApp::window_height);
+	camera_->SetEye(cameraTitle);
 
-	camera->Update();
-	Object3d::SetCamera(camera);
-	ParticleManager::SetCamera(camera);
+	camera_->Update();
+	Object3d::SetCamera(camera_);
+	ParticleManager::SetCamera(camera_);
 
-	ImGuiMan = new ImGuiManager();
-	ImGuiMan->Initialize(winApp,dxCommon_);
+	ImGuiMan_ = new ImGuiManager();
+	ImGuiMan_->Initialize(winApp,dxCommon_);
 
 	//スプライト共通部分の初期化
-	spriteCommon = new SpriteCommon;
-	spriteCommon->Initialize(dxCommon_);
-	spriteCommon->LoadTexture(0,"Reticle.png");
-	spriteCommon->LoadTexture(1,"ReticleLock.png");
-	spriteCommon->LoadTexture(2,"EnemyLock.png");
-	spriteCommon->LoadTexture(3,"stert.png");
-	spriteCommon->LoadTexture(4,"GameBlind.png");
-	spriteCommon->LoadTexture(5,"GameClear.png");
-	spriteCommon->LoadTexture(6,"GameOver.png");
-	spriteCommon->LoadTexture(7,"GameBlindFaceOver1.png");
-	spriteCommon->LoadTexture(8,"GameBlindFaceOver2.png");
-	spriteCommon->LoadTexture(9,"GameBlindFaceOver3.png");
-	spriteCommon->LoadTexture(10,"GameBlindFaceUnder1.png");
-	spriteCommon->LoadTexture(11,"GameBlindFaceUnder2.png");
-	spriteCommon->LoadTexture(12,"GameBlindFaceUnder3.png");
+	spriteCommon_ = new SpriteCommon;
+	spriteCommon_->Initialize(dxCommon_);
+	spriteCommon_->LoadTexture(0,"Reticle.png");
+	spriteCommon_->LoadTexture(1,"ReticleLock.png");
+	spriteCommon_->LoadTexture(2,"EnemyLock.png");
+	spriteCommon_->LoadTexture(3,"stert.png");
+	spriteCommon_->LoadTexture(4,"GameBlind.png");
+	spriteCommon_->LoadTexture(5,"GameClear.png");
+	spriteCommon_->LoadTexture(6,"GameOver.png");
+	spriteCommon_->LoadTexture(7,"GameBlindFaceOver1.png");
+	spriteCommon_->LoadTexture(8,"GameBlindFaceOver2.png");
+	spriteCommon_->LoadTexture(9,"GameBlindFaceOver3.png");
+	spriteCommon_->LoadTexture(10,"GameBlindFaceUnder1.png");
+	spriteCommon_->LoadTexture(11,"GameBlindFaceUnder2.png");
+	spriteCommon_->LoadTexture(12,"GameBlindFaceUnder3.png");
 
 
-	skydome = new Skydome();
-	skydome->Initalize();
+	skydome_ = new Skydome();
+	skydome_->Initalize();
 
-	stert = new Sprite();
-	stert->Initialize(spriteCommon,3);
-	stert->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 + 50 });
+	stert_ = new Sprite();
+	stert_->Initialize(spriteCommon_,3);
+	stert_->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 + 50 });
 
-	gameClear = new Sprite();
-	gameClear->Initialize(spriteCommon,5);
-	gameClear->SetPozition({ winApp->window_width / 2,( winApp->window_height / 2 ) - 80 });
-	spriteEnd = { winApp->window_width / 2,winApp->window_height / 2 };
-	gameOver = new Sprite();
-	gameOver->Initialize(spriteCommon,6);
-	gameOver->SetPozition({ winApp->window_width / 2,( winApp->window_height / 2 ) - 80 });
+	gameClear_ = new Sprite();
+	gameClear_->Initialize(spriteCommon_,5);
+	gameClear_->SetPozition({ winApp->window_width / 2,( winApp->window_height / 2 ) - 80 });
+	spriteEnd_ = { winApp->window_width / 2,winApp->window_height / 2 };
+	gameOver_ = new Sprite();
+	gameOver_->Initialize(spriteCommon_,6);
+	gameOver_->SetPozition({ winApp->window_width / 2,( winApp->window_height / 2 ) - 80 });
 
 
 
-	road = new Road();
-	road->Initialize();
+	road_ = new Road();
+	road_->Initialize();
 
 
 	Object3dFbx::SetDevice(dxCommon_->GetDevice());
-	Object3dFbx::SetCamera(camera);
+	Object3dFbx::SetCamera(camera_);
 	Object3dFbx::CreateGraphicsPipeline();
 	////モデル名を指定してファイルに読み込み
 	//model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
@@ -86,25 +86,25 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input_)
 	//object1->SetModel(model1);
 	//object1->PlayAnimation();
 
-	ParticleMana = new ParticleManager();
-	ParticleMana->Initialize();
-	ParticleMana->LoadTexture("Explosion.png");
+	ParticleMana_ = new ParticleManager();
+	ParticleMana_->Initialize();
+	ParticleMana_->LoadTexture("Explosion.png");
 
 	player_ = new Player();
-	player_->Initialize(spriteCommon,input,winApp_,ParticleMana);
+	player_->Initialize(spriteCommon_,input_,winApp_,ParticleMana_);
 
-	enemyManager = new EnemyManager();
-	enemyManager->Initialize(input,spriteCommon,camera,ParticleMana);
+	enemyManager_ = new EnemyManager();
+	enemyManager_->Initialize(input_,spriteCommon_,camera_,ParticleMana_);
 
-	enemyManager->SetGameScene(this);
-	enemyManager->SetPlayer(player_);
+	enemyManager_->SetGameScene(this);
+	enemyManager_->SetPlayer(player_);
 
 	//player_->Update();
-	seenTransition = new SeenTransition();
-	seenTransition->Initialize(spriteCommon);
+	seenTransition_ = new SeenTransition();
+	seenTransition_->Initialize(spriteCommon_);
 
-	title = new Titles();
-	title->Initialize();
+	title_ = new Titles();
+	title_->Initialize();
 
 	PhaseReset();
 	scene = Scene::Title;
@@ -113,7 +113,7 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input_)
 }
 void GameScene::Update()
 {
-	ImGuiMan->Bigin();
+	ImGuiMan_->Bigin();
 
 	ImGui::SetWindowSize({ 500,100 });
 
@@ -122,92 +122,92 @@ void GameScene::Update()
 
 	ImGui::SliderFloat("posz",&playPos,-100,0);
 	//player_->SetPos({ player_->GetWorldPosition().x ,player_->GetWorldPosition().y,playPos });
-	ImGuiMan->End();
+	ImGuiMan_->End();
 	switch ( scene )
 	{
 	case GameScene::Title:
-		road->BeforeUpdate();
-		title->Update();
-		seenTransition->Update();
+		road_->BeforeUpdate();
+		title_->Update();
+		seenTransition_->Update();
 		//player_->Update();
-		if ( seenTransition->ReturnSeenNotEnd() == false )
+		if ( seenTransition_->ReturnSeenNotEnd() == false )
 		{
-			if ( input->TriggerKey(DIK_Q) )
+			if ( input_->TriggerKey(DIK_Q) )
 			{
-				seenTransition->OnSeenTrans();
+				seenTransition_->OnSeenTrans();
 				seenFlag = true;
 			}
 		}
 		if ( seenFlag )
 		{
-			if ( seenTransition->ReturnSeenTrans() )
+			if ( seenTransition_->ReturnSeenTrans() )
 			{
-				camera->SetEye(cameraGame);
+				camera_->SetEye(cameraGame);
 				scene = Scene::Game;
 				seenFlag = false;
 			}
 		}
-		if ( input->TriggerKey(DIK_B) )
+		if ( input_->TriggerKey(DIK_B) )
 		{
 			scene = Scene::Boss;
-			enemyManager->bossSeenTest();
+			enemyManager_->bossSeenTest();
 		}
 
-		if ( input->PushKey(DIK_L) )
+		if ( input_->PushKey(DIK_L) )
 		{
 			scene = Scene::GameClear;
 		}
-		if ( input->PushKey(DIK_P) )
+		if ( input_->PushKey(DIK_P) )
 		{
 			scene = Scene::GameOver;
 		}
 		break;
 	case GameScene::Game:
 
-		camera->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera->GetTarget().z });
-		road->Update();
-		enemyManager->SetPlayer(player_);
-		enemyManager->Update();
-		enemyManager->EnemyCollision(player_);
-		seenTransition->Update();
+		camera_->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera_->GetTarget().z });
+		road_->Update();
+		enemyManager_->SetPlayer(player_);
+		enemyManager_->Update();
+		enemyManager_->EnemyCollision(player_);
+		seenTransition_->Update();
 
-		camera->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera->GetTarget().z });
-		camera->Update();
+		camera_->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera_->GetTarget().z });
+		camera_->Update();
 		player_->Update();
-		if ( enemyManager->Clear() == true )
+		if ( enemyManager_->Clear() == true )
 		{
 			scene = Scene::Boss;
 		}
 		if ( player_->retrunIsDaed() )
 		{
-			seenTransition->OnSeenTrans();
-			if ( seenTransition->ReturnSeenTrans() )
+			seenTransition_->OnSeenTrans();
+			if ( seenTransition_->ReturnSeenTrans() )
 			{
 				scene = Scene::GameOver;
 			}
 		}
 
-		if ( input->PushKey(DIK_P) )
+		if ( input_->PushKey(DIK_P) )
 		{
 			player_->OnCollision();
 		}
 
 		break;
 	case GameScene::Boss:
-		seenTransition->Update();
-		camera->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera->GetTarget().z });
-		road->Update();
-		enemyManager->SetPlayer(player_);
-		enemyManager->BossUpdate();
-		enemyManager->Update();
-		enemyManager->EnemyCollision(player_);
-		camera->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera->GetTarget().z });
-		camera->Update();
+		seenTransition_->Update();
+		camera_->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera_->GetTarget().z });
+		road_->Update();
+		enemyManager_->SetPlayer(player_);
+		enemyManager_->BossUpdate();
+		enemyManager_->Update();
+		enemyManager_->EnemyCollision(player_);
+		camera_->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera_->GetTarget().z });
+		camera_->Update();
 		player_->Update();
-		if ( enemyManager->BossClear() )
+		if ( enemyManager_->BossClear() )
 		{
-			seenTransition->OnSeenTrans();
-			if ( seenTransition->ReturnSeenTrans() )
+			seenTransition_->OnSeenTrans();
+			if ( seenTransition_->ReturnSeenTrans() )
 			{
 				scene = Scene::GameClear;
 			}
@@ -215,8 +215,8 @@ void GameScene::Update()
 		}
 		if ( player_->retrunIsDaed() )
 		{
-			seenTransition->OnSeenTrans();
-			if ( seenTransition->ReturnSeenTrans() )
+			seenTransition_->OnSeenTrans();
+			if ( seenTransition_->ReturnSeenTrans() )
 			{
 				scene = Scene::GameOver;
 
@@ -225,19 +225,19 @@ void GameScene::Update()
 
 		break;
 	case GameScene::GameOver:
-		seenTransition->Update();
-		camera->SetTarget({ 0,0,0 });
-		if ( seenTransition->ReturnSeenNotEnd() == false )
+		seenTransition_->Update();
+		camera_->SetTarget({ 0,0,0 });
+		if ( seenTransition_->ReturnSeenNotEnd() == false )
 		{
-			if ( input->TriggerKey(DIK_Q) )
+			if ( input_->TriggerKey(DIK_Q) )
 			{
-				seenTransition->OnSeenTrans();
+				seenTransition_->OnSeenTrans();
 				seenFlag = true;
 			}
 		}
 		if ( seenFlag )
 		{
-			if ( seenTransition->ReturnSeenTrans() )
+			if ( seenTransition_->ReturnSeenTrans() )
 			{
 				PhaseReset();
 				scene = Scene::Title;
@@ -247,20 +247,20 @@ void GameScene::Update()
 
 		break;
 	case GameScene::GameClear:
-		seenTransition->Update();
-		camera->SetTarget({ 0,0,0 });
+		seenTransition_->Update();
+		camera_->SetTarget({ 0,0,0 });
 		player_->ClearMove();
-		if ( seenTransition->ReturnSeenNotEnd() == false )
+		if ( seenTransition_->ReturnSeenNotEnd() == false )
 		{
-			if ( input->TriggerKey(DIK_Q) )
+			if ( input_->TriggerKey(DIK_Q) )
 			{
-				seenTransition->OnSeenTrans();
+				seenTransition_->OnSeenTrans();
 				seenFlag = true;
 			}
 		}
 		if ( seenFlag )
 		{
-			if ( seenTransition->ReturnSeenTrans() )
+			if ( seenTransition_->ReturnSeenTrans() )
 			{
 				PhaseReset();
 				scene = Scene::Title;
@@ -281,26 +281,26 @@ void GameScene::Draw()
 	Object3d::PreDraw(dxCommon_->GetCommandList());
 
 
-	skydome->Draw();
-	road->Draw();
+	skydome_->Draw();
+	road_->Draw();
 	//player_->Draw();
 
 	switch ( scene )
 	{
 	case GameScene::Title:
 		/*player_->Draw();*/
-		title->Draw();
+		title_->Draw();
 		break;
 	case GameScene::Game:
 		player_->Draw();
 
-		enemyManager->Draw();
-		enemyManager->ParticleDraw();
+		enemyManager_->Draw();
+		enemyManager_->ParticleDraw();
 		break;
 	case GameScene::Boss:
 		player_->Draw();
-		enemyManager->BossDraw();
-		enemyManager->ParticleDraw();
+		enemyManager_->BossDraw();
+		enemyManager_->ParticleDraw();
 		break;
 	case GameScene::GameOver:
 		break;
@@ -341,29 +341,29 @@ void GameScene::Draw()
 	switch ( scene )
 	{
 	case GameScene::Title:
-		stert->Draw();
+		stert_->Draw();
 		break;
 	case GameScene::Game:
 		player_->DrawUI();
-		enemyManager->DrawUI();
+		enemyManager_->DrawUI();
 		//ImGuiMan->Draw();
 		break;
 	case GameScene::Boss:
 		player_->DrawUI();
-		enemyManager->DrawUI();
+		enemyManager_->DrawUI();
 		break;
 	case GameScene::GameOver:
-		gameOver->Draw();
-		stert->Draw();
+		gameOver_->Draw();
+		stert_->Draw();
 		break;
 	case GameScene::GameClear:
-		gameClear->Draw();
-		stert->Draw();
+		gameClear_->Draw();
+		stert_->Draw();
 		break;
 	default:
 		break;
 	}
-	seenTransition->Draw();
+	seenTransition_->Draw();
 	//ImGuiMan->Draw();
 
 }
@@ -371,18 +371,18 @@ void GameScene::Draw()
 
 void GameScene::Finalize()
 {
-	ImGuiMan->Finalize();
-	audio->Finalize();
+	ImGuiMan_->Finalize();
+	audio_->Finalize();
 
-	delete audio;
+	delete audio_;
 	//ImGuiの開放
-	delete ImGuiMan;
+	delete ImGuiMan_;
 
 	//3Dモデル開放
-	delete model;
+	delete model_;
 
 	//スプライトの開放
-	delete spriteCommon;
+	delete spriteCommon_;
 
 }
 
@@ -392,12 +392,12 @@ void GameScene::PhaseReset()
 	//gameClear->SetPozition({ winApp_->window_width / 2,-30 });
 	//自キャラの初期化
 	player_->Reset();
-	enemyManager->EnemyReset();
-	road->Reset();
-	camera->SetEye(cameraTitle);
-	camera->Update();
-	title->Reset();
-	title->Update();
+	enemyManager_->EnemyReset();
+	road_->Reset();
+	camera_->SetEye(cameraTitle);
+	camera_->Update();
+	title_->Reset();
+	title_->Update();
 }
 
 void GameScene::TitleReset()

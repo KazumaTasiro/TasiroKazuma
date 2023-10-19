@@ -40,7 +40,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input_);
+	void Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -90,38 +90,38 @@ private:
 
 	//std::list<std::unique_ptr<Enemy>> enemy_;
 
-	Input* input = nullptr;
+	Input* input_ = nullptr;
 
 	WinApp* winApp_ = nullptr;
 
 	DirectXCommon* dxCommon_ = nullptr;
 
-	ImGuiManager* ImGuiMan = nullptr;
+	ImGuiManager* ImGuiMan_ = nullptr;
 
 
-	Audio* audio = nullptr;
+	Audio* audio_ = nullptr;
 
-	SpriteCommon* spriteCommon = nullptr;
+	SpriteCommon* spriteCommon_ = nullptr;
 
-	Camera* camera = nullptr;
+	Camera* camera_ = nullptr;
 
 	//OBJからモデルデータを読み込む
-	Model* model = nullptr;
+	Model* model_ = nullptr;
 
 	FbxModel* model1 = nullptr;
 	Object3dFbx* object1 = nullptr;
 
-	Road* road = nullptr;
+	Road* road_ = nullptr;
 
-	Skydome* skydome = nullptr;
+	Skydome* skydome_ = nullptr;
 
-	EnemyManager* enemyManager = nullptr;
+	EnemyManager* enemyManager_ = nullptr;
 
 
-	Sprite* stert = nullptr;
-	Sprite* gameClear = nullptr;
-	Sprite* gameOver = nullptr;
-	Vector2 spriteEnd;
+	Sprite* stert_ = nullptr;
+	Sprite* gameClear_ = nullptr;
+	Sprite* gameOver_ = nullptr;
+	Vector2 spriteEnd_;
 
 	bool playMove = true;
 
@@ -129,15 +129,15 @@ private:
 
 	bool TitleEnd = false;
 
-	ParticleManager* ParticleMana;
+	ParticleManager* ParticleMana_;
 
 
 
 	Vector3 cameraTitle = { 0,0,10 };
 	Vector3 cameraGame = { 0,0,-10 };
 
-	Titles* title = nullptr;
+	Titles* title_ = nullptr;
 
-	SeenTransition* seenTransition = nullptr;
+	SeenTransition* seenTransition_ = nullptr;
 	bool seenFlag = false;
 };

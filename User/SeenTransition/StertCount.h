@@ -1,6 +1,7 @@
 #pragma once
 #include "Object3d.h"
 #include "Model.h"
+#include "Easing.h"
 
 
 class StertCount
@@ -34,6 +35,15 @@ public:
 	////ボスアップデート
 	///</summary>
 	void BossUpdate();
+	///<summary>
+	////カメラのイージング
+	///</summary>
+	void CameraEasing();
+	///<summary>
+	////スタート画面リセット
+	///</summary>
+	void Reset();
+
 private:
 	Camera* camera_ = nullptr;
 	Object3d* bossStert = nullptr;
@@ -41,5 +51,10 @@ private:
 	//ボススケール
 	Vector3 BossScale = { 20,20,20 };
 	//ボスポジション
-	Vector3 StertBossPos = { 0,4, -500 };
+	Vector3 StertBossPos = { 0,10, -500 };
+	float stertBossFrontCamera = 90.0f;
+
+	Easing* easing = nullptr;
+	int time = 0;
+	int endTime = 120;
 };

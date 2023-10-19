@@ -33,16 +33,16 @@ void Boss::Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* 
 	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
 }
 
-void Boss::Update(Player* player_)
+void Boss::Update(Player* player)
 {
 
 	
-	assert(player_);
+	assert(player);
 	if (fireCount >= 4.0f) {
 		randBossAttackNmb = rand() % 2;
 		fireCount = 0;
 	}
-	this->player = player_;
+	this->player_ = player;
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->Update();
 	float time_ = 0.02f;
@@ -93,7 +93,7 @@ void Boss::Move()
 			if (lockOn == true) {
 				//弾を生成し、初期化
 				std::unique_ptr<LockOnBullet> newBullet = std::make_unique<LockOnBullet>();
-				newBullet->Initialize(enemyBulletModel_, player->GetWorldPosition());
+				newBullet->Initialize(enemyBulletModel_, player_->GetWorldPosition());
 				//弾を発射する
 				EnemyLockBullets_.push_back(std::move(newBullet));
 				lockOn = false;
@@ -157,7 +157,7 @@ void Boss::OnColl()
 	}
 	for (std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_) {
 		//敵キャラも座標
-		posA = player->GetWorldPosition();
+		posA = player_->GetWorldPosition();
 
 		//自弾の座標
 		posB = enemyBullets->GetWorldPosition();
@@ -165,7 +165,7 @@ void Boss::OnColl()
 		if (randBossAttackNmb == 0) {
 			if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
 				//プレイヤーの衝突時コールバックを呼び出す
-				player->OnCollision();
+				player_->OnCollision();
 				//自弾の衝突時コールバックを呼び出す
 				enemyBullets->OnCollision();
 			}
@@ -173,7 +173,7 @@ void Boss::OnColl()
 		else if (randBossAttackNmb == 1) {
 			if (Collision::CircleCollision(posB, posA, 4.0f, 4.0f)) {
 				//プレイヤーの衝突時コールバックを呼び出す
-				player->OnCollision();
+				player_->OnCollision();
 				//自弾の衝突時コールバックを呼び出す
 				enemyBullets->OnCollision();
 			}
@@ -221,7 +221,7 @@ void Boss::Fire()
 	}
 	if (fireFlag) {
 		if (randBossAttackNmb == 0) {
-			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
+			velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
 			velocity_.nomalize();
 			velocity_ *= verocitySpeed;
 			//弾を生成し、初期化
@@ -233,7 +233,7 @@ void Boss::Fire()
 			fireCount += 0.5f;
 		}
 		if (randBossAttackNmb == 1) {
-			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
+			velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
 			velocity_.nomalize();
 			velocity_ *= verocitySpeed;
 			//弾を生成し、初期化

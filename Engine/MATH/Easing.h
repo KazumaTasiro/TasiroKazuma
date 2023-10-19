@@ -2,6 +2,7 @@
 #include "Vector3.h"
 
 
+
 class Easing
 {
 public:
@@ -10,6 +11,8 @@ public:
 	Vector3 easeInVector3(double time,Vector3 stert,Vector3 end ,double endTime);
 	double easeIn(double time, double stert, double end, double endTime);
 	double easeInCubic(double x);
+	double easeOut(double time,double stert,double end,double endTime);
+	double easeOutCubic(double x);
 private:
 	//開始時間やで
 	double time_;

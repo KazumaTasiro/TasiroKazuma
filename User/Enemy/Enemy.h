@@ -89,7 +89,7 @@ public:
 	///<summary>
 	////プレイヤーの設定
 	///</summary>
-	void setPlayer(Player* player_) { player = player_; }
+	void setPlayer(Player* player) { player_ = player; }
 	///<summary>
 	////ロックオンの弾の当たり判定
 	///</summary>
@@ -160,7 +160,7 @@ private:
 
 	int32_t time = 0;
 
-	Player* player = nullptr;
+	Player* player_ = nullptr;
 
 	int EnemyHp = 1;
 

@@ -59,7 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\bace;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\SeenTransition;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\SeenTransition;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -79,7 +79,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\bace;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\SeenTransition;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\SeenTransition;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -128,6 +128,7 @@
     <ClCompile Include="User\Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="User\Enemy\Boss.cpp" />
     <ClCompile Include="User\Enemy\Enemy.cpp" />
+    <ClCompile Include="User\Enemy\EnemyAppearFont.cpp" />
     <ClCompile Include="User\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="User\Enemy\EnemyManager.cpp" />
     <ClCompile Include="User\Player\LockOnBullet.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="User\Collision\CollisionPrimitive.h" />
     <ClInclude Include="User\Enemy\Boss.h" />
     <ClInclude Include="User\Enemy\Enemy.h" />
+    <ClInclude Include="User\Enemy\EnemyAppearFont.h" />
     <ClInclude Include="User\Enemy\EnemyBullet.h" />
     <ClInclude Include="User\Enemy\EnemyManager.h" />
     <ClInclude Include="User\Player\LockOnBullet.h" />

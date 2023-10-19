@@ -117,7 +117,7 @@ private:
 
 	int32_t time = 0;
 
-	Player* player = nullptr;
+	Player* player_ = nullptr;
 
 	int EnemyHp = 10;
 

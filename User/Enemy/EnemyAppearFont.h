@@ -2,26 +2,24 @@
 #include "Object3d.h"
 #include "Model.h"
 #include <cassert>
-#include "Input.h"
 
 ///<summary>
-///雑魚敵の行動
+///ボス登場時の文字
 ///</summary>
-class EnemyBullet {
+class EnemyAppearFont
+{
 public:
 	///<summary>
 	///初期化
 	///</summary>
 
-	void Initialize(const Vector3& position, const Vector3& velocity, Model* bulletModel);
-
-
+	void Initialize(Object3d* boss);
 
 	///<summary>
 	///更新
 	///</summary>
 
-	void Update();
+	void Update(Vector3 playerPos);
 
 	///<summary>
 	///描画
@@ -32,30 +30,34 @@ public:
 	///<summary>
 	////弾消滅
 	///</summary>
-	bool IsDead()const { return isDead_; }
+	bool IsDead()const {
+		return isDead_;
+	}
 
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
 	///<summary>
-	////敵の座標
+	////文字の座標
 	///</summary>
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition(int nmb);
 
 	///<summary>
-	////弾のサイズを変える
+	////文字のサイズを変える
 	///</summary>
-	void SetSize(Vector3 Size) { worldTransform_->wtf.scale = Size; }
-
+	void SetSize(Vector3 Size,int nmb) {
+		fontWorldTransform_[nmb]->wtf.scale = Size;
+	}
+	///<summary>
+	////文字の回転攻撃
+	///</summary>
+	void Attck();
 
 private:
 	//ワールド変換データ
-	Object3d* worldTransform_;
+	Object3d* fontWorldTransform_[4];
 	//モデル
-	Model* model_ = nullptr;
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
-
+	Model* fontModel_[ 4 ] = { nullptr };
 	//速度
 	Vector3 velocity_;
 
@@ -67,4 +69,6 @@ private:
 
 	//デスフラグ
 	bool isDead_ = false;
+	//攻撃中フラグ
+	bool nowAttck = false;
 };
