@@ -21,6 +21,7 @@
 #include "ParticleManager.h"
 #include "Title.h"
 #include "SeenTransition.h"
+#include "StertCount.h"
 
 ///<summary>
 ///ボスの生成と行動
@@ -140,4 +141,6 @@ private:
 
 	SeenTransition* seenTransition_ = nullptr;
 	bool seenFlag = false;
+
+	StertCount* stertCount_ = nullptr;
 };

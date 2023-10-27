@@ -13,11 +13,13 @@ void EnemyAppearFont::Initialize(Object3d* boss)
 		fontWorldTransform_[ i ]->Initialize();
 		fontWorldTransform_[ i ]->SetModel(fontModel_[ i ]);
 		fontWorldTransform_[ i ]->SetParent(boss);
+		fontWorldTransform_[ i ]->wtf.scale = { 10,10,10 };
 	}
 }
 
-void EnemyAppearFont::Update(Vector3 playerPos)
+void EnemyAppearFont::Update()
 {
+
 	for ( int i = 0; i < 4; i++ )
 	{
 		fontWorldTransform_[ i ]->Update();
@@ -26,10 +28,15 @@ void EnemyAppearFont::Update(Vector3 playerPos)
 
 void EnemyAppearFont::Draw()
 {
+	for ( int i = 0; i < 4; i++ )
+	{
+		fontWorldTransform_[ i ]->Draw();
+	}
 }
 
 void EnemyAppearFont::OnCollision()
 {
+
 }
 
 Vector3 EnemyAppearFont::GetWorldPosition(int nmb)
@@ -39,5 +46,8 @@ Vector3 EnemyAppearFont::GetWorldPosition(int nmb)
 
 void EnemyAppearFont::Attck()
 {
+	if ( nowAttck == true )
+	{
 
+	}
 }

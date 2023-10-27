@@ -59,11 +59,11 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 	splineReMove = new SplinePosition(worldTransform_->wtf.position, EnemyReMoveSpline1, EnemyReMoveSpline2, EnemyReMoveSpline0);
 }
 
-void Enemy::Update(Player* player_)
+void Enemy::Update(Player* player)
 {
 
-	assert(player_);
-	this->player = player_;
+	assert(player);
+	this->player_ = player;
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->Update();
 	float time_ = 0.02f;
@@ -130,7 +130,7 @@ void Enemy::Fire()
 
 	}
 	if (fireFlag == false) {
-		velocityTackle = player->GetWorldPosition() - worldTransform_->wtf.position;
+		velocityTackle = player_->GetWorldPosition() - worldTransform_->wtf.position;
 		velocityTackle.nomalize();
 		velocityTackle *= verocitySpeed;
 	}
@@ -138,7 +138,7 @@ void Enemy::Fire()
 
 
 		if (enemyNmb == 0) {
-			velocity_ = player->GetWorldPosition() - worldTransform_->wtf.position;
+			velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
 			velocity_.nomalize();
 			velocity_ *= verocitySpeed;
 			//弾を生成し、初期化
@@ -161,7 +161,7 @@ void Enemy::Fire()
 		if (lockOn == true) {
 			//弾を生成し、初期化
 			std::unique_ptr<LockOnBullet> newLockBullet = std::make_unique<LockOnBullet>();
-			newLockBullet->Initialize(enemyBulletModel_, player->GetWorldPosition());
+			newLockBullet->Initialize(enemyBulletModel_, player_->GetWorldPosition());
 			//弾を発射する
 			EnemyLockBullets_.push_back(std::move(newLockBullet));
 			lockOn = false;
@@ -242,27 +242,27 @@ void Enemy::OnColl()
 	}
 	for (std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_) {
 		//敵キャラも座標
-		posA = player->GetWorldPosition();
+		posA = player_->GetWorldPosition();
 
 		//自弾の座標
 		posB = enemyBullets->GetWorldPosition();
 
 		if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
 			//敵キャラの衝突時コールバックを呼び出す
-			player->OnCollision();
+			player_->OnCollision();
 			//自弾の衝突時コールバックを呼び出す
 			enemyBullets->OnCollision();
 		}
 	}
 	//敵キャラも座標
-	posA = player->GetWorldPosition();
+	posA = player_->GetWorldPosition();
 
 	//自弾の座標
 	posB = worldTransform_->GetWorldPosition();
 
 	if (Collision::CircleCollision(posB, posA, 1.0f, 1.0f)) {
 		//敵キャラの衝突時コールバックを呼び出す
-		player->OnCollision();
+		player_->OnCollision();
 		//自弾の衝突時コールバックを呼び出す
 		CollTackle();
 	}

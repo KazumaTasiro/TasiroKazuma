@@ -51,6 +51,10 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	spriteCommon_->LoadTexture(10,"GameBlindFaceUnder1.png");
 	spriteCommon_->LoadTexture(11,"GameBlindFaceUnder2.png");
 	spriteCommon_->LoadTexture(12,"GameBlindFaceUnder3.png");
+	spriteCommon_->LoadTexture(13,"Time3.png");
+	spriteCommon_->LoadTexture(14,"Time2.png");
+	spriteCommon_->LoadTexture(15,"Time1.png");
+	spriteCommon_->LoadTexture(16,"TimeGo.png");
 
 
 	skydome_ = new Skydome();
@@ -106,10 +110,12 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	title_ = new Titles();
 	title_->Initialize();
 
-	PhaseReset();
+	
 	scene = Scene::Title;
+	stertCount_ = new StertCount();
+	stertCount_->SetCamera(camera_);
 
-
+	PhaseReset();
 }
 void GameScene::Update()
 {
@@ -142,6 +148,7 @@ void GameScene::Update()
 		{
 			if ( seenTransition_->ReturnSeenTrans() )
 			{
+				stertCount_->Initialize(spriteCommon_);
 				camera_->SetEye(cameraGame);
 				scene = Scene::Game;
 				seenFlag = false;
@@ -164,34 +171,37 @@ void GameScene::Update()
 		break;
 	case GameScene::Game:
 
-		camera_->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera_->GetTarget().z });
 		road_->Update();
-		enemyManager_->SetPlayer(player_);
-		enemyManager_->Update();
-		enemyManager_->EnemyCollision(player_);
+		stertCount_->Update();
 		seenTransition_->Update();
-
-		camera_->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera_->GetTarget().z });
 		camera_->Update();
 		player_->Update();
-		if ( enemyManager_->Clear() == true )
+		if ( stertCount_->stertEnd() )
 		{
-			scene = Scene::Boss;
-		}
-		if ( player_->retrunIsDaed() )
-		{
-			seenTransition_->OnSeenTrans();
-			if ( seenTransition_->ReturnSeenTrans() )
+			camera_->SetEye(cameraGame);
+			camera_->SetTarget({ ( player_->GetReticlePos().x / 100 ),( player_->GetReticlePos().y / 100 ),camera_->GetTarget().z });
+			player_->Update();
+			enemyManager_->SetPlayer(player_);
+			enemyManager_->Update();
+			enemyManager_->EnemyCollision(player_);
+			if ( enemyManager_->Clear() == true )
 			{
-				scene = Scene::GameOver;
+				scene = Scene::Boss;
+			}
+			if ( player_->retrunIsDaed() )
+			{
+				seenTransition_->OnSeenTrans();
+				if ( seenTransition_->ReturnSeenTrans() )
+				{
+					scene = Scene::GameOver;
+				}
+			}
+
+			if ( input_->PushKey(DIK_P) )
+			{
+				player_->OnCollision();
 			}
 		}
-
-		if ( input_->PushKey(DIK_P) )
-		{
-			player_->OnCollision();
-		}
-
 		break;
 	case GameScene::Boss:
 		seenTransition_->Update();
@@ -346,6 +356,7 @@ void GameScene::Draw()
 	case GameScene::Game:
 		player_->DrawUI();
 		enemyManager_->DrawUI();
+		stertCount_->Draw();
 		//ImGuiMan->Draw();
 		break;
 	case GameScene::Boss:
@@ -398,6 +409,7 @@ void GameScene::PhaseReset()
 	camera_->Update();
 	title_->Reset();
 	title_->Update();
+	stertCount_->Reset();
 }
 
 void GameScene::TitleReset()

@@ -240,24 +240,6 @@
     <ClCompile Include="Engine\camera\Camera.cpp">
       <Filter>ソース ファイル\Engine\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\bace\DirectXCommon.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\DirectXCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\FPS.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\FPS</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\Framework.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\GameMain.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\ImGuiManager.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\WinApp.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\WinApp</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>ソース ファイル\Engine\Input</Filter>
     </ClCompile>
@@ -333,6 +315,24 @@
     <ClCompile Include="User\Enemy\EnemyAppearFont.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\DirectXCommon.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\DirectXCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\FPS.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Framework.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\GameMain.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\ImGuiManager.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\WinApp.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\WinApp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -373,27 +373,6 @@
     </ClInclude>
     <ClInclude Include="Engine\camera\Camera.h">
       <Filter>ヘッダー ファイル\Engine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\DirectXCommon.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\DirectXCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\ErrorException.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\FPS</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\FPS.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\FPS</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\Framework.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\GameMain.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\ImGuiManager.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\WinApp.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\WinApp</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Input\Input.h">
       <Filter>ヘッダー ファイル\Engine\Input</Filter>
@@ -469,6 +448,24 @@
     </ClInclude>
     <ClInclude Include="User\Enemy\EnemyAppearFont.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DirectXCommon.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\DirectXCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\FPS.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Framework.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\GameMain.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\ImGuiManager.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\WinApp.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\WinApp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
