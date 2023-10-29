@@ -58,8 +58,8 @@ private:
 	BYTE keyPre[256] = {};
 	//マウスのデバイス
 	IDirectInputDevice8* mouse = nullptr;
-	DIMOUSESTATE CurrentMouseState;		//!< マウスの現在の入力情報
-	DIMOUSESTATE PrevMouseState;			//!< マウスの一フレーム前の入力情報
+	DIMOUSESTATE CurrentMouseState = {};		//!< マウスの現在の入力情報
+	DIMOUSESTATE PrevMouseState = {};			//!< マウスの一フレーム前の入力情報
 
 
 	//DirectInputのインスタンス
