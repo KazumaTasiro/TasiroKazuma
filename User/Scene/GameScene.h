@@ -41,7 +41,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input);
+	void Initialize( DirectXCommon* dxcomon);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -86,6 +86,7 @@ private:
 	};
 	Scene scene;
 private:
+	
 	///自キャラ
 	Player* player_ = nullptr;
 

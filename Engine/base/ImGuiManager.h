@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WinApp* winApp,DirectXCommon* dxcommon);
+	void Initialize(DirectXCommon* dxcommon);
 
 	/// <summary>
 	/// 終了
@@ -44,5 +44,7 @@ private:
 
 	// SRV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> srvHeap_;
+
+	WinApp* winApp_ = nullptr;
 
 };

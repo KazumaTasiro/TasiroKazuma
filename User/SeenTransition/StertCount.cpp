@@ -16,6 +16,7 @@ StertCount::~StertCount()
 void StertCount::Initialize(SpriteCommon* spriteCommon)
 {
 	assert(spriteCommon);
+	winApp = WinApp::GetInstance();
 	spriteCommon_ = spriteCommon;
 	Time3 = new Sprite();
 	Time2 = new Sprite();
@@ -26,10 +27,10 @@ void StertCount::Initialize(SpriteCommon* spriteCommon)
 	Time2->Initialize(spriteCommon_,14);
 	Time1->Initialize(spriteCommon_,15);
 	TimeGo->Initialize(spriteCommon_,16);
-	Time3->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
-	Time2->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
-	Time1->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
-	TimeGo->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
+	Time3->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 });
+	Time2->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 });
+	Time1->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 });
+	TimeGo->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 });
 	//bossStertModel = Model::LoadFormOBJ("Sakaban");
 	//bossStert = new Object3d();
 	//bossStert->Initialize();

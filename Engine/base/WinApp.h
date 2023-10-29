@@ -7,6 +7,8 @@ public://静的メンバ関数
 	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 public:
+
+
 	void Initialize();
 
 	HWND GetHwnd()const { return hwnd; }
@@ -25,8 +27,17 @@ public:
 	bool ProcessMessage();
 
 private:
+
+	WinApp() = default;
+	~WinApp() = default;
+	WinApp(const WinApp&) = delete;
+	const WinApp& operator=(const WinApp&) = delete;
+private:
 	//ウィンドウハンドル
 	HWND hwnd = nullptr;
 	//ウィンドウクラスの設定
 	WNDCLASSEX w{};
+
+private:
+	static WinApp* WinApp_;
 };

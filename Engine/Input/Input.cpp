@@ -3,11 +3,21 @@
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
 
-void Input::Initalize(WinApp* winApp)
+Input* Input::GetInstance()
+{
+	if (Input_ == nullptr)
+	{
+		Input_ = new Input();
+	}
+
+	return Input_;
+}
+
+void Input::Initalize()
 {
 	HRESULT result;
 	//借りてきたWinAppのインスタンスを記録
-	winApp_ = winApp;
+	winApp_ = WinApp::GetInstance();
 
 	////DirectInputの初期化
 	//IDirectInput8* directInput = nullptr;
@@ -118,4 +128,8 @@ bool Input::ReleaseMouse(int mouse_)
 	}
 
 	return false;
+}
+
+Input::~Input()
+{
 }

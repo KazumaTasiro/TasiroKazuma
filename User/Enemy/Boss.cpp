@@ -10,15 +10,14 @@ Boss::~Boss()
 
 }
 
-void Boss::Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* input)
+void Boss::Initialize(Model* enemyBulletModel, Model* enemyReticleModel)
 {
-	assert(input);
 	assert(enemyBulletModel);
 	assert(enemyReticleModel);
 	model_ = Model::LoadFormOBJ("Sakaban");
 	enemyBulletModel_ = enemyBulletModel;
 	enemyReticleModel_ = enemyReticleModel;
-	input_ = input;
+	input_ = Input::GetInstance();
 	worldTransform_ = Object3d::Create();;
 	worldTransform_->wtf.position = { 50,200,200 };
 	worldTransform_->SetModel(model_);

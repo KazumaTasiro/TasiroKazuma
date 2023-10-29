@@ -9,15 +9,14 @@ GameScene::~GameScene()
 {
 	delete player_;
 }
-void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
+void GameScene::Initialize(DirectXCommon* dxcomon)
 {
 	assert(dxcomon);
-	assert(input);
-	assert(winApp);
 
-	input_ = input;
 
-	winApp_ = winApp;
+	input_ = Input::GetInstance();
+
+	winApp_ = WinApp::GetInstance();
 
 	dxCommon_ = dxcomon;
 
@@ -25,7 +24,7 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	audio_->Initialize();
 
 	// カメラ生成
-	camera_ = new Camera(WinApp::window_width,WinApp::window_height);
+	camera_ = new Camera(winApp_->window_width,winApp_->window_height);
 	camera_->SetEye(cameraTitle);
 
 	camera_->Update();
@@ -33,7 +32,7 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	ParticleManager::SetCamera(camera_);
 
 	ImGuiMan_ = new ImGuiManager();
-	ImGuiMan_->Initialize(winApp,dxCommon_);
+	ImGuiMan_->Initialize(dxCommon_);
 
 	//スプライト共通部分の初期化
 	spriteCommon_ = new SpriteCommon;
@@ -62,15 +61,15 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 
 	stert_ = new Sprite();
 	stert_->Initialize(spriteCommon_,3);
-	stert_->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 + 50 });
+	stert_->SetPozition({ winApp_->window_width / 2,winApp_->window_height / 2 + 50 });
 
 	gameClear_ = new Sprite();
 	gameClear_->Initialize(spriteCommon_,5);
-	gameClear_->SetPozition({ winApp->window_width / 2,( winApp->window_height / 2 ) - 80 });
-	spriteEnd_ = { winApp->window_width / 2,winApp->window_height / 2 };
+	gameClear_->SetPozition({ winApp_->window_width / 2,( winApp_->window_height / 2 ) - 80 });
+	spriteEnd_ = { winApp_->window_width / 2,winApp_->window_height / 2 };
 	gameOver_ = new Sprite();
 	gameOver_->Initialize(spriteCommon_,6);
-	gameOver_->SetPozition({ winApp->window_width / 2,( winApp->window_height / 2 ) - 80 });
+	gameOver_->SetPozition({ winApp_->window_width / 2,( winApp_->window_height / 2 ) - 80 });
 
 
 
@@ -95,10 +94,10 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	ParticleMana_->LoadTexture("Explosion.png");
 
 	player_ = new Player();
-	player_->Initialize(spriteCommon_,input_,winApp_,ParticleMana_);
+	player_->Initialize(spriteCommon_,ParticleMana_);
 
 	enemyManager_ = new EnemyManager();
-	enemyManager_->Initialize(input_,spriteCommon_,camera_,ParticleMana_);
+	enemyManager_->Initialize(spriteCommon_,camera_,ParticleMana_);
 
 	enemyManager_->SetGameScene(this);
 	enemyManager_->SetPlayer(player_);

@@ -56,6 +56,7 @@ public:
 		return cameraStertEnd;
 	}
 private:
+	WinApp* winApp = nullptr;
 	Sprite* Time3 = nullptr;
 	Sprite* Time2 = nullptr;
 	Sprite* Time1 = nullptr;

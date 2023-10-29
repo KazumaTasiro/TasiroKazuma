@@ -83,6 +83,8 @@ public:
 	void SetIsFlipX(bool isFlipX);
 
 private:
+
+	WinApp* winApp = nullptr;
 	//テクスチャサイズをイメージに合わせる
 	void AdjustTextureSize();
 

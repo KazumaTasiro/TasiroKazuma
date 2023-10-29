@@ -61,8 +61,12 @@ void WinApp::Initialize()
 
 WinApp* WinApp::GetInstance()
 {
-	static WinApp instance;
-	return &instance;
+	if ( WinApp_ == nullptr )
+	{
+		WinApp_ = new WinApp();
+	}
+
+	return WinApp_;
 }
 
 void WinApp::Finalize()

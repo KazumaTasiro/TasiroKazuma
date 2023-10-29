@@ -48,7 +48,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(ID3D12Device* device,Input* input_);
+	void Initialize(ID3D12Device* device);
 
 	/// <summary>
 	/// 描画コマンドの発行
@@ -81,6 +81,7 @@ private:
 
 
 private:
+	WinApp* winApp = nullptr;
 	//メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12Resource> texBuff[2];
 	//SRV用のデスクリプタヒープ

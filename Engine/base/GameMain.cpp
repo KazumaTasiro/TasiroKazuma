@@ -15,14 +15,14 @@ void GameMain::Initialize()
 	Framework::Initialize();
 	posteffect = new PostEffect();
 
-	posteffect->Initialize(Framework::GetDXCommon()->GetDevice(), Framework::GetInput());
+	posteffect->Initialize(Framework::GetDXCommon()->GetDevice());
 
 	// 3Dオブジェクト静的初期化
 	Object3d::StaticInitialize(Framework::GetDXCommon()->GetDevice());
 	ParticleManager::StaticInitialize(Framework::GetDXCommon()->GetDevice(), Framework::GetDXCommon()->GetCommandList());
 
 	gameScene = new GameScene();
-	gameScene->Initialize(Framework::GetWinApp(), Framework::GetDXCommon(), Framework::GetInput());
+	gameScene->Initialize(Framework::GetDXCommon());
 
 }
 

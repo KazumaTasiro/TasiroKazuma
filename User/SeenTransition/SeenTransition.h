@@ -49,6 +49,7 @@ public:
 	void ResetBlindSprite();
 
 private:
+	WinApp* winApp_ = nullptr;
 	bool seenTransFlag = false;
 	bool seenTimeFlag = false;
 	bool seenNotEndFlag = false;

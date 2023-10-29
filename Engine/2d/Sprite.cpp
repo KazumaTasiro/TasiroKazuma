@@ -5,6 +5,7 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t textureIndex)
 	
 	spritecomon = spritecommon_;
 
+	winApp = WinApp::GetInstance();
 	//テクスチャサイズをイメージに合わせる
 	if (textureIndex != UINT32_MAX) {
 		textureIndex_ = textureIndex;
@@ -94,8 +95,8 @@ void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t textureIndex)
 	
 	// 射影行列計算
 	matProjection.MakeOrthogonalL(
-		0.0f, (float)WinApp::window_width,
-		(float)WinApp::window_height, 0.0f,
+		0.0f, (float) winApp->window_width,
+		(float) winApp->window_height, 0.0f,
 		0.0f, 1.0f, matProjection);
 	
 

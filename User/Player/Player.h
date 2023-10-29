@@ -28,7 +28,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, ParticleManager* particle);
+	void Initialize(SpriteCommon* spriteCommon, ParticleManager* particle);
 	///更新
 	///</summary>
 	void Update();

@@ -26,7 +26,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* input);
+	void Initialize(Model* enemyBulletModel, Model* enemyReticleModel);
 	///<summary>
 	///更新
 	///</summary>

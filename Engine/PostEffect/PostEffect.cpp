@@ -23,13 +23,13 @@ PostEffect::PostEffect()
 }
 
 
-void PostEffect::Initialize(ID3D12Device* device, Input* input_) {
+void PostEffect::Initialize(ID3D12Device* device) {
 
 	HRESULT result;
 	device_ = device;
 	assert(device_);
-
-	input = input_;
+	winApp = WinApp::GetInstance();
+	input = Input::GetInstance();
 
 	CD3DX12_HEAP_PROPERTIES heapPro(D3D12_HEAP_TYPE_UPLOAD);
 	CD3DX12_RESOURCE_DESC resDes = CD3DX12_RESOURCE_DESC::Buffer(sizeof(VertexPosUv) * vertNum);
@@ -81,8 +81,8 @@ void PostEffect::Initialize(ID3D12Device* device, Input* input_) {
 	//テクスチャリソース設定
 	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-		WinApp::window_width,
-		(UINT)WinApp::window_height,
+		winApp->window_width,
+		(UINT) winApp->window_height,
 		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
 	);
 
@@ -157,8 +157,8 @@ void PostEffect::Initialize(ID3D12Device* device, Input* input_) {
 	CD3DX12_RESOURCE_DESC depthResDesc =
 		CD3DX12_RESOURCE_DESC::Tex2D(
 			DXGI_FORMAT_D32_FLOAT,
-			WinApp::window_width,
-			WinApp::window_height,
+			winApp->window_width,
+			winApp->window_height,
 			1, 0,
 			1, 0,
 			D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL
@@ -278,8 +278,8 @@ void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList) {
 	CD3DX12_VIEWPORT viewPort[2];
 	CD3DX12_RECT rect[2];
 	for (int i = 0; i < 2; i++) {
-		viewPort[i] = CD3DX12_VIEWPORT(0.0f, 0.0f, WinApp::window_width, WinApp::window_height);
-		rect[i] = CD3DX12_RECT(0, 0, WinApp::window_width, WinApp::window_height);
+		viewPort[i] = CD3DX12_VIEWPORT(0.0f, 0.0f,winApp->window_width,winApp->window_height);
+		rect[i] = CD3DX12_RECT(0, 0,winApp->window_width,winApp->window_height);
 	}
 
 

@@ -1,9 +1,8 @@
 #include "Enemy.h"
 #include "Player.h"
 
-void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel, int EnemyNmb,int EnemyRootNmb)
+void Enemy::Initialize(Vector3 EnemyPos, SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel, int EnemyNmb,int EnemyRootNmb)
 {
-	assert(input);
 	assert(sptriteCommon);
 	assert(model);
 	assert(enemyBulletModel);
@@ -29,7 +28,7 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 	spriteLock = new Sprite();
 	spriteLock->Initialize(sptriteCommon, 2);
 
-	input_ = input;
+	input_ = Input::GetInstance();
 
 	enemyNmb = EnemyNmb;
 

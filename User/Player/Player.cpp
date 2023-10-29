@@ -15,16 +15,14 @@ Player::~Player()
 
 }
 
-void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, ParticleManager* particle)
+void Player::Initialize(SpriteCommon* spriteCommon, ParticleManager* particle)
 {
 	assert(spriteCommon);
 	assert(particle);
-	assert(input);
-	assert(winApp_);
 
 
-	input_ = input;
-	winApp = winApp_;
+	input_ = Input::GetInstance();
+	winApp = WinApp::GetInstance();
 	//引数として受け取ったデータをメンバ変数に記録する
 	//spriteCommon_ = spriteCommon;
 	//ワールド変換の初期化
@@ -311,7 +309,7 @@ void Player::MouseReticle()
 	Vector3 positionReticle = { worldTransform3DReticle_->wtf.matWorld.m[3][0],worldTransform3DReticle_->wtf.matWorld.m[3][1],worldTransform3DReticle_->wtf.matWorld.m[3][2] };
 
 	Vector2 windowWH =
-		Vector2(WinApp::window_width, WinApp::window_height);
+		Vector2(winApp->window_width,winApp->window_height);
 
 	//ビューポート行列
 	Matrix4 Viewport = {

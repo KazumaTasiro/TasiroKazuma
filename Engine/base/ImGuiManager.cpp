@@ -2,11 +2,12 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx12.h>
 
-void ImGuiManager::Initialize(WinApp* winApp, DirectXCommon* dxcommon)
+void ImGuiManager::Initialize( DirectXCommon* dxcommon)
 {
 
 	HRESULT result;
 
+	winApp_ = WinApp::GetInstance();
 	dxcommon_ = dxcommon;
 	assert(dxcommon_);
 
@@ -15,7 +16,7 @@ void ImGuiManager::Initialize(WinApp* winApp, DirectXCommon* dxcommon)
 	//ImGuiのスタイルを設定
 	ImGui::StyleColorsDark();
 
-	ImGui_ImplWin32_Init(winApp->GetHwnd());
+	ImGui_ImplWin32_Init(winApp_->GetHwnd());
 
 	//デスクリプタヒープ設定
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};

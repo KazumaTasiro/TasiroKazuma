@@ -8,12 +8,12 @@
 
 using namespace Microsoft::WRL;
 
-void DirectXCommon::Initialize(WinApp* winApp)
+void DirectXCommon::Initialize()
 {
 	//NULL検知
-	assert(winApp);
+
 	//メンバ変数に記録
-	winApp_ = winApp;
+	winApp_ = WinApp::GetInstance();
 
 
 	//デバイスの生成
@@ -188,8 +188,8 @@ void DirectXCommon::InitializeDepthBuffer()
 	//リソース設定
 
 	depthResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-	depthResourceDesc.Width = WinApp::window_width;//レンダーターゲットに合わせる
-	depthResourceDesc.Height = WinApp::window_height;//レンダーターゲットに合わせる
+	depthResourceDesc.Width = winApp_->window_width;//レンダーターゲットに合わせる
+	depthResourceDesc.Height = winApp_->window_height;//レンダーターゲットに合わせる
 	depthResourceDesc.DepthOrArraySize = 1;
 	depthResourceDesc.Format = DXGI_FORMAT_D32_FLOAT;//深度値フォーマット
 	depthResourceDesc.SampleDesc.Count = 1;
@@ -275,8 +275,8 @@ void DirectXCommon::PreDraw()
 	// 4.描画コマンドここから
 // ビューポート設定コマンド
 	D3D12_VIEWPORT viewport{};
-	viewport.Width = WinApp::window_width;//横幅
-	viewport.Height = WinApp::window_height;//縦幅
+	viewport.Width = winApp_->window_width;//横幅
+	viewport.Height = winApp_->window_height;//縦幅
 	viewport.TopLeftX = 0;//左上X
 	viewport.TopLeftY = 0;//左上Y
 	viewport.MinDepth = 0.0f;//最小深度（０でよい）
@@ -286,9 +286,9 @@ void DirectXCommon::PreDraw()
 	//シザー短形
 	D3D12_RECT scissorRect{};
 	scissorRect.left = 0;									// 切り抜き座標左
-	scissorRect.right = scissorRect.left + WinApp::window_width;	// 切り抜き座標右
+	scissorRect.right = scissorRect.left + winApp_->window_width;	// 切り抜き座標右
 	scissorRect.top = 0;									// 切り抜き座標上
-	scissorRect.bottom = scissorRect.top + WinApp::window_height;	// 切り抜き座標下
+	scissorRect.bottom = scissorRect.top + winApp_->window_height;	// 切り抜き座標下
 	// シザー矩形設定コマンドを、コマンドリストに積む
 	commandList->RSSetScissorRects(1, &scissorRect);
 }

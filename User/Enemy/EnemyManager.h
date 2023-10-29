@@ -22,7 +22,7 @@ public:
 	///<summary>
 	////初期化
 	///</summary>
-	void Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
+	void Initialize(  SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
 	///<summary>
 	////更新
 	///</summary>

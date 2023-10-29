@@ -10,16 +10,15 @@ EnemyManager::~EnemyManager()
 
 }
 
-void EnemyManager::Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera,ParticleManager* particle)
+void EnemyManager::Initialize(  SpriteCommon* spriteCommon, Camera* camera,ParticleManager* particle)
 {
 
 	assert(camera);
 	assert(particle);
-	assert(input);
 	assert(spriteCommon);
 	camera_ = camera;
 	spriteCommon_ = spriteCommon;
-	input_ = input;
+	input_ = Input::GetInstance();
 	enemyModel_ = Model::LoadFormOBJ("cubeObj");
 	enemyBulletModel_ = Model::LoadFormOBJ("EnemyBullet");
 	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
@@ -30,7 +29,7 @@ void EnemyManager::Initialize( Input* input, SpriteCommon* spriteCommon, Camera*
 	/*enemyDeadParticle->Update();*/
 
 	boss = new Boss();
-	boss->Initialize(enemyBulletModel_, enemyReticleModel_,input);
+	boss->Initialize(enemyBulletModel_, enemyReticleModel_);
 
 }
 
@@ -209,7 +208,7 @@ void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 	randEnemyRoot = rand() % 2;
 	//敵キャラの生成
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-	newEnemy->Initialize(EnemyPos, input_, spriteCommon_, enemyModel_, enemyBulletModel_, enemyReticleModel_,randEnemyNmb, randEnemyRoot);
+	newEnemy->Initialize(EnemyPos,  spriteCommon_, enemyModel_, enemyBulletModel_, enemyReticleModel_,randEnemyNmb, randEnemyRoot);
 
 	//リストに登録する
 	enemy_.push_back(std::move(newEnemy));
