@@ -72,9 +72,9 @@ private:
 
 	Easing* easing = nullptr;
 	int time = 0;
-	int CengeSeenTIme = 20;
+	int CengeSeenTIme = 5;
 	int oneSecondTime = 120;
-	int endTime = 240*2;
+	int endTime = 210*2;
 	int nowCount;
 	float cameraPos;
 	float cameraPos2;

@@ -333,6 +333,9 @@
     <ClCompile Include="Engine\base\WinApp.cpp">
       <Filter>ソース ファイル\Engine\EngineMain\WinApp</Filter>
     </ClCompile>
+    <ClCompile Include="User\Scene\GameOver.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -466,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="Engine\base\WinApp.h">
       <Filter>ヘッダー ファイル\Engine\EngineMain\WinApp</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameOver.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

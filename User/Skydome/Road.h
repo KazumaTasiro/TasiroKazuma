@@ -21,6 +21,10 @@ public:
 	///</summary>
 	void Update();
 	///<summary>
+	////更新
+	///</summary>
+	void roadUpdate();
+	///<summary>
 	////描画
 	///</summary>
 	void Draw();

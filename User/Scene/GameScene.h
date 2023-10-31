@@ -22,6 +22,7 @@
 #include "Title.h"
 #include "SeenTransition.h"
 #include "StertCount.h"
+#include "GameOver.h"
 
 ///<summary>
 ///ボスの生成と行動
@@ -132,6 +133,7 @@ private:
 
 	ParticleManager* ParticleMana_;
 
+	GameOverSeen* gameOverSeen = nullptr;
 
 
 	Vector3 cameraTitle = { 0,0,10 };

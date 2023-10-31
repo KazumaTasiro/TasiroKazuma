@@ -107,10 +107,14 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	seenTransition_ = new SeenTransition();
 	seenTransition_->Initialize(spriteCommon_);
 
+	gameOverSeen = new GameOverSeen();
+	gameOverSeen->Initialize();
+	gameOverSeen->SetCamera(camera_);
+
 	title_ = new Titles();
 	title_->Initialize();
 
-	
+
 	scene = Scene::Title;
 	stertCount_ = new StertCount();
 	stertCount_->SetCamera(camera_);
@@ -176,6 +180,10 @@ void GameScene::Update()
 		seenTransition_->Update();
 		camera_->Update();
 		player_->Update();
+		if ( stertCount_->stertEnd() == false )
+		{
+			//SetCursorPos(0,0);
+		}
 		if ( stertCount_->stertEnd() )
 		{
 			camera_->SetEye(cameraGame);
@@ -235,6 +243,8 @@ void GameScene::Update()
 
 		break;
 	case GameScene::GameOver:
+		road_->roadUpdate();
+		gameOverSeen->Update();
 		seenTransition_->Update();
 		camera_->SetTarget({ 0,0,0 });
 		if ( seenTransition_->ReturnSeenNotEnd() == false )
@@ -257,6 +267,7 @@ void GameScene::Update()
 
 		break;
 	case GameScene::GameClear:
+		road_->roadUpdate();
 		seenTransition_->Update();
 		camera_->SetTarget({ 0,0,0 });
 		player_->ClearMove();
@@ -313,6 +324,8 @@ void GameScene::Draw()
 		enemyManager_->ParticleDraw();
 		break;
 	case GameScene::GameOver:
+		gameOverSeen->Draw();
+		gameOverSeen->DrawParticle();
 		break;
 	case GameScene::GameClear:
 		player_->Draw();
@@ -354,7 +367,10 @@ void GameScene::Draw()
 		stert_->Draw();
 		break;
 	case GameScene::Game:
-		player_->DrawUI();
+		if ( stertCount_->stertEnd() )
+		{
+			player_->DrawUI();
+		}
 		enemyManager_->DrawUI();
 		stertCount_->Draw();
 		//ImGuiMan->Draw();

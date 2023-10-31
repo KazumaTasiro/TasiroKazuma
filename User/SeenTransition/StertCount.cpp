@@ -66,7 +66,7 @@ void StertCount::Draw()
 				Time1->Draw();
 			}
 		}
-		if ( time > endTime - (CengeSeenTIme*4) )
+		if ( time > endTime - (CengeSeenTIme*10) )
 		{
 			TimeGo->Draw();
 		}
@@ -138,5 +138,5 @@ void StertCount::Reset()
 	cameraPos3 = 0;
 	cameraPos = 0;
 	cameraPos2 = 0;
-	cameraPos3 = false;
+	cameraStertEnd = false;
 }

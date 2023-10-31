@@ -335,7 +335,7 @@ void Player::MouseReticle()
 		POINT mousePosition;
 		//マウス座標（スクリーン座標）を取得する
 		GetCursorPos(&mousePosition);
-
+		
 		//クライアントエリア座標に変換する
 		assert(winApp);
 		HWND hwnd = winApp->GetHwnd();

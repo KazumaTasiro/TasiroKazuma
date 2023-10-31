@@ -55,6 +55,15 @@ void Road::Update()
 	}
 }
 
+void Road::roadUpdate()
+{
+	for ( int i = 0; i < roadCount; i++ )
+	{
+		Bill_[ i ]->Update();
+		road_[ i ]->Update();
+	}
+}
+
 void Road::Draw()
 {
 	for (int i = 0; i < roadCount; i++) {
