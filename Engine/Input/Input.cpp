@@ -3,6 +3,8 @@
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
 
+Input* Input::Input_ = nullptr;
+
 Input* Input::GetInstance()
 {
 	if (Input_ == nullptr)
