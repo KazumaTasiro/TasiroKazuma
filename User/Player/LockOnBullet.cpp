@@ -26,7 +26,7 @@ void LockOnBullet::Initialize(Model* model, const Vector3& position)
 	//モデルをセットする
 	worldTransform_->SetModel(model_);
 
-	worldTransform_->wtf.scale = { 1,1,1 };
+	worldTransform_->wtf.scale = worldSc;
 }
 
 void LockOnBullet::Update(const Vector3& enemyPos)

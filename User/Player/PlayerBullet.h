@@ -58,6 +58,10 @@ private:
 	static const int32_t kLifeTime = 60 * 5;
 	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
+		//デスタイマー
+	int32_t deathTimerEnd_ =0;
 	//デスフラグ
 	bool isDead_ = false;
+
+	Vector3 worldSc = { 1,1,1 };
 };

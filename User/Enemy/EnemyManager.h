@@ -22,7 +22,7 @@ public:
 	///<summary>
 	////初期化
 	///</summary>
-	void Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
+	void Initialize(SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
 	///<summary>
 	////更新
 	///</summary>
@@ -110,6 +110,20 @@ public:
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
 
 private:
+	enum Nmb
+	{
+		zero = 0,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
+	};
 	DirectXCommon* dxCommon = nullptr;
 	SpriteCommon* spriteCommon_ = nullptr;
 	Audio* audio = nullptr;
@@ -130,14 +144,18 @@ private:
 	int waitTimer = 0;
 	Camera* camera_ = nullptr;
 	int clearCount = 0;
+	int clearCountRis = 0;
 	int clearNum = 5;
 
 	int clearTime = 400;
+	int clearTimeRis = 400;
 	int randEnemyNmb;
 	int randEnemyRoot;
 
 	bool EfectEnd = false;
 	int EffectTime = 50;
+	int EffectTimeRis = 50;
+	int EffectTimeRisEnd = 0;
 
 	ParticleManager* enemyDeadParticle;
 
@@ -149,4 +167,21 @@ private:
 	Model* enemyReticleModel_ = nullptr;
 
 	Boss* boss = nullptr;
+
+	int enemyParticleLife = 30;
+	float enemyParticleScaleStert = 0.0f;
+	float enemyParticleScaleEnd = 20.0f;
+
+	int bossParticleLife = 40;
+	float bossParticleScaleStert = 0.0f;
+	float bossParticleScaleEnd = 50.0f;
+
+	const float rnd_posS = 5.0f;
+	const float rnd_velS = 0.0f;
+	const float rnd_accS = 0.0000f;
+
+	Vector3 RayPos = { 0,0,0 };
+
+	float bossWide = 50.0f;
+	float enemyWide = 3.0f;
 };

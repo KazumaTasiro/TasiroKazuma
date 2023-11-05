@@ -48,16 +48,15 @@ void GameOverSeen::PlayerDeadParticle()
 	for ( int i = 0; i < 20; i++ )
 	{
 		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 0.0f;
+		const float rnd_pos = rnd_posS;
 		Vector3 pos = playerPos;
 		pos.x += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.y += 2.0f;
 		pos.z += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 
 		//速度
-		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.005f;
-		const float rnd_velY = 0.05f;
+		const float rnd_vel = rnd_velS;
+		const float rnd_velY = rnd_velYS;
 		Vector3 vel{};
 		vel.x = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = ( float ) rand() / RAND_MAX * rnd_velY - rnd_velY / 2.0f;
@@ -67,7 +66,7 @@ void GameOverSeen::PlayerDeadParticle()
 		}
 		vel.z = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.0000f;
+		const float rnd_acc = rnd_accS;
 		Vector3 acc{};
 		acc.x = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
@@ -80,8 +79,8 @@ void GameOverSeen::PlayerDeadParticle()
 		//pos.z += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 
 		//追加
-		playerDeadParticle->Add(150,pos,vel,acc,0.0f,1.0f,1);
-		playerDeadParticle->Add(150,pos,vel,acc,0.0f,1.0f,2);
+		playerDeadParticle->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,one);
+		playerDeadParticle->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,two);
 		playerDeadParticle->Update();
 	}
 }

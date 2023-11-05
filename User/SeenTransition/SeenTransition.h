@@ -49,6 +49,22 @@ public:
 	void ResetBlindSprite();
 
 private:
+	enum Nmb
+	{
+		zero,
+		one,
+		two,
+		three,
+		four,
+		five,
+		six,
+		seven,
+		eight,
+		nine,
+		ten,
+
+	};
+
 	bool seenTransFlag = false;
 	bool seenTimeFlag = false;
 	bool seenNotEndFlag = false;
@@ -69,4 +85,7 @@ private:
 
 	int randBlindOverNmb = 0;
 	int randBlindUnderNmb = 0;
+
+	int zeroNmb = 0;
+	int tenNmb = 10;
 };

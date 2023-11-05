@@ -9,6 +9,7 @@
 class StertCount
 {
 public:
+
 	StertCount();
 	~StertCount();
 	///<summary>
@@ -56,6 +57,22 @@ public:
 		return cameraStertEnd;
 	}
 private:
+	enum GoNmb
+	{
+		zero,
+		one,
+		two,
+		three = 10,
+	};
+
+	enum Tex
+	{
+		oneSp = 15,
+		twoSp = 14,
+		threeSp = 13,
+		goSp = 16,
+	};
+
 	Sprite* Time3 = nullptr;
 	Sprite* Time2 = nullptr;
 	Sprite* Time1 = nullptr;
@@ -74,7 +91,7 @@ private:
 	int time = 0;
 	int CengeSeenTIme = 5;
 	int oneSecondTime = 120;
-	int endTime = 210*2;
+	int endTime = 210 * 2;
 	int nowCount;
 	float cameraPos;
 	float cameraPos2;

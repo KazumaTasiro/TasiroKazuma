@@ -10,16 +10,15 @@ EnemyManager::~EnemyManager()
 
 }
 
-void EnemyManager::Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera,ParticleManager* particle)
+void EnemyManager::Initialize( SpriteCommon* spriteCommon, Camera* camera,ParticleManager* particle)
 {
 
 	assert(camera);
 	assert(particle);
-	assert(input);
 	assert(spriteCommon);
 	camera_ = camera;
 	spriteCommon_ = spriteCommon;
-	input_ = input;
+	input_ = Input::GetInstance();
 	enemyModel_ = Model::LoadFormOBJ("cubeObj");
 	enemyBulletModel_ = Model::LoadFormOBJ("EnemyBullet");
 	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
@@ -30,7 +29,7 @@ void EnemyManager::Initialize( Input* input, SpriteCommon* spriteCommon, Camera*
 	/*enemyDeadParticle->Update();*/
 
 	boss = new Boss();
-	boss->Initialize(enemyBulletModel_, enemyReticleModel_,input);
+	boss->Initialize(enemyBulletModel_, enemyReticleModel_);
 
 }
 
@@ -38,7 +37,7 @@ void EnemyManager::Update()
 {
 	clearTime--;
 	if (clearTime <= 0) {
-		clearTime = 400;
+		clearTime = clearTimeRis;
 		EnemyPopComandReset();
 	}
 	UpdateEnemyPopCommands();
@@ -75,12 +74,12 @@ void EnemyManager::BossUpdate()
 	enemyDeadParticle->Update();
 	boss->Update(player_);
 	if (boss->IsDead()) {
-		if (EffectTime == 50) {
+		if (EffectTime == EffectTimeRis ) {
 			BossDeadParticle(boss->GetWorldPosition());
 		}
 		EffectTime--;
 		
-		if (EffectTime <= 0) {
+		if (EffectTime <= EffectTimeRisEnd ) {
 			EfectEnd = true;
 		}
 	}
@@ -205,11 +204,11 @@ void EnemyManager::UpdateEnemyPopCommands()
 void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 {
 
-	randEnemyNmb = rand() % 2;
-	randEnemyRoot = rand() % 2;
+	randEnemyNmb = rand() % two;
+	randEnemyRoot = rand() % two;
 	//敵キャラの生成
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-	newEnemy->Initialize(EnemyPos, input_, spriteCommon_, enemyModel_, enemyBulletModel_, enemyReticleModel_,randEnemyNmb, randEnemyRoot);
+	newEnemy->Initialize(EnemyPos, spriteCommon_, enemyModel_, enemyBulletModel_, enemyReticleModel_,randEnemyNmb, randEnemyRoot);
 
 	//リストに登録する
 	enemy_.push_back(std::move(newEnemy));
@@ -244,7 +243,7 @@ void EnemyManager::EnemyCollision(Player* player)
 			//自弾の座標
 			posB = bullet->GetWorldPosition();
 
-			if (Collision::CircleCollision(posB, posA, 2.0f, 2.0f)) {
+			if (Collision::CircleCollision(posB, posA,enemyWide,enemyWide)) {
 				//敵キャラの衝突時コールバックを呼び出す
 				enemy->OnCollision();
 				//自弾の衝突時コールバックを呼び出す
@@ -262,7 +261,7 @@ void EnemyManager::EnemyCollision(Player* player)
 		//レティクルの座標
 		posR = player->GetReticlePos();
 
-		if (Collision::RaySphere({ 0,0,0 }, posA, 3.0f, player->GetFarNear())) {
+		if (Collision::RaySphere(RayPos, posA,enemyWide, player->GetFarNear())) {
 			if (enemy->GetMoveFlag() == true) {
 				if (input_->PushMouse(1)) {
 					//敵キャラのロックオンコールバックを呼び出す
@@ -282,7 +281,7 @@ void EnemyManager::EnemyCollision(Player* player)
 			//自弾の座標
 			posB = bullet->GetWorldPosition();
 
-			if (Collision::CircleCollision(posB, posA, 50.0f, 50.0f)) {
+			if (Collision::CircleCollision(posB, posA,bossWide,bossWide)) {
 				//敵キャラの衝突時コールバックを呼び出す
 				boss->OnCollision();
 				//自弾の衝突時コールバックを呼び出す
@@ -297,8 +296,8 @@ void EnemyManager::EnemyCollision(Player* player)
 		//自弾の座標
 		posR = player->GetReticlePos();
 
-		if (Collision::RaySphere({ 0,0,0 }, posA, 50.0f, player->GetFarNear())) {
-			if (input_->PushMouse(1)) {
+		if (Collision::RaySphere(RayPos, posA,bossWide, player->GetFarNear())) {
+			if (input_->PushMouse(one)) {
 				//敵キャラの衝突時コールバックを呼び出す
 				boss->LockOnTrue();
 			}
@@ -338,11 +337,11 @@ void EnemyManager::EnemyReset()
 		enemy->CollTackle();
 	}
 	EnemyPopComandReset();
-	clearCount = 0;
+	clearCount = clearCountRis;
 	//clearNum = 0;
-	clearTime = 400;
+	clearTime = clearTimeRis;
 	Update();
-	EffectTime = 50;
+	EffectTime = EffectTimeRis;
 	EfectEnd = false;
 	boss->Reset();
 	BossUpdate();
@@ -372,7 +371,7 @@ void EnemyManager::EnemyDeadParticle(Vector3 EnemyPos)
 	//パーティクル範囲
 	for (int i = 0; i < 5; i++) {
 		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 5.0f;
+		const float rnd_pos = rnd_posS;
 		Vector3 pos = EnemyPos;
 		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -380,20 +379,20 @@ void EnemyManager::EnemyDeadParticle(Vector3 EnemyPos)
 
 		//速度
 		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.0f;
+		const float rnd_vel = rnd_velS;
 		Vector3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.0000f;
+		const float rnd_acc = rnd_accS;
 		Vector3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
 		//追加
-		enemyDeadParticle->Add(30, pos, vel, acc, 0.0f, 20.0f, 1);
-		enemyDeadParticle->Add(30, pos, vel, acc, 0.0f, 20.0f, 2);
+		enemyDeadParticle->Add(enemyParticleLife, pos, vel, acc, enemyParticleScaleStert, enemyParticleScaleEnd, one);
+		enemyDeadParticle->Add(enemyParticleLife, pos, vel, acc,enemyParticleScaleStert,enemyParticleScaleEnd, two);
 		enemyDeadParticle->Update();
 	}
 }
@@ -403,7 +402,7 @@ void EnemyManager::BossDeadParticle(Vector3 EnemyPos)
 	//パーティクル範囲
 	for (int i = 0; i < 10; i++) {
 		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 5.0f;
+		const float rnd_pos = rnd_posS;
 		Vector3 pos = EnemyPos;
 		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -411,20 +410,20 @@ void EnemyManager::BossDeadParticle(Vector3 EnemyPos)
 
 		//速度
 		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.0f;
+		const float rnd_vel = rnd_velS;
 		Vector3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.0000f;
+		const float rnd_acc = rnd_accS;
 		Vector3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
 		//追加
-		enemyDeadParticle->Add(40, pos, vel, acc, 0.0f, 50.0f, 1);
-		enemyDeadParticle->Add(40, pos, vel, acc, 0.0f, 50.0f, 2);
+		enemyDeadParticle->Add(bossParticleLife, pos, vel, acc, bossParticleScaleStert, bossParticleScaleEnd, one);
+		enemyDeadParticle->Add(bossParticleLife, pos, vel, acc,bossParticleScaleStert,bossParticleScaleEnd, two);
 		enemyDeadParticle->Update();
 	}
 }

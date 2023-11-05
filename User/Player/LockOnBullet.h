@@ -67,4 +67,6 @@ private:
 	float time = 0;
 
 	Vector3 worldNormal;
+
+	Vector3 worldSc = { 1,1,1 };
 };

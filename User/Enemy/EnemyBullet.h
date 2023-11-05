@@ -47,6 +47,10 @@ public:
 	///</summary>
 	void SetSize(Vector3 Size) { worldTransform_->wtf.scale = Size; }
 
+	///<summary>
+	////弾の進行方向に弾に向きを変える
+	///</summary>
+	void VecRot();
 
 private:
 	//ワールド変換データ
@@ -64,7 +68,7 @@ private:
 
 	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
-
+	int32_t deathTimerEnd_ = 0;
 	//デスフラグ
 	bool isDead_ = false;
 };

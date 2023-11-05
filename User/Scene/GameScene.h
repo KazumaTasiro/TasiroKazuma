@@ -42,7 +42,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input);
+	void Initialize( DirectXCommon* dxcomon);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -145,4 +145,23 @@ private:
 	bool seenFlag = false;
 
 	StertCount* stertCount_ = nullptr;
+
+	Vector3 TargetCamRes = { 0,0,0 };
+	enum Nmb
+	{
+		zero = 0,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
+	};
+
+	float gameOverUp = 80.0f;
+	float gamestertUp = 50.0f;
 };

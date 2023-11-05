@@ -9,15 +9,14 @@ GameScene::~GameScene()
 {
 	delete player_;
 }
-void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
+void GameScene::Initialize(DirectXCommon* dxcomon)
 {
 	assert(dxcomon);
-	assert(input);
-	assert(winApp);
 
-	input_ = input;
 
-	winApp_ = winApp;
+	input_ = Input::GetInstance();
+
+	winApp_ = WinApp::GetInstance();
 
 	dxCommon_ = dxcomon;
 
@@ -32,8 +31,7 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	Object3d::SetCamera(camera_);
 	ParticleManager::SetCamera(camera_);
 
-	ImGuiMan_ = new ImGuiManager();
-	ImGuiMan_->Initialize(winApp,dxCommon_);
+	ImGuiMan_ = ImGuiManager::GetInstance();
 
 	//スプライト共通部分の初期化
 	spriteCommon_ = new SpriteCommon;
@@ -61,16 +59,16 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	skydome_->Initalize();
 
 	stert_ = new Sprite();
-	stert_->Initialize(spriteCommon_,3);
-	stert_->SetPozition({ winApp->window_width / 2,winApp->window_height / 2 + 50 });
+	stert_->Initialize(spriteCommon_,three);
+	stert_->SetPozition({ winApp_->window_width / 2,winApp_->window_height / 2 + gamestertUp });
 
 	gameClear_ = new Sprite();
-	gameClear_->Initialize(spriteCommon_,5);
-	gameClear_->SetPozition({ winApp->window_width / 2,( winApp->window_height / 2 ) - 80 });
-	spriteEnd_ = { winApp->window_width / 2,winApp->window_height / 2 };
+	gameClear_->Initialize(spriteCommon_,five);
+	gameClear_->SetPozition({ winApp_->window_width / 2,( winApp_->window_height / 2 ) - gameOverUp });
+	spriteEnd_ = { winApp_->window_width / 2,winApp_->window_height / 2 };
 	gameOver_ = new Sprite();
-	gameOver_->Initialize(spriteCommon_,6);
-	gameOver_->SetPozition({ winApp->window_width / 2,( winApp->window_height / 2 ) - 80 });
+	gameOver_->Initialize(spriteCommon_,six);
+	gameOver_->SetPozition({ winApp_->window_width / 2,( winApp_->window_height / 2 ) - gameOverUp });
 
 
 
@@ -95,10 +93,10 @@ void GameScene::Initialize(WinApp* winApp,DirectXCommon* dxcomon,Input* input)
 	ParticleMana_->LoadTexture("Explosion.png");
 
 	player_ = new Player();
-	player_->Initialize(spriteCommon_,input_,winApp_,ParticleMana_);
+	player_->Initialize(spriteCommon_,ParticleMana_);
 
 	enemyManager_ = new EnemyManager();
-	enemyManager_->Initialize(input_,spriteCommon_,camera_,ParticleMana_);
+	enemyManager_->Initialize(spriteCommon_,camera_,ParticleMana_);
 
 	enemyManager_->SetGameScene(this);
 	enemyManager_->SetPlayer(player_);
@@ -125,12 +123,10 @@ void GameScene::Update()
 {
 	ImGuiMan_->Bigin();
 
-	ImGui::SetWindowSize({ 500,100 });
 
 	//デモウィンドウの表示ON
 	ImGui::ShowDemoWindow();
 
-	ImGui::SliderFloat("posz",&playPos,-100,0);
 	//player_->SetPos({ player_->GetWorldPosition().x ,player_->GetWorldPosition().y,playPos });
 	ImGuiMan_->End();
 	switch ( scene )
@@ -246,7 +242,7 @@ void GameScene::Update()
 		road_->roadUpdate();
 		gameOverSeen->Update();
 		seenTransition_->Update();
-		camera_->SetTarget({ 0,0,0 });
+		camera_->SetTarget(TargetCamRes);
 		if ( seenTransition_->ReturnSeenNotEnd() == false )
 		{
 			if ( input_->TriggerKey(DIK_Q) )
@@ -269,7 +265,7 @@ void GameScene::Update()
 	case GameScene::GameClear:
 		road_->roadUpdate();
 		seenTransition_->Update();
-		camera_->SetTarget({ 0,0,0 });
+		camera_->SetTarget(TargetCamRes);
 		player_->ClearMove();
 		if ( seenTransition_->ReturnSeenNotEnd() == false )
 		{
@@ -391,19 +387,17 @@ void GameScene::Draw()
 		break;
 	}
 	seenTransition_->Draw();
-	//ImGuiMan->Draw();
+	ImGuiMan_->Draw();
 
 }
 
 
 void GameScene::Finalize()
 {
-	ImGuiMan_->Finalize();
+
 	audio_->Finalize();
 
 	delete audio_;
-	//ImGuiの開放
-	delete ImGuiMan_;
 
 	//3Dモデル開放
 	delete model_;

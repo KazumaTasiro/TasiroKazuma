@@ -16,6 +16,7 @@ public:
 	static WinApp* GetInstance();
 
 
+
 	//ウィンドウサイズ
 	static const int window_width = 1280;
 	static const int window_height = 720;
@@ -23,7 +24,14 @@ public:
 	void Finalize();
 
 	bool ProcessMessage();
+private:
 
+	WinApp() = default;
+	~WinApp() = default;
+	WinApp(const WinApp&) = delete;
+	const WinApp& operator=(const WinApp&) = delete;
+private:
+	static WinApp* WinApp_;
 private:
 	//ウィンドウハンドル
 	HWND hwnd = nullptr;

@@ -27,7 +27,7 @@ void EnemyBullet::Update()
 	worldTransform_->Update();
 	deathTimer_--;
 	//時間経過でデス
-	if (deathTimer_ <= 0) {
+	if (deathTimer_ <= deathTimerEnd_ ) {
 		isDead_ = true;
 	}
 }
@@ -50,4 +50,13 @@ Vector3 EnemyBullet::GetWorldPosition()
 	worldPos = worldTransform_->GetWorldPosition();
 
 	return worldPos;
+}
+
+void EnemyBullet::VecRot()
+{
+	//進行方向に見た目の回転を合わせる
+	worldTransform_->wtf.rotation.y = std::atan2(velocity_.x, velocity_.z);
+	Vector3 temp = velocity_;
+	temp.y = 0.0f;
+	worldTransform_->wtf.rotation.x = std::atan2(-velocity_.y, temp.length());
 }

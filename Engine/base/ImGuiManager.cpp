@@ -2,20 +2,22 @@
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx12.h>
 
-void ImGuiManager::Initialize(WinApp* winApp, DirectXCommon* dxcommon)
+ImGuiManager* ImGuiManager::ImGuiManager_ = nullptr;
+
+void ImGuiManager::Initialize(DirectXCommon* dxcommon)
 {
 
 	HRESULT result;
-
+	assert(dxcommon);
 	dxcommon_ = dxcommon;
-	assert(dxcommon_);
+	winApp_ = WinApp::GetInstance();
 
 	//ImGuiのコンテキストを生成
 	ImGui::CreateContext();
 	//ImGuiのスタイルを設定
 	ImGui::StyleColorsDark();
 
-	ImGui_ImplWin32_Init(winApp->GetHwnd());
+	ImGui_ImplWin32_Init(winApp_->GetHwnd());
 
 	//デスクリプタヒープ設定
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
@@ -75,4 +77,14 @@ void ImGuiManager::Draw()
 
 void ImGuiManager::MySaveFunction()
 {
+}
+
+ImGuiManager* ImGuiManager::GetInstance()
+{
+	if (ImGuiManager_ == nullptr)
+	{
+		ImGuiManager_ = new ImGuiManager();
+	}
+
+	return ImGuiManager_;
 }

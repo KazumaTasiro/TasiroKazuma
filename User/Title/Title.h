@@ -59,6 +59,7 @@ private:
 	Vector3 LogoRot = { 0,( PI / 180 ) * 1,0 };
 
 	float LogoRotNum = 0;
+	float LogoRotMax = 15;
 	float LogoRotPlus = 0.5f;
 
 	//タイトルのプレイヤー
@@ -71,8 +72,10 @@ private:
 	Vector3 TitlePlayerResetPos = { 0,-2.5f, 0 };
 	float TitleRotReset = 20;
 	Vector3 playerRot = { 0,( PI / 180 ) * 1,0 };
+	float playerMoveRimit = 1.5f;
 	float playerSpeed = 0.1f;
 	float playerRotNum = 0;
+	float playerRotConst = 20;
 	float playerRotPlus = 2;
 	bool playerWallFlagX = false;
 	bool playerWallFlagY = false;
@@ -85,7 +88,10 @@ private:
 	bool gravityStert = true;
 	int defGravityStertTime = 3;
 	int gravityStertTime = 3;
+	int gravityEndTime = 0;
 
 	bool bossGoFlag = false;
 	float bossNear = 1.0f;
+
+	float rot = ( PI / 180 );
 };

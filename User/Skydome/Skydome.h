@@ -30,4 +30,7 @@ private:
 	//モデル
 	Model* model_ = nullptr;
 
+	Vector3 skydomeScale={ 500,500,500 };
+
+	Vector3 skydomePos = { 0,0,0 };
 };

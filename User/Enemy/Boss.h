@@ -26,7 +26,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* input);
+	void Initialize(Model* enemyBulletModel, Model* enemyReticleModel);
 	///<summary>
 	///更新
 	///</summary>
@@ -108,6 +108,7 @@ private:
 	Vector3 LeaveMove = { -0.1f,0.1f,-0.1f };
 
 	Vector3 EnemyMoveSpline0 = { 0,0,0 };
+	Vector3 EnemyMoveSpline0Ris = { 0,50,200 };
 	Vector3 EnemyMoveSpline1 = { 0,150,200 };
 	Vector3 EnemyMoveSpline2 = { 0,100,200 };
 
@@ -137,12 +138,32 @@ private:
 	bool fireFlag = false;
 
 	int fireTime = 45;
+	int fireTimeRisSm = 35;
+	int fireTimeRisBig = 70;
 
 	float fireCount = 0.0f;
+	float fireCountMax = 4.0f;
+	float fireCountSm = 0.5f;
+	float fireCountBig = 1.0f;
 
 	float verocitySpeed = 4.0f;
 	float bigVerocitySpeed = 3.0f;
 	
+	Vector3 PosRis = { 100,200,200 };
+
+	float AttackSm = 1.5f;
+	float AttackBig = 1.5f;
+	float BossColl = 50.0f;
 
 	Vector3 velocity_;
+
+	Vector3 ReticleSc = { 70,70,70 };
+
+	Vector3 worldRt = { 0,( 89 / PI ),0 };
+	Vector3 worldSc = { 50,50,50 };
+	Vector3 worldPs = { 50,200,200 };
+
+	float time_ = 0.02f;
+
+	Vector3 BulletSize = { 4.0f,4.0f,4.0f };
 };

@@ -60,6 +60,7 @@ public:
 private:
 	//ワールド変換データ
 	Object3d* fontWorldTransform_[4];
+	Vector3 fontSize = { 10,10,10 };
 	//モデル
 	Model* fontModel_[ 4 ] = { nullptr };
 	//速度
@@ -83,4 +84,5 @@ private:
 	//攻撃中フラグ
 	bool nowAttck = false;
 
+	int fontI = 4;
 };

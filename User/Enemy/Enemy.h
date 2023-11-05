@@ -24,7 +24,7 @@ public:
 	///</summary>
 	/// EnemyNmb 敵の行動の種類
 	/// EnemyRootNmb 敵の行動ルート　0:左 1:右
-	void Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon, Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb, int EnemyRootNmb);
+	void Initialize(Vector3 EnemyPos, SpriteCommon* sptriteCommon, Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb, int EnemyRootNmb);
 	///<summary>
 	///更新
 	///</summary>
@@ -116,6 +116,20 @@ public:
 	bool GetMoveFlag(){return DemoEnemyMove;}
 
 private:
+	enum Nmb
+	{
+		zero = 0,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
+	};
 	//発射間隔
 	static const int kFireInterval = 100;
 
@@ -158,11 +172,15 @@ private:
 	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
 	std::list<std::unique_ptr<EnemyBullet>> EnemyBullets_;
 
+	float LockWidth = 2.0f;
+
 	int32_t time = 0;
 
 	Player* player_ = nullptr;
+	float playerWidth = 1.5f;
 
 	int EnemyHp = 1;
+	int EnemyHpEnd = 0;
 
 	//デスフラグ
 	bool isDead_ = false;
@@ -181,8 +199,10 @@ private:
 	bool fireFlag = false;
 
 	int fireTime = 45;
+	int fireTimeRis = 45;
 
 	float verocitySpeed = 3.0f;
+	float tackPosLim = -50;
 
 	int enemyNmb = 1;
 
@@ -192,4 +212,31 @@ private:
 	Vector3 velocityTackle;
 
 	int EnemyRootNmb_ = 0;
+	Vector3 EnemyScale = { 3,3,3 };
+	Vector3 EnemyReticleScale = { 10,10,10 };;
+
+	Vector3 oneEnemyMoveSpline1 = { -50,20,50 };
+	Vector3 oneEnemyMoveSpline2 = { -20,15,100 };
+	Vector3 oneEnemyMoveSpline0 = {  };
+	Vector3 oneEnemyReMoveSpline0 = {  };
+	Vector3 oneEnemyReMoveSpline1 = {  };
+	Vector3 oneEnemyReMoveSpline2 = {  };
+
+	Vector3 twoEnemyMoveSpline1 = { +50,20,50 };
+	Vector3 twoEnemyMoveSpline2 = { +20,15,100 };
+	Vector3 twoEnemyMoveSpline0 = {  };
+	Vector3 twoEnemyReMoveSpline0 = {  };
+	Vector3 twoEnemyReMoveSpline1 = { };
+	Vector3 twoEnemyReMoveSpline2 = {  };
+
+	float sprineX = 100.0f;
+	float sprineY1 = 30.0f;
+	float sprineY2 = 25.0f;
+	float sprineZ1 = 50.0f;
+	float sprineZ3 = 150.0f;
+	float sprineZ2 = 100.0f;
+
+
+	float Movetime = 0.05f;
+	float Updatetime = 0.02f;
 };

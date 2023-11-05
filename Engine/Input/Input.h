@@ -14,8 +14,11 @@ public:
 	//namespace省略
 	template<class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバー関数
+	//シングルトンインスタンス
+	static Input* GetInstance();
+
 	//初期化
-	void Initalize(WinApp* winApp);
+	void Initalize();
 	//更新
 	void Update();
 
@@ -39,6 +42,15 @@ public://メンバー関数
 	//1　右クリック
 	//2　マウスカーソルクリック
 	bool ReleaseMouse(int mouse_);
+private://メンバ変数
+
+	Input() = default;
+	~Input();
+	Input(const Input&) = delete;
+	const Input& operator=(const Input&) = delete;
+
+private:
+	static Input* Input_;
 private://メンバ変数
 	//キーボードのデバイス
 	IDirectInputDevice8* keyboard = nullptr;

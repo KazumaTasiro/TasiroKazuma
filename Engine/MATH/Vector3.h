@@ -28,7 +28,14 @@ public:
 
 	static Vector3 Vector3Zero();
 	static bool Vector3Equal(Vector3 v1,Vector3 v2);
-	 bool Vector3IsInfinite();
+	bool Vector3IsInfinite();
+
+	// 球面線形補間関数
+	// out   : 補間ベクトル（出力）
+	// start : 開始ベクトル
+	// end : 終了ベクトル
+	// t : 補間値（0～1）
+	Vector3 SphereLinear(Vector3& out,Vector3& start,Vector3& end,float t);
 
 	Vector3 operator+() const;
 	Vector3 operator-() const;

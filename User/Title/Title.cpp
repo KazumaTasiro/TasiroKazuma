@@ -31,16 +31,16 @@ void Titles::Initialize()
 	titlePlayer->SetModel(titlePlayerModel);
 	titlePlayer->wtf.position = { TitlePlayerPos };
 	playerRotNum = TitleRotReset;
-	titlePlayer->wtf.rotation.y = ( PI / 180 ) * playerRotNum;
+	titlePlayer->wtf.rotation.y = rot * playerRotNum;
 }
 
 
 void Titles::Update()
 {
 	LogoRotNum += LogoRotPlus;
-	LogoRot.y = ( PI / 180 ) * LogoRotNum;
+	LogoRot.y = rot * LogoRotNum;
 	titleLogo->wtf.rotation = LogoRot;
-	if ( LogoRotNum >= 15 || LogoRotNum <= -15 )
+	if ( LogoRotNum >= LogoRotMax || LogoRotNum <= -LogoRotMax )
 	{
 		LogoRotPlus = -LogoRotPlus;
 	}
@@ -59,7 +59,7 @@ void Titles::Update()
 	else
 	{
 		gravityStertTime--;
-		if ( gravityStertTime <= 0 )
+		if ( gravityStertTime <= gravityEndTime )
 		{
 			gravityStert = true;
 			gravityStertTime = defGravityStertTime;
@@ -86,7 +86,7 @@ void Titles::Reset()
 	titleLogo->Update();
 	titlePlayer->wtf.position = { TitlePlayerPos };
 	playerRotNum = TitleRotReset;
-	titlePlayer->wtf.rotation.y = ( PI / 180 ) * playerRotNum;
+	titlePlayer->wtf.rotation.y = rot * playerRotNum;
 	titlePlayer->Update();
 	if ( playerSpeed < 0 )
 	{
@@ -103,19 +103,19 @@ void Titles::Reset()
 
 void Titles::PlayerLimit()
 {
-	if ( titlePlayer->wtf.position.x > 1.5f )
+	if ( titlePlayer->wtf.position.x > playerMoveRimit )
 	{
 		if ( playerWallFlagX == false )
 		{
 			playerWallFlagY = false;
-			playerRot.y = ( PI / 180 ) * playerRotNum;
+			playerRot.y = rot * playerRotNum;
 			titlePlayer->wtf.rotation = playerRot;
-			if ( playerRotNum >= 20 )
+			if ( playerRotNum >= playerRotConst )
 			{
 				playerRotPlus = -playerRotPlus;
 
 			}
-			if ( playerRotNum <= -20 - playerRotPlus )
+			if ( playerRotNum <= -playerRotConst - playerRotPlus )
 			{
 				playerSpeed = -playerSpeed;
 				titlePlayer->wtf.position.x += playerSpeed;
@@ -124,18 +124,18 @@ void Titles::PlayerLimit()
 			playerRotNum += playerRotPlus;
 		}
 	}
-	if ( titlePlayer->wtf.position.x < -1.5f )
+	if ( titlePlayer->wtf.position.x < -playerMoveRimit )
 	{
 		if ( playerWallFlagY == false )
 		{
-			playerRot.y = ( PI / 180 ) * playerRotNum;
+			playerRot.y = rot * playerRotNum;
 			titlePlayer->wtf.rotation = playerRot;
 			playerWallFlagX = false;
-			if ( playerRotNum <= -20 )
+			if ( playerRotNum <= -playerRotConst )
 			{
 				playerRotPlus = -playerRotPlus;
 			}
-			if ( playerRotNum >= 20 - playerRotPlus )
+			if ( playerRotNum >= playerRotConst - playerRotPlus )
 			{
 				playerSpeed = -playerSpeed;
 				titlePlayer->wtf.position.x += playerSpeed;

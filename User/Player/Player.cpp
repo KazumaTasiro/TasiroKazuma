@@ -15,16 +15,15 @@ Player::~Player()
 
 }
 
-void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, ParticleManager* particle)
+void Player::Initialize(SpriteCommon* spriteCommon, ParticleManager* particle)
 {
 	assert(spriteCommon);
 	assert(particle);
-	assert(input);
-	assert(winApp_);
 
 
-	input_ = input;
-	winApp = winApp_;
+
+	input_ = Input::GetInstance();
+	winApp = WinApp::GetInstance();
 	//引数として受け取ったデータをメンバ変数に記録する
 	//spriteCommon_ = spriteCommon;
 	//ワールド変換の初期化
@@ -36,18 +35,18 @@ void Player::Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp
 
 	worldTransform_->Initialize();
 	worldTransform_->SetModel(model_);
-	worldTransform_->wtf.position = { 0, 0, -20 };
-	worldTransform_->wtf.scale = { 1.0f, 1.0f, 1.0f };
+	worldTransform_->wtf.position = playerPos;
+	worldTransform_->wtf.scale = playerSc;
 
 	bulletModel_ = Model::LoadFormOBJ("playerBullet");
 
 	worldTransform3DReticle_->SetModel(bulletModel_);
 	//スプライト生成
 	sprite2DReticle_ = new Sprite();
-	sprite2DReticle_->Initialize(spriteCommon, 0);
+	sprite2DReticle_->Initialize(spriteCommon, zero);
 
 	sprite2DReticleLock_ = new Sprite();
-	sprite2DReticleLock_->Initialize(spriteCommon, 1);
+	sprite2DReticleLock_->Initialize(spriteCommon, one);
 
 	worldTransform_->wtf.position = playerResetPos;
 
@@ -88,7 +87,7 @@ void Player::Update()
 		EffectWaiteTime--;
 
 	}
-	if (EffectWaiteTime <= 0) {
+	if (EffectWaiteTime <= zero) {
 		isDead_ = true;
 	}
 }
@@ -96,8 +95,8 @@ void Player::Update()
 void Player::Move()
 {
 	//キャラクターの移動ベクトル
-	Vector3 move = { 0,0,0 };
-	Vector3 camMove = { 0,0,0 };
+	Vector3 move = { };
+	Vector3 camMove = { };
 	Vector3 pos = worldTransform_->wtf.position;
 
 	//const float RotSpeed = 0.05f;
@@ -122,16 +121,15 @@ void Player::Move()
 	//worldTransform_->SetEye({ pos.x + move.x,pos.y + move.y,pos.z + move.z });
 	//worldTransform_->SetTarget({ pos.x + move.x,pos.y + move.y,10 });
 	//移動限界座標
-	const float kMoveLimitX = 35.0f;
-	const float kMoveLimitY = 19.0f;
+
 	//範囲を超えない処理
 	worldTransform_->wtf.position.x = max(worldTransform_->wtf.position.x, -kMoveLimitX);
 	worldTransform_->wtf.position.x = min(worldTransform_->wtf.position.x, +kMoveLimitX);
 	worldTransform_->wtf.position.y = max(worldTransform_->wtf.position.y, -kMoveLimitY);
 	worldTransform_->wtf.position.y = min(worldTransform_->wtf.position.y, +kMoveLimitY);
 
-	sprite2DReticle_->SetPozition({ max(worldTransform_->wtf.position.x, 1280),max(worldTransform_->wtf.position.y, 720) });
-	sprite2DReticle_->SetPozition({ min(worldTransform_->wtf.position.x, 0),min(worldTransform_->wtf.position.y, 0) });
+	sprite2DReticle_->SetPozition({ max(worldTransform_->wtf.position.x, WinApp::window_width),max(worldTransform_->wtf.position.y, WinApp::window_height) });
+	sprite2DReticle_->SetPozition({ min(worldTransform_->wtf.position.x, zeroNmb),min(worldTransform_->wtf.position.y, zeroNmb) });
 
 	//worldTransform_->wtf.position = { 0,0,-30 };
 	PlayerLimit();
@@ -149,11 +147,11 @@ Vector3 Player::ConvertToVector3(const Matrix4& mat, Vector3 vec)
 	Vector3 retVec = {};
 
 
-	retVec.x = vec.x * mat.m[0][0] + vec.y * mat.m[1][0] + vec.z * mat.m[2][0];
+	retVec.x = vec.x * mat.m[zero][ zero ] + vec.y * mat.m[one][ zero ] + vec.z * mat.m[ two ][ zero ];
 
-	retVec.y = vec.x * mat.m[0][1] + vec.y * mat.m[1][1] + vec.z * mat.m[2][1];
+	retVec.y = vec.x * mat.m[ zero ][ one ] + vec.y * mat.m[ one ][ one ] + vec.z * mat.m[ two ][ one ];
 
-	retVec.z = vec.x * mat.m[0][2] + vec.y * mat.m[1][2] + vec.z * mat.m[2][2];
+	retVec.z = vec.x * mat.m[ zero ][two] + vec.y * mat.m[ one ][ two ] + vec.z * mat.m[ two ][ two ];
 
 	return retVec;
 }
@@ -198,18 +196,18 @@ void Player::DrawFbx()
 
 void Player::Attack()
 {
-	if (input_->TriggerMouse(0))
+	if (input_->TriggerMouse(zero))
 	{
 		//弾の速度
-		const float kBulletSpeed = 0.01f;
-		Vector3 velocity(0, 0, kBulletSpeed);
+
+		Vector3 velocity(zero,zero, kBulletSpeed);
 
 		//速度ベクトルを自機の向きに合わせて回転させる
 		velocity = ConvertToVector3(worldTransform_->wtf.matWorld, velocity);
 
 		//自機から標準オブジェクトへのベクトル
 		velocity = worldTransform3DReticle_->wtf.position - worldTransform_->wtf.position;
-		Vec3Normalize(&velocity, &velocity);
+		velocity.nomalize();
 		//弾を生成し、初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 		newBullet->Initialize(bulletModel_, GetWorldPosition(), velocity);
@@ -218,34 +216,11 @@ void Player::Attack()
 	}
 }
 
-int Player::Vec3Normalize(Vector3* pOut, Vector3* pV)
-{
-	double len;
-	double x, y, z;
-
-	x = (double)(pV->x);
-	y = (double)(pV->y);
-	z = (double)(pV->z);
-	len = sqrt(x * x + y * y + z * z);
-
-	if (len < (1e-6)) return 0;
-
-	len = 1.0 / len;
-	x *= len;
-	y *= len;
-	z *= len;
-
-	pOut->x = (float)x;
-	pOut->y = (float)y;
-	pOut->z = (float)z;
-
-	return 1;
-}
 
 void Player::DrawUI()
 {
 
-	if (input_->PushMouse(1)) {
+	if (input_->PushMouse(one)) {
 		sprite2DReticleLock_->Draw();
 	}
 	else {
@@ -258,13 +233,13 @@ Vector3 Player::clossV3V4(const Vector3& vec, const XMMATRIX& mat)
 {
 	Vector4 divVec = {};
 
-	divVec.x = vec.x * mat.r[0].m128_f32[0] + vec.y * mat.r[1].m128_f32[0] + vec.z * mat.r[2].m128_f32[0] + 1 * mat.r[3].m128_f32[0];
+	divVec.x = vec.x * mat.r[ zeroNmbI ].m128_f32[ zeroNmbI ] + vec.y * mat.r[ oneNmbI ].m128_f32[ zeroNmbI ] + vec.z * mat.r[ twoNmbI ].m128_f32[ zeroNmbI ] + oneNmb * mat.r[threeNmbI ].m128_f32[ zeroNmbI ];
 
-	divVec.y = vec.x * mat.r[0].m128_f32[1] + vec.y * mat.r[1].m128_f32[1] + vec.z * mat.r[2].m128_f32[1] + 1 * mat.r[3].m128_f32[1];
+	divVec.y = vec.x * mat.r[ zeroNmbI ].m128_f32[oneNmbI ] + vec.y * mat.r[ oneNmbI ].m128_f32[ oneNmbI ] + vec.z * mat.r[ twoNmbI ].m128_f32[ oneNmbI ] + oneNmb * mat.r[ threeNmbI ].m128_f32[ oneNmbI ];
 
-	divVec.z = vec.x * mat.r[0].m128_f32[2] + vec.y * mat.r[1].m128_f32[2] + vec.z * mat.r[2].m128_f32[2] + 1 * mat.r[3].m128_f32[2];
+	divVec.z = vec.x * mat.r[ zeroNmbI ].m128_f32[twoNmbI ] + vec.y * mat.r[oneNmbI ].m128_f32[ twoNmbI ] + vec.z * mat.r[ twoNmbI ].m128_f32[ twoNmbI ] + oneNmb * mat.r[ threeNmbI ].m128_f32[ twoNmbI ];
 
-	divVec.w = vec.x * mat.r[0].m128_f32[3] + vec.y * mat.r[1].m128_f32[3] + vec.z * mat.r[2].m128_f32[3] + 1 * mat.r[3].m128_f32[3];
+	divVec.w = vec.x * mat.r[ zeroNmbI ].m128_f32[ threeNmbI ] + vec.y * mat.r[1].m128_f32[ threeNmbI ] + vec.z * mat.r[ twoNmbI ].m128_f32[ threeNmbI ] + oneNmb * mat.r[ threeNmbI ].m128_f32[ threeNmbI ];
 
 	divVec.x = divVec.x / divVec.w;
 
@@ -297,28 +272,29 @@ void Player::MouseReticle()
 	//自機のワールド座標の回転を反映
 	offset = ConvertToVector3(worldTransform_->wtf.matWorld, offset);
 	//ベクトルの長さを整える
-	Vec3Normalize(&offset, &offset);
+	//Vec3Normalize(&offset, &offset);
+	offset.nomalize();
 	offset.x *= kDistancePlayerTo3DReticle;
 	offset.y *= kDistancePlayerTo3DReticle;
 	offset.z *= kDistancePlayerTo3DReticle;
 	//3Dレティクル座標設定
 	worldTransform3DReticle_->wtf.position = {
-		offset.x + worldTransform_->wtf.matWorld.m[3][0],
-		offset.y + worldTransform_->wtf.matWorld.m[3][1],
-		offset.z + worldTransform_->wtf.matWorld.m[3][2] };
+		offset.x + worldTransform_->wtf.matWorld.m[ three ][zero],
+		offset.y + worldTransform_->wtf.matWorld.m[ three ][one],
+		offset.z + worldTransform_->wtf.matWorld.m[ three ][two] };
 	worldTransform_->Update();
 	//3Dレティクルのワールド座標から2Dレティクルのスクリーン座標を計算
-	Vector3 positionReticle = { worldTransform3DReticle_->wtf.matWorld.m[3][0],worldTransform3DReticle_->wtf.matWorld.m[3][1],worldTransform3DReticle_->wtf.matWorld.m[3][2] };
+	Vector3 positionReticle = { worldTransform3DReticle_->wtf.matWorld.m[ three ][zero],worldTransform3DReticle_->wtf.matWorld.m[ three ][one],worldTransform3DReticle_->wtf.matWorld.m[ three ][two] };
 
 	Vector2 windowWH =
 		Vector2(WinApp::window_width, WinApp::window_height);
 
 	//ビューポート行列
 	Matrix4 Viewport = {
-	   windowWH.x / 2,			  0,  0,  0,
-					0,	-windowWH.y / 2,  0,  0,
-					0,				  0,  1,  0,
-	   windowWH.x / 2,	 windowWH.y / 2,  0,  1
+	   windowWH.x / 2,			  zeroNmb,  zeroNmb,  zeroNmb,
+					zeroNmb,	-windowWH.y / twoNmb,  zeroNmb,  zeroNmb,
+					zeroNmb,				  zeroNmb,  oneNmb,  zeroNmb,
+	   windowWH.x / twoNmb,	 windowWH.y / twoNmb,  zeroNmb,  oneNmb
 	};
 
 	//ビュー行列とプロジェクション行列、ビューポート行列を合成する
@@ -354,9 +330,9 @@ void Player::MouseReticle()
 		Matrix4 matInverseVPV;
 		Matrix4::MatrixInverse(matInverseVPV, matVPV);
 		//ニアクリップ面上のワールド座標得る（スクリーン→ワールド変換）
-		Vector3 posNear = Vector3(static_cast<float> (mousePosition.x), static_cast<float> (mousePosition.y), 0);
+		Vector3 posNear = Vector3(static_cast<float> (mousePosition.x), static_cast<float> (mousePosition.y), zero);
 		//ファークリップ面上のワールド座標を得る（スクリーン→ワールド変換）
-		Vector3 posFar = Vector3(static_cast<float> (mousePosition.x), static_cast<float> (mousePosition.y), 1);
+		Vector3 posFar = Vector3(static_cast<float> (mousePosition.x), static_cast<float> (mousePosition.y), one);
 
 		//スクリーン座標系からワールド座標系へ
 		posNear = clossV3V4(posNear, ConvertXM::ConvertMat4toXMMAT(matInverseVPV));
@@ -373,7 +349,7 @@ void Player::MouseReticle()
 		mouseDirection = mouseDirection.nomalize();
 		//ニアクリップ面上のワールド座標から一定距離前進したところに3Dレティクルを配置
 		//カメラから照準オブジェクトの距離
-		const float kDistanceTestObject = 120.0f;
+
 		worldTransform3DReticle_->wtf.position = (AddVector(posNear, { mouseDirection.x * kDistanceTestObject,mouseDirection.y * kDistanceTestObject,mouseDirection.z * kDistanceTestObject }));
 
 		/*debugText_->SetPos(50, 150);
@@ -391,10 +367,10 @@ void Player::Reset()
 {
 	worldTransform_->wtf.position = playerResetPos;
 	bullets_.clear();
-	playerHp = 10;
+	playerHp = ten;
 	isDead_ = false;
 	DeadParticle = false;
-	EffectWaiteTime = 50;
+	EffectWaiteTime = five*ten;
 	worldTransform_->Update();
 }
 
@@ -413,11 +389,11 @@ Vector3 Player::GetFarNear()
 
 void Player::ReticleLimit()
 {
-	if (sprite2DReticle_->GetPosition().x <= 0) {
-		sprite2DReticle_->SetPozition({ 0,sprite2DReticle_->GetPosition().y });
+	if (sprite2DReticle_->GetPosition().x <= RetiRim ) {
+		sprite2DReticle_->SetPozition({ RetiRim,sprite2DReticle_->GetPosition().y });
 	}
-	if (sprite2DReticle_->GetPosition().y <= 0) {
-		sprite2DReticle_->SetPozition({ sprite2DReticle_->GetPosition().x,0 });
+	if (sprite2DReticle_->GetPosition().y <= RetiRim ) {
+		sprite2DReticle_->SetPozition({ sprite2DReticle_->GetPosition().x,RetiRim });
 	}
 	if (sprite2DReticle_->GetPosition().x >= winApp->window_width) {
 		sprite2DReticle_->SetPozition({ winApp->window_width,sprite2DReticle_->GetPosition().y });
@@ -429,11 +405,11 @@ void Player::ReticleLimit()
 
 void Player::PlayerLimit()
 {
-	if (worldTransform_->wtf.position.x < -4) {
-		worldTransform_->wtf.position.x = -4;
+	if (worldTransform_->wtf.position.x < -posLim ) {
+		worldTransform_->wtf.position.x = -posLim;
 	}
-	if (worldTransform_->wtf.position.x > 4) {
-		worldTransform_->wtf.position.x = 4;
+	if (worldTransform_->wtf.position.x > posLim ) {
+		worldTransform_->wtf.position.x = posLim;
 	}
 }
 
@@ -442,7 +418,7 @@ void Player::PlayerDeadParticle()
 	//パーティクル範囲
 	for (int i = 0; i < 5; i++) {
 		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 5.0f;
+		const float rnd_pos = rnd_posS;
 		Vector3 pos = worldTransform_->wtf.position;
 		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -450,20 +426,20 @@ void Player::PlayerDeadParticle()
 
 		//速度
 		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.0f;
+		const float rnd_vel = rnd_velS;
 		Vector3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.0000f;
+		const float rnd_acc = rnd_accS;
 		Vector3 acc{};
 		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
 		//追加
-		playerDeadParticle->Add(30, pos, vel, acc, 0.0f, 25.0f, 1);
-		playerDeadParticle->Add(30, pos, vel, acc, 0.0f, 25.0f, 2);
+		playerDeadParticle->Add(particleLife, pos, vel, acc,particleScaleStert,particleScaleEnd, one);
+		playerDeadParticle->Add(particleLife, pos, vel, acc,particleScaleStert,particleScaleEnd, two);
 		playerDeadParticle->Update();
 	}
 }
@@ -475,8 +451,8 @@ void Player::ParticleDraw()
 
 void Player::ClearMove()
 {
-	Vector3 move = { 0,0,1 };
-	worldTransform_->wtf.position += move;
+	
+	worldTransform_->wtf.position += clearMove;
 	worldTransform_->Update();
 }
 

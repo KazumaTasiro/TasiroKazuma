@@ -10,26 +10,25 @@ Boss::~Boss()
 
 }
 
-void Boss::Initialize(Model* enemyBulletModel, Model* enemyReticleModel, Input* input)
+void Boss::Initialize(Model* enemyBulletModel, Model* enemyReticleModel)
 {
-	assert(input);
 	assert(enemyBulletModel);
 	assert(enemyReticleModel);
 	model_ = Model::LoadFormOBJ("Sakaban");
 	enemyBulletModel_ = enemyBulletModel;
 	enemyReticleModel_ = enemyReticleModel;
-	input_ = input;
+	input_ = Input::GetInstance();
 	worldTransform_ = Object3d::Create();;
-	worldTransform_->wtf.position = { 50,200,200 };
+	worldTransform_->wtf.position = worldPs;
 	worldTransform_->SetModel(model_);
-	worldTransform_->wtf.scale = { 50,50,50 };
-	worldTransform_->wtf.rotation = { 0,(89 / PI),0 };
-	EnemyMoveSpline0 = { 0,50,200 };
+	worldTransform_->wtf.scale = worldSc;
+	worldTransform_->wtf.rotation = worldRt;
+	EnemyMoveSpline0 = EnemyMoveSpline0Ris;
 
 	worldTransformReticle_ = Object3d::Create();
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->SetModel(enemyReticleModel_);
-	worldTransformReticle_->wtf.scale = { 70,70,70 };
+	worldTransformReticle_->wtf.scale = ReticleSc;
 	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
 }
 
@@ -38,14 +37,14 @@ void Boss::Update(Player* player)
 
 	
 	assert(player);
-	if (fireCount >= 4.0f) {
+	if (fireCount >= fireCountMax ) {
 		randBossAttackNmb = rand() % 2;
 		fireCount = 0;
 	}
 	this->player_ = player;
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->Update();
-	float time_ = 0.02f;
+
 	spline->Update(time_);
 	//キャラクター移動処理
 	Move();
@@ -148,7 +147,7 @@ void Boss::OnColl()
 		//自弾の座標
 		posB = bullet->GetWorldPosition();
 
-		if (Collision::CircleCollision(posB, posA, 50.0f, 50.0f)) {
+		if (Collision::CircleCollision(posB, posA,BossColl,BossColl)) {
 			//敵キャラの衝突時コールバックを呼び出す
 			OnCollision();
 			//自弾の衝突時コールバックを呼び出す
@@ -163,7 +162,7 @@ void Boss::OnColl()
 		posB = enemyBullets->GetWorldPosition();
 
 		if (randBossAttackNmb == 0) {
-			if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
+			if (Collision::CircleCollision(posB, posA,AttackSm,AttackSm)) {
 				//プレイヤーの衝突時コールバックを呼び出す
 				player_->OnCollision();
 				//自弾の衝突時コールバックを呼び出す
@@ -171,7 +170,7 @@ void Boss::OnColl()
 			}
 		}
 		else if (randBossAttackNmb == 1) {
-			if (Collision::CircleCollision(posB, posA, 4.0f, 4.0f)) {
+			if (Collision::CircleCollision(posB, posA,AttackBig,AttackBig)) {
 				//プレイヤーの衝突時コールバックを呼び出す
 				player_->OnCollision();
 				//自弾の衝突時コールバックを呼び出す
@@ -191,7 +190,7 @@ void Boss::Reset()
 	isDead_ = false;
 	DemoEnemyMove = false;
 	lockOn = false;
-	worldTransform_->wtf.position = { 100,200,200 };
+	worldTransform_->wtf.position = PosRis;
 	EnemyHp = 10;
 	for (std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_) {
 		//自弾の衝突時コールバックを呼び出す
@@ -211,11 +210,11 @@ void Boss::Fire()
 	if (fireTime <= 0) {
 		if (randBossAttackNmb == 0) {
 			fireFlag = true;
-			fireTime = 35;
+			fireTime = fireTimeRisSm;
 		}
 		else if (randBossAttackNmb == 1) {
 			fireFlag = true;
-			fireTime = 70;
+			fireTime = fireTimeRisBig;
 		}
 
 	}
@@ -230,7 +229,7 @@ void Boss::Fire()
 			//弾を発射する
 			EnemyBullets_.push_back(std::move(newEnemyBullet));
 			fireFlag = false;
-			fireCount += 0.5f;
+			fireCount += fireCountSm;
 		}
 		if (randBossAttackNmb == 1) {
 			velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
@@ -239,11 +238,11 @@ void Boss::Fire()
 			//弾を生成し、初期化
 			std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
 			newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
-			newEnemyBullet->SetSize({ 4.0f,4.0f,4.0f });
+			newEnemyBullet->SetSize(BulletSize);
 			//弾を発射する
 			EnemyBullets_.push_back(std::move(newEnemyBullet));
 			fireFlag = false;
-			fireCount += 1.0f;
+			fireCount += fireCountBig;
 		}
 	}
 	//弾更新

@@ -336,6 +336,9 @@
     <ClCompile Include="User\Scene\GameOver.cpp">
       <Filter>ソース ファイル\Game\GameScene</Filter>
     </ClCompile>
+    <ClCompile Include="User\Scene\GameClear.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -471,6 +474,9 @@
       <Filter>ヘッダー ファイル\Engine\EngineMain\WinApp</Filter>
     </ClInclude>
     <ClInclude Include="User\Scene\GameOver.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameClear.h">
       <Filter>ヘッダー ファイル\Game\GameScene</Filter>
     </ClInclude>
   </ItemGroup>

@@ -19,7 +19,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	//モデルをセットする
 	worldTransform_->SetModel(model_);
 
-	worldTransform_->wtf.scale={ 1,1,1 };
+	worldTransform_->wtf.scale= worldSc;
 }
 
 void PlayerBullet::Update()
@@ -34,7 +34,7 @@ void PlayerBullet::Update()
 
 	worldTransform_->Update();
 	//時間経過でデス
-	if (--deathTimer_ <= 0) {
+	if (--deathTimer_ <= deathTimerEnd_ ) {
 		isDead_ = true;
 	}
 }

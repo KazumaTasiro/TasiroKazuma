@@ -21,14 +21,15 @@
 ///<summary>
 ///自キャラの行動
 ///</summary>
-class Player {
+class Player
+{
 public:
 	Player();
 	~Player();
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(SpriteCommon* spriteCommon, Input* input, WinApp* winApp_, ParticleManager* particle);
+	void Initialize(SpriteCommon* spriteCommon,ParticleManager* particle);
 	///更新
 	///</summary>
 	void Update();
@@ -39,7 +40,7 @@ public:
 	///<summary>
 	////Matrix$をVector3に
 	///</summary>
-	Vector3 ConvertToVector3(const Matrix4& mat, Vector3 vec);
+	Vector3 ConvertToVector3(const Matrix4& mat,Vector3 vec);
 	///<summary>
 	////プレイヤーの座標
 	///</summary>
@@ -60,10 +61,10 @@ public:
 	void Attack();
 
 	//弾リストを取得
-	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() {
+		return bullets_;
+	}
 
-	//ベクトルを正規化する
-	int Vec3Normalize(Vector3* pOut, Vector3* pV);
 
 	///<summary>
 	///UI描画
@@ -72,13 +73,13 @@ public:
 	///<summary>
 	////外積
 	///</summary>
-	Vector3 clossV3V4(const Vector3& vec, const XMMATRIX& mat);
+	Vector3 clossV3V4(const Vector3& vec,const XMMATRIX& mat);
 
 	/*int MatrixInverse(XMMATRIX& pOut, XMMATRIX& pM);*/
 	///<summary>
 	////Vector3を足すやつ
 	///</summary>
-	Vector3 AddVector(const Vector3 v1, const Vector3 v2);
+	Vector3 AddVector(const Vector3 v1,const Vector3 v2);
 	///<summary>
 	////マウスをレティクル
 	///</summary>
@@ -106,15 +107,19 @@ public:
 	///<summary>
 	////プレイヤーの死亡判定
 	///</summary>
-	bool retrunIsDaed() { return isDead_; }
-	///<summary>
-	////座標更新
-	///</summary>
-	void SetPos(Vector3 Pos) { worldTransform_->wtf.position = Pos; }
+	bool retrunIsDaed() {
+		return isDead_;
+	}
+///<summary>
+////座標更新
+///</summary>
+	void SetPos(Vector3 Pos) {
+		worldTransform_->wtf.position = Pos;
+	}
 
-	///<summary>
-	////死亡演出
-	///</summary>
+///<summary>
+////死亡演出
+///</summary>
 	void PlayerDeadParticle();
 	///<summary>
 	////演出描画
@@ -129,6 +134,43 @@ public:
 	///</summary>
 	void TitleMove();
 private:
+	enum Nmb
+	{
+		zero = 0,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
+	};
+	const float zeroNmb = 0.0f;
+	const float oneNmb = 1.0f;
+	const float twoNmb = 2.0f;
+	const float threeNmb = 3.0f;
+	const float fourNmb = 4.0f;
+	const float fiveNmb = 5.0f;
+	const float sixNmb = 6.0f;
+	const float sevenNmb = 7.0f;
+	const float eightNmb = 8.0f;
+	const float nineNmb = 9.0f;
+	const float tenNmb = 10.0f;
+
+	const int zeroNmbI = 0;
+	const int oneNmbI = 1;
+	const int twoNmbI = 2;
+	const int threeNmbI = 3;
+	const int fourNmbI = 4;
+	const int fiveNmbI = 5;
+	const int sixNmbI = 6;
+	const int sevenNmbI = 7;
+	const int eightNmbI = 8;
+	const int nineNmbI = 9;
+	const int tenNmbI = 10;
 	//ワールド変換データ
 	Object3d* worldTransform_;
 
@@ -173,4 +215,25 @@ private:
 	int EffectWaiteTime = 50;
 
 	ParticleManager* playerDeadParticle;
+
+	Vector3 playerSc = { 1.0f, 1.0f, 1.0f };
+	Vector3 playerPos = { 0, 0, -20 };
+
+	const float kMoveLimitX = 35.0f;
+	const float kMoveLimitY = 19.0f;
+
+	const float kBulletSpeed = 0.01f;
+	const float kDistanceTestObject = 120.0f;
+
+	int particleLife = 30;
+	float particleScaleStert = 0.0f;
+	float particleScaleEnd = 25.0f;
+	Vector3 clearMove = { 0,0,1 };
+
+	float posLim = 4;
+	float RetiRim = 0;
+
+	const float rnd_posS = 5.0f;
+	const float rnd_velS = 0.0f;
+	const float rnd_accS = 0.0000f;
 };

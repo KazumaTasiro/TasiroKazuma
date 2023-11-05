@@ -22,14 +22,14 @@ void StertCount::Initialize(SpriteCommon* spriteCommon)
 	Time1 = new Sprite();
 	TimeGo = new Sprite();
 
-	Time3->Initialize(spriteCommon_,13);
-	Time2->Initialize(spriteCommon_,14);
-	Time1->Initialize(spriteCommon_,15);
-	TimeGo->Initialize(spriteCommon_,16);
-	Time3->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
-	Time2->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
-	Time1->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
-	TimeGo->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
+	Time3->Initialize(spriteCommon_,Tex::threeSp);
+	Time2->Initialize(spriteCommon_,Tex::twoSp);
+	Time1->Initialize(spriteCommon_,Tex::oneSp);
+	TimeGo->Initialize(spriteCommon_,Tex::goSp);
+	Time3->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
+	Time2->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
+	Time1->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
+	TimeGo->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
 	//bossStertModel = Model::LoadFormOBJ("Sakaban");
 	//bossStert = new Object3d();
 	//bossStert->Initialize();
@@ -53,20 +53,20 @@ void StertCount::Draw()
 	{
 		if ( time >= CengeSeenTIme )
 		{
-			if ( nowCount == 0 )
+			if ( nowCount == GoNmb::zero )
 			{
 				Time3->Draw();
 			}
-			else if ( nowCount == 1 )
+			else if ( nowCount == GoNmb::one )
 			{
 				Time2->Draw();
 			}
-			else if ( nowCount == 2 )
+			else if ( nowCount == GoNmb::two )
 			{
 				Time1->Draw();
 			}
 		}
-		if ( time > endTime - (CengeSeenTIme*10) )
+		if ( time > endTime - ( CengeSeenTIme * GoNmb::three ) )
 		{
 			TimeGo->Draw();
 		}
@@ -106,7 +106,7 @@ void StertCount::CameraMove()
 	if ( time >= CengeSeenTIme )
 	{
 		nowCount = static_cast< int >( ( time - CengeSeenTIme ) / oneSecondTime );
-		if ( nowCount == 0 )
+		if ( nowCount == GoNmb::zero )
 		{
 			float cameraMoveAmount = RightCameraAfterPos.z - RightCameraPos.z;
 			cameraPos;
@@ -114,7 +114,7 @@ void StertCount::CameraMove()
 
 			camera_->SetEye({ RightCameraPos.x, RightCameraPos.y,RightCameraPos.z + cameraPos });
 		}
-		else if ( nowCount == 1 )
+		else if ( nowCount == GoNmb::one )
 		{
 			float cameraMoveAmount = LeftCameraAfterPos.z - LeftCameraPos.z;
 			cameraPos2 += cameraPosTime * cameraMoveAmount;
@@ -122,7 +122,7 @@ void StertCount::CameraMove()
 			camera_->SetEye({ LeftCameraPos.x, LeftCameraPos.y,LeftCameraPos.z + cameraPos2 });
 
 		}
-		else if ( nowCount == 2 )
+		else if ( nowCount == GoNmb::two )
 		{
 			float cameraMoveAmount = CenterCameraAfterPos.z - CenterCameraPos.z;
 			cameraPos3 += cameraPosTime * cameraMoveAmount;
@@ -134,9 +134,9 @@ void StertCount::CameraMove()
 
 void StertCount::Reset()
 {
-	time = 0;
-	cameraPos3 = 0;
-	cameraPos = 0;
-	cameraPos2 = 0;
+	time = GoNmb::zero;
+	cameraPos3 = GoNmb::zero;
+	cameraPos = GoNmb::zero;
+	cameraPos2 = GoNmb::zero;
 	cameraStertEnd = false;
 }

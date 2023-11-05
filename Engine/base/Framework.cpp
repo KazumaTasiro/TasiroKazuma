@@ -22,24 +22,27 @@ void Framework::Run()
 void Framework::Initialize()
 {
 	//WindowsAPIの初期化
-	winApp = new WinApp();
+	winApp = WinApp::GetInstance();
 	winApp->Initialize();
 
 	//ポインタ
 
 	dxCommon = new DirectXCommon();
-	dxCommon->Initialize(winApp);
+	dxCommon->Initialize();
 
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 	//入力の初期化
-	input = new Input();
-	input->Initalize(winApp);
+	input = Input::GetInstance();
+	input->Initalize();
+
+	imGuiManager_ = ImGuiManager::GetInstance();
+	imGuiManager_->Initialize(dxCommon);
 }
 
 void Framework::Finalize()
 {
-	//入力開放
-	delete input;
+	//ImGui開放
+	imGuiManager_->Finalize();
 	delete fps;
 
 	//DirectX解放
@@ -47,7 +50,7 @@ void Framework::Finalize()
 	//WindowsAPIの終了処理
 	winApp->Finalize();
 	//WindowsAPI解放
-	delete winApp;
+	
 }
 
 void Framework::Update()

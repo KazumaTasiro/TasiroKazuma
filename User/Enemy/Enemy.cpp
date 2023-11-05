@@ -1,9 +1,8 @@
 #include "Enemy.h"
 #include "Player.h"
 
-void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel, int EnemyNmb,int EnemyRootNmb)
+void Enemy::Initialize(Vector3 EnemyPos, SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel, int EnemyNmb,int EnemyRootNmb)
 {
-	assert(input);
 	assert(sptriteCommon);
 	assert(model);
 	assert(enemyBulletModel);
@@ -24,35 +23,43 @@ void Enemy::Initialize(Vector3 EnemyPos, Input* input, SpriteCommon* sptriteComm
 	worldTransformReticle_ = Object3d::Create();
 	worldTransformReticle_->wtf.position = EnemyPos;
 	worldTransformReticle_->SetModel(enemyReticleModel_);
-	worldTransformReticle_->wtf.scale = { 10,10,10 };
+	worldTransformReticle_->wtf.scale = EnemyReticleScale;
 
 	spriteLock = new Sprite();
-	spriteLock->Initialize(sptriteCommon, 2);
+	spriteLock->Initialize(sptriteCommon, two);
 
-	input_ = input;
+	input_ = Input::GetInstance();
 
 	enemyNmb = EnemyNmb;
 
 	worldTransform_->SetModel(model_);
 
-	worldTransform_->wtf.scale = { 3,3,3 };
-	if (EnemyRootNmb_ == 0) {
-		EnemyMoveSpline0 = { 0,0,0 };
-		EnemyMoveSpline1 = { -50,20,50 };
-		EnemyMoveSpline2 = { -20,15,100 };
-		EnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - 25, 150.0f };
-		EnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - 25, 150.0f };
-		EnemyReMoveSpline1 = { worldTransform_->wtf.position.x - 100, 30 , -50.0f };
-		EnemyReMoveSpline2 = { worldTransform_->wtf.position.x - 100, 30, 100.0f };
+	worldTransform_->wtf.scale = EnemyScale;
+	if (EnemyRootNmb_ == zero) {
+		oneEnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
+		oneEnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
+		oneEnemyReMoveSpline1 = { worldTransform_->wtf.position.x - sprineX, sprineY1 , -sprineZ1 };
+		oneEnemyReMoveSpline2 = { worldTransform_->wtf.position.x - sprineX, sprineY1, sprineZ2 };
+		EnemyMoveSpline0 = oneEnemyMoveSpline0;
+		EnemyMoveSpline1 = oneEnemyMoveSpline1;
+		EnemyMoveSpline2 = oneEnemyMoveSpline2;
+		EnemyMoveSpline0 = oneEnemyMoveSpline0;
+		EnemyReMoveSpline0 = oneEnemyReMoveSpline0;
+		EnemyReMoveSpline1 = oneEnemyReMoveSpline1;
+		EnemyReMoveSpline2 = oneEnemyReMoveSpline2;
 	}
-	else if (EnemyRootNmb_ == 1) {
-		EnemyMoveSpline0 = { 0,0,0 };
-		EnemyMoveSpline1 = { +50,20,50 };
-		EnemyMoveSpline2 = { +20,15,100 };
-		EnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - 25, 150.0f };
-		EnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - 25, 150.0f };
-		EnemyReMoveSpline1 = { worldTransform_->wtf.position.x + 100, 30 , -50.0f };
-		EnemyReMoveSpline2 = { worldTransform_->wtf.position.x + 100, 30, 100.0f };
+	else if (EnemyRootNmb_ == one) {
+		twoEnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
+		twoEnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
+		twoEnemyReMoveSpline1 = { worldTransform_->wtf.position.x + sprineX, sprineY1 , -sprineZ1 };
+		twoEnemyReMoveSpline2 = { worldTransform_->wtf.position.x + sprineX, sprineY1, sprineZ2 };
+		EnemyMoveSpline0 = twoEnemyMoveSpline0;
+		EnemyMoveSpline1 = twoEnemyMoveSpline1;
+		EnemyMoveSpline2 = twoEnemyMoveSpline2;
+		EnemyMoveSpline0 = twoEnemyMoveSpline0;
+		EnemyReMoveSpline0 = twoEnemyReMoveSpline0;
+		EnemyReMoveSpline1 = twoEnemyReMoveSpline1;
+		EnemyReMoveSpline2 = twoEnemyReMoveSpline2;
 	}
 
 	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
@@ -66,7 +73,7 @@ void Enemy::Update(Player* player)
 	this->player_ = player;
 	worldTransformReticle_->wtf.position = worldTransform_->wtf.position;
 	worldTransformReticle_->Update();
-	float time_ = 0.02f;
+	float time_ = Updatetime;
 	spline->Update(time_);
 	//worldTransformReticle_->wtf.position.z = 0;
 	//デスフラグの立った弾を削除
@@ -103,7 +110,7 @@ void Enemy::Move()
 			worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
 		}
 		if (TackleReMove) {
-			float time_ = 0.05f;
+			float time_ = Movetime;
 			splineReMove->Update(time_);
 			worldTransform_->wtf.position = splineReMove->NowPos;
 			if (splineReMove->NowPos.x == EnemyMoveSpline0.x && splineReMove->NowPos.y == EnemyMoveSpline0.y && splineReMove->NowPos.z == EnemyMoveSpline0.z) {
@@ -126,7 +133,7 @@ void Enemy::Fire()
 	fireTime--;
 	if (fireTime<=0) {
 		fireFlag = true;
-		fireTime = 45;
+		fireTime = fireTimeRis;
 
 	}
 	if (fireFlag == false) {
@@ -151,7 +158,7 @@ void Enemy::Fire()
 		if (enemyNmb == 1) {
 			worldTransform_->wtf.position += velocityTackle;
 
-			if (worldTransform_->wtf.position.z <= -50) {
+			if (worldTransform_->wtf.position.z <= tackPosLim ) {
 				TackleReMove = true;
 			}
 
@@ -233,7 +240,7 @@ void Enemy::OnColl()
 		//自弾の座標
 		posB = LockBullet->GetWorldPosition();
 
-		if (Collision::CircleCollision(posB, posA, 2.0f, 2.0f)) {
+		if (Collision::CircleCollision(posB, posA,LockWidth,LockWidth)) {
 			//敵キャラの衝突時コールバックを呼び出す
 			OnCollision();
 			//自弾の衝突時コールバックを呼び出す
@@ -247,7 +254,7 @@ void Enemy::OnColl()
 		//自弾の座標
 		posB = enemyBullets->GetWorldPosition();
 
-		if (Collision::CircleCollision(posB, posA, 1.5f, 1.5f)) {
+		if (Collision::CircleCollision(posB, posA,playerWidth,playerWidth)) {
 			//敵キャラの衝突時コールバックを呼び出す
 			player_->OnCollision();
 			//自弾の衝突時コールバックを呼び出す
@@ -260,7 +267,7 @@ void Enemy::OnColl()
 	//自弾の座標
 	posB = worldTransform_->GetWorldPosition();
 
-	if (Collision::CircleCollision(posB, posA, 1.0f, 1.0f)) {
+	if (Collision::CircleCollision(posB, posA,playerWidth,playerWidth)) {
 		//敵キャラの衝突時コールバックを呼び出す
 		player_->OnCollision();
 		//自弾の衝突時コールバックを呼び出す
@@ -270,7 +277,7 @@ void Enemy::OnColl()
 
 int Enemy::ReturnOnColl()
 {
-	if (EnemyHp <= 0) {
+	if (EnemyHp <= EnemyHpEnd ) {
 		return 1;
 	}
 	return 0;
