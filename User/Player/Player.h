@@ -16,6 +16,7 @@
 #include "FbxLoader.h"
 #include "Object3dFbx.h"
 #include "DirectXCommon.h"
+#include "Camera.h"
 
 
 ///<summary>
@@ -33,6 +34,10 @@ public:
 	///更新
 	///</summary>
 	void Update();
+	void AttackUpdate();
+	void ReticleUpdate();
+	void cameraUpdate();
+
 	void Move();
 
 	//衝突を検出したら呼び出されるコールバック関数
@@ -133,6 +138,17 @@ public:
 	////タイトル時の行動
 	///</summary>
 	void TitleMove();
+
+	//プレイヤーのHPバー更新
+	void PlayerHpUpdate();
+
+	void SetCamera(Camera* camera) {
+		camera_ = camera;
+	}
+
+	void DamageShakeUpdate();
+
+	void ResetDamageFlag();
 private:
 	enum Nmb
 	{
@@ -188,12 +204,22 @@ private:
 	uint32_t textureHandle_ = 0u;
 	Input* input_ = nullptr;
 
+	Camera* camera_ = nullptr;
+
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	//2Dレティクル用スプライト
 	Sprite* sprite2DReticle_;
 	Sprite* sprite2DReticleLock_;
 	SpriteCommon* spriteCommon_ = nullptr;
+
+	Sprite* playerHPNone;
+	Sprite* playerHPMax;
+
+	float hpSpriteHight = 124.0f;
+	Vector2 spriteHpSize = {};
+	Vector2 spritePos = { 16.0f,156.0f };
+
 	//デスフラグ
 	bool isDead_ = false;
 	WinApp* winApp = nullptr;
@@ -208,7 +234,8 @@ private:
 
 	const float speed = 0.5f;
 
-	int playerHp;
+	float playerHp;
+	float playerMaxHp = 10.0f;
 
 	bool DeadParticle = false;
 
@@ -236,4 +263,23 @@ private:
 	const float rnd_posS = 5.0f;
 	const float rnd_velS = 0.0f;
 	const float rnd_accS = 0.0000f;
+
+	float damageShakeX = 0.0f;
+	float damageShakeY = 0.0f;
+	float damageShakeZ = 0.0f;
+
+	Vector3 damageShakeBefor;
+
+
+	float shakeLimit = 0.5f;
+
+	bool shakeFlag = false;
+
+	Sprite* damageEffect = nullptr;
+
+	int shakeTime = 10;
+	int shakeTimeRe = 10;
+
+	int playerAttckTime = 5;
+	int playerAttckTimeRe = 5;
 };

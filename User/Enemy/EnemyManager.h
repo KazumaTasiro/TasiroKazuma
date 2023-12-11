@@ -9,6 +9,7 @@
 #include "LockOnBullet.h"
 #include "ParticleManager.h"
 #include "Boss.h"
+#include "Sprite.h"
 
 
 class Player;
@@ -140,12 +141,16 @@ private:
 	//敵発生コマンド
 	std::stringstream enemyPopCommands;
 
+	Sprite* spriteRight;
+	Sprite* spriteLeft;
+
 	bool waitflag = false;
 	int waitTimer = 0;
 	Camera* camera_ = nullptr;
+	int enemyDeath = 0;
 	int clearCount = 0;
 	int clearCountRis = 0;
-	int clearNum = 5;
+	int clearNum = 3;
 
 	int clearTime = 400;
 	int clearTimeRis = 400;
@@ -184,4 +189,6 @@ private:
 
 	float bossWide = 50.0f;
 	float enemyWide = 3.0f;
+
+	float dengerTimer = 180.0f;
 };

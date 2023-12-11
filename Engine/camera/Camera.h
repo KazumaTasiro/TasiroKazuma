@@ -191,9 +191,9 @@ protected: // メンバ変数
 	// アスペクト比
 	float aspectRatio = 1.0f;
 
-	float focalLengs = 50;
+	float focalLengs = 30;
 	float sensor = 35;
 
 	float nearCam = 0.1f;
-	float farCam = 1000.0f;
+	float farCam = 4500.0f;
 };

@@ -56,6 +56,9 @@ public:
 	bool stertEnd() {
 		return cameraStertEnd;
 	}
+	bool GoStert() {
+		return goStert;
+	}
 private:
 	enum GoNmb
 	{
@@ -121,4 +124,6 @@ private:
 	Vector3 CameraMoveSpline2 = { -20,30,100 };
 
 	SplinePosition* spline = nullptr;
+
+	bool goStert = false;
 };

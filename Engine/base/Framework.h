@@ -5,6 +5,7 @@
 #include "FPS.h"
 #include "FbxLoader.h"
 #include "ImGuiManager.h"
+#include "ParticleManager.h"
 
 //ゲーム全体
 class Framework

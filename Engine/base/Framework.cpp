@@ -35,6 +35,9 @@ void Framework::Initialize()
 	input = Input::GetInstance();
 	input->Initalize();
 
+	//particleMana_ = ParticleManager::GetInstance();
+	//particleMana_->Initialize();
+
 	imGuiManager_ = ImGuiManager::GetInstance();
 	imGuiManager_->Initialize(dxCommon);
 }

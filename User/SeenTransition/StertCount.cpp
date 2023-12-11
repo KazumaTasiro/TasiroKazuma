@@ -39,6 +39,7 @@ void StertCount::Initialize(SpriteCommon* spriteCommon)
 	camera_->SetTarget(PlayerPos);
 	cameraPosTime = 1.0f / oneSecondTime;
 	//easing = new Easing();
+	CameraUpdate();
 }
 
 void StertCount::Update()
@@ -124,10 +125,15 @@ void StertCount::CameraMove()
 		}
 		else if ( nowCount == GoNmb::two )
 		{
+			goStert = true;
 			float cameraMoveAmount = CenterCameraAfterPos.z - CenterCameraPos.z;
 			cameraPos3 += cameraPosTime * cameraMoveAmount;
 
 			camera_->SetEye({ CenterCameraAfterPos.x, CenterCameraAfterPos.y,CenterCameraPos.z + cameraPos3 });
+		}
+		else
+		{
+
 		}
 	}
 }
@@ -139,4 +145,5 @@ void StertCount::Reset()
 	cameraPos = GoNmb::zero;
 	cameraPos2 = GoNmb::zero;
 	cameraStertEnd = false;
+	goStert = false;
 }

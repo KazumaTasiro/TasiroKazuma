@@ -11,6 +11,7 @@
 #include "Collision.h"
 #include "SplinePosition.h"
 #include "EnemyBullet.h"
+#include "ParticleManager.h"
 
 ///<summary>
 ///敵キャラ
@@ -51,6 +52,11 @@ public:
 	///UI描画
 	///</summary>
 	void DrawUI();
+
+	///<summary>
+	///描画
+	///</summary>
+	void ParticleDraw();
 
 	////行動フェーズ
 	//enum class Phase {
@@ -111,11 +117,14 @@ public:
 	///</summary>
 	void CollTackle();
 	///<summary>
-	////敵の登場中じゃないか
+	////敵の登場中じゃないかｄぷか
 	///</summary>
 	bool GetMoveFlag(){return DemoEnemyMove;}
 
+	void DamageParticle();
+
 private:
+	float PI = 3.141592f;
 	enum Nmb
 	{
 		zero = 0,
@@ -179,7 +188,7 @@ private:
 	Player* player_ = nullptr;
 	float playerWidth = 1.5f;
 
-	int EnemyHp = 1;
+	int EnemyHp = 3;
 	int EnemyHpEnd = 0;
 
 	//デスフラグ
@@ -212,7 +221,7 @@ private:
 	Vector3 velocityTackle;
 
 	int EnemyRootNmb_ = 0;
-	Vector3 EnemyScale = { 3,3,3 };
+	Vector3 EnemyScale = { 5,5,5 };
 	Vector3 EnemyReticleScale = { 10,10,10 };;
 
 	Vector3 oneEnemyMoveSpline1 = { -50,20,50 };
@@ -229,6 +238,20 @@ private:
 	Vector3 twoEnemyReMoveSpline1 = { };
 	Vector3 twoEnemyReMoveSpline2 = {  };
 
+	Vector3 threeEnemyMoveSpline1 = { 10,20,-10 };
+	Vector3 threeEnemyMoveSpline2 = { 10,15, -5 };
+	Vector3 threeEnemyMoveSpline0 = {  };
+	Vector3 threeEnemyReMoveSpline0 = {  };
+	Vector3 threeEnemyReMoveSpline1 = { };
+	Vector3 threeEnemyReMoveSpline2 = {  };
+
+	Vector3 fourEnemyMoveSpline1 = { -10,20,-10 };
+	Vector3 fourEnemyMoveSpline2 = { -10,15, -5};
+	Vector3 fourEnemyMoveSpline0 = {  };
+	Vector3 fourEnemyReMoveSpline0 = {  };
+	Vector3 fourEnemyReMoveSpline1 = { };
+	Vector3 fourEnemyReMoveSpline2 = {  };
+
 	float sprineX = 100.0f;
 	float sprineY1 = 30.0f;
 	float sprineY2 = 25.0f;
@@ -239,4 +262,10 @@ private:
 
 	float Movetime = 0.05f;
 	float Updatetime = 0.02f;
+
+	ParticleManager* particleMana_ = nullptr;
+
+	int particleLife = 10;
+	float particleScaleStert = 2.0f;
+	float particleScaleEnd = 1.0f;
 };

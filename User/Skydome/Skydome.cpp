@@ -15,10 +15,13 @@ void Skydome::Initalize()
 
 void Skydome::Update()
 {
-
+	worldTransform_->Update();
 }
 
 void Skydome::Draw()
 {
+	//worldTransform_->wtf.position += skydomePos2;
+	//worldTransform_->wtf.scale = skydomeScale;
+	//worldTransform_->Update();
 	worldTransform_->Draw();
 }

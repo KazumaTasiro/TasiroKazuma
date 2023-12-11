@@ -11,6 +11,7 @@
 #include "Collision.h"
 #include "SplinePosition.h"
 #include "EnemyBullet.h"
+#include "ParticleManager.h"
 
 class GameScene;
 class Player;
@@ -48,6 +49,10 @@ public:
 	///</summary>
 	void Draw();
 	///<summary>
+	///描画
+	///</summary>
+	void ParticleDraw();
+	///<summary>
 	////ゲームシーンの設定
 	///</summary>
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
@@ -76,6 +81,8 @@ public:
 	///ボスの弾発射関数
 	///</summary>
 	void Fire();
+
+	void DamageParticle();
 private:
 
 	int randBossAttackNmb = 0;
@@ -166,4 +173,10 @@ private:
 	float time_ = 0.02f;
 
 	Vector3 BulletSize = { 4.0f,4.0f,4.0f };
+
+	ParticleManager* particleMana_ = nullptr;
+
+	int particleLife = 10;
+	float particleScaleStert = 15.0f;
+	float particleScaleEnd = 1.0f;
 };

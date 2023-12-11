@@ -23,11 +23,14 @@
 #include "SeenTransition.h"
 #include "StertCount.h"
 #include "GameOver.h"
+#include "GameClear.h"
+#include "RailCamera.h"
 
 ///<summary>
 ///ボスの生成と行動
 ///</summary>
-class GameScene {
+class GameScene
+{
 public:
 	/// <summary>
 	/// コンストクラタ
@@ -42,7 +45,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize( DirectXCommon* dxcomon);
+	void Initialize(DirectXCommon* dxcomon);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -73,7 +76,8 @@ public:
 	///</summary>
 	void TitleReset();
 
-
+	//カーソルが画面外に出ない処理
+	void CursorLimit();
 
 
 private:
@@ -87,6 +91,8 @@ private:
 	};
 	Scene scene;
 private:
+
+	RailCamera* railCamera = nullptr;
 	///自キャラ
 	Player* player_ = nullptr;
 
@@ -107,6 +113,9 @@ private:
 
 	Camera* camera_ = nullptr;
 
+	RECT rcClip;
+	RECT rcOldClip;
+
 	//OBJからモデルデータを読み込む
 	Model* model_ = nullptr;
 
@@ -123,7 +132,11 @@ private:
 	Sprite* stert_ = nullptr;
 	Sprite* gameClear_ = nullptr;
 	Sprite* gameOver_ = nullptr;
+	Sprite* operation_ = nullptr;
+	Sprite* cameraMoveOps_ = nullptr;
+
 	Vector2 spriteEnd_;
+	Vector2 operationPos = {128,64};
 
 	bool playMove = true;
 
@@ -134,6 +147,7 @@ private:
 	ParticleManager* ParticleMana_;
 
 	GameOverSeen* gameOverSeen = nullptr;
+	GameClearScene* gameClearScene = nullptr;
 
 
 	Vector3 cameraTitle = { 0,0,10 };
@@ -162,6 +176,9 @@ private:
 		ten = 10,
 	};
 
+	bool DemoClear = false;
 	float gameOverUp = 80.0f;
 	float gamestertUp = 50.0f;
+
+	float bossTime = 10.0f;
 };

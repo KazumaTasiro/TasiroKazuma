@@ -25,6 +25,11 @@ void Enemy::Initialize(Vector3 EnemyPos, SpriteCommon* sptriteCommon,Model* mode
 	worldTransformReticle_->SetModel(enemyReticleModel_);
 	worldTransformReticle_->wtf.scale = EnemyReticleScale;
 
+	particleMana_ = new ParticleManager();
+	particleMana_->Initialize();
+	particleMana_->LoadTexture("EnemyDamageParticle.png");
+
+
 	spriteLock = new Sprite();
 	spriteLock->Initialize(sptriteCommon, two);
 
@@ -33,6 +38,7 @@ void Enemy::Initialize(Vector3 EnemyPos, SpriteCommon* sptriteCommon,Model* mode
 	enemyNmb = EnemyNmb;
 
 	worldTransform_->SetModel(model_);
+	worldTransform_->wtf.rotation = { 0,( PI / 180 ) * 180,0 };
 
 	worldTransform_->wtf.scale = EnemyScale;
 	if (EnemyRootNmb_ == zero) {
@@ -60,6 +66,16 @@ void Enemy::Initialize(Vector3 EnemyPos, SpriteCommon* sptriteCommon,Model* mode
 		EnemyReMoveSpline0 = twoEnemyReMoveSpline0;
 		EnemyReMoveSpline1 = twoEnemyReMoveSpline1;
 		EnemyReMoveSpline2 = twoEnemyReMoveSpline2;
+	}
+	else if ( EnemyRootNmb_ == three )
+	{
+		DemoEnemyMove = true;
+		enemyNmb = 1;
+	}
+	else if ( EnemyRootNmb_ == four )
+	{
+		DemoEnemyMove = true;
+		enemyNmb = 1;
 	}
 
 	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
@@ -90,6 +106,7 @@ void Enemy::Update(Player* player)
 	if (EnemyHp <= 0) {
 		isDead_ = true;
 	}
+	particleMana_->Update();
 	OnColl();
 }
 
@@ -124,7 +141,14 @@ void Enemy::Move()
 
 		}
 	}
-
+	velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
+	velocity_.nomalize();
+	velocity_ *= verocitySpeed;
+	//進行方向に見た目の回転を合わせる
+	worldTransform_->wtf.rotation.y = std::atan2(velocity_.x,velocity_.z);
+	Vector3 temp = velocity_;
+	temp.y = 0.0f;
+	worldTransform_->wtf.rotation.x = std::atan2(-velocity_.y,temp.length());
 	worldTransform_->Update();
 }
 
@@ -196,19 +220,26 @@ Vector3 Enemy::GetWorldPosition()
 
 void Enemy::Draw()
 {
-	//弾更新
-	for (std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_) {
-		LockBullet->Draw();
-	}
-	//弾更新
-	for (std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_) {
-		enemyBullet->Draw();
-	}
-	worldTransform_->Draw();
-	if (lockOn) {
-		worldTransformReticle_->Draw();
+	if ( isDead_ == false )
+	{
+//弾更新
+		for ( std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_ )
+		{
+			LockBullet->Draw();
+		}
+		//弾更新
+		for ( std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_ )
+		{
+			enemyBullet->Draw();
+		}
+		worldTransform_->Draw();
+		if ( lockOn )
+		{
+			worldTransformReticle_->Draw();
+		}
 	}
 }
+
 
 void Enemy::DrawUI()
 {
@@ -217,9 +248,19 @@ void Enemy::DrawUI()
 	//}
 }
 
+void Enemy::ParticleDraw()
+{
+	for ( std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_ )
+	{
+		LockBullet->ParticleDraw();
+	}
+	particleMana_->Draw();
+}
+
 void Enemy::OnCollision()
 {
 	EnemyHp--;
+	DamageParticle();
 
 }
 
@@ -271,7 +312,7 @@ void Enemy::OnColl()
 		//敵キャラの衝突時コールバックを呼び出す
 		player_->OnCollision();
 		//自弾の衝突時コールバックを呼び出す
-		CollTackle();
+		//CollTackle();
 	}
 }
 
@@ -286,4 +327,36 @@ int Enemy::ReturnOnColl()
 void Enemy::CollTackle()
 {
 	isTackleDead_ = true;
+}
+
+void Enemy::DamageParticle()
+{
+		//パーティクル範囲
+	for ( int i = 0; i < 50; i++ )
+	{
+//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = 0.0f;
+		Vector3 pos = worldTransform_->wtf.position;
+		pos.x += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+		//速度
+		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+		const float rnd_vel = 1.5f;
+		Vector3 vel{};
+		vel.x = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+		const float rnd_acc = 0.0f;
+		Vector3 acc{};
+		acc.x = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+
+		//追加
+		particleMana_->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,one);
+		//particleMana_->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,two);
+		particleMana_->Update();
+	}
 }

@@ -14,6 +14,10 @@ void LockOnBullet::Initialize(Model* model, const Vector3& position)
 
 	model_ = model;
 
+	particle = new ParticleManager();
+	particle->Initialize();
+	particle->LoadTexture("LockOnParticle.png");
+	
 
 	//ワールドトランスフォームの初期化
 	worldTransform_ = Object3d::Create();
@@ -47,6 +51,8 @@ void LockOnBullet::Update(const Vector3& enemyPos)
 	//座標を移動させる(1フレーム文の移動量を足しこむ)
 	worldTransform_->wtf.position += velocity_;
 
+	AddParticle();
+	//particle->Update();
 	worldTransform_->Update();
 	//時間経過でデス
 	if (--deathTimer_ <= 0) {
@@ -57,6 +63,43 @@ void LockOnBullet::Update(const Vector3& enemyPos)
 void LockOnBullet::Draw()
 {
 	worldTransform_->Draw();
+}
+
+void LockOnBullet::ParticleDraw()
+{
+	particle->Draw();
+}
+
+void LockOnBullet::AddParticle()
+{
+		//パーティクル範囲
+	for ( int i = 0; i < 8; i++ )
+	{
+		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = rnd_posS;
+		Vector3 pos = worldTransform_->wtf.position;
+		pos.x += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+		//速度
+		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
+		const float rnd_vel = rnd_velS;
+		Vector3 vel{};
+		vel.x = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
+		const float rnd_acc = rnd_accS;
+		Vector3 acc{};
+		acc.x = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+
+		//追加
+		particle->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,2);
+		//particle->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,two);
+		particle->Update();
+	}
 }
 
 void LockOnBullet::OnCollision()

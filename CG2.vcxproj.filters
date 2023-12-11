@@ -196,6 +196,12 @@
     <Filter Include="ヘッダー ファイル\Game\SeenTransition">
       <UniqueIdentifier>{653be80e-ecfb-46b0-8cc6-ff25f397b8a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\RailCamera">
+      <UniqueIdentifier>{7ec42897-32e5-4dbc-a2af-8f1aff2edd91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\RailCamera">
+      <UniqueIdentifier>{42cba3bf-6ca6-421d-bc36-310b9abfca81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -339,6 +345,12 @@
     <ClCompile Include="User\Scene\GameClear.cpp">
       <Filter>ソース ファイル\Game\GameScene</Filter>
     </ClCompile>
+    <ClCompile Include="User\RailCamera\RailCamera.cpp">
+      <Filter>ソース ファイル\Game\RailCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyBothSides.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -478,6 +490,12 @@
     </ClInclude>
     <ClInclude Include="User\Scene\GameClear.h">
       <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\RailCamera\RailCamera.h">
+      <Filter>ヘッダー ファイル\Game\RailCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyBothSides.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
