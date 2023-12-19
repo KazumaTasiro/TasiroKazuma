@@ -279,9 +279,6 @@
     <ClCompile Include="User\Player\LockOnBullet.cpp">
       <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="User\Player\PlayerBullet.cpp">
-      <Filter>ソース ファイル\Game\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="User\Enemy\Boss.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
@@ -296,9 +293,6 @@
     </ClCompile>
     <ClCompile Include="User\Scene\GameScene.cpp">
       <Filter>ソース ファイル\Game\GameScene</Filter>
-    </ClCompile>
-    <ClCompile Include="User\Player\Player.cpp">
-      <Filter>ソース ファイル\Game\Player</Filter>
     </ClCompile>
     <ClCompile Include="User\Skydome\Road.cpp">
       <Filter>ソース ファイル\Game\Road</Filter>
@@ -350,6 +344,12 @@
     </ClCompile>
     <ClCompile Include="User\Enemy\EnemyBothSides.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Player\Player.cpp">
+      <Filter>ソース ファイル\Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Player\PlayerBullet.cpp">
+      <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -425,9 +425,6 @@
     <ClInclude Include="User\Player\LockOnBullet.h">
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="User\Player\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\Game\Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="User\Enemy\Boss.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
@@ -442,9 +439,6 @@
     </ClInclude>
     <ClInclude Include="User\Scene\GameScene.h">
       <Filter>ヘッダー ファイル\Game\GameScene</Filter>
-    </ClInclude>
-    <ClInclude Include="User\Player\Player.h">
-      <Filter>ヘッダー ファイル\Game\Player</Filter>
     </ClInclude>
     <ClInclude Include="User\Skydome\Road.h">
       <Filter>ヘッダー ファイル\Game\Road</Filter>
@@ -496,6 +490,12 @@
     </ClInclude>
     <ClInclude Include="User\Enemy\EnemyBothSides.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Player\Player.h">
+      <Filter>ヘッダー ファイル\Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Player\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
