@@ -25,6 +25,7 @@
 #include "GameOver.h"
 #include "GameClear.h"
 #include "RailCamera.h"
+#include "LightGroup.h"
 
 ///<summary>
 ///ボスの生成と行動
@@ -79,6 +80,7 @@ public:
 	//カーソルが画面外に出ない処理
 	void CursorLimit();
 
+	void LightUpdate();
 
 private:
 	enum Scene
@@ -181,4 +183,11 @@ private:
 	float gamestertUp = 50.0f;
 
 	float bossTime = 10.0f;
+
+	LightGroup* lightGroup = nullptr;
+
+	Vector4  circleShadowDir = { 0,-1,0,0 };
+	Vector3  circleShadowAtten = { 0.5f,0.6f,0.0f };
+	Vector2  circleShadowFactorAngle = { 0.0f,0.5f };
+	
 };

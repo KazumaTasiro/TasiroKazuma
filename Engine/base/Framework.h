@@ -6,6 +6,7 @@
 #include "FbxLoader.h"
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
+#include "LightGroup.h"
 
 //ゲーム全体
 class Framework
@@ -54,4 +55,6 @@ private:
 	FPS* fps = new FPS;
 	//メッセージ
 	MSG msg{};
+	//ライト
+	LightGroup* light = nullptr;
 };

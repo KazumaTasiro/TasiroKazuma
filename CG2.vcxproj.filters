@@ -202,6 +202,12 @@
     <Filter Include="ソース ファイル\Game\RailCamera">
       <UniqueIdentifier>{42cba3bf-6ca6-421d-bc36-310b9abfca81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\3D\Light">
+      <UniqueIdentifier>{b2061d3b-8b48-4cbe-8b86-d668f05b3f98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3D\Light">
+      <UniqueIdentifier>{a4e64b80-47d6-4b5f-962a-9a2fde1d16da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -351,6 +357,18 @@
     <ClCompile Include="User\Enemy\EnemyBothSides.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\LIght\LightGroup.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LIght\CircleShadow.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LIght\PointLight.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LIght\DirectionalLight.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -496,6 +514,21 @@
     </ClInclude>
     <ClInclude Include="User\Enemy\EnemyBothSides.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\LightGroup.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\CircleShadow.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\PointLight.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\SpotLight.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\DirectionalLight.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

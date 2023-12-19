@@ -140,19 +140,33 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	railCamera->Initialize();
 	railCamera->Update();
 
+	lightGroup = LightGroup::Create();
+
+	lightGroup->SetDirLightActive(0,true);
+	lightGroup->SetPointLightActive(0,true);
+	lightGroup->SetCircleShadowActive(0,true);
+
+	Object3d::SetLight(lightGroup);
+
 	PhaseReset();
 }
 void GameScene::Update()
 {
+
 	//CursorLimit();
 	ImGuiMan_->Bigin();
-
-
-	//デモウィンドウの表示ON
+#ifdef _DEBUG
+		//デモウィンドウの表示ON
 	ImGui::ShowDemoWindow();
 
+	ImGui::InputFloat3("circleShadowDirX",&circleShadowDir.x);
+	ImGui::InputFloat3("circleShadowAttenX",&circleShadowAtten.x);
+	ImGui::InputFloat2("circleShadowFactorAngleX",&circleShadowFactorAngle.x);
+
+#endif // DEBUG
 	//player_->SetPos({ player_->GetWorldPosition().x ,player_->GetWorldPosition().y,playPos });
 	ImGuiMan_->End();
+	LightUpdate();
 	skydome_->Update();
 	switch ( scene )
 	{
@@ -447,7 +461,10 @@ void GameScene::Draw()
 		break;
 	}
 	seenTransition_->Draw();
-	//ImGuiMan_->Draw();
+	ImGuiMan_->Draw();
+
+
+	
 
 }
 
@@ -498,6 +515,16 @@ void GameScene::CursorLimit()
 	GetWindowRect(winApp_->GetHwnd(),&rcClip);
 	ClipCursor(&rcClip);
 	ClipCursor(&rcOldClip);
+}
+
+void GameScene::LightUpdate()
+{
+	lightGroup->Update();
+
+	lightGroup->SetCircleShadowDir(0,circleShadowDir);
+	lightGroup->SetCircleShadowCasterPos(0,player_->GetWorldPosition());
+	lightGroup->SetCircleShadowAtten(0,circleShadowAtten);
+	lightGroup->SetCircleShadowFactorAngle(0,circleShadowFactorAngle);
 }
 
 

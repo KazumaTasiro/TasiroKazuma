@@ -230,7 +230,7 @@ private:
 	Vector3 moveLimit = { 20,20,20 };
 	bool limitIn = false;
 
-	Vector3 playerResetPos = { 0,-2.5f,0 };
+	Vector3 playerResetPos = { 0,-0.5f,0 };
 
 	const float speed = 0.5f;
 
@@ -280,6 +280,6 @@ private:
 	int shakeTime = 10;
 	int shakeTimeRe = 10;
 
-	int playerAttckTime = 5;
-	int playerAttckTimeRe = 5;
+	int playerAttckTime = 20;
+	int playerAttckTimeRe = 20;
 };

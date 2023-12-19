@@ -4,6 +4,7 @@
 #include <cassert>
 #include "Input.h"
 #include "Vector3.h"
+#include "ParticleManager.h"
 
 
 ///<summary>
@@ -37,7 +38,12 @@ public:
 	///</summary>
 	Vector3 GetWorldPosition();
 
+	void AddParticle();
 
+	///<summary>
+	///描画
+	///</summary>
+	void ParticleDraw();
 
 private:
 	//ワールド変換データ
@@ -55,7 +61,7 @@ private:
 	//速度
 	Vector3 velocity_;
 	//寿命<fim>
-	static const int32_t kLifeTime = 60 * 5;
+	static const int32_t kLifeTime = 60 * 3;
 	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
 		//デスタイマー
@@ -64,4 +70,14 @@ private:
 	bool isDead_ = false;
 
 	Vector3 worldSc = { 1,1,1 };
+
+	ParticleManager* particle;
+
+	float rnd_accS = 0.0005f;
+	float rnd_velS = 0;
+	float rnd_posS = 0;
+
+	int particleLife = 80;
+	float particleScaleStert = 2.0f;
+	float particleScaleEnd = 0;
 };

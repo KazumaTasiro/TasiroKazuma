@@ -122,11 +122,7 @@ void Player::AttackUpdate()
 	}
 	if ( isDead_ == false )
 	{
-		if ( playerAttckTime <= 0 )
-		{
-			Attack();
-			playerAttckTime = playerAttckTimeRe;
-		}
+		Attack();
 	}
 }
 
@@ -258,21 +254,26 @@ void Player::Attack()
 {
 	if ( input_->TriggerMouse(zero) )
 	{
+		if ( playerAttckTime <= 0 )
+		{
 		//弾の速度
 
-		Vector3 velocity(zero,zero,kBulletSpeed);
+			Vector3 velocity(zero,zero,kBulletSpeed);
 
-		//速度ベクトルを自機の向きに合わせて回転させる
-		velocity = ConvertToVector3(worldTransform_->wtf.matWorld,velocity);
+			//速度ベクトルを自機の向きに合わせて回転させる
+			velocity = ConvertToVector3(worldTransform_->wtf.matWorld,velocity);
 
-		//自機から標準オブジェクトへのベクトル
-		velocity = worldTransform3DReticle_->wtf.position - worldTransform_->wtf.position;
-		velocity.nomalize();
-		//弾を生成し、初期化
-		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(bulletModel_,GetWorldPosition(),velocity);
-		//弾を発射する
-		bullets_.push_back(std::move(newBullet));
+			//自機から標準オブジェクトへのベクトル
+			velocity = worldTransform3DReticle_->wtf.position - worldTransform_->wtf.position;
+			velocity.nomalize();
+			//弾を生成し、初期化
+			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+			newBullet->Initialize(bulletModel_,GetWorldPosition(),velocity);
+			//弾を発射する
+			bullets_.push_back(std::move(newBullet));
+
+			playerAttckTime = playerAttckTimeRe;
+		}
 	}
 }
 
@@ -294,7 +295,7 @@ void Player::DrawUI()
 		sprite2DReticle_->Draw();
 	}
 
-	if ( shakeFlag||isDead_)
+	if ( shakeFlag || isDead_ )
 	{
 		damageEffect->Draw();
 	}
@@ -532,6 +533,11 @@ void Player::PlayerDeadParticle()
 void Player::ParticleDraw()
 {
 	playerDeadParticle->Draw();
+	for ( std::unique_ptr<PlayerBullet>& bullet : bullets_ )
+	{
+		bullet->ParticleDraw();
+	}
+	
 }
 
 void Player::ClearMove()
@@ -565,7 +571,7 @@ void Player::DamageShakeUpdate()
 		damageShakeX = ( float ) rand() / RAND_MAX * shakeLimit - shakeLimit / 2.0f;
 		damageShakeY = ( float ) rand() / RAND_MAX * shakeLimit - shakeLimit / 2.0f;
 		damageShakeZ = ( float ) rand() / RAND_MAX * shakeLimit - shakeLimit / 2.0f;
-		damageShakeBefor = { damageShakeBefor.x-damageShakeX ,damageShakeBefor.y -damageShakeY,damageShakeBefor.z -damageShakeZ };
+		damageShakeBefor = { damageShakeBefor.x - damageShakeX ,damageShakeBefor.y - damageShakeY,damageShakeBefor.z - damageShakeZ };
 	}
 
 	if ( shakeTime < 0 )
