@@ -9,45 +9,30 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
+#include <vector>
+#include <memory>
 
 class LightGroup
 {
-private://エイリアス
-	//Microsoft::WRL::を省略
-	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
-	////DirecX::を省略
-	//using Vector2 = DirectX::XMFLOAT2;
-	//using Vector3 = DirectX::XMFLOAT3;
-	//using Vector4 = DirectX::XMFLOAT4;
-	//using Vector4 = DirectX::XMVECTOR;
-	//using Matrix4 = DirectX::XMMATRIX;
-
-public: 
-	static const int DirLightNum = 3;
-
-	//点光源の数
-	static const int PointLightNum = 3;
-
-	//スポットライトの数
-	static const int SpotLightNum = 3;
-
-	//丸影の数
-	static const int CircleShadowNum = 1;
-
 public://サブクラス
+	const static uint32_t lightCount = 3;
+	const static uint32_t shadowCount = 30;
 	struct ConstBufferData
 	{
 		Vector3 ambientColor;
 		float pad1;
 
-		//平行光源
-		DirectionalLight::ConstBufferData dirLights[DirLightNum];
+		uint32_t pointLightCount = 0;
+		uint32_t spotLightCount = 0;
+		uint32_t circleShadowCount = 0;
+		float pad2;
+
 		//点光源用
-		PointLight::ConstBufferData pointLights[PointLightNum];
+		PointLight::ConstBufferData pointLights[ lightCount ];
 		//スポットライト用
-		SpotLight::ConstBufferData spotLights[SpotLightNum];
+		SpotLight::ConstBufferData spotLights[ lightCount ];
 		//丸影用
-		CircleShadow::ConstBufferData circleShadows[CircleShadowNum];
+		CircleShadow::ConstBufferData circleShadows[ shadowCount ];
 	};
 	HRESULT result;
 
@@ -58,7 +43,7 @@ private://静的メンバ変数
 public:
 	//静的メンバ関数
 
-	static void StaticInitialize(ID3D12Device* devices);
+	static void StaticInitialize(ID3D12Device* device);
 
 public:
 	/// <summary>
@@ -85,10 +70,7 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParameterIndex);
-
-	//標準ライト
-	void DefaultLightSetting();
+	void Draw(ID3D12GraphicsCommandList* cmdList,UINT rootParameterIndex);
 
 	//平行
 	void SetAmbientColor(const Vector3& color) {
@@ -96,131 +78,56 @@ public:
 		dirty = true;
 	}
 
-	void SetDirLightActive(int index, bool active) {
-		assert(0 <= index && index < DirLightNum);
-		dirLights[index].SetActive(active);
+	uint32_t SetPointLight(const PointLight& pointLight) {
+		dirty = true;
+		pointLights.push_back(pointLight);
+		return static_cast< uint32_t >( pointLights.size() - 1 );
 	}
 
-	void SetDirLightDir(int index, const Vector4& lightdir) {
-		assert(0 <= index && index < DirLightNum);
-		dirLights[index].SetLightDir(lightdir);
+	uint32_t SetSpotLight(const SpotLight& spotLight) {
 		dirty = true;
-	}
-	void SetDirLightColor(int index, const Vector3& lightcolor) {
-		assert(0 <= index && index < DirLightNum);
-		dirLights[index].SetLightColor(lightcolor);
-		dirty = true;
+		spotLights.push_back(spotLight);
+		return static_cast< uint32_t >( spotLights.size() - 1 );
 	}
 
-	//点光源
-	void SetPointLightActive(int index, bool active) {
-		assert(0 <= index && index < PointLightNum);
-		pointLights[index].SetActive(active);
+	uint32_t SetCircleShadow(const CircleShadow& circleShadow) {
+		dirty = true;
+		circleShadows.push_back(circleShadow);
+		return static_cast< uint32_t >( circleShadows.size() - 1 );
 	}
 
-	void SetPointLightPos(int index, const Vector3& lightPos) {
-		assert(0 <= index && index < PointLightNum);
-		pointLights[index].SetLightPos(lightPos);
+	void SetPointLightUpdate(const PointLight& pointLight,const uint32_t& lightNumbar) {
 		dirty = true;
+		pointLights[ lightNumbar ] = pointLight;
 	}
 
-	void SetPointLightColor(int index, const Vector3& lightcolor) {
-		assert(0 <= index && index < PointLightNum);
-		pointLights[index].SetLightColor(lightcolor);
+	void SetSpotLightUpdate(const SpotLight& spotLight,const uint32_t& lightNumbar) {
 		dirty = true;
+		spotLights[ lightNumbar ] = spotLight;
 	}
 
-	void SetPointLightAtten(int index, const Vector3& lightAtten) {
-		assert(0 <= index && index < PointLightNum);
-		pointLights[index].SetLightAtten(lightAtten);
+	void SetCircleShadowUpdate(const CircleShadow& circleShadow,const uint32_t& shadowNumbar) {
 		dirty = true;
+		circleShadows[ shadowNumbar ] = circleShadow;
 	}
 
-	//スポットライト
-	void SetSpotLightActive(int index, bool active) {
-		assert(0 <= index && index < SpotLightNum);
-		spotLights[index].SetActive(active);
+	void ResetCircleShadow() {
+		circleShadows.clear();
 	}
-	void SetSpotLightDir(int index, const Vector4& lightdir) {
-		assert(0 <= index && index < SpotLightNum);
-		spotLights[index].SetLightDir(lightdir);
-		dirty = true;
-	}
-	void SetSpotLightPos(int index, const Vector3& spotlightpos) {
-		assert(0 <= index && index < SpotLightNum);
-		spotLights[index].SetLightPos(spotlightpos);
-		dirty = true;
-	}
-	void SetSpotLightColor(int index, const Vector3& lightcolor) {
-		assert(0 <= index && index < SpotLightNum);
-		spotLights[index].SetLightColor(lightcolor);
-		dirty = true;
-	}
-	void SetSpotLightAtten(int index, const Vector3& lightAtten) {
-		assert(0 <= index && index < SpotLightNum);
-		spotLights[index].SetLightAtten(lightAtten);
-		dirty = true;
-	}
-	void SetSpotLightFactorAngle(int index, const Vector2& lightFactorAngle) {
-		assert(0 <= index && index < SpotLightNum);
-		spotLights[index].SetLightFactorAngle(lightFactorAngle);
-		dirty = true;
-	}
-
-
-	//シャドウ
-	void SetCircleShadowActive(int index, bool active) {
-		assert(0 <= index && index < CircleShadowNum);
-		circleShadows[index].SetActive(active);
-	}
-
-	void SetCircleShadowCasterPos(int index, const Vector3& casterPos) {
-		assert(0 <= index && index < CircleShadowNum);
-		circleShadows[index].SetCasterPos(casterPos);
-		dirty = true;
-	}
-
-	void SetCircleShadowDir(int index, const Vector4& lightdir) {
-		assert(0 <= index && index < CircleShadowNum);
-		circleShadows[index].SetDir(lightdir);
-		dirty = true;
-	}
-
-	void SetCircleShadowDistanceCasterLight(int index, float distanceCasterLight) {
-		assert(0 <= index && index < CircleShadowNum);
-		circleShadows[index].SetDistanceCasterLight(distanceCasterLight);
-		dirty = true;
-	}
-
-	void SetCircleShadowAtten(int index, const Vector3& lightAtten) {
-		assert(0 <= index && index < CircleShadowNum);
-		circleShadows[index].SetAtten(lightAtten);
-		dirty = true;
-	}
-
-	void SetCircleShadowFactorAngle(int index, const Vector2& lightFactorAngle) {
-		assert(0 <= index && index < CircleShadowNum);
-		circleShadows[index].SetFactorAngle(lightFactorAngle);
-		dirty = true;
-	}
-
-
 
 private:
 	//メンバ変数
 	//定数バッファ
-	ComPtr<ID3D12Resource> constBuff;
+	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff;
 	//環境光の色
-	Vector3 ambientColor = { 1,1,1 };
+	Vector3 ambientColor = { 0.8f,0.8f,0.8f };
 
-	//平行光源の配列
-	DirectionalLight dirLights[DirLightNum];
 	//点光源の配列
-	PointLight pointLights[PointLightNum];
+	std::vector<PointLight> pointLights;
 	//スポットライト配列
-	SpotLight spotLights[SpotLightNum];
+	std::vector<SpotLight> spotLights;
 	//丸影の配列
-	CircleShadow circleShadows[CircleShadowNum];
+	std::vector<CircleShadow> circleShadows;
 
 	//ダーティフラグ
 	bool dirty = false;

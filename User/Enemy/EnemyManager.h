@@ -106,6 +106,8 @@ public:
 	////ボステスト用
 	///</summary>
 	void bossSeenTest();
+
+	void ImguiUpdate();
 public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
@@ -187,7 +189,7 @@ private:
 
 	Vector3 RayPos = { 0,0,0 };
 
-	float bossWide = 50.0f;
+	float bossWide = 20.0f;
 	float enemyWide = 3.0f;
 
 	float dengerTimer = 180.0f;

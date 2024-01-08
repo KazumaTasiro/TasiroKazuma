@@ -13,7 +13,7 @@ cbuffer cbuff1 : register(b1)
 	float m_alpha : packoffset(c2.w);	//アルファ
 }
 
-static const uint DIR_LIGHT_NUM = 3;
+static const uint DIR_LIGHT_NUM = 30;
 
 //平行
 struct DirLight
@@ -49,7 +49,7 @@ struct SpotLight
 
 
 //丸影の数
-static const int CIRCLESHADOW_NUM = 1;
+static const int CIRCLESHADOW_NUM = 30;
 
 struct CircleShadow
 {
@@ -65,7 +65,13 @@ struct CircleShadow
 cbuffer cbuff2 : register(b2)
 {
     float3 ambientColor;
-    DirLight dirLights[DIR_LIGHT_NUM];
+    float pad;
+	
+    uint pointLightCount;
+    uint spotLightCount;
+    uint circleShadowCount;
+    float pad2;
+	
     PointLight pointLights[POINTLIGHT_NUM];
     SpotLight spotLights[SPOTLIGHT_NUM];
     CircleShadow circleShadows[CIRCLESHADOW_NUM];

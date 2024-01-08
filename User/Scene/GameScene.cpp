@@ -140,30 +140,40 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	railCamera->Initialize();
 	railCamera->Update();
 
-	lightGroup = LightGroup::Create();
+	lightGroupNon = LightGroup::Create();
 
-	lightGroup->SetDirLightActive(0,true);
-	lightGroup->SetPointLightActive(0,true);
-	lightGroup->SetCircleShadowActive(0,true);
 
-	Object3d::SetLight(lightGroup);
+	lightGroupUse = LightGroup::Create();
 
+	//lightGroupUse->SetDirLightActive(0,true);
+	//lightGroupUse->SetPointLightActive(0,true);
+	//lightGroupUse->SetCircleShadowActive(0,true);
+
+	Object3d::SetLightNon(lightGroupNon);
+	Object3d::SetLightUse(lightGroupUse);
 	PhaseReset();
 }
 void GameScene::Update()
 {
 
-	//CursorLimit();
+	CursorLimit();
 	ImGuiMan_->Bigin();
 #ifdef _DEBUG
-		//デモウィンドウの表示ON
+	lightGroupUse->Update();
+
+	//ImGui::SliderFloat3("circleShadowDirX",&circleShadowDir.x,-5,2);
+	//ImGui::SliderFloat3("circleShadowAttenX",&circleShadowAtten.x,0,2);
+	//ImGui::SliderFloat2("circleShadowFactorAngleX",&circleShadowFactorAngle.x,0,2);
+	//player_->worldTransform_->lightGroup->SetCircleShadowDir(0,circleShadowDir);
+	//player_->worldTransform_->lightGroup->SetCircleShadowAtten(0,circleShadowAtten);
+	//player_->worldTransform_->lightGroup->SetCircleShadowFactorAngle(0,circleShadowFactorAngle);
 	ImGui::ShowDemoWindow();
-
-	ImGui::InputFloat3("circleShadowDirX",&circleShadowDir.x);
-	ImGui::InputFloat3("circleShadowAttenX",&circleShadowAtten.x);
-	ImGui::InputFloat2("circleShadowFactorAngleX",&circleShadowFactorAngle.x);
-
+	player_->ImguiDraw();
 #endif // DEBUG
+			//デモウィンドウの表示ON
+
+
+	/*enemyManager_->ImguiUpdate();*/
 	//player_->SetPos({ player_->GetWorldPosition().x ,player_->GetWorldPosition().y,playPos });
 	ImGuiMan_->End();
 	LightUpdate();
@@ -263,8 +273,10 @@ void GameScene::Update()
 				}
 			}
 		}
+		LightData::GetInstance()->Update();
 		break;
 	case GameScene::Boss:
+
 		bossTime--;
 		seenTransition_->Update();
 		player_->cameraUpdate();
@@ -295,7 +307,7 @@ void GameScene::Update()
 
 			}
 		}
-
+		LightData::GetInstance()->Update();
 		break;
 	case GameScene::GameOver:
 		road_->roadUpdate();
@@ -322,6 +334,7 @@ void GameScene::Update()
 
 		break;
 	case GameScene::GameClear:
+
 		gameClearScene->Update();
 		road_->roadUpdate();
 		seenTransition_->Update();
@@ -346,7 +359,7 @@ void GameScene::Update()
 				seenFlag = false;
 			}
 		}
-
+		LightData::GetInstance()->Update();
 		break;
 	default:
 		break;
@@ -489,6 +502,7 @@ void GameScene::PhaseReset()
 {
 	//gameClear->SetPozition({ winApp_->window_width / 2,-30 });
 	//自キャラの初期化
+	LightData::GetInstance()->GetLightGroupData()->ResetCircleShadow();
 	DemoClear = false;
 	railCamera->Reset();
 	bossTime = 10;
@@ -519,12 +533,12 @@ void GameScene::CursorLimit()
 
 void GameScene::LightUpdate()
 {
-	lightGroup->Update();
+	lightGroupNon->Update();
 
-	lightGroup->SetCircleShadowDir(0,circleShadowDir);
-	lightGroup->SetCircleShadowCasterPos(0,player_->GetWorldPosition());
-	lightGroup->SetCircleShadowAtten(0,circleShadowAtten);
-	lightGroup->SetCircleShadowFactorAngle(0,circleShadowFactorAngle);
+	//lightGroupNon->SetCircleShadowDir(0,circleShadowDir);
+	//lightGroupNon->SetCircleShadowCasterPos(0,{0,0,0});
+	//lightGroupNon->SetCircleShadowAtten(0,circleShadowAtten);
+	//lightGroupNon->SetCircleShadowFactorAngle(0,circleShadowFactorAngle);
 }
 
 

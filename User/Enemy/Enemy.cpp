@@ -80,6 +80,10 @@ void Enemy::Initialize(Vector3 EnemyPos, SpriteCommon* sptriteCommon,Model* mode
 
 	spline = new SplinePosition(worldTransform_->wtf.position, EnemyMoveSpline1, EnemyMoveSpline2, EnemyMoveSpline0);
 	splineReMove = new SplinePosition(worldTransform_->wtf.position, EnemyReMoveSpline1, EnemyReMoveSpline2, EnemyReMoveSpline0);
+
+	//worldTransform_->ShadowUse();
+	shadowNmb = LightData::GetInstance()->AddCircleShadow(worldTransform_->wtf.position, circleShadowDir,circleShadowAtten,circleShadowFactorAngle);
+
 }
 
 void Enemy::Update(Player* player)
@@ -102,10 +106,13 @@ void Enemy::Update(Player* player)
 
 	//キャラクター移動処理
 	Move();
+
 	spriteLock->SetPozition({ GetWorldPosition().x,GetWorldPosition().y });
 	if (EnemyHp <= 0) {
 		isDead_ = true;
+		lightActive = false;
 	}
+	LightData::GetInstance()->UpdateCircleShadow(shadowNmb,worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle,lightActive);
 	particleMana_->Update();
 	OnColl();
 }
@@ -121,25 +128,13 @@ void Enemy::Move()
 	if (DemoEnemyMove == true) {
 		Fire();
 		if (enemyNmb == 0) {
-			if (worldTransform_->wtf.position.x >= 5 || worldTransform_->wtf.position.x <= -5) {
-				move = -move;
-			}
-			worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
+			NormalBulletMove();
 		}
-		if (TackleReMove) {
-			float time_ = Movetime;
-			splineReMove->Update(time_);
-			worldTransform_->wtf.position = splineReMove->NowPos;
-			if (splineReMove->NowPos.x == EnemyMoveSpline0.x && splineReMove->NowPos.y == EnemyMoveSpline0.y && splineReMove->NowPos.z == EnemyMoveSpline0.z) {
-				TackleReMove = false;
-				fireFlag = false;
-			}
-		}
-		else
+		if ( enemyNmb == 1 )
 		{
-			splineReMove->Reset();
-
+			TackleMove();
 		}
+
 	}
 	velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
 	velocity_.nomalize();
@@ -169,23 +164,11 @@ void Enemy::Fire()
 
 
 		if (enemyNmb == 0) {
-			velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
-			velocity_.nomalize();
-			velocity_ *= verocitySpeed;
-			//弾を生成し、初期化
-			std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
-			newEnemyBullet->Initialize(worldTransform_->wtf.position, velocity_, enemyBulletModel_);
-			//弾を発射する
-			EnemyBullets_.push_back(std::move(newEnemyBullet));
-			fireFlag = false;
+			NormalBulletAttck();
 		}
 		if (enemyNmb == 1) {
-			worldTransform_->wtf.position += velocityTackle;
 
-			if (worldTransform_->wtf.position.z <= tackPosLim ) {
-				TackleReMove = true;
-			}
-
+			TackleAttck();
 		}
 	}
 	if (input_->ReleaseMouse(1)) {
@@ -358,5 +341,62 @@ void Enemy::DamageParticle()
 		particleMana_->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,one);
 		//particleMana_->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,two);
 		particleMana_->Update();
+	}
+}
+
+void Enemy::ImGuiUpdate()
+{
+
+}
+
+void Enemy::NormalBulletAttck()
+{
+	velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
+	velocity_.nomalize();
+	velocity_ *= verocitySpeed;
+	//弾を生成し、初期化
+	std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
+	newEnemyBullet->Initialize(worldTransform_->wtf.position,velocity_,enemyBulletModel_);
+	//弾を発射する
+	EnemyBullets_.push_back(std::move(newEnemyBullet));
+	fireFlag = false;
+}
+
+void Enemy::NormalBulletMove()
+{
+	if ( worldTransform_->wtf.position.x >= 5 || worldTransform_->wtf.position.x <= -5 )
+	{
+		move = -move;
+	}
+	worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
+}
+
+void Enemy::TackleAttck()
+{
+	worldTransform_->wtf.position += velocityTackle;
+
+	if ( worldTransform_->wtf.position.z <= tackPosLim )
+	{
+		TackleReMove = true;
+	}
+}
+
+void Enemy::TackleMove()
+{
+	if ( TackleReMove )
+	{
+		float time_ = Movetime;
+		splineReMove->Update(time_);
+		worldTransform_->wtf.position = splineReMove->NowPos;
+		if ( splineReMove->NowPos.x == EnemyMoveSpline0.x && splineReMove->NowPos.y == EnemyMoveSpline0.y && splineReMove->NowPos.z == EnemyMoveSpline0.z )
+		{
+			TackleReMove = false;
+			fireFlag = false;
+		}
+	}
+	else
+	{
+		splineReMove->Reset();
+
 	}
 }

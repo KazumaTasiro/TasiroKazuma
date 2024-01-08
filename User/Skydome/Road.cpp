@@ -12,6 +12,7 @@ void Road::Initialize()
 		road_[ i ]->SetModel(roadModel);
 		road_[ i ]->wtf.position = { pos.x ,pos.y,pos.z + ( posTrans * i ) };
 		road_[ i ]->wtf.scale = { RoasdSize };
+		road_[ i ]->ShadowUse();
 		Bill_[ i ] = new Object3d();
 		Bill_[ i ]->Initialize();
 		Bill_[ i ]->SetModel(BillModel);

@@ -29,7 +29,9 @@ Vector3 Object3d::eye = { 0, 0, -50.0f };
 Vector3 Object3d::target = { 0, 0, 0 };
 Vector3 Object3d::up = { 0, 1, 0 };
 float Object3d::focalLengs = 50.0f;
-LightGroup* Object3d::lightGroupStatic = nullptr;
+LightGroup* Object3d::lightGroupNon = nullptr;
+LightGroup* Object3d::lightGroupUse = nullptr;
+int Object3d::useNum;
 
 Camera* Object3d::camera = nullptr;
 
@@ -303,8 +305,6 @@ bool Object3d::Initialize()
 		IID_PPV_ARGS(&constBuffB0));
 	assert(SUCCEEDED(result));
 
-
-
 	return true;
 }
 
@@ -334,13 +334,28 @@ void Object3d::Update() {
 
 	HRESULT result;
 	Matrix4 resultMat;
+	if ( lightUse )
+	{
+		if ( lightCopyFlag == false )
+		{
+			lightGroup = lightGroupUse;
+			lightCopyFlag = true;
+		}
+	}
 	resultMat = Affin::matUnit();
 	//if ( lightGroup == nullptr )
 	//{
 	//	lightGroup = lightGroupStatic;
 	//}
 	UpdateMat();
-
+	if ( lightUse )
+	{
+		//lightGroupUse->SetCircleShadowCasterPos(useNmb,wtf.position);
+		//lightGroupUse->SetCircleShadowDir(useNmb,circleShadowDir);
+		//lightGroupUse->SetCircleShadowAtten(useNmb,circleShadowAtten);
+		//lightGroupUse->SetCircleShadowFactorAngle(useNmb,circleShadowFactorAngle);
+		//lightGroupUse->Update();
+	}
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0,nullptr,( void** ) &constMap);
@@ -362,7 +377,14 @@ void Object3d::Update(Transform* parentWtf) {
 	UpdateMat();
 
 	wtf.matWorld *= parentWtf->matWorld;
-
+	if ( lightUse )
+	{
+		//lightGroupUse->SetCircleShadowCasterPos(0,wtf.position);
+		//lightGroupUse->SetCircleShadowDir(0,circleShadowDir);
+		//lightGroupUse->SetCircleShadowAtten(0,circleShadowAtten);
+		//lightGroupUse->SetCircleShadowFactorAngle(0,circleShadowFactorAngle);
+		//lightGroupUse->Update();
+	}
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0,nullptr,( void** ) &constMap);
@@ -388,7 +410,15 @@ void Object3d::Draw()
 	cmdList->SetGraphicsRootConstantBufferView(0,constBuffB0->GetGPUVirtualAddress());
 	//if ( lightGroup == nullptr )
 	//ライトの描画
-	lightGroupStatic->Draw(cmdList.Get(),3);
+	if ( lightUse )
+	{
+		LightData::GetInstance()->GetLightGroupData()->Draw(cmdList.Get(),3);
+	}
+	else
+	{
+		lightGroupNon->Draw(cmdList.Get(),3);
+	}
+
 	//else
 	//{
 	//	//ライトの描画

@@ -17,6 +17,7 @@
 #include "Object3dFbx.h"
 #include "DirectXCommon.h"
 #include "Camera.h"
+#include "LightData.h"
 
 
 ///<summary>
@@ -149,6 +150,8 @@ public:
 	void DamageShakeUpdate();
 
 	void ResetDamageFlag();
+
+	void ImguiDraw();
 private:
 	enum Nmb
 	{
@@ -187,11 +190,13 @@ private:
 	const int eightNmbI = 8;
 	const int nineNmbI = 9;
 	const int tenNmbI = 10;
-	//ワールド変換データ
-	Object3d* worldTransform_;
+
 
 	//3Dレティクル用ワールドトランスフォーム
 	Object3d* worldTransform3DReticle_;
+
+		//ワールド変換データ
+	Object3d* worldTransform_;
 
 	//Object3dFbx* fbxWorldTransform_ = nullptr;
 	//FbxModel* fbxModel_ = nullptr;
@@ -230,7 +235,7 @@ private:
 	Vector3 moveLimit = { 20,20,20 };
 	bool limitIn = false;
 
-	Vector3 playerResetPos = { 0,-0.5f,0 };
+	Vector3 playerResetPos = { 0,-2.5f,0 };
 
 	const float speed = 0.5f;
 
@@ -282,4 +287,12 @@ private:
 
 	int playerAttckTime = 20;
 	int playerAttckTimeRe = 20;
+
+	uint32_t shadowNmb = 0;
+
+	Vector4  circleShadowDir = { 0,0.5f,0,0 };
+	Vector3  circleShadowAtten = { 1.3f,2.0f,0.0f };
+	Vector2  circleShadowFactorAngle = { 0.25f,1.14f };
+
+	bool lightActive = true;
 };

@@ -30,12 +30,7 @@ void StertCount::Initialize(SpriteCommon* spriteCommon)
 	Time2->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
 	Time1->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
 	TimeGo->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
-	//bossStertModel = Model::LoadFormOBJ("Sakaban");
-	//bossStert = new Object3d();
-	//bossStert->Initialize();
-	//bossStert->SetModel(bossStertModel);
-	//bossStert->wtf.scale = { BossScale };
-	//bossStert->wtf.position = { StertBossPos };
+
 	camera_->SetTarget(PlayerPos);
 	cameraPosTime = 1.0f / oneSecondTime;
 	//easing = new Easing();
@@ -83,14 +78,6 @@ void StertCount::CameraUpdate()
 
 void StertCount::BossUpdate()
 {
-}
-
-void StertCount::CameraEasing()
-{
-	//camera_->SetEye({	camera_->GetEye().x,camera_->GetEye().y,
-	//					easing->easeOut(time,camera_->GetEye().z,
-	//					bossStert->wtf.position.z - stertBossFrontCamera,endTime)
-	//	});
 }
 
 void StertCount::CameraMove()

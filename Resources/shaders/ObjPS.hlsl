@@ -30,23 +30,23 @@ float4 main(VSOutput input) : sv_TARGET
 	
 	
 	//全て加算する
-    for (int i = 0; i < DIR_LIGHT_NUM; i++)
-    {
-        if (dirLights[i].active)
-        {
-			//ライトに向かうベクトルと法線の内積
-            float3 dotlightnormal = dot(dirLights[i].lightv, input.normal);
-			//反射光ベクトル
-            float3 reflect = normalize(-dirLights[i].lightv + 2 * dotlightnormal * input.normal);
-			//拡散反射光
-            float3 diffuse = dotlightnormal * m_diffuse;
-			//鏡面反射光 
-            float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
+   // for (int i = 0; i < DIR_LIGHT_NUM; i++)
+   // {
+   //     if (dirLights[i].active)
+   //     {
+			////ライトに向かうベクトルと法線の内積
+   //         float3 dotlightnormal = dot(dirLights[i].lightv, input.normal);
+			////反射光ベクトル
+   //         float3 reflect = normalize(-dirLights[i].lightv + 2 * dotlightnormal * input.normal);
+			////拡散反射光
+   //         float3 diffuse = dotlightnormal * m_diffuse;
+			////鏡面反射光 
+   //         float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
 
-			//全て加算する
-            shadecolor.rgb += (diffuse + specular) * dirLights[i].lightcolor;
-        }
-    }
+			////全て加算する
+   //         shadecolor.rgb += (diffuse + specular) * dirLights[i].lightcolor;
+   //     }
+   // }
 	//点光源
     for (int i = 0; i < POINTLIGHT_NUM; i++)
     {

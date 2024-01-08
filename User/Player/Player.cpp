@@ -15,6 +15,7 @@ Player::~Player()
 
 }
 
+//いろいろな初期化
 void Player::Initialize(SpriteCommon* spriteCommon,ParticleManager* particle)
 {
 	assert(spriteCommon);
@@ -70,8 +71,12 @@ void Player::Initialize(SpriteCommon* spriteCommon,ParticleManager* particle)
 	playerDeadParticle = particle;
 
 	playerHp = playerMaxHp;
+	//worldTransform_->ShadowUse();
+	shadowNmb = LightData::GetInstance()->AddCircleShadow(worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle);
+
 }
 
+//いろいろな更新
 void Player::Update()
 {
 	playerHPMax->SetAnchorPoint({ 0,0 });
@@ -84,6 +89,7 @@ void Player::Update()
 	{
 		if ( DeadParticle == false )
 		{
+			lightActive = false;
 			PlayerDeadParticle();
 		}
 		DeadParticle = true;
@@ -93,6 +99,7 @@ void Player::Update()
 	Move();
 	//キャラクター攻撃更新
 	PlayerHpUpdate();
+	LightData::GetInstance()->UpdateCircleShadow(shadowNmb,worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle,lightActive);
 	//弾更新
 	for ( std::unique_ptr<PlayerBullet>& bullet : bullets_ )
 	{
@@ -114,6 +121,7 @@ void Player::Update()
 	}
 }
 
+//攻撃を制限するための分離
 void Player::AttackUpdate()
 {
 	if ( playerAttckTime > 0 )
@@ -125,7 +133,7 @@ void Player::AttackUpdate()
 		Attack();
 	}
 }
-
+//画面が揺れないようにするための分離
 void Player::ReticleUpdate()
 {
 	MouseReticle();
@@ -134,6 +142,7 @@ void Player::ReticleUpdate()
 
 void Player::cameraUpdate()
 {
+	//ダメージを受けた時の画面シェイク
 	if ( playerHp > 1 )
 	{
 		camera_->SetEye({ camera_->GetEye() + damageShakeBefor });
@@ -197,6 +206,7 @@ void Player::OnCollision()
 	playerHp--;
 }
 
+//Matorix4をVector3に直す処理
 Vector3 Player::ConvertToVector3(const Matrix4& mat,Vector3 vec)
 {
 	Vector3 retVec = {};
@@ -302,6 +312,7 @@ void Player::DrawUI()
 
 }
 
+//Vector3とXMMATRIXの外積
 Vector3 Player::clossV3V4(const Vector3& vec,const XMMATRIX& mat)
 {
 	Vector4 divVec = {};
@@ -439,10 +450,12 @@ void Player::MouseReticle()
 void Player::Reset()
 {
 	shakeFlag = false;
+	lightActive = true;
 	shakeTime = shakeTimeRe;
 	damageShakeX = 0.0f;
 	damageShakeY = 0.0f;
 	damageShakeZ = 0.0f;
+	shadowNmb = LightData::GetInstance()->AddCircleShadow(worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle);
 	worldTransform_->wtf.position = playerResetPos;
 	playerAttckTime = playerAttckTimeRe;
 	bullets_.clear();
@@ -459,6 +472,7 @@ Vector2 Player::GetReticlePos()
 	return pos;
 }
 
+//カメラのfarを取る関数
 Vector3 Player::GetFarNear()
 {
 	Vector3 vec = farCre - nearCre;
@@ -466,6 +480,7 @@ Vector3 Player::GetFarNear()
 	return vec;
 }
 
+//レティクルの制限
 void Player::ReticleLimit()
 {
 	if ( sprite2DReticle_->GetPosition().x <= RetiRim )
@@ -540,9 +555,10 @@ void Player::ParticleDraw()
 	
 }
 
+//クリア時の自機の動き
 void Player::ClearMove()
 {
-
+	LightData::GetInstance()->UpdateCircleShadow(shadowNmb,worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle,lightActive);
 	worldTransform_->wtf.position += clearMove;
 	worldTransform_->Update();
 }
@@ -552,6 +568,7 @@ void Player::TitleMove()
 	worldTransform_->wtf.rotation.y;
 }
 
+//プレイヤーのHPの更新
 void Player::PlayerHpUpdate()
 {
 	float HpSize = playerHp / playerMaxHp;
@@ -560,11 +577,13 @@ void Player::PlayerHpUpdate()
 
 void Player::DamageShakeUpdate()
 {
+	//初期化
 	damageShakeX = 0.0f;
 	damageShakeY = 0.0f;
 	damageShakeZ = 0.0f;
 	damageShakeBefor = { 0,0,0 };
 
+	//フラグがたったら画面をシェイクする度合いを決める
 	if ( shakeFlag )
 	{
 		shakeTime--;
@@ -573,7 +592,7 @@ void Player::DamageShakeUpdate()
 		damageShakeZ = ( float ) rand() / RAND_MAX * shakeLimit - shakeLimit / 2.0f;
 		damageShakeBefor = { damageShakeBefor.x - damageShakeX ,damageShakeBefor.y - damageShakeY,damageShakeBefor.z - damageShakeZ };
 	}
-
+	//終了処理
 	if ( shakeTime < 0 )
 	{
 		shakeTime = shakeTimeRe;
@@ -589,4 +608,11 @@ void Player::DamageShakeUpdate()
 void Player::ResetDamageFlag()
 {
 	shakeFlag = false;
+}
+
+void Player::ImguiDraw()
+{
+	ImGui::SliderFloat4("circleShadowDir",&circleShadowDir.x,-2,1);
+	ImGui::SliderFloat3("circleShadowAtten",&circleShadowAtten.x,-2,2);
+	ImGui::SliderFloat2("circleShadowFactorAngle",&circleShadowFactorAngle.x,-2,2);
 }

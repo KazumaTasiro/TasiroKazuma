@@ -491,3 +491,8 @@ void EnemyManager::bossSeenTest()
 {
 	clearCount = 3;
 }
+
+void EnemyManager::ImguiUpdate()
+{
+	boss->ImGuiUpdate();
+}

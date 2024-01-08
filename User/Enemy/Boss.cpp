@@ -34,6 +34,9 @@ void Boss::Initialize(Model* enemyBulletModel,Model* enemyReticleModel)
 	particleMana_ = new ParticleManager();
 	particleMana_->Initialize();
 	particleMana_->LoadTexture("EnemyDamageParticle.png");
+
+	//worldTransform_->ShadowUse();
+	shadowNmb = LightData::GetInstance()->AddCircleShadow(worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle);
 }
 
 void Boss::Update(Player* player)
@@ -53,7 +56,7 @@ void Boss::Update(Player* player)
 	spline->Update(time_);
 	//キャラクター移動処理
 	Move();
-
+	LightData::GetInstance()->UpdateCircleShadow(shadowNmb,worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle,lightActive);
 	//worldTransformReticle_->wtf.position.z = 0;
 	if ( isDead_ )
 	{
@@ -80,6 +83,7 @@ void Boss::Update(Player* player)
 
 	if ( EnemyHp <= 0 )
 	{
+		lightActive = false;
 		isDead_ = true;
 	}
 	particleMana_->Update();
@@ -234,10 +238,12 @@ void Boss::OnCollision()
 void Boss::Reset()
 {
 	isDead_ = false;
+	lightActive = true;
 	DemoEnemyMove = false;
 	lockOn = false;
 	worldTransform_->wtf.position = PosRis;
 	EnemyHp = 10;
+	shadowNmb = LightData::GetInstance()->AddCircleShadow(worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle);
 	for ( std::unique_ptr<LockOnBullet>& bullet : EnemyLockBullets_ )
 	{
 //自弾の衝突時コールバックを呼び出す
@@ -336,4 +342,11 @@ void Boss::DamageParticle()
 		//particleMana_->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,two);
 		particleMana_->Update();
 	}
+}
+
+void Boss::ImGuiUpdate()
+{
+	ImGui::SliderFloat4("circleShadowDir",&circleShadowDir.x,-1,1);
+	ImGui::SliderFloat3("circleShadowAtten",&circleShadowAtten.x,-1,1);
+	ImGui::SliderFloat2("circleShadowFactorAngle",&circleShadowFactorAngle.x,-1,1);
 }

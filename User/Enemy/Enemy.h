@@ -12,13 +12,15 @@
 #include "SplinePosition.h"
 #include "EnemyBullet.h"
 #include "ParticleManager.h"
+#include "LightData.h"
+#include "EnemyPolymo.h"
 
 ///<summary>
 ///敵キャラ
 ///</summary>
 class GameScene;
 class Player;
-class Enemy {
+class Enemy:public EnemyPolymo {
 public:
 	///<summary>
 	///初期化
@@ -47,7 +49,7 @@ public:
 	///<summary>
 	///描画
 	///</summary>
-	void Draw();
+	void Draw()override;
 	///<summary>
 	///UI描画
 	///</summary>
@@ -123,6 +125,16 @@ public:
 
 	void DamageParticle();
 
+	void ImGuiUpdate();
+
+	void NormalBulletAttck();
+
+	void NormalBulletMove();
+
+	void TackleAttck();
+
+	void TackleMove();
+
 private:
 	float PI = 3.141592f;
 	enum Nmb
@@ -139,34 +151,34 @@ private:
 		nine = 9,
 		ten = 10,
 	};
-	//発射間隔
-	static const int kFireInterval = 100;
+private://弾
+	//敵の弾モデル
+	Model* enemyBulletModel_ = nullptr;
+	//敵の照準モデル
+	Model* enemyReticleModel_ = nullptr;
+	//弾
+	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
+	std::list<std::unique_ptr<EnemyBullet>> EnemyBullets_;
 
-	Input* input_ = nullptr;
+	bool fireFlag = false;
 
-	GameScene* gameScene_ = nullptr;
-
+	int fireTime = 45;
+	int fireTimeRis = 45;
+private://敵の基本情報
 	//ワールド変換データ
 	Object3d* worldTransform_;
 	//ワールド変換データ
 	Object3d* worldTransformReticle_;
 	//敵モデル
 	Model* model_ = nullptr;
-	//敵の弾モデル
-	Model* enemyBulletModel_ = nullptr;
-	//敵の照準モデル
-	Model* enemyReticleModel_ = nullptr;
 
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
-
-	////フェーズ
+		////フェーズ
 	//Phase phase_ = Phase::Approch;
 	//キャラクターの移動ベクトル
 	Vector3 ApprochMove = { 0,0,0.0f };
 	Vector3 LeaveMove = { -0.1f,0.1f,-0.1f };
 
-	Vector3 EnemyMoveSpline0 = { 0,0,0};
+	Vector3 EnemyMoveSpline0 = { 0,0,0 };
 	Vector3 EnemyMoveSpline1 = { -50,20,50 };
 	Vector3 EnemyMoveSpline2 = { -20,15,100 };
 
@@ -174,24 +186,16 @@ private:
 	Vector3 EnemyReMoveSpline1 = { -50,30,-50 };
 	Vector3 EnemyReMoveSpline2 = { -20,30,100 };
 
-	//移動フラグ
-	bool moveEndFlag = false;
-
-	//弾
-	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
-	std::list<std::unique_ptr<EnemyBullet>> EnemyBullets_;
-
-	float LockWidth = 2.0f;
-
-	int32_t time = 0;
-
-	Player* player_ = nullptr;
-	float playerWidth = 1.5f;
-
 	int EnemyHp = 3;
 	int EnemyHpEnd = 0;
 
-	//デスフラグ
+	Vector3 EnemyScale = { 5,5,5 };
+	Vector3 EnemyReticleScale = { 10,10,10 };;
+
+	//登場時の移動状態
+	bool DemoEnemyMove = false;
+
+		//デスフラグ
 	bool isDead_ = false;
 	//デスフラグ
 	bool isTackleDead_ = false;
@@ -199,30 +203,19 @@ private:
 	bool lockOn = false;
 	float move = 0.1f;
 
-	Sprite* spriteLock = nullptr;
-
-	SplinePosition* spline = nullptr;
-	SplinePosition* splineReMove = nullptr;
-	bool DemoEnemyMove = false;
-
-	bool fireFlag = false;
-
-	int fireTime = 45;
-	int fireTimeRis = 45;
-
+	//タックルの情報
 	float verocitySpeed = 3.0f;
 	float tackPosLim = -50;
 
-	int enemyNmb = 1;
 
 	bool TackleReMove = false;
 
 	Vector3 velocity_;
 	Vector3 velocityTackle;
 
+private://敵のスプライン
 	int EnemyRootNmb_ = 0;
-	Vector3 EnemyScale = { 5,5,5 };
-	Vector3 EnemyReticleScale = { 10,10,10 };;
+
 
 	Vector3 oneEnemyMoveSpline1 = { -50,20,50 };
 	Vector3 oneEnemyMoveSpline2 = { -20,15,100 };
@@ -246,7 +239,7 @@ private:
 	Vector3 threeEnemyReMoveSpline2 = {  };
 
 	Vector3 fourEnemyMoveSpline1 = { -10,20,-10 };
-	Vector3 fourEnemyMoveSpline2 = { -10,15, -5};
+	Vector3 fourEnemyMoveSpline2 = { -10,15, -5 };
 	Vector3 fourEnemyMoveSpline0 = {  };
 	Vector3 fourEnemyReMoveSpline0 = {  };
 	Vector3 fourEnemyReMoveSpline1 = { };
@@ -263,9 +256,46 @@ private:
 	float Movetime = 0.05f;
 	float Updatetime = 0.02f;
 
+	SplinePosition* spline = nullptr;
+	SplinePosition* splineReMove = nullptr;
+private://パーティクル
+
 	ParticleManager* particleMana_ = nullptr;
 
 	int particleLife = 10;
 	float particleScaleStert = 2.0f;
 	float particleScaleEnd = 1.0f;
+
+private://影
+	int enemyNmb = 1;
+
+
+	int32_t shadowNmb = 0;
+
+	Vector4  circleShadowDir = { 0,-0.5f,0,0 };
+	Vector3  circleShadowAtten = { 0,0.1f,0.0f };
+	Vector2  circleShadowFactorAngle = { 0.5f,1.2f };
+
+	bool lightActive = true;
+private:
+
+	//発射間隔
+	static const int kFireInterval = 100;
+
+	Input* input_ = nullptr;
+
+	GameScene* gameScene_ = nullptr;
+	//テクスチャハンドル
+	uint32_t textureHandle_ = 0u;
+
+	//移動フラグ
+	bool moveEndFlag = false;
+
+	float LockWidth = 2.0f;
+
+	int32_t time = 0;
+
+	Player* player_ = nullptr;
+	float playerWidth = 1.5f;
+	Sprite* spriteLock = nullptr;
 };

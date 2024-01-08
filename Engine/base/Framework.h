@@ -7,6 +7,7 @@
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
 #include "LightGroup.h"
+#include "LightData.h"
 
 //ゲーム全体
 class Framework
@@ -57,4 +58,6 @@ private:
 	MSG msg{};
 	//ライト
 	LightGroup* light = nullptr;
+
+	LightData* lightData = nullptr;
 };

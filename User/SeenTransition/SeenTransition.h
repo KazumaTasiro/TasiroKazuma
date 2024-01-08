@@ -64,7 +64,7 @@ private:
 		ten,
 
 	};
-
+private://ブラインド
 	bool seenTransFlag = false;
 	bool seenTimeFlag = false;
 	bool seenNotEndFlag = false;

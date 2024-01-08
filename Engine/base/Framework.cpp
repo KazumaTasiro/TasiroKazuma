@@ -33,6 +33,7 @@ void Framework::Initialize()
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
 
 	LightGroup::StaticInitialize(dxCommon->GetDevice());
+	LightData::GetInstance()->StaticInitialize();
 	//入力の初期化
 	input = Input::GetInstance();
 	input->Initalize();

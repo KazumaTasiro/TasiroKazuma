@@ -99,6 +99,7 @@
   <ItemGroup>
     <ClCompile Include="Engine\LIght\CircleShadow.cpp" />
     <ClCompile Include="Engine\LIght\DirectionalLight.cpp" />
+    <ClCompile Include="Engine\Light\LightData.cpp" />
     <ClCompile Include="Engine\LIght\LightGroup.cpp" />
     <ClCompile Include="Engine\LIght\PointLight.cpp" />
     <ClCompile Include="User\Enemy\EnemyBothSides.cpp" />
@@ -131,6 +132,8 @@
     <ClCompile Include="Engine\MATH\Vector4.cpp" />
     <ClCompile Include="Engine\PostEffect\PostEffect.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="User\Enemy\EnemyObstacleBullet.cpp" />
+    <ClCompile Include="User\Enemy\EnemyPolymo.cpp" />
     <ClCompile Include="User\RailCamera\RailCamera.cpp" />
     <ClCompile Include="User\Collision\Collision.cpp" />
     <ClCompile Include="User\Collision\CollisionPrimitive.cpp" />
@@ -154,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\LIght\CircleShadow.h" />
     <ClInclude Include="Engine\LIght\DirectionalLight.h" />
+    <ClInclude Include="Engine\Light\LightData.h" />
     <ClInclude Include="Engine\LIght\LightGroup.h" />
     <ClInclude Include="Engine\LIght\PointLight.h" />
     <ClInclude Include="Engine\LIght\SpotLight.h" />
@@ -186,6 +190,8 @@
     <ClInclude Include="Engine\MATH\Vector3.h" />
     <ClInclude Include="Engine\MATH\Vector4.h" />
     <ClInclude Include="Engine\PostEffect\PostEffect.h" />
+    <ClInclude Include="User\Enemy\EnemyObstacleBullet.h" />
+    <ClInclude Include="User\Enemy\EnemyPolymo.h" />
     <ClInclude Include="User\RailCamera\RailCamera.h" />
     <ClInclude Include="User\Collision\Collision.h" />
     <ClInclude Include="User\Collision\CollisionPrimitive.h" />

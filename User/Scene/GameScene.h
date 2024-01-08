@@ -93,10 +93,41 @@ private:
 	};
 	Scene scene;
 private:
-
-	RailCamera* railCamera = nullptr;
+	enum Nmb
+	{
+		zero = 0,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
+	};
+private://プレイヤー
 	///自キャラ
 	Player* player_ = nullptr;
+
+	bool playMove = true;
+
+	float playPos = 0;
+
+	bool TitleEnd = false;
+private://スプライト
+
+	Sprite* stert_ = nullptr;
+	Sprite* gameClear_ = nullptr;
+	Sprite* gameOver_ = nullptr;
+	Sprite* operation_ = nullptr;
+	Sprite* cameraMoveOps_ = nullptr;
+
+private:
+
+	RailCamera* railCamera = nullptr;
+	
 
 	//std::list<std::unique_ptr<Enemy>> enemy_;
 
@@ -131,20 +162,11 @@ private:
 	EnemyManager* enemyManager_ = nullptr;
 
 
-	Sprite* stert_ = nullptr;
-	Sprite* gameClear_ = nullptr;
-	Sprite* gameOver_ = nullptr;
-	Sprite* operation_ = nullptr;
-	Sprite* cameraMoveOps_ = nullptr;
 
 	Vector2 spriteEnd_;
 	Vector2 operationPos = {128,64};
 
-	bool playMove = true;
-
-	float playPos = 0;
-
-	bool TitleEnd = false;
+	
 
 	ParticleManager* ParticleMana_;
 
@@ -163,20 +185,7 @@ private:
 	StertCount* stertCount_ = nullptr;
 
 	Vector3 TargetCamRes = { 0,0,0 };
-	enum Nmb
-	{
-		zero = 0,
-		one = 1,
-		two = 2,
-		three = 3,
-		four = 4,
-		five = 5,
-		six = 6,
-		seven = 7,
-		eight = 8,
-		nine = 9,
-		ten = 10,
-	};
+
 
 	bool DemoClear = false;
 	float gameOverUp = 80.0f;
@@ -184,10 +193,11 @@ private:
 
 	float bossTime = 10.0f;
 
-	LightGroup* lightGroup = nullptr;
+	LightGroup* lightGroupNon = nullptr;
+	LightGroup* lightGroupUse = nullptr;
 
-	Vector4  circleShadowDir = { 0,-1,0,0 };
-	Vector3  circleShadowAtten = { 0.5f,0.6f,0.0f };
-	Vector2  circleShadowFactorAngle = { 0.0f,0.5f };
+	Vector4  circleShadowDir = { 0,0.5f,0,0 };
+	Vector3  circleShadowAtten = { 1.1f,0.7f,0.0f };
+	Vector2  circleShadowFactorAngle = { 0.5f,1.2f };
 	
 };
