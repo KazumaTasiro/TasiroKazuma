@@ -221,6 +221,7 @@ private://敵の基本情報
 	float tackPosLim = -50;
 
 
+
 	bool TackleReMove = false;
 
 	Vector3 velocity_;
