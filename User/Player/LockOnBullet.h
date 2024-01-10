@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "Vector3.h"
 #include "SplinePosition.h"
+#include "ParticleManager.h"
 
 
 ///<summary>
@@ -19,7 +20,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(Model* model, const Vector3& position);
+	void Initialize(Model* model,const Vector3& position);
 	///<summary>
 	///更新
 	///</summary>
@@ -30,11 +31,19 @@ public:
 	void Draw();
 
 	///<summary>
+	///描画
+	///</summary>
+	void ParticleDraw();
+
+	///<summary>
 	///弾の消滅フラグ
 	///</summary>
-	bool IsDead()const { return isDead_; }
+	bool IsDead()const {
+		return isDead_;
+	}
 
-	
+	void AddParticle();
+
 	///<summary>
 	////衝突を検出したら呼び出されるコールバック関数
 	///</summary>
@@ -58,7 +67,7 @@ private:
 	//速度
 	Vector3 velocity_;
 	//寿命<fim>
-	static const int32_t kLifeTime = 60 * 5;
+	static const int32_t kLifeTime = 60 * 2;
 	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
 	//デスフラグ
@@ -67,4 +76,17 @@ private:
 	float time = 0;
 
 	Vector3 worldNormal;
+
+	Vector3 worldSc = { 1,1,1 };
+
+	ParticleManager* particle;
+
+	float rnd_accS = 0.0005f;
+	float rnd_velS = 0;
+	float rnd_posS = 0;
+
+	int particleLife = 80;
+	float particleScaleStert = 2.0f;
+	float particleScaleEnd = 0;
+
 };

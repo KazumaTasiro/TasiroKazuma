@@ -19,7 +19,7 @@ public:
 	///更新
 	///</summary>
 
-	void Update(Vector3 playerPos);
+	void Update();
 
 	///<summary>
 	///描画
@@ -53,13 +53,20 @@ public:
 	///</summary>
 	void Attck();
 
+	void OnAttckFlag() {
+		nowAttck = true;
+	}
+
 private:
 	//ワールド変換データ
 	Object3d* fontWorldTransform_[4];
+	Vector3 fontSize = { 10,10,10 };
 	//モデル
 	Model* fontModel_[ 4 ] = { nullptr };
 	//速度
 	Vector3 velocity_;
+
+	Vector3 fontPos4th = { 50.0f,50.0f,0 };
 
 	//寿命<fim>
 	static const int32_t kLifeTime = 60 * 1000;
@@ -67,8 +74,15 @@ private:
 	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
 
+	//文字を飛ばす間隔
+	float attackInterval = 60;
+	//飛ぶ文字の番号Zの順番に飛ばす
+	int32_t fontAttckNmb = 0;
+
 	//デスフラグ
 	bool isDead_ = false;
 	//攻撃中フラグ
 	bool nowAttck = false;
+
+	int fontI = 4;
 };

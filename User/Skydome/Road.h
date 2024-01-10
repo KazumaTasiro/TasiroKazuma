@@ -21,6 +21,10 @@ public:
 	///</summary>
 	void Update();
 	///<summary>
+	////更新
+	///</summary>
+	void roadUpdate();
+	///<summary>
 	////描画
 	///</summary>
 	void Draw();
@@ -39,4 +43,9 @@ private:
 	float beforSpeed = 0.2f;
 
 	Vector3 RoasdSize = { 6,2,2 };
+	Vector3 pos= { 0,-2.5f,-50.0f };
+	int posTrans = 50;
+
+	float posMove = -100.0f + ( 49.0f * roadCount );
+	float posLimit = -150.0f;
 };

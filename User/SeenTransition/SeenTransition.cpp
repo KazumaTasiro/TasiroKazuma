@@ -15,23 +15,22 @@ void SeenTransition::Initialize(SpriteCommon* spriteCommon_)
 
 	//黒いブラインド
 	blind = new Sprite();
-	blind->Initialize(spriteCommon,4);
-	blind->SetPozition({ WinApp::window_width/2,WinApp::window_height/2 });
+	blind->Initialize(spriteCommon,Nmb::four);
+	blind->SetPozition({ WinApp::window_width/Nmb::two,WinApp::window_height/ Nmb::two });
 	blind->SetSize({ WinApp::window_width,WinApp::window_height });
 	blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
 
 	//サカバンバスピスの上のやつ
-	randBlindOverNmb = rand() % 3 + 7;
-	randBlindUnderNmb = rand() % 3 + 10;
 	blindFaceOver = new Sprite();
 	blindFaceOver->Initialize(spriteCommon,randBlindOverNmb);
-	blindFaceOver->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 - blindResetPos });
+	blindFaceOver->SetPozition({ WinApp::window_width / Nmb::two,WinApp::window_height / Nmb::two - blindResetPos });
 	blindFaceOver->SetSize({ WinApp::window_width,WinApp::window_height });
 
 	blindFaceUnder = new Sprite();
 	blindFaceUnder->Initialize(spriteCommon,randBlindUnderNmb);
-	blindFaceUnder->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 + blindResetPos });
+	blindFaceUnder->SetPozition({ WinApp::window_width / Nmb::two,WinApp::window_height / Nmb::two + blindResetPos });
 	blindFaceUnder->SetSize({ WinApp::window_width,WinApp::window_height });
+	ResetBlindSprite();
 
 
 }
@@ -47,8 +46,8 @@ void SeenTransition::Reset()
 
 void SeenTransition::ResetBlindSprite()
 {
-	randBlindOverNmb = rand() % 3 + 7;
-	randBlindUnderNmb = rand() % 3 + 10;
+	randBlindOverNmb = rand() % Nmb::three + Nmb::seven;
+	randBlindUnderNmb = rand() % Nmb::three + Nmb::ten;
 	blindFaceOver->SetTextureIndex(randBlindOverNmb);
 	blindFaceUnder->SetTextureIndex(randBlindUnderNmb);
 }
@@ -57,6 +56,7 @@ void SeenTransition::ResetBlindSprite()
 
 void SeenTransition::Update()
 {
+	
 	if ( seenTransFlag )
 	{
 		seenNotEndFlag = true;
@@ -67,13 +67,13 @@ void SeenTransition::Update()
 		}
 		//blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
 		//blind->Update();
-		blindFaceOver->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 +blindW - blindResetPos });
-		blindFaceUnder->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 -blindW + blindResetPos });
+		blindFaceOver->SetPozition({ WinApp::window_width / Nmb::two,WinApp::window_height / Nmb::two +blindW - blindResetPos });
+		blindFaceUnder->SetPozition({ WinApp::window_width / Nmb::two,WinApp::window_height / Nmb::two -blindW + blindResetPos });
 		if ( blindW >= blindResetPos )
 		{
 			blindLoadTime--;
 		}
-		if ( blindLoadTime <= 0 )
+		if ( blindLoadTime <= zeroNmb )
 		{
 			seenTimeFlag = true;
 			seenTransFlag = false;
@@ -86,22 +86,22 @@ void SeenTransition::Update()
 	{
 
 		blindTime++;
-		if ( blindTime >= 0 )
+		if ( blindTime >= zeroNmb )
 		{
-			if ( blindW > 0 )
+			if ( blindW > zeroNmb )
 			{
 				blindW -= ( blindResetPos / blindTimeReset );
 			}
 		}
 		//blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
 		//blind->Update();
-		blindFaceOver->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 +blindW - blindResetPos });
-		blindFaceUnder->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 -blindW + blindResetPos });
-		if ( blindW <= 0 )
+		blindFaceOver->SetPozition({ WinApp::window_width / Nmb::two,WinApp::window_height / Nmb::two +blindW - blindResetPos });
+		blindFaceUnder->SetPozition({ WinApp::window_width / Nmb::two,WinApp::window_height / Nmb::two -blindW + blindResetPos });
+		if ( blindW <= zeroNmb )
 		{
 			blindLoadTime++;
 		}
-		if ( blindLoadTime > 10 )
+		if ( blindLoadTime > tenNmb )
 		{
 			blindFlag = false;
 			seenTimeFlag = false;

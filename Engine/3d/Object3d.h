@@ -17,6 +17,10 @@
 #include "Transform.h"
 #include "Camera.h"
 
+#include "LightGroup.h"
+#include "LightData.h"
+
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
@@ -31,7 +35,10 @@ private: // エイリアス
 	struct ConstBufferDataB0
 	{
 		//XMFLOAT4 color;	// 色 (RGBA)
-		Matrix4 mat;	// ３Ｄ変換行列
+		//Matrix4 mat;	// ３Ｄ変換行列
+		Matrix4 veiwproj;  //ビュープロジェクション行列
+		Matrix4 world;		//ワールド行列
+		Vector3 cameraPos;	//カメラ座標 (ワールド座標)
 	};
 
 
@@ -71,8 +78,25 @@ public: // 静的メンバ関数
 
 	bool IsDead() const { return  isDead_; }
 
+	/// <summary>
+	/// ライトのセット
+	/// </summary>
+	static void SetLightNon(LightGroup* lightGroups) {
+		Object3d::lightGroupNon = lightGroups;
+	}
+	static void SetLightUse(LightGroup* lightGroups) {
+		Object3d::lightGroupUse = lightGroups;
+	}
+	void ShadowUse() {
+		lightUse = true;
+		useNmb = useNum;
+		useNum++;
+	}
+	void RoadShadowUse() {
+		lightUse = true;
+	}
 
-
+	LightGroup* lightGroup;
 private: // 静的メンバ変数
 	// デバイス
 	static ComPtr<ID3D12Device> device;
@@ -98,6 +122,16 @@ private: // 静的メンバ変数
 	// 上方向ベクトル
 	static Vector3 up;
 
+	//ライト
+	static LightGroup* lightGroupNon;
+	//ライト
+	static LightGroup* lightGroupUse;
+
+
+
+
+	bool lightUse = false;
+	bool lightCopyFlag = false;
 
 	static float focalLengs;
 
@@ -166,6 +200,14 @@ public:
 	static Camera* camera;
 
 	static float win_wi, win_hi;
+
+
+	Vector4  circleShadowDir = { 0,0.5f,0,0 };
+	Vector3  circleShadowAtten = { 1.1f,0.7f,0.0f };
+	Vector2  circleShadowFactorAngle = { 0.5f,1.2f };
+
+	static int useNum;
+	int useNmb = 0;
 public:
 	Transform wtf;
 

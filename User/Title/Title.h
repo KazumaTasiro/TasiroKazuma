@@ -36,17 +36,10 @@ public:
 	///</summary>
 	void GameStertTrans();
 
-private:
+private://タイトルとその他
 
 	float PI = 3.141592f;
-	//タイトルのボス
-	Object3d* titleBoss = nullptr;
-	Model* titleBossModel = nullptr;
-	//ボススケール
-	Vector3 BossScale = { 20,20,20 };
-	//ボスポジション
-	Vector3 TitleBossPos = { 0,4, -50 };
-	Vector3 TitleResetBossPos = { 0,4,-50 };
+
 
 	//ロゴ
 	Object3d* titleLogo = nullptr;
@@ -59,7 +52,12 @@ private:
 	Vector3 LogoRot = { 0,( PI / 180 ) * 1,0 };
 
 	float LogoRotNum = 0;
+	float LogoRotMax = 15;
 	float LogoRotPlus = 0.5f;
+
+	float rot = ( PI / 180 );
+
+private://プレイヤー
 
 	//タイトルのプレイヤー
 	Object3d* titlePlayer = nullptr;
@@ -69,14 +67,32 @@ private:
 	//プレイヤーのポジション
 	Vector3 TitlePlayerPos = { 0,-2.5f, 0 };
 	Vector3 TitlePlayerResetPos = { 0,-2.5f, 0 };
+	//移動時のプレイヤーの回転
 	float TitleRotReset = 20;
 	Vector3 playerRot = { 0,( PI / 180 ) * 1,0 };
-	float playerSpeed = 0.1f;
 	float playerRotNum = 0;
+	float playerRotConst = 20;
 	float playerRotPlus = 2;
+	//プレイヤーのポジション限界
+	float playerMoveRimit = 1.5f;
+	float playerSpeed = 0.1f;
+	//どちらの壁に触れたか
 	bool playerWallFlagX = false;
 	bool playerWallFlagY = false;
 
+private://ボス
+
+
+	//タイトルのボス
+	Object3d* titleBoss = nullptr;
+	Model* titleBossModel = nullptr;
+	//ボススケール
+	Vector3 BossScale = { 20,20,20 };
+	//ボスポジション
+	Vector3 TitleBossPos = { 0,4, -50 };
+	Vector3 TitleResetBossPos = { 0,4,-50 };
+
+	//ボスの重力関係
 	float gravity = 0.1f;
 	float defUpSpeed = 1.0f;
 	float upSpeed = 1.0f;
@@ -85,7 +101,11 @@ private:
 	bool gravityStert = true;
 	int defGravityStertTime = 3;
 	int gravityStertTime = 3;
-
-	bool bossGoFlag = false;
+	int gravityEndTime = 0;
 	float bossNear = 1.0f;
+
+	//ゲームスタートフラグ
+	bool bossGoFlag = false;
+
+
 };

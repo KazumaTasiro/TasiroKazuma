@@ -196,6 +196,18 @@
     <Filter Include="ヘッダー ファイル\Game\SeenTransition">
       <UniqueIdentifier>{653be80e-ecfb-46b0-8cc6-ff25f397b8a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\RailCamera">
+      <UniqueIdentifier>{7ec42897-32e5-4dbc-a2af-8f1aff2edd91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\RailCamera">
+      <UniqueIdentifier>{42cba3bf-6ca6-421d-bc36-310b9abfca81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3D\Light">
+      <UniqueIdentifier>{b2061d3b-8b48-4cbe-8b86-d668f05b3f98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3D\Light">
+      <UniqueIdentifier>{a4e64b80-47d6-4b5f-962a-9a2fde1d16da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -239,24 +251,6 @@
     </ClCompile>
     <ClCompile Include="Engine\camera\Camera.cpp">
       <Filter>ソース ファイル\Engine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\DirectXCommon.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\DirectXCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\FPS.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\FPS</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\Framework.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\GameMain.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\ImGuiManager.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\bace\WinApp.cpp">
-      <Filter>ソース ファイル\Engine\EngineMain\WinApp</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>ソース ファイル\Engine\Input</Filter>
@@ -333,6 +327,57 @@
     <ClCompile Include="User\Enemy\EnemyAppearFont.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\base\DirectXCommon.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\DirectXCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\FPS.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Framework.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\GameMain.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\ImGuiManager.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\WinApp.cpp">
+      <Filter>ソース ファイル\Engine\EngineMain\WinApp</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameOver.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameClear.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\RailCamera\RailCamera.cpp">
+      <Filter>ソース ファイル\Game\RailCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyBothSides.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LIght\LightGroup.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LIght\CircleShadow.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LIght\PointLight.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LIght\DirectionalLight.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light\LightData.cpp">
+      <Filter>ソース ファイル\Engine\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyPolymo.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyObstacleBullet.cpp">
+      <Filter>ソース ファイル\Game\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -373,27 +418,6 @@
     </ClInclude>
     <ClInclude Include="Engine\camera\Camera.h">
       <Filter>ヘッダー ファイル\Engine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\DirectXCommon.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\DirectXCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\ErrorException.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\FPS</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\FPS.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\FPS</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\Framework.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\GameMain.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\ImGuiManager.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\bace\WinApp.h">
-      <Filter>ヘッダー ファイル\Engine\EngineMain\WinApp</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Input\Input.h">
       <Filter>ヘッダー ファイル\Engine\Input</Filter>
@@ -469,6 +493,60 @@
     </ClInclude>
     <ClInclude Include="User\Enemy\EnemyAppearFont.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DirectXCommon.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\DirectXCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\FPS.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Framework.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\GameMain.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\GameMain</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\ImGuiManager.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\WinApp.h">
+      <Filter>ヘッダー ファイル\Engine\EngineMain\WinApp</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameOver.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameClear.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\RailCamera\RailCamera.h">
+      <Filter>ヘッダー ファイル\Game\RailCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyBothSides.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\LightGroup.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\CircleShadow.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\PointLight.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\SpotLight.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LIght\DirectionalLight.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light\LightData.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyPolymo.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyObstacleBullet.h">
+      <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

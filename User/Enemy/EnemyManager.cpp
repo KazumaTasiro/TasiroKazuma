@@ -10,77 +10,98 @@ EnemyManager::~EnemyManager()
 
 }
 
-void EnemyManager::Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera,ParticleManager* particle)
+void EnemyManager::Initialize(SpriteCommon* spriteCommon,Camera* camera,ParticleManager* particle)
 {
 
 	assert(camera);
 	assert(particle);
-	assert(input);
 	assert(spriteCommon);
 	camera_ = camera;
 	spriteCommon_ = spriteCommon;
-	input_ = input;
-	enemyModel_ = Model::LoadFormOBJ("cubeObj");
+	input_ = Input::GetInstance();
+	enemyModel_ = Model::LoadFormOBJ("Sakaban");
 	enemyBulletModel_ = Model::LoadFormOBJ("EnemyBullet");
+	enemyObstacle_ = Model::LoadFormOBJ("EnemyObstacle");
+	alertModel_ = Model::LoadFormOBJ("AlertRoad");
 	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
 	LoadEnemyPopData();
 
+	spriteRight = new Sprite();
+	spriteLeft = new Sprite();
+	spriteRight->Initialize(spriteCommon_,22);
+	spriteLeft->Initialize(spriteCommon_,21);
 	//パーティクル生成
 	enemyDeadParticle = particle;
 	/*enemyDeadParticle->Update();*/
 
 	boss = new Boss();
-	boss->Initialize(enemyBulletModel_, enemyReticleModel_,input);
+	boss->Initialize(enemyBulletModel_,enemyReticleModel_);
 
 }
 
 void EnemyManager::Update()
 {
 	clearTime--;
-	if (clearTime <= 0) {
-		clearTime = 400;
+	int count = enemyDeath;
+	if ( count == 3 )
+	{
+		enemyDeath = 0;
+		clearCount++;
+		clearTime = clearTimeRis;
 		EnemyPopComandReset();
 	}
 	UpdateEnemyPopCommands();
-	
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		//敵キャラの描画
-		if (enemy->IsDead()) {
+
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
+//敵キャラの描画
+		if ( enemy->IsDead() )
+		{
 			EnemyDeadParticle(enemy->GetWorldPosition());
 		}
 	}
 	enemyDeadParticle->Update();
 	//デスフラグの立った弾を削除
-	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) {
-	return enemy->IsDead();
+	enemy_.remove_if([ ] (std::unique_ptr<Enemy>& enemy)
+ {
+	 return enemy->IsDead();
 		});
-	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) {
-		return enemy->IsTackleDead();
+	enemy_.remove_if([ ] (std::unique_ptr<Enemy>& enemy)
+ {
+	 return enemy->IsTackleDead();
 		});
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		clearCount += enemy->ReturnOnColl();
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
+		enemyDeath += enemy->ReturnOnColl();
 		enemy->SetGameScene(gameScene_);
 		enemy->Update(player_);
 	}
+	CreateObstance();
 }
 
 void EnemyManager::BossUpdate()
 {
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		enemy->CollTackle();
+	boss->Update(player_);
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
+		enemy->OnCollision();
 	}
-	enemy_.remove_if([](std::unique_ptr<Enemy>& enemy) {
-		return enemy->IsTackleDead();
+	enemy_.remove_if([ ] (std::unique_ptr<Enemy>& enemy)
+ {
+	 return enemy->IsTackleDead();
 		});
 	enemyDeadParticle->Update();
-	boss->Update(player_);
-	if (boss->IsDead()) {
-		if (EffectTime == 50) {
+
+	if ( boss->IsDead() )
+	{
+		if ( EffectTime == EffectTimeRis )
+		{
 			BossDeadParticle(boss->GetWorldPosition());
 		}
 		EffectTime--;
-		
-		if (EffectTime <= 0) {
+
+		if ( EffectTime <= EffectTimeRisEnd )
+		{
 			EfectEnd = true;
 		}
 	}
@@ -88,9 +109,14 @@ void EnemyManager::BossUpdate()
 
 void EnemyManager::Draw()
 {
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		//敵キャラの描画
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
+//敵キャラの描画
 		enemy->Draw();
+	}
+	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
+	{
+		newEnemyObstacleBullet->Draw();
 	}
 
 }
@@ -102,7 +128,8 @@ void EnemyManager::BossDraw()
 
 void EnemyManager::DrawUI()
 {
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
 		enemy->DrawUI();
 	}
 }
@@ -136,10 +163,10 @@ void EnemyManager::EnemyPopComandReset()
 
 void EnemyManager::UpdateEnemyPopCommands()
 {
-	if (waitflag)
+	if ( waitflag )
 	{
 		waitTimer--;
-		if (waitTimer <= 0)
+		if ( waitTimer <= 0 )
 		{
 			//待機完了
 			waitflag = false;
@@ -151,42 +178,42 @@ void EnemyManager::UpdateEnemyPopCommands()
 	std::string line;
 
 	//コマンド実行ループ
-	while (getline(enemyPopCommands, line))
+	while ( getline(enemyPopCommands,line) )
 	{
 		//1行分の文字列をストリームに変換して解析しやすくする
 		std::istringstream line_stream(line);
 
 		std::string word;
 		//,区切りで行の先頭文字列を取得
-		getline(line_stream, word, ',');
+		getline(line_stream,word,',');
 
 		//"//"から始まる行はコメント
-		if (word.find("//") == 0)
+		if ( word.find("//") == 0 )
 		{
 			//コメント行は飛ばす
 			continue;
 		}
 
 		//POPコマンド
-		if (word.find("POP") == 0)
+		if ( word.find("POP") == 0 )
 		{
 			//x座標
-			getline(line_stream, word, ',');
-			float x = (float)std::atof(word.c_str());
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
 			//y座標
-			getline(line_stream, word, ',');
-			float y = (float)std::atof(word.c_str());
+			getline(line_stream,word,',');
+			float y = ( float ) std::atof(word.c_str());
 			//z座標
-			getline(line_stream, word, ',');
-			float z = (float)std::atof(word.c_str());
+			getline(line_stream,word,',');
+			float z = ( float ) std::atof(word.c_str());
 			//敵を発生させる
-			ExistenceEnemy(Vector3(x, y, z));
+			ExistenceEnemy(Vector3(x,y,z));
 		}
 
 		//WAITコマンド
-		else if (word.find("WAIT") == 0)
+		else if ( word.find("WAIT") == 0 )
 		{
-			getline(line_stream, word, ',');
+			getline(line_stream,word,',');
 
 			//待ち時間
 			int32_t waitTime = atoi(word.c_str());
@@ -205,11 +232,11 @@ void EnemyManager::UpdateEnemyPopCommands()
 void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 {
 
-	randEnemyNmb = rand() % 2;
-	randEnemyRoot = rand() % 2;
+	randEnemyNmb = rand() % two;
+	randEnemyRoot = rand() % two;
 	//敵キャラの生成
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-	newEnemy->Initialize(EnemyPos, input_, spriteCommon_, enemyModel_, enemyBulletModel_, enemyReticleModel_,randEnemyNmb, randEnemyRoot);
+	newEnemy->Initialize(EnemyPos,spriteCommon_,enemyModel_,enemyBulletModel_,enemyReticleModel_,randEnemyNmb,randEnemyRoot);
 
 	//リストに登録する
 	enemy_.push_back(std::move(newEnemy));
@@ -218,7 +245,7 @@ void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 void EnemyManager::EnemyCollision(Player* player)
 {
 	//判定対象AとBの座標
-	Vector3 posA, posB;
+	Vector3 posA,posB;
 
 	//自弾リストの取得
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player->GetBullets();
@@ -234,18 +261,21 @@ void EnemyManager::EnemyCollision(Player* player)
 
 #pragma region 自弾と敵キャラの当たり判定
 #pragma endregion
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		//自弾と敵すべての当たり判定
-		for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
+//自弾と敵すべての当たり判定
+		for ( const std::unique_ptr<PlayerBullet>& bullet : playerBullets )
+		{
 
-			//敵キャラも座標
+//敵キャラも座標
 			posA = enemy->GetWorldPosition();
 
 			//自弾の座標
 			posB = bullet->GetWorldPosition();
 
-			if (Collision::CircleCollision(posB, posA, 2.0f, 2.0f)) {
-				//敵キャラの衝突時コールバックを呼び出す
+			if ( Collision::CircleCollision(posB,posA,enemyWide,enemyWide) )
+			{
+//敵キャラの衝突時コールバックを呼び出す
 				enemy->OnCollision();
 				//自弾の衝突時コールバックを呼び出す
 				bullet->OnCollision();
@@ -253,41 +283,58 @@ void EnemyManager::EnemyCollision(Player* player)
 			}
 		}
 	}
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
 
-		//敵キャラも座標
+//敵キャラも座標
 		posA = enemy->GetWorldPosition();
 
 		Vector2 posR;
 		//レティクルの座標
 		posR = player->GetReticlePos();
 
-		if (Collision::RaySphere({ 0,0,0 }, posA, 3.0f, player->GetFarNear())) {
-			if (enemy->GetMoveFlag() == true) {
-				if (input_->PushMouse(1)) {
-					//敵キャラのロックオンコールバックを呼び出す
+		if ( Collision::RaySphere(RayPos,posA,enemyWide,player->GetFarNear()) )
+		{
+			if ( enemy->GetMoveFlag() == true )
+			{
+				if ( input_->PushMouse(1) )
+				{
+//敵キャラのロックオンコールバックを呼び出す
 					enemy->LockOnTrue();
 				}
 			}
 		}
 	}
 
-	if (clearNum <= clearCount) {
-		//自弾とボスの当たり判定
-		for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
+	if ( clearNum <= clearCount )
+	{
+		if ( boss->IsDead() == false )
+		{
+			//自弾とボスの当たり判定
+			for ( const std::unique_ptr<PlayerBullet>& bullet : playerBullets )
+			{
 
-			//敵キャラも座標
-			posA = boss->GetWorldPosition();
+				//敵キャラも座標
+				posA = boss->GetWorldPosition();
 
-			//自弾の座標
-			posB = bullet->GetWorldPosition();
+				//自弾の座標
+				posB = bullet->GetWorldPosition();
 
-			if (Collision::CircleCollision(posB, posA, 50.0f, 50.0f)) {
-				//敵キャラの衝突時コールバックを呼び出す
-				boss->OnCollision();
-				//自弾の衝突時コールバックを呼び出す
+				if ( Collision::CircleCollision(posB,posA,bossWide,bossWide) )
+				{
+					//敵キャラの衝突時コールバックを呼び出す
+					boss->OnCollision();
+					//自弾の衝突時コールバックを呼び出す
+					bullet->OnCollision();
+
+				}
+			}
+		}
+		if ( boss->IsDead() )
+		{
+			for ( const std::unique_ptr<PlayerBullet>& bullet : playerBullets )
+			{
 				bullet->OnCollision();
-
 			}
 		}
 		//敵キャラも座標
@@ -297,9 +344,11 @@ void EnemyManager::EnemyCollision(Player* player)
 		//自弾の座標
 		posR = player->GetReticlePos();
 
-		if (Collision::RaySphere({ 0,0,0 }, posA, 50.0f, player->GetFarNear())) {
-			if (input_->PushMouse(1)) {
-				//敵キャラの衝突時コールバックを呼び出す
+		if ( Collision::RaySphere(RayPos,posA,bossWide,player->GetFarNear()) )
+		{
+			if ( input_->PushMouse(one) )
+			{
+//敵キャラの衝突時コールバックを呼び出す
 				boss->LockOnTrue();
 			}
 		}
@@ -334,15 +383,17 @@ void EnemyManager::EnemyCollision(Player* player)
 
 void EnemyManager::EnemyReset()
 {
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
 		enemy->CollTackle();
 	}
 	EnemyPopComandReset();
-	clearCount = 0;
+	clearCount = clearCountRis;
+	enemyDeath = clearCountRis;
 	//clearNum = 0;
-	clearTime = 400;
+	clearTime = clearTimeRis;
 	Update();
-	EffectTime = 50;
+	EffectTime = EffectTimeRis;
 	EfectEnd = false;
 	boss->Reset();
 	BossUpdate();
@@ -352,7 +403,8 @@ void EnemyManager::EnemyReset()
 bool EnemyManager::Clear()
 {
 
-	if (clearNum <= clearCount) {
+	if ( clearNum <= clearCount )
+	{
 		return true;
 	}
 
@@ -361,7 +413,8 @@ bool EnemyManager::Clear()
 
 bool EnemyManager::BossClear()
 {
-	if (EfectEnd) {
+	if ( EfectEnd )
+	{
 		return true;
 	}
 	return false;
@@ -370,30 +423,31 @@ bool EnemyManager::BossClear()
 void EnemyManager::EnemyDeadParticle(Vector3 EnemyPos)
 {
 	//パーティクル範囲
-	for (int i = 0; i < 5; i++) {
-		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 5.0f;
+	for ( int i = 0; i < 5; i++ )
+	{
+//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = rnd_posS;
 		Vector3 pos = EnemyPos;
-		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.x += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 
 		//速度
 		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.0f;
+		const float rnd_vel = rnd_velS;
 		Vector3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.x = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.0000f;
+		const float rnd_acc = rnd_accS;
 		Vector3 acc{};
-		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.x = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
 		//追加
-		enemyDeadParticle->Add(30, pos, vel, acc, 0.0f, 20.0f, 1);
-		enemyDeadParticle->Add(30, pos, vel, acc, 0.0f, 20.0f, 2);
+		enemyDeadParticle->Add(enemyParticleLife,pos,vel,acc,enemyParticleScaleStert,enemyParticleScaleEnd,one);
+		enemyDeadParticle->Add(enemyParticleLife,pos,vel,acc,enemyParticleScaleStert,enemyParticleScaleEnd,two);
 		enemyDeadParticle->Update();
 	}
 }
@@ -401,30 +455,31 @@ void EnemyManager::EnemyDeadParticle(Vector3 EnemyPos)
 void EnemyManager::BossDeadParticle(Vector3 EnemyPos)
 {
 	//パーティクル範囲
-	for (int i = 0; i < 10; i++) {
-		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
-		const float rnd_pos = 5.0f;
+	for ( int i = 0; i < 10; i++ )
+	{
+//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
+		const float rnd_pos = rnd_posS;
 		Vector3 pos = EnemyPos;
-		pos.x += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.y += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		pos.z += (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.x += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.z += ( float ) rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 
 		//速度
 		//X,Y,Z全て[-0.05f,+0.05f]でランダムに分布
-		const float rnd_vel = 0.0f;
+		const float rnd_vel = rnd_velS;
 		Vector3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.x = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = ( float ) rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		//重力に見立ててYのみ[-0.001f,0]でランダムに分布
-		const float rnd_acc = 0.0000f;
+		const float rnd_acc = rnd_accS;
 		Vector3 acc{};
-		acc.x = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
-		acc.y = (float)rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.x = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
+		acc.y = ( float ) rand() / RAND_MAX * rnd_acc - rnd_acc / 2.0f;
 
 		//追加
-		enemyDeadParticle->Add(40, pos, vel, acc, 0.0f, 50.0f, 1);
-		enemyDeadParticle->Add(40, pos, vel, acc, 0.0f, 50.0f, 2);
+		enemyDeadParticle->Add(bossParticleLife,pos,vel,acc,bossParticleScaleStert,bossParticleScaleEnd,one);
+		enemyDeadParticle->Add(bossParticleLife,pos,vel,acc,bossParticleScaleStert,bossParticleScaleEnd,two);
 		enemyDeadParticle->Update();
 	}
 }
@@ -432,9 +487,39 @@ void EnemyManager::BossDeadParticle(Vector3 EnemyPos)
 void EnemyManager::ParticleDraw()
 {
 	enemyDeadParticle->Draw();
+	boss->ParticleDraw();
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
+		enemy->ParticleDraw();
+	}
 }
 
 void EnemyManager::bossSeenTest()
 {
-	clearCount = 5;
+	clearCount = 3;
+}
+
+void EnemyManager::ImguiUpdate()
+{
+	boss->ImGuiUpdate();
+}
+
+void EnemyManager::CreateObstance()
+{
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
+		if ( enemy->ReturnObstacleFlag() )
+		{
+			//弾を生成し、初期化
+			std::unique_ptr<EnemyObstacleBullet> newEnemyObstacleBullet = std::make_unique<EnemyObstacleBullet>();
+			newEnemyObstacleBullet->Initialize(enemyObstacle_,alertModel_,enemy->GetWorldPosition());
+			//弾を発射する
+			enemyObstacleBullet.push_back(std::move(newEnemyObstacleBullet));
+			enemy->ResetObstacleFlag();
+		}
+	}
+	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
+	{
+		newEnemyObstacleBullet->Update();
+	}
 }

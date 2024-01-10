@@ -2,6 +2,7 @@
 
 void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t textureIndex)
 {
+	
 	spritecomon = spritecommon_;
 
 	//テクスチャサイズをイメージに合わせる

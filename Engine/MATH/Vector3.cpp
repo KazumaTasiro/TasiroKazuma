@@ -90,6 +90,31 @@ bool Vector3::Vector3IsInfinite() {
 	}
 }
 
+Vector3 Vector3::SphereLinear(Vector3& out, Vector3& start, Vector3& end, float t)
+{
+	Vector3 s, e;
+	start.nomalize();
+	end.nomalize();
+	s = start;
+	e = end;
+
+	// 2ベクトル間の角度（鋭角側）
+	float angle = 0.0f;
+	angle = acos(s.dot(e));
+	//float SinTh = sin(angle);
+
+	// 補間係数
+	float Ps = sin(angle * (1 - t));
+	//float Pe = sin(angle * t);
+
+	/*out = (s * Ps+ Pe * e) / SinTh;*/
+	out = { (s.x * Ps) + (e.x * Ps),(s.y * Ps) + (e.y * Ps),(s.z * Ps) + (e.z * Ps) };
+	// 一応正規化して球面線形補間に
+	out.nomalize();
+
+	return out;
+}
+
 Vector3 Vector3::operator+()const {
 	return *this;
 }

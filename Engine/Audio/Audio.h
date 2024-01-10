@@ -12,6 +12,7 @@
 #include <mfreadwrite.h>
 #include <propvarutil.h>
 
+
 class Audio
 {
 private:
@@ -21,7 +22,7 @@ public:
 	//チャンクヘッダ
 	struct ChunkHeader
 	{
-		char id[4];		//チャンクごとのid
+		char id[ 4 ];		//チャンクごとのid
 		int32_t size;	//チャンクサイズ
 	};
 
@@ -29,7 +30,7 @@ public:
 	struct RiffHeader
 	{
 		ChunkHeader chunk;	//"RIFF"
-		char type[4];		//"WAVE"
+		char type[ 4 ];		//"WAVE"
 	};
 	//FMTチャンク
 	struct FormatChunk
@@ -70,7 +71,7 @@ public:
 	/// サウンドデータ名
 	/// </summary>
 	/// <param name="filename">WAVファイル名</param>
-	void PlayWave(const std::string filename, bool LoopFlag = false, float sourceRate=1.0f, float targetRate=1.0f);
+	void PlayWave(const std::string filename,bool LoopFlag = false,float sourceRate = 1.0f,float targetRate = 1.0f);
 
 	void SetPitch(const std::string filename);
 
@@ -78,7 +79,7 @@ private:
 	//xAudioのインスタンス
 	ComPtr<IXAudio2>xAudio2_;
 	//サウンドデータの配列
-	std::map<std::string, SoundData> soundDatas_;
+	std::map<std::string,SoundData> soundDatas_;
 
 	//サウンド格納ディレクトリ
 	std::string directoryPath_;

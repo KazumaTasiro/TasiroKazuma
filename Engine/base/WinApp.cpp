@@ -3,6 +3,8 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+WinApp* WinApp::WinApp_ = nullptr;
+
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	//ImGui用ウィンドウプロシージャ呼び出し
@@ -61,8 +63,12 @@ void WinApp::Initialize()
 
 WinApp* WinApp::GetInstance()
 {
-	static WinApp instance;
-	return &instance;
+	if ( WinApp_ == nullptr )
+	{
+		WinApp_ = new WinApp();
+	}
+
+	return WinApp_;
 }
 
 void WinApp::Finalize()

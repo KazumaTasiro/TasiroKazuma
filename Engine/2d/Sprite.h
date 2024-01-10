@@ -56,13 +56,10 @@ public:
 
 	Vector4 GetColor() { return color; }
 
-	void SetScale(const Vector3& scale_) { scale = scale_; }
+	void SetAnchorPoint(const Vector2& anchorPoint_) {
+		anchorpoint = anchorPoint_; }
 
-	Vector3 GetScale() { return scale; }
-
-	void SetAnchorPoint(const Vector2& anchorPoint_) { anchorPoint = anchorPoint_; }
-
-	Vector2 GetAnchorPoint() { return anchorPoint; }
+	Vector2 GetAnchorPoint() { return anchorpoint; }
 
 	void SetTextureIndex(uint32_t texNmb) { textureIndex_ = texNmb; AdjustTextureSize();}
 
@@ -106,7 +103,6 @@ private:
 	Matrix4  matTrans;//平行移動行列
 
 	//座標
-	Vector3 scale{ 0.5f, 0.5f, 1.0f };
 
 	Vector2 size_ = { 100.0f,100.0f };
 
@@ -115,7 +111,7 @@ private:
 
 	Vector4 color = { 1,1,1,1 };
 
-	Vector2 anchorPoint = { 0.0f,0.0f };
+	/*Vector2 anchorPoint = { 0.0f,0.0f };*/
 
 	ComPtr<ID3D12Resource> constBuffTransform;
 	ConstBufferDataTransform* constMapTransform = nullptr;

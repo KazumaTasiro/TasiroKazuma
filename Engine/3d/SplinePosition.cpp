@@ -7,6 +7,12 @@ SplinePosition::SplinePosition(Vector3& Start, Vector3& p1, Vector3& p2, Vector3
 }
 
 
+SplinePosition::SplinePosition(Vector3& Start,Vector3& p1,Vector3& end)
+{
+	std::vector<Vector3> points_{ Start, Start, p1, p1, end, end };
+	this->points = points_;
+}
+
 SplinePosition::SplinePosition(const std::vector<Vector3>& points)
 {
 	this->points = points;

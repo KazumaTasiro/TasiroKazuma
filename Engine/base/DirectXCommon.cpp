@@ -8,12 +8,11 @@
 
 using namespace Microsoft::WRL;
 
-void DirectXCommon::Initialize(WinApp* winApp)
+void DirectXCommon::Initialize()
 {
 	//NULL検知
-	assert(winApp);
 	//メンバ変数に記録
-	winApp_ = winApp;
+	winApp_ = WinApp::GetInstance();
 
 
 	//デバイスの生成

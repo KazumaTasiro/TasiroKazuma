@@ -22,7 +22,7 @@ void GameMain::Initialize()
 	ParticleManager::StaticInitialize(Framework::GetDXCommon()->GetDevice(), Framework::GetDXCommon()->GetCommandList());
 
 	gameScene = new GameScene();
-	gameScene->Initialize(Framework::GetWinApp(), Framework::GetDXCommon(), Framework::GetInput());
+	gameScene->Initialize(Framework::GetDXCommon());
 
 }
 

@@ -9,6 +9,11 @@
 #include "LockOnBullet.h"
 #include "ParticleManager.h"
 #include "Boss.h"
+#include "Sprite.h"
+#include "EnemyObstacleBullet.h"
+#include <memory>
+#include <list>
+#include <cassert>
 
 
 class Player;
@@ -22,7 +27,7 @@ public:
 	///<summary>
 	////初期化
 	///</summary>
-	void Initialize( Input* input, SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
+	void Initialize(SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
 	///<summary>
 	////更新
 	///</summary>
@@ -105,11 +110,35 @@ public:
 	////ボステスト用
 	///</summary>
 	void bossSeenTest();
+
+	void ImguiUpdate();
+
+	void CreateObstance();
+
 public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
+private://障害物
+	std::list<std::unique_ptr<EnemyObstacleBullet>> enemyObstacleBullet;
+		//敵の落とす弾
+	Model* enemyObstacle_ = nullptr;
+	Model* alertModel_ = nullptr;
 
 private:
+	enum Nmb
+	{
+		zero = 0,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
+	};
 	DirectXCommon* dxCommon = nullptr;
 	SpriteCommon* spriteCommon_ = nullptr;
 	Audio* audio = nullptr;
@@ -126,18 +155,26 @@ private:
 	//敵発生コマンド
 	std::stringstream enemyPopCommands;
 
+	Sprite* spriteRight;
+	Sprite* spriteLeft;
+
 	bool waitflag = false;
 	int waitTimer = 0;
 	Camera* camera_ = nullptr;
+	int enemyDeath = 0;
 	int clearCount = 0;
-	int clearNum = 5;
+	int clearCountRis = 0;
+	int clearNum = 3;
 
 	int clearTime = 400;
+	int clearTimeRis = 400;
 	int randEnemyNmb;
 	int randEnemyRoot;
 
 	bool EfectEnd = false;
 	int EffectTime = 50;
+	int EffectTimeRis = 50;
+	int EffectTimeRisEnd = 0;
 
 	ParticleManager* enemyDeadParticle;
 
@@ -145,8 +182,29 @@ private:
 	Model* enemyModel_ = nullptr;
 	//敵の弾モデル
 	Model* enemyBulletModel_ = nullptr;
+
+
 	//敵の照準モデル
 	Model* enemyReticleModel_ = nullptr;
 
 	Boss* boss = nullptr;
+
+	int enemyParticleLife = 30;
+	float enemyParticleScaleStert = 0.0f;
+	float enemyParticleScaleEnd = 20.0f;
+
+	int bossParticleLife = 40;
+	float bossParticleScaleStert = 0.0f;
+	float bossParticleScaleEnd = 50.0f;
+
+	const float rnd_posS = 5.0f;
+	const float rnd_velS = 0.0f;
+	const float rnd_accS = 0.0000f;
+
+	Vector3 RayPos = { 0,0,0 };
+
+	float bossWide = 20.0f;
+	float enemyWide = 3.0f;
+
+	float dengerTimer = 180.0f;
 };

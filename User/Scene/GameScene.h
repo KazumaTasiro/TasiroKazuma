@@ -21,11 +21,17 @@
 #include "ParticleManager.h"
 #include "Title.h"
 #include "SeenTransition.h"
+#include "StertCount.h"
+#include "GameOver.h"
+#include "GameClear.h"
+#include "RailCamera.h"
+#include "LightGroup.h"
 
 ///<summary>
 ///ボスの生成と行動
 ///</summary>
-class GameScene {
+class GameScene
+{
 public:
 	/// <summary>
 	/// コンストクラタ
@@ -40,7 +46,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WinApp* winApp, DirectXCommon* dxcomon, Input* input);
+	void Initialize(DirectXCommon* dxcomon);
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -71,8 +77,10 @@ public:
 	///</summary>
 	void TitleReset();
 
+	//カーソルが画面外に出ない処理
+	void CursorLimit();
 
-
+	void LightUpdate();
 
 private:
 	enum Scene
@@ -85,8 +93,41 @@ private:
 	};
 	Scene scene;
 private:
+	enum Nmb
+	{
+		zero = 0,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
+	};
+private://プレイヤー
 	///自キャラ
 	Player* player_ = nullptr;
+
+	bool playMove = true;
+
+	float playPos = 0;
+
+	bool TitleEnd = false;
+private://スプライト
+
+	Sprite* stert_ = nullptr;
+	Sprite* gameClear_ = nullptr;
+	Sprite* gameOver_ = nullptr;
+	Sprite* operation_ = nullptr;
+	Sprite* cameraMoveOps_ = nullptr;
+
+private:
+
+	RailCamera* railCamera = nullptr;
+	
 
 	//std::list<std::unique_ptr<Enemy>> enemy_;
 
@@ -105,6 +146,9 @@ private:
 
 	Camera* camera_ = nullptr;
 
+	RECT rcClip;
+	RECT rcOldClip;
+
 	//OBJからモデルデータを読み込む
 	Model* model_ = nullptr;
 
@@ -118,19 +162,16 @@ private:
 	EnemyManager* enemyManager_ = nullptr;
 
 
-	Sprite* stert_ = nullptr;
-	Sprite* gameClear_ = nullptr;
-	Sprite* gameOver_ = nullptr;
+
 	Vector2 spriteEnd_;
+	Vector2 operationPos = {128,64};
 
-	bool playMove = true;
-
-	float playPos = 0;
-
-	bool TitleEnd = false;
+	
 
 	ParticleManager* ParticleMana_;
 
+	GameOverSeen* gameOverSeen = nullptr;
+	GameClearScene* gameClearScene = nullptr;
 
 
 	Vector3 cameraTitle = { 0,0,10 };
@@ -140,4 +181,23 @@ private:
 
 	SeenTransition* seenTransition_ = nullptr;
 	bool seenFlag = false;
+
+	StertCount* stertCount_ = nullptr;
+
+	Vector3 TargetCamRes = { 0,0,0 };
+
+
+	bool DemoClear = false;
+	float gameOverUp = 80.0f;
+	float gamestertUp = 50.0f;
+
+	float bossTime = 10.0f;
+
+	LightGroup* lightGroupNon = nullptr;
+	LightGroup* lightGroupUse = nullptr;
+
+	Vector4  circleShadowDir = { 0,0.5f,0,0 };
+	Vector3  circleShadowAtten = { 1.1f,0.7f,0.0f };
+	Vector2  circleShadowFactorAngle = { 0.5f,1.2f };
+	
 };

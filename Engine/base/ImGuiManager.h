@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WinApp* winApp,DirectXCommon* dxcommon);
+	void Initialize(DirectXCommon* dxcommon);
 
 	/// <summary>
 	/// 終了
@@ -39,7 +39,17 @@ public:
 
 	void MySaveFunction();
 
+	static ImGuiManager* GetInstance();
 private:
+
+	ImGuiManager() = default;
+	~ImGuiManager() = default;
+	ImGuiManager(const ImGuiManager&) = delete;
+	const ImGuiManager& operator=(const ImGuiManager&) = delete;
+private:
+	static ImGuiManager* ImGuiManager_;
+private:
+	WinApp* winApp_ = nullptr;
 	DirectXCommon* dxcommon_ = nullptr;
 
 	// SRV用デスクリプタヒープ

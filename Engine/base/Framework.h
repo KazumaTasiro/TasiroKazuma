@@ -4,6 +4,10 @@
 #include "DirectXCommon.h"
 #include "FPS.h"
 #include "FbxLoader.h"
+#include "ImGuiManager.h"
+#include "ParticleManager.h"
+#include "LightGroup.h"
+#include "LightData.h"
 
 //ゲーム全体
 class Framework
@@ -46,8 +50,14 @@ private:
 	DirectXCommon* dxCommon = nullptr;
 	//インプット
 	Input* input = nullptr;
+	//ImGui
+	ImGuiManager* imGuiManager_ = nullptr;
 	//FPS
 	FPS* fps = new FPS;
 	//メッセージ
 	MSG msg{};
+	//ライト
+	LightGroup* light = nullptr;
+
+	LightData* lightData = nullptr;
 };
