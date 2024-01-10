@@ -10,6 +10,10 @@
 #include "ParticleManager.h"
 #include "Boss.h"
 #include "Sprite.h"
+#include "EnemyObstacleBullet.h"
+#include <memory>
+#include <list>
+#include <cassert>
 
 
 class Player;
@@ -108,9 +112,17 @@ public:
 	void bossSeenTest();
 
 	void ImguiUpdate();
+
+	void CreateObstance();
+
 public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
+private://障害物
+	std::list<std::unique_ptr<EnemyObstacleBullet>> enemyObstacleBullet;
+		//敵の落とす弾
+	Model* enemyObstacle_ = nullptr;
+	Model* alertModel_ = nullptr;
 
 private:
 	enum Nmb
@@ -170,6 +182,8 @@ private:
 	Model* enemyModel_ = nullptr;
 	//敵の弾モデル
 	Model* enemyBulletModel_ = nullptr;
+
+
 	//敵の照準モデル
 	Model* enemyReticleModel_ = nullptr;
 

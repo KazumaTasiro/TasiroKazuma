@@ -21,6 +21,8 @@ void EnemyManager::Initialize(SpriteCommon* spriteCommon,Camera* camera,Particle
 	input_ = Input::GetInstance();
 	enemyModel_ = Model::LoadFormOBJ("Sakaban");
 	enemyBulletModel_ = Model::LoadFormOBJ("EnemyBullet");
+	enemyObstacle_ = Model::LoadFormOBJ("EnemyObstacle");
+	alertModel_ = Model::LoadFormOBJ("AlertRoad");
 	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
 	LoadEnemyPopData();
 
@@ -74,6 +76,7 @@ void EnemyManager::Update()
 		enemy->SetGameScene(gameScene_);
 		enemy->Update(player_);
 	}
+	CreateObstance();
 }
 
 void EnemyManager::BossUpdate()
@@ -110,6 +113,10 @@ void EnemyManager::Draw()
 	{
 //敵キャラの描画
 		enemy->Draw();
+	}
+	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
+	{
+		newEnemyObstacleBullet->Draw();
 	}
 
 }
@@ -495,4 +502,24 @@ void EnemyManager::bossSeenTest()
 void EnemyManager::ImguiUpdate()
 {
 	boss->ImGuiUpdate();
+}
+
+void EnemyManager::CreateObstance()
+{
+	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
+	{
+		if ( enemy->ReturnObstacleFlag() )
+		{
+			//弾を生成し、初期化
+			std::unique_ptr<EnemyObstacleBullet> newEnemyObstacleBullet = std::make_unique<EnemyObstacleBullet>();
+			newEnemyObstacleBullet->Initialize(enemyObstacle_,alertModel_,enemy->GetWorldPosition());
+			//弾を発射する
+			enemyObstacleBullet.push_back(std::move(newEnemyObstacleBullet));
+			enemy->ResetObstacleFlag();
+		}
+	}
+	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
+	{
+		newEnemyObstacleBullet->Update();
+	}
 }

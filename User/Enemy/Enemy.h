@@ -135,6 +135,16 @@ public:
 
 	void TackleMove();
 
+	void ObstacleAttack();
+
+	void ObstacleMove();
+
+	bool ReturnObstacleFlag();
+
+	void ResetObstacleFlag();
+
+	float AbsoluteValue(float nmb1,float nmb2);
+
 private:
 	float PI = 3.141592f;
 	enum Nmb
@@ -164,6 +174,9 @@ private://弾
 
 	int fireTime = 45;
 	int fireTimeRis = 45;
+
+	//障害物発生フラグ
+	bool obstacleFlag = false;
 private://敵の基本情報
 	//ワールド変換データ
 	Object3d* worldTransform_;
@@ -212,6 +225,9 @@ private://敵の基本情報
 
 	Vector3 velocity_;
 	Vector3 velocityTackle;
+
+	//障害物を落とすやつの基本スピード
+	float obstacleEnemySpeed = 1.5f;
 
 private://敵のスプライン
 	int EnemyRootNmb_ = 0;
