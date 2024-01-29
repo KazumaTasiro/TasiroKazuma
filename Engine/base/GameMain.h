@@ -3,6 +3,8 @@
 #include "GameScene.h"
 #include "PostEffect.h"
 #include "Framework.h"
+#include "DirectionalLight.h"
+
 
 //ゲーム全体
 class GameMain:public Framework

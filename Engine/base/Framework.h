@@ -9,6 +9,7 @@
 #include "LightGroup.h"
 #include "LightData.h"
 
+
 //ゲーム全体
 class Framework
 {

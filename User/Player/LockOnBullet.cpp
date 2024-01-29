@@ -73,7 +73,7 @@ void LockOnBullet::ParticleDraw()
 void LockOnBullet::AddParticle()
 {
 		//パーティクル範囲
-	for ( int i = 0; i < 8; i++ )
+	for ( int i = 0; i < 10; i++ )
 	{
 		//X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
 		const float rnd_pos = rnd_posS;

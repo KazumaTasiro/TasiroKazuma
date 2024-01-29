@@ -100,6 +100,7 @@ void Boss::Move()
 			DemoEnemyMove = true;
 		}
 	}
+	lockOnCoolTime--;
 	if ( DemoEnemyMove == true )
 	{
 		if ( worldTransform_->wtf.position.x >= 5 || worldTransform_->wtf.position.x <= -5 )
@@ -110,15 +111,25 @@ void Boss::Move()
 		Fire();
 		if ( input_->ReleaseMouse(1) )
 		{
-			if ( lockOn == true )
-			{
-//弾を生成し、初期化
-				std::unique_ptr<LockOnBullet> newBullet = std::make_unique<LockOnBullet>();
-				newBullet->Initialize(enemyBulletModel_,player_->GetWorldPosition());
-				//弾を発射する
-				EnemyLockBullets_.push_back(std::move(newBullet));
-				lockOn = false;
-			}
+
+				if ( isDead_ == false )
+				{
+					if ( player_->retrunIsDaed() == false )
+					{
+						if ( lockOn == true )
+						{
+
+							//弾を生成し、初期化
+							std::unique_ptr<LockOnBullet> newBullet = std::make_unique<LockOnBullet>();
+							newBullet->Initialize(enemyBulletModel_,player_->GetWorldPosition());
+							//弾を発射する
+							EnemyLockBullets_.push_back(std::move(newBullet));
+							lockOn = false;
+
+						}
+					}
+				}
+			
 		}
 	}
 	worldTransform_->Update();
@@ -150,9 +161,12 @@ void Boss::Draw()
 	{
 		worldTransform_->Draw();
 
-		if ( lockOn )
+		if ( player_->retrunIsDaed() == false )
 		{
-			worldTransformReticle_->Draw();
+			if ( lockOn )
+			{
+				worldTransformReticle_->Draw();
+			}
 		}
 	}
 }
@@ -168,7 +182,11 @@ void Boss::ParticleDraw()
 
 void Boss::LockOnTrue()
 {
-	lockOn = true;
+	if ( lockOnCoolTime <= 0 )
+	{
+		lockOn = true;
+		lockOnCoolTime = lockOnCoolTimeRe;
+	}
 }
 
 void Boss::OnColl()

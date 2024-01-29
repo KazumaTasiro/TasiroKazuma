@@ -378,6 +378,9 @@
     <ClCompile Include="User\Enemy\EnemyObstacleBullet.cpp">
       <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\ParticleLibrary.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -547,6 +550,9 @@
     </ClInclude>
     <ClInclude Include="User\Enemy\EnemyObstacleBullet.h">
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ParticleLibrary.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #pragma once
 #include "Object3d.h"
 #include "Model.h"
+#include "LightData.h"
 #include <cassert>
 
 ///<summary>

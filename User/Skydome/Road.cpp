@@ -20,6 +20,7 @@ void Road::Initialize()
 		Bill_[ i ]->wtf.scale = { RoasdSize };
 
 
+
 	}
 
 }

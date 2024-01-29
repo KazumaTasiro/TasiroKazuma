@@ -20,6 +20,9 @@ void GameMain::Initialize()
 	// 3Dオブジェクト静的初期化
 	Object3d::StaticInitialize(Framework::GetDXCommon()->GetDevice());
 	ParticleManager::StaticInitialize(Framework::GetDXCommon()->GetDevice(), Framework::GetDXCommon()->GetCommandList());
+	ParticleLibrary::GetInstance()->Initialize();
+	//DirectionalLight::StaticInitialize(Framework::GetDXCommon()->GetDevice());
+
 
 	gameScene = new GameScene();
 	gameScene->Initialize(Framework::GetDXCommon());

@@ -120,7 +120,7 @@ private:
 	//定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff;
 	//環境光の色
-	Vector3 ambientColor = { 0.8f,0.8f,0.8f };
+	Vector3 ambientColor = { 1.0f,1.0f,1.0f };
 
 	//点光源の配列
 	std::vector<PointLight> pointLights;
