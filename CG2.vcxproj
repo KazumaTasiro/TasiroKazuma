@@ -102,6 +102,7 @@
     <ClCompile Include="Engine\Light\LightData.cpp" />
     <ClCompile Include="Engine\LIght\LightGroup.cpp" />
     <ClCompile Include="Engine\LIght\PointLight.cpp" />
+    <ClCompile Include="Engine\3d\ParticleLibrary.cpp" />
     <ClCompile Include="User\Enemy\EnemyBothSides.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\2d\SpriteCommon.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Engine\LIght\LightGroup.h" />
     <ClInclude Include="Engine\LIght\PointLight.h" />
     <ClInclude Include="Engine\LIght\SpotLight.h" />
+    <ClInclude Include="Engine\3d\ParticleLibrary.h" />
     <ClInclude Include="User\Enemy\EnemyBothSides.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\2d\SpriteCommon.h" />

@@ -177,7 +177,7 @@ private:
 	const float sevenNmb = 7.0f;
 	const float eightNmb = 8.0f;
 	const float nineNmb = 9.0f;
-	const float tenNmb = 10.0f;
+	const float tenNmb = 3.0f;
 
 	const int zeroNmbI = 0;
 	const int oneNmbI = 1;
@@ -240,7 +240,7 @@ private:
 	const float speed = 0.5f;
 
 	float playerHp;
-	float playerMaxHp = 10.0f;
+	float playerMaxHp = 3.0f;
 
 	bool DeadParticle = false;
 

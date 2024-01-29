@@ -41,47 +41,9 @@ void Enemy::Initialize(Vector3 EnemyPos,SpriteCommon* sptriteCommon,Model* model
 	worldTransform_->wtf.rotation = { 0,( PI / 180 ) * 180,0 };
 
 	worldTransform_->wtf.scale = EnemyScale;
-	if ( EnemyRootNmb_ == zero )
-	{
-		oneEnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
-		oneEnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
-		oneEnemyReMoveSpline1 = { worldTransform_->wtf.position.x - sprineX, sprineY1 , -sprineZ1 };
-		oneEnemyReMoveSpline2 = { worldTransform_->wtf.position.x - sprineX, sprineY1, sprineZ2 };
-		EnemyMoveSpline0 = oneEnemyMoveSpline0;
-		EnemyMoveSpline1 = oneEnemyMoveSpline1;
-		EnemyMoveSpline2 = oneEnemyMoveSpline2;
-		EnemyMoveSpline0 = oneEnemyMoveSpline0;
-		EnemyReMoveSpline0 = oneEnemyReMoveSpline0;
-		EnemyReMoveSpline1 = oneEnemyReMoveSpline1;
-		EnemyReMoveSpline2 = oneEnemyReMoveSpline2;
-	}
-	else if ( EnemyRootNmb_ == one )
-	{
-		twoEnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
-		twoEnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
-		twoEnemyReMoveSpline1 = { worldTransform_->wtf.position.x + sprineX, sprineY1 , -sprineZ1 };
-		twoEnemyReMoveSpline2 = { worldTransform_->wtf.position.x + sprineX, sprineY1, sprineZ2 };
-		EnemyMoveSpline0 = twoEnemyMoveSpline0;
-		EnemyMoveSpline1 = twoEnemyMoveSpline1;
-		EnemyMoveSpline2 = twoEnemyMoveSpline2;
-		EnemyMoveSpline0 = twoEnemyMoveSpline0;
-		EnemyReMoveSpline0 = twoEnemyReMoveSpline0;
-		EnemyReMoveSpline1 = twoEnemyReMoveSpline1;
-		EnemyReMoveSpline2 = twoEnemyReMoveSpline2;
-	}
-	else if ( EnemyRootNmb_ == three )
-	{
-		DemoEnemyMove = true;
-		enemyNmb = 1;
-	}
-	else if ( EnemyRootNmb_ == four )
-	{
-		DemoEnemyMove = true;
-		enemyNmb = 1;
-	}
+	SplineMoveInitialize();
 
-	spline = new SplinePosition(worldTransform_->wtf.position,EnemyMoveSpline1,EnemyMoveSpline2,EnemyMoveSpline0);
-	splineReMove = new SplinePosition(worldTransform_->wtf.position,EnemyReMoveSpline1,EnemyReMoveSpline2,EnemyReMoveSpline0);
+
 
 	//worldTransform_->ShadowUse();
 	shadowNmb = LightData::GetInstance()->AddCircleShadow(worldTransform_->wtf.position,circleShadowDir,circleShadowAtten,circleShadowFactorAngle);
@@ -143,6 +105,10 @@ void Enemy::Move()
 		{
 			TackleMove();
 		}
+		if ( enemyNmb == 2 )
+		{
+			ObstacleMove();
+		}
 
 	}
 	velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
@@ -158,7 +124,7 @@ void Enemy::Move()
 
 void Enemy::Fire()
 {
-	fireTime--;
+
 	if ( fireTime <= 0 )
 	{
 		fireFlag = true;
@@ -167,6 +133,7 @@ void Enemy::Fire()
 	}
 	if ( fireFlag == false )
 	{
+		fireTime--;
 		velocityTackle = player_->GetWorldPosition() - worldTransform_->wtf.position;
 		velocityTackle.nomalize();
 		velocityTackle *= verocitySpeed;
@@ -184,17 +151,25 @@ void Enemy::Fire()
 
 			TackleAttck();
 		}
+		if ( enemyNmb == 2 )
+		{
+			ObstacleAttack();
+		}
 	}
+	lockOnCoolTime--;
 	if ( input_->ReleaseMouse(1) )
 	{
-		if ( lockOn == true )
+		if ( player_->retrunIsDaed() == false )
 		{
-//弾を生成し、初期化
-			std::unique_ptr<LockOnBullet> newLockBullet = std::make_unique<LockOnBullet>();
-			newLockBullet->Initialize(enemyBulletModel_,player_->GetWorldPosition());
-			//弾を発射する
-			EnemyLockBullets_.push_back(std::move(newLockBullet));
-			lockOn = false;
+			if ( lockOn == true )
+			{
+	//弾を生成し、初期化
+				std::unique_ptr<LockOnBullet> newLockBullet = std::make_unique<LockOnBullet>();
+				newLockBullet->Initialize(enemyBulletModel_,player_->GetWorldPosition());
+				//弾を発射する
+				EnemyLockBullets_.push_back(std::move(newLockBullet));
+				lockOn = false;
+			}
 		}
 	}
 	//弾更新
@@ -234,9 +209,12 @@ void Enemy::Draw()
 			enemyBullet->Draw();
 		}
 		worldTransform_->Draw();
-		if ( lockOn )
+		if ( player_->retrunIsDaed() == false )
 		{
-			worldTransformReticle_->Draw();
+			if ( lockOn )
+			{
+				worldTransformReticle_->Draw();
+			}
 		}
 	}
 }
@@ -267,7 +245,11 @@ void Enemy::OnCollision()
 
 void Enemy::LockOnTrue()
 {
-	lockOn = true;
+	if ( lockOnCoolTime <= 0 )
+	{
+		lockOnCoolTime = lockOnCoolTimeRe;
+		lockOn = true;
+	}
 }
 
 void Enemy::OnColl()
@@ -299,7 +281,7 @@ void Enemy::OnColl()
 		//自弾の座標
 		posB = enemyBullets->GetWorldPosition();
 
-		if ( Collision::CircleCollision(posB,posA,playerWidth,playerWidth) )
+		if ( Collision::CircleCollision(posB,posA,playerWidth,enemyWidth_) )
 		{
 //敵キャラの衝突時コールバックを呼び出す
 			player_->OnCollision();
@@ -313,7 +295,7 @@ void Enemy::OnColl()
 	//自弾の座標
 	posB = worldTransform_->GetWorldPosition();
 
-	if ( Collision::CircleCollision(posB,posA,playerWidth,playerWidth) )
+	if ( Collision::CircleCollision(posB,posA,playerWidth,enemyWidth_) )
 	{
 //敵キャラの衝突時コールバックを呼び出す
 		player_->OnCollision();
@@ -363,7 +345,7 @@ void Enemy::DamageParticle()
 
 		//追加
 		particleMana_->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,one);
-		//particleMana_->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,two);
+		particleMana_->Add(particleLife,pos,vel,acc,particleScaleStert,particleScaleEnd,two);
 		particleMana_->Update();
 	}
 }
@@ -428,6 +410,9 @@ void Enemy::TackleMove()
 void Enemy::ObstacleAttack()
 {
 	obstacleFlag = true;
+	fireTime = fireTimeRis * 3;
+
+	fireFlag = false;
 }
 
 void Enemy::ObstacleMove()
@@ -464,4 +449,57 @@ float Enemy::AbsoluteValue(float nmb1,float nmb2)
 	ans = sqrtf(ans);
 
 	return  ans;
+}
+
+void Enemy::SplineMoveInitialize()
+{
+	if ( EnemyRootNmb_ == zero )
+	{
+		oneEnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
+		oneEnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
+		oneEnemyReMoveSpline1 = { worldTransform_->wtf.position.x - sprineX, sprineY1 , -sprineZ1 };
+		oneEnemyReMoveSpline2 = { worldTransform_->wtf.position.x - sprineX, sprineY1, sprineZ2 };
+		EnemyMoveSpline0 = oneEnemyMoveSpline0;
+		EnemyMoveSpline1 = oneEnemyMoveSpline1;
+		EnemyMoveSpline2 = oneEnemyMoveSpline2;
+		EnemyMoveSpline0 = oneEnemyMoveSpline0;
+		EnemyReMoveSpline0 = oneEnemyReMoveSpline0;
+		EnemyReMoveSpline1 = oneEnemyReMoveSpline1;
+		EnemyReMoveSpline2 = oneEnemyReMoveSpline2;
+	}
+	else if ( EnemyRootNmb_ == one )
+	{
+		twoEnemyMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
+		twoEnemyReMoveSpline0 = { worldTransform_->wtf.position.x, worldTransform_->wtf.position.y - sprineY2, sprineZ3 };
+		twoEnemyReMoveSpline1 = { worldTransform_->wtf.position.x + sprineX, sprineY1 , -sprineZ1 };
+		twoEnemyReMoveSpline2 = { worldTransform_->wtf.position.x + sprineX, sprineY1, sprineZ2 };
+		EnemyMoveSpline0 = twoEnemyMoveSpline0;
+		EnemyMoveSpline1 = twoEnemyMoveSpline1;
+		EnemyMoveSpline2 = twoEnemyMoveSpline2;
+		EnemyMoveSpline0 = twoEnemyMoveSpline0;
+		EnemyReMoveSpline0 = twoEnemyReMoveSpline0;
+		EnemyReMoveSpline1 = twoEnemyReMoveSpline1;
+		EnemyReMoveSpline2 = twoEnemyReMoveSpline2;
+	}
+	else if ( EnemyRootNmb_ == three )
+	{
+		DemoEnemyMove = true;
+		enemyNmb = 1;
+	}
+	else if ( EnemyRootNmb_ == four )
+	{
+		DemoEnemyMove = true;
+		enemyNmb = 1;
+	}
+
+	spline = new SplinePosition(worldTransform_->wtf.position,EnemyMoveSpline1,EnemyMoveSpline2,EnemyMoveSpline0);
+	splineReMove = new SplinePosition(worldTransform_->wtf.position,EnemyReMoveSpline1,EnemyReMoveSpline2,EnemyReMoveSpline0);
+
+}
+
+void Enemy::LightShadowOff()
+{
+	lightActive = false;
+	worldTransform_->wtf.position = enemyResetPos;
+	LightData::GetInstance()->UpdateCircleShadow(shadowNmb,enemyResetPos,circleShadowDir,circleShadowAtten,circleShadowFactorAngle,lightActive);
 }

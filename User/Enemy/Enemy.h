@@ -145,6 +145,10 @@ public:
 
 	float AbsoluteValue(float nmb1,float nmb2);
 
+	void SplineMoveInitialize();
+
+	void LightShadowOff();
+
 private:
 	float PI = 3.141592f;
 	enum Nmb
@@ -177,6 +181,9 @@ private://弾
 
 	//障害物発生フラグ
 	bool obstacleFlag = false;
+
+	float lockOnCoolTime = 25;
+	float lockOnCoolTimeRe = 25;
 private://敵の基本情報
 	//ワールド変換データ
 	Object3d* worldTransform_;
@@ -221,6 +228,7 @@ private://敵の基本情報
 	float tackPosLim = -50;
 
 
+
 	bool TackleReMove = false;
 
 	Vector3 velocity_;
@@ -229,6 +237,7 @@ private://敵の基本情報
 	//障害物を落とすやつの基本スピード
 	float obstacleEnemySpeed = 1.5f;
 
+	Vector3 enemyResetPos = { -100,0,-30 };
 private://敵のスプライン
 	int EnemyRootNmb_ = 0;
 
@@ -313,5 +322,6 @@ private:
 
 	Player* player_ = nullptr;
 	float playerWidth = 1.5f;
+	float enemyWidth_ = 1.5f;
 	Sprite* spriteLock = nullptr;
 };

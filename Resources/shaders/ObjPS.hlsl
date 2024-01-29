@@ -25,11 +25,18 @@ float4 main(VSOutput input) : sv_TARGET
 	//環境反射光
     float3 ambient = m_ambient;
 
-	//シェーディングによる色
-    float4 shadecolor = float4(ambientColor * ambient, m_alpha);
+	////シェーディングによる色
+ //   float4 shadecolor = float4(ambientColor * ambient, m_alpha);
+    
+    // Lambert反射
+    float3 light = normalize(float3(1, -1, 1)); // 右下奥　向きのライト
+    float diffuse = saturate(dot(-light, input.normal));
+    float brightness = diffuse + 0.3f;
+    float4 shadecolor = float4(brightness * ambientColor.x, brightness * ambientColor.y, brightness * ambientColor.z, m_alpha);
 	
 	
-	//全て加算する
+   // //全て加算する
+
    // for (int i = 0; i < DIR_LIGHT_NUM; i++)
    // {
    //     if (dirLights[i].active)
@@ -139,5 +146,5 @@ float4 main(VSOutput input) : sv_TARGET
     }
 
 	//シェーディングによる色で描画
-    return shadecolor * texcolor;
+    return float4(shadecolor.rgb * texcolor.rgb, shadecolor.a * texcolor.a);
 }

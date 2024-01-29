@@ -123,6 +123,9 @@ private://障害物
 		//敵の落とす弾
 	Model* enemyObstacle_ = nullptr;
 	Model* alertModel_ = nullptr;
+	//それぞれの当たり判定
+	float playerWidth = 1.5f;
+	float enemyWidth_ = 0.5f;
 
 private:
 	enum Nmb
@@ -191,7 +194,7 @@ private:
 
 	int enemyParticleLife = 30;
 	float enemyParticleScaleStert = 0.0f;
-	float enemyParticleScaleEnd = 20.0f;
+	float enemyParticleScaleEnd = 5.0f;
 
 	int bossParticleLife = 40;
 	float bossParticleScaleStert = 0.0f;
@@ -203,8 +206,9 @@ private:
 
 	Vector3 RayPos = { 0,0,0 };
 
-	float bossWide = 20.0f;
+	float bossWide = 5.0f;
 	float enemyWide = 3.0f;
+	float enemyLockWide = 5.0f;
 
 	float dengerTimer = 180.0f;
 };

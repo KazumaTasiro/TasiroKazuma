@@ -59,7 +59,7 @@ void DirectXCommon::InitializeDevice()
 		//動的配列に追加する
 		adapters.push_back(tmpAdapter);
 	}
-	//だと追うなアダプタを選別する
+	//アダプタを選別する
 	for (size_t i = 0; i < adapters.size(); i++) {
 		DXGI_ADAPTER_DESC3 adapterDesc;
 		//アダプターの情報を取得する

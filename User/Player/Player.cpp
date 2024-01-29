@@ -143,7 +143,7 @@ void Player::ReticleUpdate()
 void Player::cameraUpdate()
 {
 	//ダメージを受けた時の画面シェイク
-	if ( playerHp > 1 )
+	if ( playerHp > 0 )
 	{
 		camera_->SetEye({ camera_->GetEye() + damageShakeBefor });
 		DamageShakeUpdate();

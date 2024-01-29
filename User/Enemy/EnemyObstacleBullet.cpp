@@ -65,9 +65,10 @@ void EnemyObstacleBullet::GravityUpdate()
 	{
 		speedGra += gravity;
 		worldTransform_->wtf.position.y -= speedGra;
-		if ( worldTransform_->wtf.position.y <= 0 )
+		if ( worldTransform_->wtf.position.y < roadPos )
 		{
 			hitRoad = true;
+			worldTransform_->wtf.position.y = roadPos;
 		}
 	}
 }

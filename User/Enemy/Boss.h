@@ -121,6 +121,9 @@ private://弾
 
 	float verocitySpeed = 4.0f;
 	float bigVerocitySpeed = 3.0f;
+
+	float lockOnCoolTime = 0;
+	float lockOnCoolTimeRe = 20;
 private://基本情報
 
 	int EnemyHp = 10;

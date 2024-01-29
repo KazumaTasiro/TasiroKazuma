@@ -41,7 +41,8 @@ public: // サブクラス
 	struct ConstBufferData
 	{
 		Matrix4 mat;
-		Matrix4 matBillboard;	// ビルボード行列
+		Matrix4 matBillboard;
+		Vector4 color;// ビルボード行列
 	};
 
 	//パーティクル一粒
@@ -64,6 +65,11 @@ public: // サブクラス
 		float s_scale = 1.0f;
 		//最終値
 		float e_scale = 0.0f;
+		//初期カラー
+		Vector4 s_color = { 1,1,1,1 };
+		//最終カラー
+		Vector4 e_color = { 1,1,1,1 };
+
 		//パーティクルの種類
 		int particleNmb = 0;
 
@@ -77,7 +83,7 @@ private: // 定数
 	//const float prizmHeight;			// 柱の高さ
 	//const int planeCount = division * 2 + division * 2;		// 面の数
 	//static const int vertexCount = 30;//頂点数
-	const int vertexCount = 2024;
+	const int vertexCount = 4048;
 
 public: // 静的メンバ関数
 	/// <summary>
@@ -183,6 +189,7 @@ public: // メンバ関数
 	///	<param name="particleNmb">パーティクルの種類</param>
 	/// 0.通常,1.徐々に速く,2.徐々に遅く
 	void Add(int life, Vector3 position, Vector3 velociy, Vector3 speed, float start_scale, float end_scale,int particleNmb);
+	void Add(int life,Vector3 position,Vector3 velociy,Vector3 speed,float start_scale,float end_scale,Vector4 start_color,Vector4 end_color,int particleNmb);
 
 	static void SetCamera(Camera* camera_) { ParticleManager::camera = camera_; }
 
@@ -194,10 +201,14 @@ public: // メンバ関数
 
 	double lerp(double a, double b, double t);
 
+	void SetColor(Vector4 color_);
+
 private: // メンバ変数
 	static Camera* camera;
 	// ローカルスケール
 	Transform wtf_;
+
+	Vector4 color = { 1,1,1,1 };
 
 	ConstBufferDataMaterial* constMapMaterial = nullptr;
 };

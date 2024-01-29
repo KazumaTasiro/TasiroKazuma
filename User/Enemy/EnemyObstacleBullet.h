@@ -61,7 +61,7 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 
-	Vector3 worldSc = { 1,1,1 };
+	Vector3 worldSc = { 0.5,0.5,0.5 };
 
 	bool hitRoad = false;
 
@@ -69,5 +69,8 @@ private:
 	float gravity = 0.1f;
 
 	float speedGra = 0;
+
+	//床の座標
+	float roadPos = -2.5f;
 
 };

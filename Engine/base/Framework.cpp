@@ -34,6 +34,8 @@ void Framework::Initialize()
 
 	LightGroup::StaticInitialize(dxCommon->GetDevice());
 	LightData::GetInstance()->StaticInitialize();
+
+
 	//入力の初期化
 	input = Input::GetInstance();
 	input->Initalize();

@@ -60,6 +60,7 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	spriteCommon_->LoadTexture(21,"CengeCameraE.png");
 	spriteCommon_->LoadTexture(22,"CengeCmaraQ.png");
 	spriteCommon_->LoadTexture(23,"damageEf.png");
+	spriteCommon_->LoadTexture(24,"MoveTuto.png");
 
 
 	skydome_ = new Skydome();
@@ -84,6 +85,9 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	cameraMoveOps_= new Sprite();
 	cameraMoveOps_->Initialize(spriteCommon_,20);
 	cameraMoveOps_->SetPozition({ WinApp::window_width - operationPos.x,WinApp::window_height - (operationPos.y*3) });
+	moveTute_ = new Sprite();
+	moveTute_->Initialize(spriteCommon_,24);
+	moveTute_->SetPozition({ WinApp::window_width - operationPos.x,WinApp::window_height - ( operationPos.y * 5 ) });
 
 	road_ = new Road();
 	road_->Initialize();
@@ -142,8 +146,9 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 
 	lightGroupNon = LightGroup::Create();
 
-
 	lightGroupUse = LightGroup::Create();
+
+	//direLight = DirectionalLight::Create();
 
 	//lightGroupUse->SetDirLightActive(0,true);
 	//lightGroupUse->SetPointLightActive(0,true);
@@ -152,24 +157,50 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	Object3d::SetLightNon(lightGroupNon);
 	Object3d::SetLightUse(lightGroupUse);
 	PhaseReset();
+
+	
+	//pointLight = LightData::GetInstance()->AddPointLight(pointLightPos,pointLightColor,pointLightAtten);
+
 }
 void GameScene::Update()
 {
 
-	CursorLimit();
+	//direLight->Update();
 	ImGuiMan_->Bigin();
 #ifdef _DEBUG
 	lightGroupUse->Update();
 
-	//ImGui::SliderFloat3("circleShadowDirX",&circleShadowDir.x,-5,2);
+
 	//ImGui::SliderFloat3("circleShadowAttenX",&circleShadowAtten.x,0,2);
 	//ImGui::SliderFloat2("circleShadowFactorAngleX",&circleShadowFactorAngle.x,0,2);
 	//player_->worldTransform_->lightGroup->SetCircleShadowDir(0,circleShadowDir);
 	//player_->worldTransform_->lightGroup->SetCircleShadowAtten(0,circleShadowAtten);
 	//player_->worldTransform_->lightGroup->SetCircleShadowFactorAngle(0,circleShadowFactorAngle);
-	ImGui::ShowDemoWindow();
-	player_->ImguiDraw();
+	/*ImGui::ShowDemoWindow();*/
+	/*player_->ImguiDraw();*/
+	//ImGui::SliderFloat3("pointLightPos",&pointLightPos.x,-100,100);
+	//ImGui::SliderFloat3("pointLightColor",&pointLightColor.x,0,1);
+	//ImGui::SliderFloat3("pointLightAtten",&pointLightAtten.x,0,1);
+	//LightData::GetInstance()->UpdatePointLight(pointLight,pointLightPos,pointLightColor,pointLightAtten);
+	switch ( scene )
+	{
+	case GameScene::Particle:
+		//ImGui::SliderFloat3("pointLightPos",&pointLightPos.x,-100,100);
+		//ImGui::SliderFloat3("pointLightColor",&pointLightColor.x,0,1);
+		//ImGui::SliderFloat3("pointLightAtten",&pointLightAtten.x,0,1);
+		ImGui::SliderFloat3("cameraEye",&cameraImgui.x,-30,30);
+
+		camera_->SetEye(cameraImgui);
+		camera_->Update();
+		ParticleLibrary::GetInstance()->DrawImgui();
+		ParticleLibrary::GetInstance()->Update();
+		break;
+	}
+#else
+	CursorLimit();
+
 #endif // DEBUG
+
 			//デモウィンドウの表示ON
 
 
@@ -181,6 +212,14 @@ void GameScene::Update()
 	switch ( scene )
 	{
 	case GameScene::Title:
+#ifdef _DEBUG
+		if ( input_->PushKey(DIK_L) )
+		{
+			scene = GameScene::Particle;
+		}
+#endif // DEBUG
+
+
 		road_->BeforeUpdate();
 		title_->Update();
 		seenTransition_->Update();
@@ -370,26 +409,32 @@ void GameScene::Update()
 }
 void GameScene::Draw()
 {
+	/*direLight->Draw(dxCommon_->GetCommandList(),1);*/
 	Object3d::PreDraw(dxCommon_->GetCommandList());
 
 
-	skydome_->Draw();
-	road_->Draw();
+
 	//player_->Draw();
 
 	switch ( scene )
 	{
 	case GameScene::Title:
+		skydome_->Draw();
+		road_->Draw();
 		/*player_->Draw();*/
 		title_->Draw();
 		break;
 	case GameScene::Game:
+		skydome_->Draw();
+		road_->Draw();
 		player_->Draw();
 
 		enemyManager_->Draw();
 		enemyManager_->ParticleDraw();
 		break;
 	case GameScene::Boss:
+		skydome_->Draw();
+		road_->Draw();
 		player_->Draw();
 		if ( bossTime < 0 )
 		{
@@ -398,18 +443,30 @@ void GameScene::Draw()
 		enemyManager_->ParticleDraw();
 		break;
 	case GameScene::GameOver:
+		skydome_->Draw();
+		road_->Draw();
 		gameOverSeen->Draw();
 		gameOverSeen->DrawParticle();
 		break;
 	case GameScene::GameClear:
+		skydome_->Draw();
+		road_->Draw();
 		gameClearScene->Draw();
 		player_->Draw();
+
+		break;
+	case GameScene::Particle:
+#ifdef _DEBUG
+		skydome_->Draw();
+		road_->Draw();
+		ParticleLibrary::GetInstance()->Draw();
+#endif // _DEBUG
+
 
 		break;
 	default:
 		break;
 	}
-
 
 	player_->ParticleDraw();
 	Object3d::PostDraw();
@@ -447,6 +504,7 @@ void GameScene::Draw()
 			player_->DrawUI();
 			operation_->Draw();
 			cameraMoveOps_->Draw();
+			moveTute_->Draw();
 		}
 		enemyManager_->DrawUI();
 		stertCount_->Draw();
@@ -455,6 +513,7 @@ void GameScene::Draw()
 	case GameScene::Boss:
 		operation_->Draw();
 		cameraMoveOps_->Draw();
+		moveTute_->Draw();
 		player_->DrawUI();
 		enemyManager_->DrawUI();
 		break;
@@ -502,12 +561,16 @@ void GameScene::PhaseReset()
 {
 	//gameClear->SetPozition({ winApp_->window_width / 2,-30 });
 	//自キャラの初期化
+	enemyManager_->EnemyReset();
+	//LightData::GetInstance()->Update();
 	LightData::GetInstance()->GetLightGroupData()->ResetCircleShadow();
+	//LightData::GetInstance()->Destroy();
+	//LightData::GetInstance()->StaticInitialize();
 	DemoClear = false;
 	railCamera->Reset();
 	bossTime = 10;
 	player_->Reset();
-	enemyManager_->EnemyReset();
+
 	road_->Reset();
 	camera_->SetTarget(TargetCamRes);
 	camera_->SetEye(cameraTitle);

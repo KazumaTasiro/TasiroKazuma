@@ -26,6 +26,8 @@
 #include "GameClear.h"
 #include "RailCamera.h"
 #include "LightGroup.h"
+#include "ParticleLibrary.h"
+#include "DirectionalLight.h"
 
 ///<summary>
 ///ボスの生成と行動
@@ -89,7 +91,8 @@ private:
 		Game,
 		Boss,
 		GameOver,
-		GameClear
+		GameClear,
+		Particle
 	};
 	Scene scene;
 private:
@@ -123,7 +126,11 @@ private://スプライト
 	Sprite* gameOver_ = nullptr;
 	Sprite* operation_ = nullptr;
 	Sprite* cameraMoveOps_ = nullptr;
+	Sprite* moveTute_ = nullptr;
 
+private:
+	//ライト
+	DirectionalLight* direLight = nullptr;
 private:
 
 	RailCamera* railCamera = nullptr;
@@ -191,7 +198,7 @@ private:
 	float gameOverUp = 80.0f;
 	float gamestertUp = 50.0f;
 
-	float bossTime = 10.0f;
+	float bossTime = 3.0f;
 
 	LightGroup* lightGroupNon = nullptr;
 	LightGroup* lightGroupUse = nullptr;
@@ -199,5 +206,12 @@ private:
 	Vector4  circleShadowDir = { 0,0.5f,0,0 };
 	Vector3  circleShadowAtten = { 1.1f,0.7f,0.0f };
 	Vector2  circleShadowFactorAngle = { 0.5f,1.2f };
+
+	Vector3 cameraImgui = { 0,0,0 };
+
+	int32_t pointLight;
+	Vector3 pointLightPos = { 0,0,0 };
+	Vector3 pointLightColor = { 0,0,0 };
+	Vector3 pointLightAtten = { 0,0,0 };
 	
 };

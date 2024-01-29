@@ -63,13 +63,17 @@ void EnemyManager::Update()
 	enemyDeadParticle->Update();
 	//デスフラグの立った弾を削除
 	enemy_.remove_if([ ] (std::unique_ptr<Enemy>& enemy)
- {
-	 return enemy->IsDead();
+	{
+		return enemy->IsDead();
 		});
 	enemy_.remove_if([ ] (std::unique_ptr<Enemy>& enemy)
- {
-	 return enemy->IsTackleDead();
+	 {
+		 return enemy->IsTackleDead();
 		});
+	enemyObstacleBullet.remove_if([ ] (std::unique_ptr<EnemyObstacleBullet>& obstacle)
+	{
+		return obstacle->IsDead();
+	});
 	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
 	{
 		enemyDeath += enemy->ReturnOnColl();
@@ -124,6 +128,10 @@ void EnemyManager::Draw()
 void EnemyManager::BossDraw()
 {
 	boss->Draw();
+	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
+	{
+		newEnemyObstacleBullet->Draw();
+	}
 }
 
 void EnemyManager::DrawUI()
@@ -232,7 +240,7 @@ void EnemyManager::UpdateEnemyPopCommands()
 void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 {
 
-	randEnemyNmb = rand() % two;
+	randEnemyNmb = rand() % three;
 	randEnemyRoot = rand() % two;
 	//敵キャラの生成
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
@@ -293,7 +301,7 @@ void EnemyManager::EnemyCollision(Player* player)
 		//レティクルの座標
 		posR = player->GetReticlePos();
 
-		if ( Collision::RaySphere(RayPos,posA,enemyWide,player->GetFarNear()) )
+		if ( Collision::RaySphere(RayPos,posA,enemyLockWide,player->GetFarNear()) )
 		{
 			if ( enemy->GetMoveFlag() == true )
 			{
@@ -353,6 +361,22 @@ void EnemyManager::EnemyCollision(Player* player)
 			}
 		}
 	}
+	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
+	{
+		//敵キャラも座標
+		posA = player_->GetWorldPosition();
+
+		//自弾の座標
+		posB = newEnemyObstacleBullet->GetWorldPosition();
+
+		if ( Collision::CircleCollision(posB,posA,playerWidth,enemyWidth_) )
+		{
+//敵キャラの衝突時コールバックを呼び出す
+			player_->OnCollision();
+			//自弾の衝突時コールバックを呼び出す
+			newEnemyObstacleBullet->OnCollision();
+		}
+	}
 
 #pragma region 自キャラと敵弾の当たり判定
 #pragma endregion
@@ -385,7 +409,18 @@ void EnemyManager::EnemyReset()
 {
 	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
 	{
+		enemy->LightShadowOff();
 		enemy->CollTackle();
+
+	}
+	enemy_.remove_if([ ] (std::unique_ptr<Enemy>& enemy)
+	{
+	return enemy->IsTackleDead();
+	});
+	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
+	{
+			//自弾の衝突時コールバックを呼び出す
+		newEnemyObstacleBullet->OnCollision();
 	}
 	EnemyPopComandReset();
 	clearCount = clearCountRis;
