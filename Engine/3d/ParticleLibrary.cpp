@@ -37,7 +37,6 @@ void ParticleLibrary::Update()
 		randomColor.y /= 100;
 		randomColor.z /= 100;
 		particleStertColor = { randomColor.x,randomColor.y,randomColor.z,1 };
-
 	}
 	if ( randomParticleEndColor )
 	{
