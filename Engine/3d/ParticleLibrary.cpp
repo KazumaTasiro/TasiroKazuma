@@ -30,69 +30,6 @@ void ParticleLibrary::Draw()
 
 void ParticleLibrary::Update()
 {
-	if ( randomParticleStertColor )
-	{
-		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
-		randomColor.x /= 100;
-		randomColor.y /= 100;
-		randomColor.z /= 100;
-		particleStertColor = { randomColor.x,randomColor.y,randomColor.z,1 };
-	}
-	if ( randomParticleEndColor )
-	{
-		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
-		randomColor.x /= 100;
-		randomColor.y /= 100;
-		randomColor.z /= 100;
-		particleEndColor = { randomColor.x,randomColor.y,randomColor.z,1 };
-
-	}
-
-	for ( int i = 0; i < particleNmber; i++ )
-	{
-		if ( endPoint )
-		{
-			particle->Add(particleLife,particlePos,particleEndPos,endPointPos,particleStertScale,particleEndScale,easingNmb);
-		}
-		else
-		{
-			particle->Add(particleLife,particlePos,particleEndPos,particleSpeed,particleStertScale,particleEndScale,easingNmb);
-		}
-	}
-	particle->Update();
-}
-
-void ParticleLibrary::DrawImgui()
-{
-	ImGui::InputText("FileName",fileName,sizeof(fileName));
-	loadParticle = ImGui::Button("loadParticle");
-
-	saveParticle = ImGui::Button("saveParticle");
-	if ( saveParticle )
-	{
-		CreateSaveFile(fileName);
-		
-	}
-	if ( loadParticle )
-	{
-		LoadCSVJudgment(fileName);
-		ResetCSVfile();
-
-	}
-
-	ImGui::InputText("TextureFileName",texFileName,sizeof(texFileName));
-	loadTexSwich = ImGui::Button("loadTexture");
-	if ( loadTexSwich )
-	{
-		LoadTexJudgment(texFileName);
-
-	}
-	ImGui::SliderInt("particleNmber",&particleNmber,0,70);
-	ImGui::SliderFloat3("particlePos",&particlePos.x,-5.0f,5.0f);
-	ImGui::Checkbox("randomParticlePosX",&randomParticlePosX);
-	ImGui::Checkbox("randomParticlePosY",&randomParticlePosY);
-	ImGui::Checkbox("randomParticlePosZ",&randomParticlePosZ);
-	ImGui::SliderFloat3("particlerandomPosX",&randomParticlePos.x,-5.0f,5.0f);
 	if ( randomParticlePosX )
 	{
 
@@ -108,21 +45,10 @@ void ParticleLibrary::DrawImgui()
 
 		particlePos.z = RandNmber(randomParticlePos.z);
 	}
-	ImGui::Checkbox("endPoint",&endPoint);
-	ImGui::SliderFloat("particleEndPointSpeed",&particleEndPointSpeed,0,3.0f);
-	ImGui::Checkbox("randomParticleSpeed",&randomParticleSpeedX);
-	ImGui::SliderFloat("particleRandomSpeed",&particleRandomSpeedX,-3.0f,3.0f);
-	ImGui::SliderFloat3("particleEndPos",&particleEndPos.x,-5.0f,5.0f);
-	ImGui::SliderFloat3("particleSpeed",&particleSpeed.x,0,3.0f);
-	ImGui::Checkbox("randomParticleSpeedX",&randomParticleSpeedX);
-	ImGui::Checkbox("randomParticleSpeedY",&randomParticleSpeedY);
-	ImGui::Checkbox("randomParticleSpeedZ",&randomParticleSpeedZ);
-	ImGui::SliderFloat("particleRandomSpeedX",&particleRandomSpeedX,-3.0f,3.0f);
-	ImGui::SliderFloat("particleRandomSpeedY",&particleRandomSpeedY,-3.0f,3.0f);
-	ImGui::SliderFloat("particleRandomSpeedZ",&particleRandomSpeedZ,-3.0f,3.0f);
+
 	if ( endPoint )
 	{
-		if ( randomParticleSpeedX)
+		if ( randomParticleSpeedX )
 		{
 			particleEndPointSpeed = RandNmber(particleRandomSpeedX);
 		}
@@ -151,10 +77,6 @@ void ParticleLibrary::DrawImgui()
 		}
 	}
 
-	ImGui::SliderFloat("particleStertScale",&particleStertScale,0,5.0f);
-
-	ImGui::Checkbox("randomParticleStertScale",&randomParticleStertScale);
-	ImGui::SliderFloat("particleRandomStertScale",&particleRandomStertScale,0,5.0f);
 	if ( randomParticleStertScale )
 	{
 
@@ -164,11 +86,6 @@ void ParticleLibrary::DrawImgui()
 			particleStertScale = -particleStertScale;
 		}
 	}
-
-	ImGui::SliderFloat("particleEndScale",&particleEndScale,0,5.0f);
-
-	ImGui::Checkbox("randomParticleEndScale",&randomParticleEndScale);
-	ImGui::SliderFloat("particleRandomEndScale",&particleRandomEndScale,0,5.0f);
 	if ( randomParticleEndScale )
 	{
 
@@ -178,12 +95,102 @@ void ParticleLibrary::DrawImgui()
 			particleEndScale = -particleEndScale;
 		}
 	}
+
+	if ( randomParticleStertColor )
+	{
+		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
+		randomColor.x /= 100;
+		randomColor.y /= 100;
+		randomColor.z /= 100;
+		particleStertColor = { randomColor.x,randomColor.y,randomColor.z,1 };
+	}
+	if ( randomParticleEndColor )
+	{
+		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
+		randomColor.x /= 100;
+		randomColor.y /= 100;
+		randomColor.z /= 100;
+		particleEndColor = { randomColor.x,randomColor.y,randomColor.z,1 };
+
+	}
+
+	for ( int i = 0; i < particleNmber; i++ )
+	{
+		if ( endPoint )
+		{
+			particle->Add(particleLife,particlePos,particleEndPos,endPointPos,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+		}
+		else
+		{
+			particle->Add(particleLife,particlePos,particleEndPos,particleSpeed,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+		}
+	}
+	particle->Update();
+}
+
+void ParticleLibrary::DrawImgui()
+{
+	ImGui::InputText("FileName",fileName,sizeof(fileName));
+	loadParticle = ImGui::Button("loadParticle");
+
+	saveParticle = ImGui::Button("saveParticle");
+	if ( saveParticle )
+	{
+		CreateSaveFile(fileName);
+
+	}
+	if ( loadParticle )
+	{
+		LoadCSVJudgment(fileName);
+		ResetCSVfile();
+
+	}
+
+	ImGui::InputText("TextureFileName",texFileName,sizeof(texFileName));
+	loadTexSwich = ImGui::Button("loadTexture");
+	if ( loadTexSwich )
+	{
+		LoadTexJudgment(texFileName);
+
+	}
+	ImGui::SliderInt("particleNmber",&particleNmber,0,70);
+	ImGui::SliderFloat3("particlePos",&particlePos.x,-5.0f,5.0f);
+	ImGui::Checkbox("randomParticlePosX",&randomParticlePosX);
+	ImGui::Checkbox("randomParticlePosY",&randomParticlePosY);
+	ImGui::Checkbox("randomParticlePosZ",&randomParticlePosZ);
+	ImGui::SliderFloat3("particlerandomPosX",&randomParticlePos.x,-5.0f,5.0f);
+
+	ImGui::Checkbox("endPoint",&endPoint);
+	ImGui::SliderFloat("particleEndPointSpeed",&particleEndPointSpeed,0,3.0f);
+	ImGui::Checkbox("randomParticleSpeed",&randomParticleSpeedX);
+	ImGui::SliderFloat("particleRandomSpeed",&particleRandomSpeedX,-3.0f,3.0f);
+	ImGui::SliderFloat3("particleEndPos",&particleEndPos.x,-5.0f,5.0f);
+	ImGui::SliderFloat3("particleSpeed",&particleSpeed.x,0,3.0f);
+	ImGui::Checkbox("randomParticleSpeedX",&randomParticleSpeedX);
+	ImGui::Checkbox("randomParticleSpeedY",&randomParticleSpeedY);
+	ImGui::Checkbox("randomParticleSpeedZ",&randomParticleSpeedZ);
+	ImGui::SliderFloat("particleRandomSpeedX",&particleRandomSpeedX,-3.0f,3.0f);
+	ImGui::SliderFloat("particleRandomSpeedY",&particleRandomSpeedY,-3.0f,3.0f);
+	ImGui::SliderFloat("particleRandomSpeedZ",&particleRandomSpeedZ,-3.0f,3.0f);
+
+
+	ImGui::SliderFloat("particleStertScale",&particleStertScale,0,5.0f);
+
+	ImGui::Checkbox("randomParticleStertScale",&randomParticleStertScale);
+	ImGui::SliderFloat("particleRandomStertScale",&particleRandomStertScale,0,5.0f);
+
+
+	ImGui::SliderFloat("particleEndScale",&particleEndScale,0,5.0f);
+
+	ImGui::Checkbox("randomParticleEndScale",&randomParticleEndScale);
+	ImGui::SliderFloat("particleRandomEndScale",&particleRandomEndScale,0,5.0f);
+
 	ImGui::SliderInt("particleLife",&particleLife,0,30);
 	ImGui::SliderInt("easingNmb",&easingNmb,0,2);
 
 
-	ImGui::ColorEdit4("particleStertCollor",&particleStertColor.x);
-	ImGui::ColorEdit4("particleEndCollor",&particleEndColor.x);
+	//ImGui::ColorEdit4("particleStertCollor",&particleStertColor.x);
+	ImGui::ColorEdit4("particleCollor",&particleEndColor.x);
 
 	ImGui::Checkbox("randomParticleStertColor",&randomParticleStertColor);
 	ImGui::Checkbox("randomParticleEndColor",&randomParticleEndColor);
@@ -575,6 +582,88 @@ float ParticleLibrary::RandNmber(float randNmb)
 	float Nmb = ( float ) rand() / RAND_MAX * randNmb - randNmb / 2.0f;
 	return Nmb;
 
+}
+
+void ParticleLibrary::ParticleDataSave(uint32_t nmb,const std::string& fileNames)
+{
+	ResetCSVfile();
+	LoadCSVfile(fileNames);
+	UpdateCSVfile();
+	particleBox[ nmb ].pData.easingNmb = easingNmb;
+	particleBox[ nmb ].pData.particlePos = particlePos;
+	particleBox[ nmb ].pData.randomParticlePos = randomParticlePos;
+	//終点
+	particleBox[ nmb ].pData.particleEndPos = particleEndPos;
+	particleBox[ nmb ].pData.endPointPos = endPointPos;
+	//大きさ
+	//最初
+	particleBox[ nmb ].pData.particleStertScale = particleStertScale;
+	particleBox[ nmb ].pData.particleRandomStertScale = particleRandomStertScale;
+	//最後
+	particleBox[ nmb ].pData.particleEndScale = particleEndScale;
+	particleBox[ nmb ].pData.particleRandomEndScale = particleRandomEndScale;
+
+	//速度
+	particleBox[ nmb ].pData.particleSpeed = particleSpeed;
+	particleBox[ nmb ].pData.particleEndPointSpeed = particleEndPointSpeed;
+	particleBox[ nmb ].pData.particleRandomSpeed = particleRandomSpeed;
+	particleBox[ nmb ].pData.particleRandomSpeedX = particleRandomSpeedX;
+	particleBox[ nmb ].pData.particleRandomSpeedY = particleRandomSpeedY;
+	particleBox[ nmb ].pData.particleRandomSpeedZ = particleRandomSpeedZ;
+
+	//色
+	particleBox[ nmb ].pData.particleStertColor = particleStertColor;
+	particleBox[ nmb ].pData.particleEndColor = particleEndColor;
+
+	//数
+	particleBox[ nmb ].pData.particleNmber = particleNmber;
+	//パーティクルのライフ
+	particleBox[ nmb ].pData.particleLife = particleLife;
+	//イージングのナンバー
+	particleBox[ nmb ].pData.easingNmb = easingNmb;
+
+	for ( int i = 0; i < 30; i++ )
+	{
+		particleBox[ nmb ].pData.texFileName[ i ] = texFileName[ i ];
+	}
+	//パーティクルのスイッチ
+	particleBox[ nmb ].pData.randomParticleStertColor = randomParticleStertColor;
+	particleBox[ nmb ].pData.randomParticleEndColor = randomParticleEndColor;
+	particleBox[ nmb ].pData.randomParticleSize = randomParticleSize;
+	particleBox[ nmb ].pData.endPoint = endPoint;
+	//ランダムpos
+
+	particleBox[ nmb ].pData.randomParticlePosX = randomParticlePosX;
+	particleBox[ nmb ].pData.randomParticlePosY = randomParticlePosY;
+	particleBox[ nmb ].pData.randomParticlePosZ = randomParticlePosZ;
+	//ランダムspeed
+	particleBox[ nmb ].pData.randomParticleSpeedX = randomParticleSpeedX;
+	particleBox[ nmb ].pData.randomParticleSpeedY = randomParticleSpeedY;
+	particleBox[ nmb ].pData.randomParticleSpeedZ = randomParticleSpeedZ;
+	//ランダムscale
+	particleBox[ nmb ].pData.randomParticleStertScale = randomParticleStertScale;
+	particleBox[ nmb ].pData.randomParticleEndScale = randomParticleEndScale;
+
+}
+
+void ParticleLibrary::AddParticle(uint32_t nmb)
+{
+	for ( int i = 0; i < particleBox[ nmb ].pData.particleNmber; i++ )
+	{
+		if ( endPoint )
+		{
+			particleBox[ nmb ].particleUse->Add(particleLife,particlePos,particleEndPos,endPointPos,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+		}
+		else
+		{
+			particleBox[ nmb ].particleUse->Add(particleLife,particlePos,particleEndPos,particleSpeed,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+		}
+	}
+}
+
+void ParticleLibrary::ParticleUpdate(uint32_t nmb)
+{
+	particleBox[ nmb ].particleUse->Update();
 }
 
 ParticleLibrary::~ParticleLibrary()

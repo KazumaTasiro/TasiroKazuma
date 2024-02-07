@@ -74,10 +74,6 @@ public:
 	////シーンをまたぐときのリセット
 	///</summary>
 	void PhaseReset();
-	///<summary>
-	////タイトルに戻るときのリセット
-	///</summary>
-	void TitleReset();
 
 	//カーソルが画面外に出ない処理
 	void CursorLimit();
@@ -92,7 +88,6 @@ private:
 		Boss,
 		GameOver,
 		GameClear,
-		Particle
 	};
 	Scene scene;
 private:

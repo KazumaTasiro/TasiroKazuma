@@ -381,6 +381,18 @@
     <ClCompile Include="Engine\3d\ParticleLibrary.cpp">
       <Filter>ソース ファイル\Engine\3D\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyAttackObstacle.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyBulletAttack.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyTackle.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameSceneState.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -553,6 +565,33 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\ParticleLibrary.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyTackle.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyBulletAttack.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyAttackObstacle.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameSceneState.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameClearScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\BossScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GamePlayScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

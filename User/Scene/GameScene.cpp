@@ -182,6 +182,9 @@ void GameScene::Update()
 	//ImGui::SliderFloat3("pointLightColor",&pointLightColor.x,0,1);
 	//ImGui::SliderFloat3("pointLightAtten",&pointLightAtten.x,0,1);
 	//LightData::GetInstance()->UpdatePointLight(pointLight,pointLightPos,pointLightColor,pointLightAtten);
+
+#endif
+#ifdef _PARTICLELIBRARY
 	switch ( scene )
 	{
 	case GameScene::Particle:
@@ -194,9 +197,11 @@ void GameScene::Update()
 		camera_->Update();
 		ParticleLibrary::GetInstance()->DrawImgui();
 		ParticleLibrary::GetInstance()->Update();
+
 		break;
 	}
-#else
+#endif
+#ifdef NDEBUG
 	CursorLimit();
 
 #endif // DEBUG
@@ -213,10 +218,6 @@ void GameScene::Update()
 	{
 	case GameScene::Title:
 #ifdef _DEBUG
-		if ( input_->PushKey(DIK_L) )
-		{
-			scene = GameScene::Particle;
-		}
 #endif // DEBUG
 
 
@@ -455,19 +456,18 @@ void GameScene::Draw()
 		player_->Draw();
 
 		break;
-	case GameScene::Particle:
-#ifdef _DEBUG
-		skydome_->Draw();
-		road_->Draw();
-		ParticleLibrary::GetInstance()->Draw();
-#endif // _DEBUG
+
 
 
 		break;
 	default:
 		break;
 	}
-
+#ifdef _PARTICLELIBRARY
+	//skydome_->Draw();
+	//road_->Draw();
+	ParticleLibrary::GetInstance()->Draw();
+#endif // _DEBUG
 	player_->ParticleDraw();
 	Object3d::PostDraw();
 
@@ -581,10 +581,6 @@ void GameScene::PhaseReset()
 	gameClearScene->Reset();
 }
 
-void GameScene::TitleReset()
-{
-
-}
 
 void GameScene::CursorLimit()
 {
