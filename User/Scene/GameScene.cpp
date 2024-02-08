@@ -123,11 +123,11 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	seenTransition_ = new SeenTransition();
 	seenTransition_->Initialize(spriteCommon_);
 
-	gameOverSeen = new GameOverSeen();
+	gameOverSeen = new GameOver();
 	gameOverSeen->Initialize();
 	gameOverSeen->SetCamera(camera_);
 
-	gameClearScene = new GameClearScene();
+	gameClearScene = new GameClear();
 	gameClearScene->SetCamera(camera_);
 	gameClearScene->Initialize(spriteCommon_);
 
@@ -185,9 +185,7 @@ void GameScene::Update()
 
 #endif
 #ifdef _PARTICLELIBRARY
-	switch ( scene )
-	{
-	case GameScene::Particle:
+
 		//ImGui::SliderFloat3("pointLightPos",&pointLightPos.x,-100,100);
 		//ImGui::SliderFloat3("pointLightColor",&pointLightColor.x,0,1);
 		//ImGui::SliderFloat3("pointLightAtten",&pointLightAtten.x,0,1);
@@ -199,7 +197,7 @@ void GameScene::Update()
 		ParticleLibrary::GetInstance()->Update();
 
 		break;
-	}
+
 #endif
 #ifdef NDEBUG
 	CursorLimit();
@@ -291,7 +289,7 @@ void GameScene::Update()
 				seenTransition_->OnSeenTrans();
 				if ( seenTransition_->ReturnSeenTrans() )
 				{
-					scene = Scene::GameOver;
+					scene = Scene::Over;
 				}
 			}
 
@@ -309,7 +307,7 @@ void GameScene::Update()
 			{
 				if ( seenTransition_->ReturnSeenTrans() )
 				{
-					scene = Scene::GameClear;
+					scene = Scene::Clear;
 				}
 			}
 		}
@@ -334,7 +332,7 @@ void GameScene::Update()
 			seenTransition_->OnSeenTrans();
 			if ( seenTransition_->ReturnSeenTrans() )
 			{
-				scene = Scene::GameClear;
+				scene = Scene::Clear;
 			}
 
 		}
@@ -343,13 +341,13 @@ void GameScene::Update()
 			seenTransition_->OnSeenTrans();
 			if ( seenTransition_->ReturnSeenTrans() )
 			{
-				scene = Scene::GameOver;
+				scene = Scene::Over;
 
 			}
 		}
 		LightData::GetInstance()->Update();
 		break;
-	case GameScene::GameOver:
+	case GameScene::Over:
 		road_->roadUpdate();
 		gameOverSeen->Update();
 		seenTransition_->Update();
@@ -373,7 +371,7 @@ void GameScene::Update()
 		}
 
 		break;
-	case GameScene::GameClear:
+	case GameScene::Clear:
 
 		gameClearScene->Update();
 		road_->roadUpdate();
@@ -443,13 +441,13 @@ void GameScene::Draw()
 		}
 		enemyManager_->ParticleDraw();
 		break;
-	case GameScene::GameOver:
+	case GameScene::Over:
 		skydome_->Draw();
 		road_->Draw();
 		gameOverSeen->Draw();
 		gameOverSeen->DrawParticle();
 		break;
-	case GameScene::GameClear:
+	case GameScene::Clear:
 		skydome_->Draw();
 		road_->Draw();
 		gameClearScene->Draw();
@@ -482,9 +480,9 @@ void GameScene::Draw()
 	case GameScene::Boss:
 		player_->DrawFbx();
 		break;
-	case GameScene::GameOver:
+	case GameScene::Over:
 		break;
-	case GameScene::GameClear:
+	case GameScene::Clear:
 		player_->DrawFbx();
 
 		break;
@@ -517,11 +515,11 @@ void GameScene::Draw()
 		player_->DrawUI();
 		enemyManager_->DrawUI();
 		break;
-	case GameScene::GameOver:
+	case GameScene::Over:
 		gameOver_->Draw();
 		stert_->Draw();
 		break;
-	case GameScene::GameClear:
+	case GameScene::Clear:
 		//gameClear_->Draw();
 		gameClearScene->SpriteDraw();
 		if ( gameClearScene->ClearTrue() )

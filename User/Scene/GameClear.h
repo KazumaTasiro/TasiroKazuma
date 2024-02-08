@@ -7,11 +7,11 @@
 #include "Sprite.h"
 #include "ParticleManager.h"
 
-class GameClearScene
+class GameClear
 {
 public:
-	GameClearScene();
-	~GameClearScene();
+	GameClear();
+	~GameClear();
 
 	//初期化
 	void Initialize(SpriteCommon* spriteCommon);

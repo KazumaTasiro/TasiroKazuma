@@ -86,8 +86,8 @@ private:
 		Title,
 		Game,
 		Boss,
-		GameOver,
-		GameClear,
+		Over,
+		Clear,
 	};
 	Scene scene;
 private:
@@ -106,6 +106,7 @@ private:
 		ten = 10,
 	};
 private://プレイヤー
+	
 	///自キャラ
 	Player* player_ = nullptr;
 
@@ -172,8 +173,8 @@ private:
 
 	ParticleManager* ParticleMana_;
 
-	GameOverSeen* gameOverSeen = nullptr;
-	GameClearScene* gameClearScene = nullptr;
+	GameOver* gameOverSeen = nullptr;
+	GameClear* gameClearScene = nullptr;
 
 
 	Vector3 cameraTitle = { 0,0,10 };

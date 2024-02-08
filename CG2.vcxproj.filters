@@ -393,6 +393,24 @@
     <ClCompile Include="User\Scene\GameSceneState.cpp">
       <Filter>ソース ファイル\Game\GameScene</Filter>
     </ClCompile>
+    <ClCompile Include="User\Scene\BossScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GamePlayScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameClearScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\TitleScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\SceneManager.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -591,6 +609,9 @@
       <Filter>ヘッダー ファイル\Game\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="User\Scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\SceneManager.h">
       <Filter>ヘッダー ファイル\Game\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
