@@ -9,11 +9,10 @@ GameClear::~GameClear()
 {
 }
 
-void GameClear::Initialize(SpriteCommon* spriteCommon)
+void GameClear::Initialize()
 {
-	assert(spriteCommon);
 
-	spriteCommon_ = spriteCommon;
+	spriteCommon_ = SpriteCommon::GetInstance();
 
 	bossSter = Object3d::Create();
 	bossSterModel = Model::LoadFormOBJ("SakabanFantom");
@@ -24,8 +23,8 @@ void GameClear::Initialize(SpriteCommon* spriteCommon)
 	bossSter->wtf.matWorld.m[ 3 ][ 3 ] = wCenge;
 
 	clear_ = new Sprite();
-	clear_->Initialize(spriteCommon_,five);
-	clear_->SetPozition({ WinApp::window_width / 2,( WinApp::window_height / 2 ) - gameOverUp });
+	clear_->Initialize(five);
+	clear_->SetPozition({ WinApp::window_width / 2.0f,( WinApp::window_height / 2.0f ) - gameOverUp });
 	clear_->SetColor({ clear_->GetColor().x,clear_->GetColor().y,clear_->GetColor().z,wCenge });
 
 }

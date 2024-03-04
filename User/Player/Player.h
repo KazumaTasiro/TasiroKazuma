@@ -18,6 +18,7 @@
 #include "DirectXCommon.h"
 #include "Camera.h"
 #include "LightData.h"
+#include "ParticleLibrary.h"
 
 
 ///<summary>
@@ -31,7 +32,7 @@ public:
 	///<summary>
 	///初期化
 	///</summary>
-	void Initialize(SpriteCommon* spriteCommon,ParticleManager* particle);
+	void Initialize(ParticleManager* particle);
 	///更新
 	///</summary>
 	void Update();
@@ -153,6 +154,9 @@ public:
 
 	void ImguiDraw();
 private:
+
+	float PI = 3.141592f;
+
 	enum Nmb
 	{
 		zero = 0,
@@ -237,10 +241,12 @@ private:
 
 	Vector3 playerResetPos = { 0,-2.5f,0 };
 
-	const float speed = 0.5f;
+	 float speed = 0.1f;
+	float speedPlus = 0.01f;
+	float speedMax = 0.15f;
 
 	float playerHp;
-	float playerMaxHp = 3.0f;
+	float playerMaxHp = 10.0f;
 
 	bool DeadParticle = false;
 
@@ -295,4 +301,10 @@ private:
 	Vector2  circleShadowFactorAngle = { 0.25f,1.14f };
 
 	bool lightActive = true;
+
+	float playerRot = 0;
+	float playerRotReset = 0;
+	float playerRotLimit = 10.0f;
+	float playerRotPlus = 1.0f;
+	float rot = ( PI / 180 );
 };

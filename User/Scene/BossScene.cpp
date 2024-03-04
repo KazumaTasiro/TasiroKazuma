@@ -8,9 +8,14 @@ void BossScene::Update()
 {
 }
 
-void BossScene::Draw()
+void BossScene::ObjectDraw()
 {
 }
+
+void BossScene::SpriteDraw()
+{
+}
+
 
 void BossScene::Finalize()
 {

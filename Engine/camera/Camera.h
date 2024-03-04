@@ -167,6 +167,8 @@ public: // メンバ関数
 
 	Vector3 GetMatVec3();
 
+private:
+
 protected: // メンバ変数
 	// ビュー行列
 	Matrix4 matView = ConvertXM::ConvertXMMATtoMat4(DirectX::XMMatrixIdentity());

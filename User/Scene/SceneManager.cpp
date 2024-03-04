@@ -30,6 +30,9 @@ void SceneManager::Update()
 		//シーンの切り替え
 		scene_ = nextScene_;
 		nextScene_ = nullptr;
+
+		scene_->SetSceneManager(this);
+
 		//次シーンを初期化する
 		scene_->Initialize();
 	}
@@ -37,9 +40,14 @@ void SceneManager::Update()
 	scene_->Update();
 }
 
-void SceneManager::Draw()
+void SceneManager::ObjectDraw()
 {
-	scene_->Draw();
+	scene_->ObjectDraw();
+}
+
+void SceneManager::SpriteDraw()
+{
+	scene_->SpriteDraw();
 }
 
 SceneManager::~SceneManager()

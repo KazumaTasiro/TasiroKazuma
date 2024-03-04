@@ -185,6 +185,11 @@ void ParticleManager::InitializeGraphicsPipeline()
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
 		},
+		{	//色
+			"COLOR",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		}
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -553,12 +558,14 @@ void ParticleManager::Update()
 			it->scale = ( it->e_scale - it->s_scale ) * static_cast< float >( f );
 			it->scale += it->s_scale;
 		}
-					//スケールの線形補完
-		it->color = ( it->e_color - it->s_color ) * static_cast< float >( f );
+
+		//Vector4 colors = it->e_color - it->s_color;
+		//colors = colors / static_cast< float >( times );
+		it->color = (it->e_color - it->s_color)* static_cast< float >( f );
 		it->color += it->s_color;
+
 		//色
-		constMapMaterial->color = it->color;
-		color= it->color;
+		//constMapMaterial->color = it->color;
 	}
 
 	//頂点バッファへデータ更新
@@ -575,10 +582,12 @@ void ParticleManager::Update()
 		{
  //座標
 			vertMap->pos = it->position;
-			//次の頂点へ
-			vertMap++;
+
 			//スケール
 			vertMap->scale = it->scale;
+			vertMap->color = it->color;
+			//次の頂点へ
+			vertMap++;
 
 		}
 		vertBuff->Unmap(0,nullptr);
@@ -592,12 +601,6 @@ void ParticleManager::Update()
 
 	constMap->mat = ( wtf_.matWorld * camera->GetViewProjectionMatrix() );
 	constMap->matBillboard = ( camera->GetBillboardMatrix() );	// 行列の合成
-	for ( std::forward_list<Particle>::iterator it = particles.begin();
-			it != particles.end();
-			it++ )
-	{
-		constMap->color = ( it->color );
-	}
 	constBuff->Unmap(0,nullptr);
 }
 
@@ -664,10 +667,13 @@ void ParticleManager::Add(int life,Vector3 position,Vector3 velociy,Vector3 spee
 	p.velocity = velociy;
 	p.accel = speed;
 	p.num_frame = life;
+	times = life;
 	p.s_scale = start_scale;
 	p.e_scale = end_scale;
 	p.s_color = start_color;
+	p.color = start_color;
 	p.e_color = end_color;
+	colorVector = start_color;
 	p.particleNmb = particleNmb;
 }
 

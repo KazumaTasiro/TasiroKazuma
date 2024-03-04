@@ -38,7 +38,7 @@ public:
 
 public:
 	//初期化
-	void Initialize(SpriteCommon* spritecommon_, uint32_t textureIndex = UINT32_MAX);
+	void Initialize( uint32_t textureIndex = UINT32_MAX);
 
 	void Update();
 

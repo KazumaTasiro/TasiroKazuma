@@ -18,33 +18,58 @@ void ParticleLibrary::StaticInitialize()
 
 void ParticleLibrary::Initialize()
 {
-	particle = new ParticleManager();
-	particle->Initialize();
-	particle->LoadTexture("LockOnParticle.png");
+	particle_ = new ParticleManager();
+	particle_->Initialize();
+	particle_->LoadTexture("standard.png");
+
+
 }
 
-void ParticleLibrary::Draw()
+void ParticleLibrary::ObjectInitialize()
 {
-	particle->Draw();
+	ModelManager::GetInstance()->LoadModel("trakku");
+	playerModel = ModelManager::GetInstance()->FindObjModel("trakku");
+	player = Object3d::Create();
+	player->Initialize();
+	player->SetModel(playerModel);
+	player->Update();
+}
+
+void ParticleLibrary::ObjectUpdate()
+{
+	player->Update();
+}
+
+void ParticleLibrary::ObjectDraw()
+{
+	player->Draw();
+}
+
+void ParticleLibrary::PDraw()
+{
+	particle_->Draw();
 }
 
 void ParticleLibrary::Update()
 {
+	Vector3 particlePoss = particlePos;
+
 	if ( randomParticlePosX )
 	{
 
-		particlePos.x = RandNmber(randomParticlePos.x);
+		particlePoss.x += RandNmber(randomParticlePos.x);
 	}
 	if ( randomParticlePosY )
 	{
 
-		particlePos.y = RandNmber(randomParticlePos.y);
+		particlePoss.y += RandNmber(randomParticlePos.y);
 	}
 	if ( randomParticlePosZ )
 	{
 
-		particlePos.z = RandNmber(randomParticlePos.z);
+		particlePoss.z += RandNmber(randomParticlePos.z);
 	}
+
 
 	if ( endPoint )
 	{
@@ -52,7 +77,7 @@ void ParticleLibrary::Update()
 		{
 			particleEndPointSpeed = RandNmber(particleRandomSpeedX);
 		}
-		endPointPos = ( particleEndPos - particlePos );
+		endPointPos = ( particleEndPos - particlePoss );
 		endPointPos.nomalize();
 		endPointPos *= particleEndPointSpeed;
 
@@ -118,19 +143,25 @@ void ParticleLibrary::Update()
 	{
 		if ( endPoint )
 		{
-			particle->Add(particleLife,particlePos,particleEndPos,endPointPos,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+			particle_->Add(particleLife,particlePoss,particleEndPos,endPointPos,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
 		}
 		else
 		{
-			particle->Add(particleLife,particlePos,particleEndPos,particleSpeed,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+			particle_->Add(particleLife,particlePoss,particleEndPos,particleSpeed,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
 		}
 	}
-	particle->Update();
+	particle_->Update();
 }
 
 void ParticleLibrary::DrawImgui()
 {
-	ImGui::InputText("FileName",fileName,sizeof(fileName));
+	ImGui::InputText("ObjectFileName",objectFileName,sizeof(objectFileName));
+	loadObject = ImGui::Button("loadObject");
+	ImGui::SliderFloat("playerRot",&playerRot,-playerRotLimit,playerRotLimit);
+	player->wtf.rotation.y = playerRot * rot;
+	player->Update();
+
+	ImGui::InputText("CSVFileName",fileName,sizeof(fileName));
 	loadParticle = ImGui::Button("loadParticle");
 
 	saveParticle = ImGui::Button("saveParticle");
@@ -151,7 +182,6 @@ void ParticleLibrary::DrawImgui()
 	if ( loadTexSwich )
 	{
 		LoadTexJudgment(texFileName);
-
 	}
 	ImGui::SliderInt("particleNmber",&particleNmber,0,70);
 	ImGui::SliderFloat3("particlePos",&particlePos.x,-5.0f,5.0f);
@@ -165,13 +195,13 @@ void ParticleLibrary::DrawImgui()
 	ImGui::Checkbox("randomParticleSpeed",&randomParticleSpeedX);
 	ImGui::SliderFloat("particleRandomSpeed",&particleRandomSpeedX,-3.0f,3.0f);
 	ImGui::SliderFloat3("particleEndPos",&particleEndPos.x,-5.0f,5.0f);
-	ImGui::SliderFloat3("particleSpeed",&particleSpeed.x,0,3.0f);
+	ImGui::SliderFloat3("particleSpeed",&particleSpeed.x,-0.1f,0.1f);
 	ImGui::Checkbox("randomParticleSpeedX",&randomParticleSpeedX);
 	ImGui::Checkbox("randomParticleSpeedY",&randomParticleSpeedY);
 	ImGui::Checkbox("randomParticleSpeedZ",&randomParticleSpeedZ);
-	ImGui::SliderFloat("particleRandomSpeedX",&particleRandomSpeedX,-3.0f,3.0f);
-	ImGui::SliderFloat("particleRandomSpeedY",&particleRandomSpeedY,-3.0f,3.0f);
-	ImGui::SliderFloat("particleRandomSpeedZ",&particleRandomSpeedZ,-3.0f,3.0f);
+	ImGui::SliderFloat("particleRandomSpeedX",&particleRandomSpeedX,-0.1f,0.1f);
+	ImGui::SliderFloat("particleRandomSpeedY",&particleRandomSpeedY,-0.1f,0.1f);
+	ImGui::SliderFloat("particleRandomSpeedZ",&particleRandomSpeedZ,-0.1f,0.1f);
 
 
 	ImGui::SliderFloat("particleStertScale",&particleStertScale,0,5.0f);
@@ -189,7 +219,7 @@ void ParticleLibrary::DrawImgui()
 	ImGui::SliderInt("easingNmb",&easingNmb,0,2);
 
 
-	//ImGui::ColorEdit4("particleStertCollor",&particleStertColor.x);
+	ImGui::ColorEdit4("particleStertCollor",&particleStertColor.x);
 	ImGui::ColorEdit4("particleCollor",&particleEndColor.x);
 
 	ImGui::Checkbox("randomParticleStertColor",&randomParticleStertColor);
@@ -216,7 +246,7 @@ void ParticleLibrary::LoadCSVfile(const std::string& fileNames)
 	file.close();
 }
 
-void ParticleLibrary::UpdateCSVfile()
+void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 {
 	//1行分の文字列を入れる変数
 	std::string line;
@@ -254,14 +284,14 @@ void ParticleLibrary::UpdateCSVfile()
 			isExists = std::filesystem::exists(fullPath);
 			if ( isExists )
 			{
-				particle->LoadTexture(texPath);
+				particlemana->LoadTexture(texPath);
 			}
 			texPath = readFileName + JpgPath;
 			fullPath = kDefaultTextureDirectoryPath + texPath;
 			isExists = std::filesystem::exists(fullPath);
 			if ( isExists )
 			{
-				particle->LoadTexture(texPath);
+				particlemana->LoadTexture(texPath);
 			}
 
 			//particle->LoadTexture(readFileName);
@@ -550,14 +580,14 @@ void ParticleLibrary::LoadTexJudgment(const std::string& fileNames)
 	bool isExists = std::filesystem::exists(fullPath);
 	if ( isExists )
 	{
-		particle->LoadTexture(texPath);
+		particle_->LoadTexture(texPath);
 	}
 	texPath = fileName + JpgPath;
 	fullPath = kDefaultTextureDirectoryPath + texPath;
 	isExists = std::filesystem::exists(fullPath);
 	if ( isExists )
 	{
-		particle->LoadTexture(texPath);
+		particle_->LoadTexture(texPath);
 	}
 
 }
@@ -571,7 +601,7 @@ void ParticleLibrary::LoadCSVJudgment(const std::string& fileNames)
 	if ( isExists )
 	{
 		LoadCSVfile(fileNames);
-		UpdateCSVfile();
+		UpdateCSVfile(particle_);
 	}
 
 
@@ -586,9 +616,17 @@ float ParticleLibrary::RandNmber(float randNmb)
 
 void ParticleLibrary::ParticleDataSave(uint32_t nmb,const std::string& fileNames)
 {
+
+	if ( particleBox[ nmb ].particleUse == nullptr )
+	{
+		particleBox[ nmb ].particleUse = new ParticleManager();
+		particleBox[ nmb ].particleUse->Initialize();
+	}
 	ResetCSVfile();
 	LoadCSVfile(fileNames);
-	UpdateCSVfile();
+	UpdateCSVfile(particleBox[ nmb ].particleUse);
+
+	
 	particleBox[ nmb ].pData.easingNmb = easingNmb;
 	particleBox[ nmb ].pData.particlePos = particlePos;
 	particleBox[ nmb ].pData.randomParticlePos = randomParticlePos;
@@ -646,24 +684,129 @@ void ParticleLibrary::ParticleDataSave(uint32_t nmb,const std::string& fileNames
 
 }
 
-void ParticleLibrary::AddParticle(uint32_t nmb)
+void ParticleLibrary::AddParticle(uint32_t nmb,Vector3 ObjectPos)
 {
+	Vector3 particlePoss = particlePos;
+
+	if ( particleBox[ nmb ].pData.randomParticlePosX )
+	{
+
+		particlePoss.x += RandNmber(particleBox[ nmb ].pData.randomParticlePos.x);
+	}
+	if ( particleBox[ nmb ].pData.randomParticlePosY )
+	{
+
+		particlePoss.y += RandNmber(particleBox[ nmb ].pData.randomParticlePos.y);
+	}
+	if ( particleBox[ nmb ].pData.randomParticlePosZ )
+	{
+
+		particlePoss.z += RandNmber(particleBox[ nmb ].pData.randomParticlePos.z);
+	}
+
+
+	if ( particleBox[ nmb ].pData.endPoint )
+	{
+		if ( particleBox[ nmb ].pData.randomParticleSpeedX )
+		{
+			particleBox[ nmb ].pData.particleEndPointSpeed = RandNmber(particleBox[ nmb ].pData.particleRandomSpeedX);
+		}
+		particleBox[ nmb ].pData.endPointPos = ( particleBox[ nmb ].pData.particleEndPos - particlePoss );
+		particleBox[ nmb ].pData.endPointPos.nomalize();
+		particleBox[ nmb ].pData.endPointPos *= particleBox[ nmb ].pData.particleEndPointSpeed;
+
+	}
+	else
+	{
+
+		if ( particleBox[ nmb ].pData.randomParticleSpeedX )
+		{
+
+			particleBox[ nmb ].pData.particleSpeed.x = RandNmber(particleBox[ nmb ].pData.particleRandomSpeedX);
+		}
+		if ( particleBox[ nmb ].pData.randomParticleSpeedY )
+		{
+
+			particleBox[ nmb ].pData.particleSpeed.y = RandNmber(particleBox[ nmb ].pData.particleRandomSpeedY);
+		}
+		if ( particleBox[ nmb ].pData.randomParticleSpeedZ )
+		{
+
+			particleBox[ nmb ].pData.particleSpeed.z = RandNmber(particleBox[ nmb ].pData.particleRandomSpeedZ);
+		}
+	}
+
+	if ( particleBox[ nmb ].pData.randomParticleStertScale )
+	{
+
+		particleBox[ nmb ].pData.particleStertScale = RandNmber(particleBox[ nmb ].pData.particleRandomStertScale);
+		if ( particleBox[ nmb ].pData.particleStertScale < 0 )
+		{
+			particleBox[ nmb ].pData.particleStertScale = -particleBox[ nmb ].pData.particleStertScale;
+		}
+	}
+	if ( particleBox[ nmb ].pData.randomParticleEndScale )
+	{
+
+		particleBox[ nmb ].pData.particleEndScale = RandNmber(particleBox[ nmb ].pData.particleRandomEndScale);
+		if ( particleBox[ nmb ].pData.particleEndScale < 0 )
+		{
+			particleBox[ nmb ].pData.particleEndScale = -particleBox[ nmb ].pData.particleEndScale;
+		}
+	}
+
+	if ( particleBox[ nmb ].pData.randomParticleStertColor )
+	{
+		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
+		randomColor.x /= 100;
+		randomColor.y /= 100;
+		randomColor.z /= 100;
+		particleBox[ nmb ].pData.particleStertColor = { randomColor.x,randomColor.y,randomColor.z,particleBox[ nmb ].pData.particleStertColor.w };
+	}
+	if ( particleBox[ nmb ].pData.randomParticleEndColor )
+	{
+		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
+		randomColor.x /= 100;
+		randomColor.y /= 100;
+		randomColor.z /= 100;
+		particleBox[ nmb ].pData.particleEndColor = { randomColor.x,randomColor.y,randomColor.z,particleBox[ nmb ].pData.particleEndColor.w };
+
+	}
 	for ( int i = 0; i < particleBox[ nmb ].pData.particleNmber; i++ )
 	{
 		if ( endPoint )
 		{
-			particleBox[ nmb ].particleUse->Add(particleLife,particlePos,particleEndPos,endPointPos,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+			particleBox[ nmb ].particleUse->Add(particleBox[ nmb ].pData.particleLife,particleBox[ nmb ].pData.particlePos+ObjectPos,particleBox[ nmb ].pData.particleEndPos,particleBox[ nmb ].pData.endPointPos,particleBox[ nmb ].pData.particleStertScale,particleBox[ nmb ].pData.particleEndScale,particleBox[ nmb ].pData.easingNmb,particleBox[ nmb ].pData.particleStertColor,particleBox[ nmb ].pData.particleEndColor);
 		}
 		else
 		{
-			particleBox[ nmb ].particleUse->Add(particleLife,particlePos,particleEndPos,particleSpeed,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+			particleBox[ nmb ].particleUse->Add(particleBox[ nmb ].pData.particleLife,particleBox[ nmb ].pData.particlePos+ ObjectPos,particleBox[ nmb ].pData.particleEndPos,particleBox[ nmb ].pData.particleSpeed,particleBox[ nmb ].pData.particleStertScale,particleBox[ nmb ].pData.particleEndScale,particleBox[ nmb ].pData.easingNmb,particleBox[ nmb ].pData.particleStertColor,particleBox[ nmb ].pData.particleEndColor);
 		}
 	}
+	
 }
 
 void ParticleLibrary::ParticleUpdate(uint32_t nmb)
 {
 	particleBox[ nmb ].particleUse->Update();
+}
+
+void ParticleLibrary::ParticleDraw(uint32_t nmb)
+{
+	particleBox[ nmb ].particleUse->Draw();
+}
+
+void ParticleLibrary::Finalize()
+{
+	for ( int i = 0; i < particleBoxSaves; i++ )
+	{
+		if ( particleBox[ i ].particleUse != nullptr )
+		{
+			delete particleBox[ i ].particleUse;
+		}
+	}
+	delete particle_;
+	delete particleLibrary;
 }
 
 ParticleLibrary::~ParticleLibrary()

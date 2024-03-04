@@ -10,7 +10,8 @@ public:
 	//更新
 	void Update() override;
 	//描画
-	void Draw() override;
+	void ObjectDraw() override;
+	void SpriteDraw() override;
 	//終了処理
 	void Finalize() override;
 

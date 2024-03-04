@@ -16,7 +16,9 @@ public:
 
 	void Update();
 
-	void Draw();
+	void ObjectDraw();
+
+	void SpriteDraw();
 
 private:
 	SceneManager() = default;

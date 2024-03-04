@@ -14,7 +14,7 @@ public:
 	~GameClear();
 
 	//初期化
-	void Initialize(SpriteCommon* spriteCommon);
+	void Initialize();
 	//描画
 	void Draw();
 	//描画

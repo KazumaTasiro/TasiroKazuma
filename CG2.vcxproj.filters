@@ -411,6 +411,9 @@
     <ClCompile Include="User\Scene\SceneManager.cpp">
       <Filter>ソース ファイル\Game\GameScene</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\ModelManager.cpp">
+      <Filter>ソース ファイル\Engine\3D\Object3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -613,6 +616,9 @@
     </ClInclude>
     <ClInclude Include="User\Scene\SceneManager.h">
       <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ModelManager.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Object3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

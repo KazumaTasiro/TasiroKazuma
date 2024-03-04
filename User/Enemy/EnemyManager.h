@@ -27,7 +27,7 @@ public:
 	///<summary>
 	////初期化
 	///</summary>
-	void Initialize(SpriteCommon* spriteCommon, Camera* camera, ParticleManager* particle);
+	void Initialize( Camera* camera, ParticleManager* particle);
 	///<summary>
 	////更新
 	///</summary>
@@ -124,7 +124,7 @@ private://障害物
 	Model* enemyObstacle_ = nullptr;
 	Model* alertModel_ = nullptr;
 	//それぞれの当たり判定
-	float playerWidth = 1.5f;
+	float playerWidth = 0.5f;
 	float enemyWidth_ = 0.5f;
 
 private:
@@ -206,7 +206,7 @@ private:
 
 	Vector3 RayPos = { 0,0,0 };
 
-	float bossWide = 5.0f;
+	float bossWide = 10.0f;
 	float enemyWide = 3.0f;
 	float enemyLockWide = 5.0f;
 

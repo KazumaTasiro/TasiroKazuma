@@ -16,9 +16,9 @@ Player::~Player()
 }
 
 //いろいろな初期化
-void Player::Initialize(SpriteCommon* spriteCommon,ParticleManager* particle)
+void Player::Initialize(ParticleManager* particle)
 {
-	assert(spriteCommon);
+
 	assert(particle);
 
 
@@ -44,24 +44,24 @@ void Player::Initialize(SpriteCommon* spriteCommon,ParticleManager* particle)
 	worldTransform3DReticle_->SetModel(bulletModel_);
 	//スプライト生成
 	sprite2DReticle_ = new Sprite();
-	sprite2DReticle_->Initialize(spriteCommon,zero);
+	sprite2DReticle_->Initialize(zero);
 
 	sprite2DReticleLock_ = new Sprite();
-	sprite2DReticleLock_->Initialize(spriteCommon,one);
+	sprite2DReticleLock_->Initialize(one);
 
 	worldTransform_->wtf.position = playerResetPos;
 
 	playerHPNone = new Sprite();
 	playerHPMax = new Sprite();
-	playerHPNone->Initialize(spriteCommon,17);
-	playerHPMax->Initialize(spriteCommon,18);
+	playerHPNone->Initialize(17);
+	playerHPMax->Initialize(18);
 	playerHPNone->SetAnchorPoint({ 0,0 });
 	playerHPNone->SetPozition({ 0,WinApp::window_height - hpSpriteHight });
 	playerHPMax->SetAnchorPoint({ 0,0 });
 	playerHPMax->SetPozition({ spritePos.x,WinApp::window_height - hpSpriteHight });
 
 	damageEffect = new Sprite();
-	damageEffect->Initialize(spriteCommon,23);
+	damageEffect->Initialize(23);
 	damageEffect->SetSize({ WinApp::window_width,WinApp::window_height });
 	damageEffect->SetAnchorPoint({ 0.5f,0.5f });
 	damageEffect->SetPozition({ WinApp::window_width / 2,WinApp::window_height / 2 });
@@ -110,6 +110,8 @@ void Player::Update()
 	ReticleLimit();
 	sprite2DReticleLock_->SetPozition(sprite2DReticle_->GetPosition());
 	playerDeadParticle->Update();
+	ParticleLibrary::GetInstance()->ParticleUpdate(0);
+	ParticleLibrary::GetInstance()->ParticleUpdate(1);
 	if ( DeadParticle )
 	{
 		EffectWaiteTime--;
@@ -162,22 +164,113 @@ void Player::Move()
 	//const float RotSpeed = 0.05f;
 	if ( input_->PushKey(DIK_A) )
 	{
-		move.x -= speed;
+		worldTransform_->wtf.rotation.y = rot * playerRot;
+		if ( -playerRotLimit < playerRot + playerRotPlus )
+		{
+			if ( playerPos.x - speed > -kMoveLimitX )
+			{
+				playerRot -= playerRotPlus;
+				
+			}
+			else if ( playerRot < 0 )
+			{
+				playerRot += playerRotPlus + playerRotPlus;
+				
+
+			}
+			else
+			{
+				playerRot += playerRotPlus;
+			}
+
+		}
+		if ( playerRot <= 0 )
+		{
+			if ( speed >= -speedMax )
+			{
+				speed -= speedPlus;
+
+			}
+			//move.x += speed;
+		}
+		else
+		{
+			ParticleLibrary::GetInstance()->AddParticle(1,worldTransform_->wtf.position);
+			//if ( speed == 0 )
+			//{
+			//	speed = 0;
+			//}
+		}
+
 	}
 	else if ( input_->PushKey(DIK_D) )
 	{
-		move.x += speed;
 
+		if ( playerRotLimit > playerRot - playerRotPlus )
+		{
+			if ( playerPos.x - speed > -kMoveLimitX )
+			{
+				playerRot += playerRotPlus;
+				
+			}
+			else if ( playerRot > 0 )
+			{
+				playerRot += playerRotPlus + playerRotPlus;
+				
+			}
+			else
+			{
+				playerRot -= playerRotPlus;
+			}
+			
+		}
+		if ( playerRot >= 0 )
+		{
+			if ( speed <= speedMax )
+			{
+				speed += speedPlus;
+			}
+			//move.x += speed;
+		}
+		else
+		{
+			ParticleLibrary::GetInstance()->AddParticle(0,worldTransform_->wtf.position);
+			//if ( speed == 0 )
+			//{
+			//	speed = 0;
+			//}
+		}
 	}
-	if ( input_->PushKey(DIK_LEFT) )
+	else
 	{
-		camMove.x -= speed;
-	}
-	else if ( input_->PushKey(DIK_RIGHT) )
-	{
-		camMove.x += speed;
+		if ( playerRot < 0 )
+		{
+			playerRot += playerRotPlus;
+		}
+		else if ( playerRot > 0 )
+		{
+			playerRot -= playerRotPlus;
+		}
 
+		if ( speed > 0 )
+		{
+			speed -= speedPlus;
+			if ( speed < 0 )
+			{
+				speed = 0;
+			}
+		}
+		else if ( speed < 0 )
+		{
+			speed += speedPlus;
+			if ( speed > 0 )
+			{
+				speed = 0;
+			}
+		}
 	}
+	move.x += speed;
+	worldTransform_->wtf.rotation.y = rot * playerRot;
 	worldTransform_->wtf.position = { pos.x + move.x,pos.y + move.y,pos.z + move.z };
 	worldTransform_->camera->SetTarget(worldTransform_->camera->GetTarget() + camMove);
 	//worldTransform_->camera->SetEye({ worldTransform_->camera->GetEye().x + camMove.x, worldTransform_->camera->GetEye().y + camMove.y, worldTransform_->wtf.position.z - 10 });
@@ -516,7 +609,7 @@ void Player::PlayerLimit()
 void Player::PlayerDeadParticle()
 {
 	//パーティクル範囲
-	for ( int i = 0; i < 5; i++ )
+	for ( int i = 0; i < 3; i++ )
 	{
 //X,Y,Z全て[-5.0f,+5.0f]でランダムに分布
 		const float rnd_pos = rnd_posS;
@@ -548,11 +641,13 @@ void Player::PlayerDeadParticle()
 void Player::ParticleDraw()
 {
 	playerDeadParticle->Draw();
+	ParticleLibrary::GetInstance()->ParticleDraw(0);
+	ParticleLibrary::GetInstance()->ParticleDraw(1);
 	for ( std::unique_ptr<PlayerBullet>& bullet : bullets_ )
 	{
 		bullet->ParticleDraw();
 	}
-	
+
 }
 
 //クリア時の自機の動き

@@ -21,6 +21,8 @@
 #include "LightData.h"
 
 
+
+class DirectXCommon;
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
@@ -184,6 +186,10 @@ public: // メンバ関数
 
 	Vector3 GetWorldPosition();
 
+	void SetDirecXCommn(DirectXCommon* dxCommon_){
+		dxCommon = dxCommon_;
+	}
+
 private: // メンバ変数
 public:
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
@@ -211,5 +217,6 @@ public:
 public:
 	Transform wtf;
 
+	static DirectXCommon* dxCommon;
 };
 

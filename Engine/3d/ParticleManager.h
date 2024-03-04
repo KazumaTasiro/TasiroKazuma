@@ -38,6 +38,8 @@ public: // サブクラス
 	{
 		Vector3 pos; // xyz座標
 		float scale;
+		Vector4 color;// 色
+
 	};
 
 	// 定数バッファ用データ構造体
@@ -45,7 +47,7 @@ public: // サブクラス
 	{
 		Matrix4 mat;
 		Matrix4 matBillboard;
-		Vector4 color;// ビルボード行列
+
 	};
 
 	//パーティクル一粒
@@ -276,6 +278,10 @@ private: // メンバ変数
 	static Camera* camera;
 	// ローカルスケール
 	Transform wtf_;
+
+	Vector4 colorVector;
+
+	int times = 0;
 
 	Vector4 color = { 1,1,1,1 };
 

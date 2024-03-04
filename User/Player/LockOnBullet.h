@@ -85,7 +85,7 @@ private:
 	float rnd_velS = 0;
 	float rnd_posS = 0;
 
-	int particleLife = 80;
+	int particleLife = 40;
 	float particleScaleStert = 2.0f;
 	float particleScaleEnd = 0;
 

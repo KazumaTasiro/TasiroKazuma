@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\3d\ModelManager.cpp" />
     <ClCompile Include="Engine\LIght\CircleShadow.cpp" />
     <ClCompile Include="Engine\LIght\DirectionalLight.cpp" />
     <ClCompile Include="Engine\Light\LightData.cpp" />
@@ -203,6 +204,7 @@
     <ClCompile Include="User\Title\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\3d\ModelManager.h" />
     <ClInclude Include="Engine\LIght\CircleShadow.h" />
     <ClInclude Include="Engine\LIght\DirectionalLight.h" />
     <ClInclude Include="Engine\Light\LightData.h" />

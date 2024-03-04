@@ -7,7 +7,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	delete player_;
+
 }
 void GameScene::Initialize(DirectXCommon* dxcomon)
 {
@@ -20,133 +20,100 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 
 	dxCommon_ = dxcomon;
 
-	audio_ = new Audio();
+
+	audio_ = std::make_unique <Audio>();
 	audio_->Initialize();
 
 	// カメラ生成
-	camera_ = new Camera(WinApp::window_width,WinApp::window_height);
+	camera_ = std::make_unique <Camera>(WinApp::window_width,WinApp::window_height);
 	camera_->SetEye(cameraTitle);
 
 	camera_->Update();
-	Object3d::SetCamera(camera_);
-	ParticleManager::SetCamera(camera_);
+	Object3d::SetCamera(camera_.get());
+	ParticleManager::SetCamera(camera_.get());
 
 	ImGuiMan_ = ImGuiManager::GetInstance();
 
 	//スプライト共通部分の初期化
-	spriteCommon_ = new SpriteCommon;
-	spriteCommon_->Initialize(dxCommon_);
-	spriteCommon_->LoadTexture(0,"Reticle.png");
-	spriteCommon_->LoadTexture(1,"ReticleLock.png");
-	spriteCommon_->LoadTexture(2,"EnemyLock.png");
-	spriteCommon_->LoadTexture(3,"stert.png");
-	spriteCommon_->LoadTexture(4,"GameBlind.png");
-	spriteCommon_->LoadTexture(5,"GameClear.png");
-	spriteCommon_->LoadTexture(6,"GameOver.png");
-	spriteCommon_->LoadTexture(7,"GameBlindFaceOver1.png");
-	spriteCommon_->LoadTexture(8,"GameBlindFaceOver2.png");
-	spriteCommon_->LoadTexture(9,"GameBlindFaceOver3.png");
-	spriteCommon_->LoadTexture(10,"GameBlindFaceUnder1.png");
-	spriteCommon_->LoadTexture(11,"GameBlindFaceUnder2.png");
-	spriteCommon_->LoadTexture(12,"GameBlindFaceUnder3.png");
-	spriteCommon_->LoadTexture(13,"Time3.png");
-	spriteCommon_->LoadTexture(14,"Time2.png");
-	spriteCommon_->LoadTexture(15,"Time1.png");
-	spriteCommon_->LoadTexture(16,"TimeGo.png");
-	spriteCommon_->LoadTexture(17,"playerHPNone.png");
-	spriteCommon_->LoadTexture(18,"playerHPMax.png");
-	spriteCommon_->LoadTexture(19,"Operation.png");
-	spriteCommon_->LoadTexture(20,"CameraMove.png");
-	spriteCommon_->LoadTexture(21,"CengeCameraE.png");
-	spriteCommon_->LoadTexture(22,"CengeCmaraQ.png");
-	spriteCommon_->LoadTexture(23,"damageEf.png");
-	spriteCommon_->LoadTexture(24,"MoveTuto.png");
+	
 
 
-	skydome_ = new Skydome();
+
+
+	skydome_ = std::make_unique < Skydome>();
 	skydome_->Initalize();
 
-	stert_ = new Sprite();
-	stert_->Initialize(spriteCommon_,three);
+	stert_ = std::make_unique <Sprite>();
+	stert_->Initialize(three);
 	stert_->SetPozition({ winApp_->window_width / 2,winApp_->window_height / 2 + gamestertUp });
 
 
-	gameClear_ = new Sprite();
-	gameClear_->Initialize(spriteCommon_,five);
+	gameClear_ = std::make_unique <Sprite>();
+	gameClear_->Initialize(five);
 	gameClear_->SetPozition({ winApp_->window_width / 2,( winApp_->window_height / 2 ) - gameOverUp });
 	spriteEnd_ = { winApp_->window_width / 2,winApp_->window_height / 2 };
-	gameOver_ = new Sprite();
-	gameOver_->Initialize(spriteCommon_,six);
+	gameOver_ = std::make_unique <Sprite>();
+	gameOver_->Initialize(six);
 	gameOver_->SetPozition({ winApp_->window_width / 2,( winApp_->window_height / 2 ) - gameOverUp });
-	operation_ = new Sprite();
-	operation_->Initialize(spriteCommon_,19);
+	operation_ = std::make_unique <Sprite>();
+	operation_->Initialize(19);
 	operation_->SetPozition({ WinApp::window_width - operationPos.x,WinApp::window_height - operationPos.y });
 	//operation_->SetAnchorPoint({ 0,0 })
-	cameraMoveOps_= new Sprite();
-	cameraMoveOps_->Initialize(spriteCommon_,20);
+	cameraMoveOps_= std::make_unique <Sprite>();
+	cameraMoveOps_->Initialize(20);
 	cameraMoveOps_->SetPozition({ WinApp::window_width - operationPos.x,WinApp::window_height - (operationPos.y*3) });
-	moveTute_ = new Sprite();
-	moveTute_->Initialize(spriteCommon_,24);
+	moveTute_ = std::make_unique <Sprite>();
+	moveTute_->Initialize(24);
 	moveTute_->SetPozition({ WinApp::window_width - operationPos.x,WinApp::window_height - ( operationPos.y * 5 ) });
 
-	road_ = new Road();
+	road_ = std::make_unique <Road>();
 	road_->Initialize();
 
 
 	Object3dFbx::SetDevice(dxCommon_->GetDevice());
-	Object3dFbx::SetCamera(camera_);
+	Object3dFbx::SetCamera(camera_.get());
 	Object3dFbx::CreateGraphicsPipeline();
-	////モデル名を指定してファイルに読み込み
-	//model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
-
-	//object1 = new Object3dFbx;
-	//object1->Initialize();
-	//object1->SetModel(model1);
-	//object1->PlayAnimation();
-
-	ParticleMana_ = new ParticleManager();
+	ParticleMana_ = std::make_unique <ParticleManager>();
 	ParticleMana_->Initialize();
 	ParticleMana_->LoadTexture("Explosion.png");
 
-	player_ = new Player();
-	player_->Initialize(spriteCommon_,ParticleMana_);
-	player_->SetCamera(camera_);
+	player_ = std::make_unique<Player>();
+	player_->Initialize(ParticleMana_.get());
+	player_->SetCamera(camera_.get());
 
-	enemyManager_ = new EnemyManager();
-	enemyManager_->Initialize(spriteCommon_,camera_,ParticleMana_);
+	enemyManager_ = std::make_unique < EnemyManager>();
+	enemyManager_->Initialize(camera_.get(),ParticleMana_.get());
 
 	enemyManager_->SetGameScene(this);
-	enemyManager_->SetPlayer(player_);
+	enemyManager_->SetPlayer(player_.get());
 
 	//player_->Update();
-	seenTransition_ = new SeenTransition();
-	seenTransition_->Initialize(spriteCommon_);
+	seenTransition_ = std::make_unique < SeenTransition>();
+	seenTransition_->Initialize();
 
-	gameOverSeen = new GameOver();
+	gameOverSeen = std::make_unique<GameOver>();
 	gameOverSeen->Initialize();
-	gameOverSeen->SetCamera(camera_);
+	gameOverSeen->SetCamera(camera_.get());
 
-	gameClearScene = new GameClear();
-	gameClearScene->SetCamera(camera_);
-	gameClearScene->Initialize(spriteCommon_);
+	gameClearScene = std::make_unique < GameClear>();
+	gameClearScene->SetCamera(camera_.get());
+	gameClearScene->Initialize();
 
-	title_ = new Titles();
+	title_ = std::make_unique< Titles>();
 	title_->Initialize();
 
 
 	scene = Scene::Title;
-	stertCount_ = new StertCount();
-	stertCount_->SetCamera(camera_);
-	railCamera = new RailCamera();
-	railCamera->SetCamera(camera_);
-	railCamera->SetPlayer(player_);
+	stertCount_ = std::make_unique<StertCount>();
+	stertCount_->SetCamera(camera_.get());
+	railCamera = std::make_unique < RailCamera>();
+	railCamera->SetCamera(camera_.get());
+	railCamera->SetPlayer(player_.get());
 	railCamera->Initialize();
 	railCamera->Update();
 
 	lightGroupNon = LightGroup::Create();
-
-	lightGroupUse = LightGroup::Create();
 
 	//direLight = DirectionalLight::Create();
 
@@ -155,11 +122,13 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	//lightGroupUse->SetCircleShadowActive(0,true);
 
 	Object3d::SetLightNon(lightGroupNon);
-	Object3d::SetLightUse(lightGroupUse);
-	PhaseReset();
+	ParticleLibrary::GetInstance()->ObjectInitialize();
 
-	
-	//pointLight = LightData::GetInstance()->AddPointLight(pointLightPos,pointLightColor,pointLightAtten);
+	ParticleLibrary::GetInstance()->ParticleDataSave(0,"RotParticleL");
+	ParticleLibrary::GetInstance()->ParticleUpdate(0);
+	ParticleLibrary::GetInstance()->ParticleDataSave(1,"RotParticleR");
+	ParticleLibrary::GetInstance()->ParticleUpdate(1);
+	PhaseReset();
 
 }
 void GameScene::Update()
@@ -168,55 +137,36 @@ void GameScene::Update()
 	//direLight->Update();
 	ImGuiMan_->Bigin();
 #ifdef _DEBUG
-	lightGroupUse->Update();
-
-
-	//ImGui::SliderFloat3("circleShadowAttenX",&circleShadowAtten.x,0,2);
-	//ImGui::SliderFloat2("circleShadowFactorAngleX",&circleShadowFactorAngle.x,0,2);
-	//player_->worldTransform_->lightGroup->SetCircleShadowDir(0,circleShadowDir);
-	//player_->worldTransform_->lightGroup->SetCircleShadowAtten(0,circleShadowAtten);
-	//player_->worldTransform_->lightGroup->SetCircleShadowFactorAngle(0,circleShadowFactorAngle);
-	/*ImGui::ShowDemoWindow();*/
-	/*player_->ImguiDraw();*/
-	//ImGui::SliderFloat3("pointLightPos",&pointLightPos.x,-100,100);
-	//ImGui::SliderFloat3("pointLightColor",&pointLightColor.x,0,1);
-	//ImGui::SliderFloat3("pointLightAtten",&pointLightAtten.x,0,1);
-	//LightData::GetInstance()->UpdatePointLight(pointLight,pointLightPos,pointLightColor,pointLightAtten);
 
 #endif
 #ifdef _PARTICLELIBRARY
 
-		//ImGui::SliderFloat3("pointLightPos",&pointLightPos.x,-100,100);
-		//ImGui::SliderFloat3("pointLightColor",&pointLightColor.x,0,1);
-		//ImGui::SliderFloat3("pointLightAtten",&pointLightAtten.x,0,1);
 		ImGui::SliderFloat3("cameraEye",&cameraImgui.x,-30,30);
 
 		camera_->SetEye(cameraImgui);
+		Vector3 CameraMove = {0,0,1.0f };
+		Vector3 cameraTage = cameraImgui + CameraMove;
+		camera_->SetTarget(cameraTage);
 		camera_->Update();
+		ParticleLibrary::GetInstance()->ObjectUpdate();
 		ParticleLibrary::GetInstance()->DrawImgui();
 		ParticleLibrary::GetInstance()->Update();
-
-		break;
 
 #endif
 #ifdef NDEBUG
 	CursorLimit();
 
 #endif // DEBUG
-
-			//デモウィンドウの表示ON
-
-
-	/*enemyManager_->ImguiUpdate();*/
-	//player_->SetPos({ player_->GetWorldPosition().x ,player_->GetWorldPosition().y,playPos });
 	ImGuiMan_->End();
 	LightUpdate();
+#ifndef _PARTICLELIBRARY
+
 	skydome_->Update();
 	switch ( scene )
 	{
 	case GameScene::Title:
-#ifdef _DEBUG
-#endif // DEBUG
+
+
 
 
 		road_->BeforeUpdate();
@@ -235,26 +185,12 @@ void GameScene::Update()
 		{
 			if ( seenTransition_->ReturnSeenTrans() )
 			{
-				stertCount_->Initialize(spriteCommon_);
+				stertCount_->Initialize();
 				camera_->SetEye(cameraGame);
 				scene = Scene::Game;
 				seenFlag = false;
 			}
 		}
-		//if ( input_->TriggerKey(DIK_B) )
-		//{
-		//	scene = Scene::Boss;
-		//	enemyManager_->bossSeenTest();
-		//}
-
-		//if ( input_->PushKey(DIK_L) )
-		//{
-		//	scene = Scene::GameClear;
-		//}
-		//if ( input_->PushKey(DIK_P) )
-		//{
-		//	scene = Scene::GameOver;
-		//}
 		break;
 	case GameScene::Game:
 
@@ -277,9 +213,9 @@ void GameScene::Update()
 			}
 			//player_->Update();
 			player_->AttackUpdate();
-			enemyManager_->SetPlayer(player_);
+			enemyManager_->SetPlayer(player_.get());
 			enemyManager_->Update();
-			enemyManager_->EnemyCollision(player_);
+			enemyManager_->EnemyCollision(player_.get());
 			if ( enemyManager_->Clear() == true )
 			{
 				scene = Scene::Boss;
@@ -319,10 +255,10 @@ void GameScene::Update()
 		seenTransition_->Update();
 		player_->cameraUpdate();
 		road_->Update();
-		enemyManager_->SetPlayer(player_);
+		enemyManager_->SetPlayer(player_.get());
 		enemyManager_->BossUpdate();
 		enemyManager_->Update();
-		enemyManager_->EnemyCollision(player_);
+		enemyManager_->EnemyCollision(player_.get());
 		camera_->Update();
 		player_->Update();
 		player_->AttackUpdate();
@@ -403,13 +339,16 @@ void GameScene::Update()
 		break;
 	}
 
-
+#endif // DEBUG
 
 }
 void GameScene::Draw()
 {
 	/*direLight->Draw(dxCommon_->GetCommandList(),1);*/
 	Object3d::PreDraw(dxCommon_->GetCommandList());
+
+
+#ifndef _PARTICLELIBRARY
 
 
 
@@ -461,14 +400,23 @@ void GameScene::Draw()
 	default:
 		break;
 	}
+#endif // !_PARTICLELIBRARY
 #ifdef _PARTICLELIBRARY
 	//skydome_->Draw();
 	//road_->Draw();
-	ParticleLibrary::GetInstance()->Draw();
+	ParticleLibrary::GetInstance()->ObjectDraw();
+	ParticleLibrary::GetInstance()->PDraw();
 #endif // _DEBUG
+
+
+
+
 	player_->ParticleDraw();
 	Object3d::PostDraw();
-
+#ifdef _PARTICLELIBRARY
+	ImGuiMan_->Draw();
+#endif // _DEBUG
+#ifndef _PARTICLELIBRARY
 	switch ( scene )
 	{
 	case GameScene::Title:
@@ -531,9 +479,9 @@ void GameScene::Draw()
 		break;
 	}
 	seenTransition_->Draw();
-	ImGuiMan_->Draw();
 
 
+#endif // !_PARTICLELIBRARY
 	
 
 }
@@ -544,13 +492,6 @@ void GameScene::Finalize()
 
 	audio_->Finalize();
 
-	delete audio_;
-
-	//3Dモデル開放
-	delete model_;
-
-	//スプライトの開放
-	delete spriteCommon_;
 
 }
 
@@ -591,11 +532,6 @@ void GameScene::CursorLimit()
 void GameScene::LightUpdate()
 {
 	lightGroupNon->Update();
-
-	//lightGroupNon->SetCircleShadowDir(0,circleShadowDir);
-	//lightGroupNon->SetCircleShadowCasterPos(0,{0,0,0});
-	//lightGroupNon->SetCircleShadowAtten(0,circleShadowAtten);
-	//lightGroupNon->SetCircleShadowFactorAngle(0,circleShadowFactorAngle);
 }
 
 
