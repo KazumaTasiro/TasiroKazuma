@@ -4,6 +4,7 @@
 #include "PostEffect.h"
 #include "Framework.h"
 #include "DirectionalLight.h"
+#include "SpriteCommon.h"
 
 
 //ゲーム全体
@@ -26,6 +27,8 @@ public:
 	//描画
 	void Draw() override;
 
+	//スプライトまとめ
+	void SpriteInitialize();
 
 private:
 	

@@ -7,6 +7,17 @@
 //デフォルトテクスチャ格納ディレクトリ
 std::string SpriteCommon::kDefaultTextureDirectoryPath = "Resources/";
 
+SpriteCommon* SpriteCommon::spriteCommon = nullptr;
+
+SpriteCommon* SpriteCommon::GetInstance()
+{
+	if (spriteCommon == nullptr)
+	{
+		spriteCommon = new SpriteCommon();
+	}
+	return spriteCommon;
+}
+
 void SpriteCommon::Initialize(DirectXCommon* dxcommon)
 {
 	assert(dxcommon);
@@ -303,4 +314,8 @@ void SpriteCommon::SetTextureCommands(uint32_t index)
 	// SRVヒープの先頭にあるSRVをルートパラメータ1番に設定
 	srvGpuHandle.ptr += (incrementSize * index);
 	dxcommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, srvGpuHandle);
+}
+
+SpriteCommon::~SpriteCommon()
+{
 }

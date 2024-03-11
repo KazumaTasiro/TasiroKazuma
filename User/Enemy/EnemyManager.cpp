@@ -10,14 +10,13 @@ EnemyManager::~EnemyManager()
 
 }
 
-void EnemyManager::Initialize(SpriteCommon* spriteCommon,Camera* camera,ParticleManager* particle)
+void EnemyManager::Initialize(Camera* camera,ParticleManager* particle)
 {
 
 	assert(camera);
 	assert(particle);
-	assert(spriteCommon);
 	camera_ = camera;
-	spriteCommon_ = spriteCommon;
+	spriteCommon_ = SpriteCommon::GetInstance();
 	input_ = Input::GetInstance();
 	enemyModel_ = Model::LoadFormOBJ("Sakaban");
 	enemyBulletModel_ = Model::LoadFormOBJ("EnemyBullet");
@@ -28,8 +27,8 @@ void EnemyManager::Initialize(SpriteCommon* spriteCommon,Camera* camera,Particle
 
 	spriteRight = new Sprite();
 	spriteLeft = new Sprite();
-	spriteRight->Initialize(spriteCommon_,22);
-	spriteLeft->Initialize(spriteCommon_,21);
+	spriteRight->Initialize(22);
+	spriteLeft->Initialize(21);
 	//パーティクル生成
 	enemyDeadParticle = particle;
 	/*enemyDeadParticle->Update();*/
@@ -77,7 +76,7 @@ void EnemyManager::Update()
 	for ( std::unique_ptr<Enemy>& enemy : enemy_ )
 	{
 		enemyDeath += enemy->ReturnOnColl();
-		enemy->SetGameScene(gameScene_);
+		//enemy->SetGameScene(gameScene_);
 		enemy->Update(player_);
 	}
 	CreateObstance();
@@ -244,7 +243,7 @@ void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 	randEnemyRoot = rand() % two;
 	//敵キャラの生成
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-	newEnemy->Initialize(EnemyPos,spriteCommon_,enemyModel_,enemyBulletModel_,enemyReticleModel_,randEnemyNmb,randEnemyRoot);
+	newEnemy->Initialize(EnemyPos,enemyModel_,enemyBulletModel_,enemyReticleModel_,randEnemyNmb,randEnemyRoot);
 
 	//リストに登録する
 	enemy_.push_back(std::move(newEnemy));
@@ -381,27 +380,6 @@ void EnemyManager::EnemyCollision(Player* player)
 #pragma region 自キャラと敵弾の当たり判定
 #pragma endregion
 
-	////自キャラも座標
-	//posA = player_->GetWorldPosition();
-
-	////敵キャラと敵弾すべての当たり判定
-	//for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
-	//	//敵弾の座標
-	//	posB = bullet->GetWorldPosition();
-
-	//	float lol = { (posB.x - posA.x) * (posB.x - posA.x) + (posB.y - posA.y) * (posB.y - posA.y) + (posB.z - posA.z) * (posB.z - posA.z) };
-
-	//	float radius = { (1 + 1) * (1 + 1) };
-
-	//	if (lol <= radius) {
-	//		//自キャラの衝突時コールバックを呼び出す
-	//		player_->OnCollision();
-	//		//自弾の衝突時コールバックを呼び出す
-	//		bullet->OnCollision();
-
-	//		PlayerDead = true;
-	//	}
-	//}
 
 }
 

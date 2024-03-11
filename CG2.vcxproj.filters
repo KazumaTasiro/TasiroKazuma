@@ -208,6 +208,12 @@
     <Filter Include="ヘッダー ファイル\Engine\3D\Light">
       <UniqueIdentifier>{a4e64b80-47d6-4b5f-962a-9a2fde1d16da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\StageEditor">
+      <UniqueIdentifier>{35b37733-8d75-4d5d-9bdf-4410daabafe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\StageEditor">
+      <UniqueIdentifier>{873b85af-c36d-4ed4-a9b9-69008f43eb4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -381,6 +387,42 @@
     <ClCompile Include="Engine\3d\ParticleLibrary.cpp">
       <Filter>ソース ファイル\Engine\3D\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyAttackObstacle.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyBulletAttack.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Enemy\EnemyTackle.cpp">
+      <Filter>ソース ファイル\Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameSceneState.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\BossScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GamePlayScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameClearScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\TitleScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\SceneManager.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\ModelManager.cpp">
+      <Filter>ソース ファイル\Engine\3D\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\StageEditor\StageEditor.cpp">
+      <Filter>ソース ファイル\Engine\StageEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -553,6 +595,42 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\ParticleLibrary.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyTackle.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyBulletAttack.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Enemy\EnemyAttackObstacle.h">
+      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameSceneState.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameClearScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\BossScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GamePlayScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\SceneManager.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ModelManager.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\StageEditor\StageEditor.h">
+      <Filter>ヘッダー ファイル\Engine\StageEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,26 +8,26 @@ SeenTransition::~SeenTransition()
 {
 
 }
-void SeenTransition::Initialize(SpriteCommon* spriteCommon_)
+void SeenTransition::Initialize()
 {
-	assert(spriteCommon_);
-	spriteCommon = spriteCommon_;
+	
+	spriteCommon = SpriteCommon::GetInstance();
 
 	//黒いブラインド
 	blind = new Sprite();
-	blind->Initialize(spriteCommon,Nmb::four);
+	blind->Initialize(Nmb::four);
 	blind->SetPozition({ WinApp::window_width/Nmb::two,WinApp::window_height/ Nmb::two });
 	blind->SetSize({ WinApp::window_width,WinApp::window_height });
 	blind->SetColor({ blind->GetColor().x,blind->GetColor().y,blind->GetColor().z,blindW });
 
 	//サカバンバスピスの上のやつ
 	blindFaceOver = new Sprite();
-	blindFaceOver->Initialize(spriteCommon,randBlindOverNmb);
+	blindFaceOver->Initialize(randBlindOverNmb);
 	blindFaceOver->SetPozition({ WinApp::window_width / Nmb::two,WinApp::window_height / Nmb::two - blindResetPos });
 	blindFaceOver->SetSize({ WinApp::window_width,WinApp::window_height });
 
 	blindFaceUnder = new Sprite();
-	blindFaceUnder->Initialize(spriteCommon,randBlindUnderNmb);
+	blindFaceUnder->Initialize(randBlindUnderNmb);
 	blindFaceUnder->SetPozition({ WinApp::window_width / Nmb::two,WinApp::window_height / Nmb::two + blindResetPos });
 	blindFaceUnder->SetSize({ WinApp::window_width,WinApp::window_height });
 	ResetBlindSprite();

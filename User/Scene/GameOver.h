@@ -7,11 +7,11 @@
 #include "Sprite.h"
 #include "ParticleManager.h"
 
-class  GameOverSeen
+class  GameOver
 {
 public:
-	 GameOverSeen();
-	~GameOverSeen();
+	 GameOver();
+	~GameOver();
 	///<summary>
 	////初期化
 	///</summary>

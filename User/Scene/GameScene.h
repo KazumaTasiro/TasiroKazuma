@@ -28,6 +28,8 @@
 #include "LightGroup.h"
 #include "ParticleLibrary.h"
 #include "DirectionalLight.h"
+#include "StageEditor.h"
+
 
 ///<summary>
 ///ボスの生成と行動
@@ -74,10 +76,6 @@ public:
 	////シーンをまたぐときのリセット
 	///</summary>
 	void PhaseReset();
-	///<summary>
-	////タイトルに戻るときのリセット
-	///</summary>
-	void TitleReset();
 
 	//カーソルが画面外に出ない処理
 	void CursorLimit();
@@ -90,9 +88,9 @@ private:
 		Title,
 		Game,
 		Boss,
-		GameOver,
-		GameClear,
-		Particle
+		Over,
+		Clear,
+		Editor,
 	};
 	Scene scene;
 private:
@@ -111,8 +109,9 @@ private:
 		ten = 10,
 	};
 private://プレイヤー
+	
 	///自キャラ
-	Player* player_ = nullptr;
+	std::unique_ptr<Player> player_ = nullptr;
 
 	bool playMove = true;
 
@@ -121,19 +120,19 @@ private://プレイヤー
 	bool TitleEnd = false;
 private://スプライト
 
-	Sprite* stert_ = nullptr;
-	Sprite* gameClear_ = nullptr;
-	Sprite* gameOver_ = nullptr;
-	Sprite* operation_ = nullptr;
-	Sprite* cameraMoveOps_ = nullptr;
-	Sprite* moveTute_ = nullptr;
+	std::unique_ptr <Sprite> stert_ = nullptr;
+	std::unique_ptr <Sprite> gameClear_ = nullptr;
+	std::unique_ptr <Sprite> gameOver_ = nullptr;
+	std::unique_ptr <Sprite> operation_ = nullptr;
+	std::unique_ptr <Sprite> cameraMoveOps_ = nullptr;
+	std::unique_ptr <Sprite> moveTute_ = nullptr;
 
 private:
 	//ライト
 	DirectionalLight* direLight = nullptr;
 private:
 
-	RailCamera* railCamera = nullptr;
+	std::unique_ptr<RailCamera> railCamera = nullptr;
 	
 
 	//std::list<std::unique_ptr<Enemy>> enemy_;
@@ -147,26 +146,20 @@ private:
 	ImGuiManager* ImGuiMan_ = nullptr;
 
 
-	Audio* audio_ = nullptr;
+	std::unique_ptr < Audio> audio_ = nullptr;
 
-	SpriteCommon* spriteCommon_ = nullptr;
 
-	Camera* camera_ = nullptr;
+	std::unique_ptr < Camera> camera_ = nullptr;
 
 	RECT rcClip;
 	RECT rcOldClip;
 
-	//OBJからモデルデータを読み込む
-	Model* model_ = nullptr;
 
-	FbxModel* model1 = nullptr;
-	Object3dFbx* object1 = nullptr;
+	std::unique_ptr <Road> road_ = nullptr;
 
-	Road* road_ = nullptr;
+	std::unique_ptr < Skydome> skydome_ = nullptr;
 
-	Skydome* skydome_ = nullptr;
-
-	EnemyManager* enemyManager_ = nullptr;
+	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
 
 
 
@@ -175,21 +168,21 @@ private:
 
 	
 
-	ParticleManager* ParticleMana_;
+	std::unique_ptr<ParticleManager> ParticleMana_;
 
-	GameOverSeen* gameOverSeen = nullptr;
-	GameClearScene* gameClearScene = nullptr;
+	std::unique_ptr <GameOver> gameOverSeen = nullptr;
+	std::unique_ptr <GameClear> gameClearScene = nullptr;
 
 
 	Vector3 cameraTitle = { 0,0,10 };
 	Vector3 cameraGame = { 0,0,-10 };
 
-	Titles* title_ = nullptr;
+	std::unique_ptr <Titles> title_ = nullptr;
 
-	SeenTransition* seenTransition_ = nullptr;
+	std::unique_ptr<SeenTransition> seenTransition_ = nullptr;
 	bool seenFlag = false;
 
-	StertCount* stertCount_ = nullptr;
+	std::unique_ptr <StertCount> stertCount_ = nullptr;
 
 	Vector3 TargetCamRes = { 0,0,0 };
 
@@ -201,7 +194,7 @@ private:
 	float bossTime = 3.0f;
 
 	LightGroup* lightGroupNon = nullptr;
-	LightGroup* lightGroupUse = nullptr;
+	//LightGroup* lightGroupUse = nullptr;
 
 	Vector4  circleShadowDir = { 0,0.5f,0,0 };
 	Vector3  circleShadowAtten = { 1.1f,0.7f,0.0f };
@@ -213,5 +206,7 @@ private:
 	Vector3 pointLightPos = { 0,0,0 };
 	Vector3 pointLightColor = { 0,0,0 };
 	Vector3 pointLightAtten = { 0,0,0 };
+
+
 	
 };

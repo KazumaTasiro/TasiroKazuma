@@ -30,6 +30,9 @@ public:
 		Matrix4 mat;	//3D変換行列
 	};
 public:
+	//シングルトン
+	static SpriteCommon* GetInstance();
+
 	//初期化
 	void Initialize(DirectXCommon* dxcommon);
 
@@ -58,7 +61,13 @@ public:
 	//SRV用デスクリプタヒープ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap = nullptr;
 
+private:
+	SpriteCommon() = default;
+	~SpriteCommon();
+	SpriteCommon(const SpriteCommon&) = delete;
+	const SpriteCommon& operator=(const SpriteCommon&) = delete;
 
+	static SpriteCommon* spriteCommon;
 private:
 	// 頂点データ
 	Vertex vertices[4] = {

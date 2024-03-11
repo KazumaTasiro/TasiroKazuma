@@ -185,6 +185,11 @@ void ParticleManager::InitializeGraphicsPipeline()
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
 		},
+		{	//色
+			"COLOR",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
+		}
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -351,6 +356,7 @@ void ParticleManager::LoadTexture()
 }
 
 std::string kDefaultTextureDirectoryPath = "Resources/";
+
 void ParticleManager::LoadTexture(const std::string& fileName)
 {
 	HRESULT result = S_FALSE;
@@ -552,11 +558,14 @@ void ParticleManager::Update()
 			it->scale = ( it->e_scale - it->s_scale ) * static_cast< float >( f );
 			it->scale += it->s_scale;
 		}
-					//スケールの線形補完
-		it->color = ( it->e_color - it->s_color ) * static_cast< float >( f );
+
+		//Vector4 colors = it->e_color - it->s_color;
+		//colors = colors / static_cast< float >( times );
+		it->color = (it->e_color - it->s_color)* static_cast< float >( f );
 		it->color += it->s_color;
+
 		//色
-		constMapMaterial->color = it->color;
+		//constMapMaterial->color = it->color;
 	}
 
 	//頂点バッファへデータ更新
@@ -573,10 +582,12 @@ void ParticleManager::Update()
 		{
  //座標
 			vertMap->pos = it->position;
-			//次の頂点へ
-			vertMap++;
+
 			//スケール
 			vertMap->scale = it->scale;
+			vertMap->color = it->color;
+			//次の頂点へ
+			vertMap++;
 
 		}
 		vertBuff->Unmap(0,nullptr);
@@ -590,93 +601,8 @@ void ParticleManager::Update()
 
 	constMap->mat = ( wtf_.matWorld * camera->GetViewProjectionMatrix() );
 	constMap->matBillboard = ( camera->GetBillboardMatrix() );	// 行列の合成
-	constMap->color = ( color );
 	constBuff->Unmap(0,nullptr);
 }
-
-//void ParticleManager::Update(Vector4 color_)
-//{
-//	HRESULT result;
-//
-////寿命が尽きたパーティクルを削除
-//	particles.remove_if(
-//		[ ] (Particle& x)
-// {
-//	 return x.frame >= x.num_frame;
-//		}
-//	);
-//	//全パーティクル更新
-//	for ( std::forward_list<Particle>::iterator it = particles.begin();
-//		it != particles.end();
-//		it++ )
-//	{
-//	//経過フレーム数をカウント
-//		it->frame++;
-//		//速度に加速度を加算
-//		it->velocity = it->velocity + it->accel;
-//		//速度による移動
-//		it->position = it->position + it->velocity;
-//
-//		//進行度を0~1の範囲に換算
-//		double f = ( double ) it->frame / it->num_frame;
-//		if ( it->particleNmb == 1 )
-//		{
-//			it->scale = static_cast< float >( lerp(static_cast< double >( it->s_scale ),static_cast< double >( it->e_scale ),f * f * f * f * f) );
-//		}
-//		if ( it->particleNmb == 2 )
-//		{
-//			it->scale = static_cast< float >( lerp(static_cast< double >( it->s_scale ),static_cast< double >( it->e_scale ),( 1 - f ) * ( 1 - f ) * ( 1 - f ) * ( 1 - f ) * ( 1 - f )) );
-//		}
-//		else
-//		{
-//			//スケールの線形補完
-//			it->scale = ( it->e_scale - it->s_scale ) * static_cast< float >( f );
-//			it->scale += it->s_scale;
-//		}
-//
-//			//スケールの線形補完
-//		it->color = ( it->e_color - it->s_color ) * static_cast< float >( f );
-//		it->color += it->s_color;
-//
-//	//色
-//		constMapMaterial->color = color_;
-//	}
-//
-//	//頂点バッファへデータ更新
-//	VertexPos* vertMap = nullptr;
-//	result = vertBuff->Map(0,nullptr,( void** ) &vertMap);
-//
-//
-//	if ( SUCCEEDED(result) )
-//	{
-//		//パーティクルの情報を一つづつ反映
-//		for ( std::forward_list<Particle>::iterator it = particles.begin();
-//			it != particles.end();
-//			it++ )
-//		{
-//			//座標
-//			vertMap->pos = it->position;
-//			//次の頂点へ
-//			vertMap++;
-//			//スケール
-//			vertMap->scale = it->scale;
-//
-//
-//		}
-//		vertBuff->Unmap(0,nullptr);
-//	}
-//
-//	// 定数バッファへデータ転送
-//	ConstBufferData* constMap = nullptr;
-//	result = constBuff->Map(0,nullptr,( void** ) &constMap);
-//
-//	wtf_.UpdateMat();
-//
-//	constMap->mat = ( wtf_.matWorld * camera->GetViewProjectionMatrix() );
-//	constMap->matBillboard = ( camera->GetBillboardMatrix() );	// 行列の合成
-//	constMap->color = ( color_ );
-//	constBuff->Unmap(0,nullptr);
-//}
 
 void ParticleManager::Draw()
 {
@@ -730,9 +656,9 @@ void ParticleManager::Add(int life,Vector3 position,Vector3 velociy,Vector3 spee
 	p.particleNmb = particleNmb;
 }
 
-void ParticleManager::Add(int life,Vector3 position,Vector3 velociy,Vector3 speed,float start_scale,float end_scale,Vector4 start_color,Vector4 end_color,int particleNmb)
+void ParticleManager::Add(int life,Vector3 position,Vector3 velociy,Vector3 speed,float start_scale,float end_scale,int particleNmb,Vector4 start_color,Vector4 end_color)
 {
-		//リストに要素を追加
+	//リストに要素を追加
 	particles.emplace_front();
 	//追加した要素の参照
 	Particle& p = particles.front();
@@ -741,10 +667,13 @@ void ParticleManager::Add(int life,Vector3 position,Vector3 velociy,Vector3 spee
 	p.velocity = velociy;
 	p.accel = speed;
 	p.num_frame = life;
+	times = life;
 	p.s_scale = start_scale;
 	p.e_scale = end_scale;
 	p.s_color = start_color;
+	p.color = start_color;
 	p.e_color = end_color;
+	colorVector = start_color;
 	p.particleNmb = particleNmb;
 }
 
@@ -761,6 +690,414 @@ void ParticleManager::SetColor(Vector4 color_)
 	{
 		it->color = color_;
 	}
+}
+
+void ParticleManager::LoadCSVfile(const std::string& fileNames)
+{
+	//ファイルを開く
+	std::string kDefaultTextureDirectoryPath_ = "Resources/ParticleCSVFile/";
+	std::string CSVpath = ".csv";
+	std::ifstream file;
+	std::string fullPath = kDefaultTextureDirectoryPath_ + fileNames + CSVpath;
+	file.open(fullPath);
+	assert(file.is_open());
+
+	//ファイルを内容を文字列ストリームにコピー
+	particleCSV << file.rdbuf();
+
+	//ファイルを閉じる
+	file.close();
+	UpdateCSVfile();
+}
+
+void ParticleManager::UpdateCSVfile()
+{
+		//1行分の文字列を入れる変数
+	std::string line;
+
+
+
+	//コマンド実行ループ
+	while ( getline(particleCSV,line) )
+	{
+		//1行分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+
+		std::string word;
+		//,区切りで行の先頭文字列を取得
+		getline(line_stream,word,',');
+
+		//"//"から始まる行はコメント
+		if ( word.find("//") == 0 )
+		{
+			//コメント行は飛ばす
+			continue;
+		}
+
+		//ファイル名
+		if ( word.find("File") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			std::string readFileName = word;
+
+			std::string kDefaultTextureDirectoryPath_ = "Resources/";
+			std::string PngPath = ".png";
+			std::string JpgPath = ".jpg";
+			std::string texPath = readFileName + PngPath;
+			std::string fullPath = kDefaultTextureDirectoryPath_ + texPath;
+			bool isExists;
+			isExists = std::filesystem::exists(fullPath);
+			if ( isExists )
+			{
+				LoadTexture(texPath);
+			}
+			texPath = readFileName + JpgPath;
+			fullPath = kDefaultTextureDirectoryPath_ + texPath;
+			isExists = std::filesystem::exists(fullPath);
+			if ( isExists )
+			{
+				LoadTexture(texPath);
+			}
+
+			//particle->LoadTexture(readFileName);
+		}
+		if ( word.find("particleNmb") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			int x = ( int ) std::atof(word.c_str());
+
+
+			pData.particleNmber = x;
+		}
+
+		//POPコマンド
+		if ( word.find("Pos") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+			//y座標
+			getline(line_stream,word,',');
+			float y = ( float ) std::atof(word.c_str());
+			//z座標
+			getline(line_stream,word,',');
+			float z = ( float ) std::atof(word.c_str());
+
+			pData.particlePos = { x,y,z };
+		}
+		if ( word.find("RandomPosButton") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			bool x = ( bool ) std::atof(word.c_str());
+			//y座標
+			getline(line_stream,word,',');
+			bool y = ( bool ) std::atof(word.c_str());
+			//z座標
+			getline(line_stream,word,',');
+			bool z = ( bool ) std::atof(word.c_str());
+
+			pData.randomParticlePosX = x;
+			pData.randomParticlePosY = y;
+			pData.randomParticlePosZ = z;
+		}
+		if ( word.find("RandomPos") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+			//y座標
+			getline(line_stream,word,',');
+			float y = ( float ) std::atof(word.c_str());
+			//z座標
+			getline(line_stream,word,',');
+			float z = ( float ) std::atof(word.c_str());
+
+			pData.randomParticlePos = { x,y,z };
+		}
+		if ( word.find("EndPosButton") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			bool x = ( bool ) std::atof(word.c_str());
+
+			pData.endPoint = x;
+		}
+		if ( word.find("EndPos") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+			//y座標
+			getline(line_stream,word,',');
+			float y = ( float ) std::atof(word.c_str());
+			//z座標
+			getline(line_stream,word,',');
+			float z = ( float ) std::atof(word.c_str());
+
+			pData.particleEndPos = { x,y,z };
+		}
+		if ( word.find("EndPointSpeed") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+
+
+			pData.particleEndPointSpeed = x;
+		}
+
+		if ( word.find("RandomSpeedButton") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			bool x = ( bool ) std::atof(word.c_str());
+			//y座標
+			getline(line_stream,word,',');
+			bool y = ( bool ) std::atof(word.c_str());
+			//z座標
+			getline(line_stream,word,',');
+			bool z = ( bool ) std::atof(word.c_str());
+
+			pData.randomParticleSpeedX = x;
+			pData.randomParticleSpeedY = y;
+			pData.randomParticleSpeedZ = z;
+		}
+		if ( word.find("Speed") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+			//y座標
+			getline(line_stream,word,',');
+			float y = ( float ) std::atof(word.c_str());
+			//z座標
+			getline(line_stream,word,',');
+			float z = ( float ) std::atof(word.c_str());
+
+			pData.particleSpeed = { x,y,z };
+		}
+		if ( word.find("StertScale") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+
+			pData.particleStertScale = x;
+		}
+		if ( word.find("RandomStertScaleButton") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			bool x = ( bool ) std::atof(word.c_str());
+
+			pData.randomParticleStertScale = x;
+		}
+		if ( word.find("RandomStertScale") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+
+			pData.particleRandomStertScale = x;
+		}
+
+		if ( word.find("EndScale") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+
+			pData.particleEndScale = x;
+		}
+		if ( word.find("RandomEndScaleButton") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			bool x = ( bool ) std::atof(word.c_str());
+
+			pData.randomParticleEndScale = x;
+		}
+		if ( word.find("RandomEndScale") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+
+			pData.particleRandomEndScale = x;
+		}
+		if ( word.find("Life") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			int x = ( int ) std::atof(word.c_str());
+
+			pData.particleLife = x;
+		}
+		if ( word.find("Easing") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			int x = ( int ) std::atof(word.c_str());
+
+			pData.easingNmb = x;
+		}
+		if ( word.find("StertColor") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+			//y座標
+			getline(line_stream,word,',');
+			float y = ( float ) std::atof(word.c_str());
+			//z座標
+			getline(line_stream,word,',');
+			float z = ( float ) std::atof(word.c_str());
+			getline(line_stream,word,',');
+			float w = ( float ) std::atof(word.c_str());
+
+			pData.particleStertColor = { x,y,z ,w };
+		}
+		if ( word.find("EndColor") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			float x = ( float ) std::atof(word.c_str());
+			//y座標
+			getline(line_stream,word,',');
+			float y = ( float ) std::atof(word.c_str());
+			//z座標
+			getline(line_stream,word,',');
+			float z = ( float ) std::atof(word.c_str());
+			getline(line_stream,word,',');
+			float w = ( float ) std::atof(word.c_str());
+
+			pData.particleEndColor = { x,y,z ,w };
+		}
+		if ( word.find("RandomStertColorButton") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			bool x = ( bool ) std::atof(word.c_str());
+
+			pData.randomParticleStertColor = x;
+		}
+		if ( word.find("RandomEndColorButton") == 0 )
+		{
+			//x座標
+			getline(line_stream,word,',');
+			bool x = ( bool ) std::atof(word.c_str());
+
+			pData.randomParticleEndColor = x;
+		}
+	}
+}
+
+void ParticleManager::UpdateParticleAdd()
+{
+	if ( pData.randomParticlePosX )
+	{
+
+		pData.particlePos.x = RandNmber(pData.randomParticlePos.x);
+	}
+	if ( pData.randomParticlePosY )
+	{
+
+		pData.particlePos.y = RandNmber(pData.randomParticlePos.y);
+	}
+	if ( pData.randomParticlePosZ )
+	{
+
+		pData.particlePos.z = RandNmber(pData.randomParticlePos.z);
+	}
+
+	if ( pData.endPoint )
+	{
+		if ( pData.randomParticleSpeedX )
+		{
+			pData.particleEndPointSpeed = RandNmber(pData.particleRandomSpeedX);
+		}
+		pData.endPointPos = ( pData.particleEndPos - pData.particlePos );
+		pData.endPointPos.nomalize();
+		pData.endPointPos *= pData.particleEndPointSpeed;
+
+	}
+	else
+	{
+
+		if ( pData.randomParticleSpeedX )
+		{
+
+			pData.particleSpeed.x = RandNmber(pData.particleRandomSpeedX);
+		}
+		if ( pData.randomParticleSpeedY )
+		{
+
+			pData.particleSpeed.y = RandNmber(pData.particleRandomSpeedY);
+		}
+		if ( pData.randomParticleSpeedZ )
+		{
+
+			pData.particleSpeed.z = RandNmber(pData.particleRandomSpeedZ);
+		}
+	}
+
+	if ( pData.randomParticleStertScale )
+	{
+
+		pData.particleStertScale = RandNmber(pData.particleRandomStertScale);
+		if ( pData.particleStertScale < 0 )
+		{
+			pData.particleStertScale = -pData.particleStertScale;
+		}
+	}
+	if ( pData.randomParticleEndScale )
+	{
+
+		pData.particleEndScale = RandNmber(pData.particleRandomEndScale);
+		if ( pData.particleEndScale < 0 )
+		{
+			pData.particleEndScale = -pData.particleEndScale;
+		}
+	}
+
+	if ( pData.randomParticleStertColor )
+	{
+		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
+		randomColor.x /= 100;
+		randomColor.y /= 100;
+		randomColor.z /= 100;
+		pData.particleStertColor = { randomColor.x,randomColor.y,randomColor.z,1 };
+	}
+	if ( pData.randomParticleEndColor )
+	{
+		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
+		randomColor.x /= 100;
+		randomColor.y /= 100;
+		randomColor.z /= 100;
+		pData.particleEndColor = { randomColor.x,randomColor.y,randomColor.z,1 };
+
+	}
+
+	for ( int i = 0; i < pData.particleNmber; i++ )
+	{
+		if ( pData.endPoint )
+		{
+			Add(pData.particleLife,pData.particlePos,pData.particleEndPos,pData.endPointPos,pData.particleStertScale,pData.particleEndScale,pData.easingNmb,pData.particleStertColor,pData.particleEndColor);
+		}
+		else
+		{
+			Add(pData.particleLife,pData.particlePos,pData.particleEndPos,pData.particleSpeed,pData.particleStertScale,pData.particleEndScale,pData.easingNmb,pData.particleStertColor,pData.particleEndColor);
+		}
+	}
+}
+
+float ParticleManager::RandNmber(float randNmb)
+{
+	float Nmb = ( float ) rand() / RAND_MAX * randNmb - randNmb / 2.0f;
+	return Nmb;
 }
 
 void ParticleManager::RandParticle()

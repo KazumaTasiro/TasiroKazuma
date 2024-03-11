@@ -1,18 +1,18 @@
 #include "GameClear.h"
+#include "GameClearScene.h"
 
-GameClearScene::GameClearScene()
+GameClear::GameClear()
 {
 }
 
-GameClearScene::~GameClearScene()
+GameClear::~GameClear()
 {
 }
 
-void GameClearScene::Initialize(SpriteCommon* spriteCommon)
+void GameClear::Initialize()
 {
-	assert(spriteCommon);
 
-	spriteCommon_ = spriteCommon;
+	spriteCommon_ = SpriteCommon::GetInstance();
 
 	bossSter = Object3d::Create();
 	bossSterModel = Model::LoadFormOBJ("SakabanFantom");
@@ -23,23 +23,25 @@ void GameClearScene::Initialize(SpriteCommon* spriteCommon)
 	bossSter->wtf.matWorld.m[ 3 ][ 3 ] = wCenge;
 
 	clear_ = new Sprite();
-	clear_->Initialize(spriteCommon_,five);
-	clear_->SetPozition({ WinApp::window_width / 2,( WinApp::window_height / 2 ) - gameOverUp });
+	clear_->Initialize(five);
+	clear_->SetPozition({ WinApp::window_width / 2.0f,( WinApp::window_height / 2.0f ) - gameOverUp });
 	clear_->SetColor({ clear_->GetColor().x,clear_->GetColor().y,clear_->GetColor().z,wCenge });
 
 }
 
-void GameClearScene::Draw()
+void GameClear::Draw()
 {
 	bossSter->Draw();
 }
 
-void GameClearScene::SpriteDraw()
+void GameClear::SpriteDraw()
 {
 	clear_->Draw();
 }
 
-void GameClearScene::Update()
+
+
+void GameClear::Update()
 {
 	CameraUpdate();
 	BossSpriteUpdate();
@@ -47,7 +49,7 @@ void GameClearScene::Update()
 	bossSter->Update();
 }
 
-void GameClearScene::BossSpriteUpdate()
+void GameClear::BossSpriteUpdate()
 {
 	if ( cameraRotEnd == true )
 	{
@@ -66,7 +68,7 @@ void GameClearScene::BossSpriteUpdate()
 
 }
 
-void GameClearScene::CameraUpdate()
+void GameClear::CameraUpdate()
 {
 	if ( cameraPIPuls < 10 )
 	{
@@ -80,7 +82,7 @@ void GameClearScene::CameraUpdate()
 	camera_->SetTarget({ playerRot });
 }
 
-void GameClearScene::Reset()
+void GameClear::Reset()
 {
 	cameraRotEnd = false;
 	clearEnd = false;

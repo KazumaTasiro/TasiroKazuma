@@ -14,6 +14,7 @@
 #include "ParticleManager.h"
 #include "LightData.h"
 #include "EnemyPolymo.h"
+#include "EnemyBulletAttack.h"
 
 ///<summary>
 ///敵キャラ
@@ -27,7 +28,7 @@ public:
 	///</summary>
 	/// EnemyNmb 敵の行動の種類
 	/// EnemyRootNmb 敵の行動ルート　0:左 1:右
-	void Initialize(Vector3 EnemyPos, SpriteCommon* sptriteCommon, Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb, int EnemyRootNmb);
+	void Initialize(Vector3 EnemyPos,  Model* model, Model* enemyBulletModel, Model* enemyReticleModel,int EnemyNmb, int EnemyRootNmb);
 	///<summary>
 	///更新
 	///</summary>
@@ -149,6 +150,15 @@ public:
 
 	void LightShadowOff();
 
+
+	void SetEnemyPos(Vector3 enemyPos) {
+		worldTransform_->wtf.position = enemyPos;
+	}
+
+	Player* GetPlayer() {
+		return player_;
+	}
+
 private:
 	float PI = 3.141592f;
 	enum Nmb
@@ -172,7 +182,8 @@ private://弾
 	Model* enemyReticleModel_ = nullptr;
 	//弾
 	std::list<std::unique_ptr<LockOnBullet>> EnemyLockBullets_;
-	std::list<std::unique_ptr<EnemyBullet>> EnemyBullets_;
+
+	EnemyBulletAttack* enemyBulletAttck = nullptr;
 
 	bool fireFlag = false;
 
@@ -191,6 +202,8 @@ private://敵の基本情報
 	Object3d* worldTransformReticle_;
 	//敵モデル
 	Model* model_ = nullptr;
+
+	Vector3 velocity_;
 
 		////フェーズ
 	//Phase phase_ = Phase::Approch;
@@ -221,7 +234,7 @@ private://敵の基本情報
 	bool isTackleDead_ = false;
 
 	bool lockOn = false;
-	float move = 0.1f;
+
 
 	//タックルの情報
 	float verocitySpeed = 3.0f;
@@ -231,7 +244,7 @@ private://敵の基本情報
 
 	bool TackleReMove = false;
 
-	Vector3 velocity_;
+
 	Vector3 velocityTackle;
 
 	//障害物を落とすやつの基本スピード

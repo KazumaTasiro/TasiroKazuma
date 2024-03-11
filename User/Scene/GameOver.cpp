@@ -1,14 +1,14 @@
 #include "GameOver.h"
 
-GameOverSeen::GameOverSeen()
+GameOver::GameOver()
 {
 }
 
-GameOverSeen::~GameOverSeen()
+GameOver::~GameOver()
 {
 }
 
-void GameOverSeen::Initialize()
+void GameOver::Initialize()
 {
 	playerDeadParticle = new ParticleManager();
 	playerDeadParticle->Initialize();
@@ -22,7 +22,7 @@ void GameOverSeen::Initialize()
 
 }
 
-void GameOverSeen::Update()
+void GameOver::Update()
 {
 	camera_->SetEye(cameraPos_);
 	camera_->SetTarget({ playerPos.x,0,playerPos.z });
@@ -32,17 +32,17 @@ void GameOverSeen::Update()
 	camera_->Update();
 }
 
-void GameOverSeen::Draw()
+void GameOver::Draw()
 {
 	playerGameOver->Draw();
 }
 
-void GameOverSeen::DrawParticle()
+void GameOver::DrawParticle()
 {
 	playerDeadParticle->Draw();
 }
 
-void GameOverSeen::PlayerDeadParticle()
+void GameOver::PlayerDeadParticle()
 {
 	//パーティクル範囲
 	for ( int i = 0; i < 20; i++ )

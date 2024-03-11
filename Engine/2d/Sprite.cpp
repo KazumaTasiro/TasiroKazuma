@@ -1,9 +1,9 @@
 #include"Sprite.h"
 
-void Sprite::Initialize(SpriteCommon* spritecommon_, uint32_t textureIndex)
+void Sprite::Initialize( uint32_t textureIndex)
 {
 	
-	spritecomon = spritecommon_;
+	spritecomon = SpriteCommon::GetInstance();
 
 	//テクスチャサイズをイメージに合わせる
 	if (textureIndex != UINT32_MAX) {

@@ -13,19 +13,18 @@ StertCount::~StertCount()
 
 }
 
-void StertCount::Initialize(SpriteCommon* spriteCommon)
+void StertCount::Initialize()
 {
-	assert(spriteCommon);
-	spriteCommon_ = spriteCommon;
+	spriteCommon_ = SpriteCommon::GetInstance();
 	Time3 = new Sprite();
 	Time2 = new Sprite();
 	Time1 = new Sprite();
 	TimeGo = new Sprite();
 
-	Time3->Initialize(spriteCommon_,Tex::threeSp);
-	Time2->Initialize(spriteCommon_,Tex::twoSp);
-	Time1->Initialize(spriteCommon_,Tex::oneSp);
-	TimeGo->Initialize(spriteCommon_,Tex::goSp);
+	Time3->Initialize(Tex::threeSp);
+	Time2->Initialize(Tex::twoSp);
+	Time1->Initialize(Tex::oneSp);
+	TimeGo->Initialize(Tex::goSp);
 	Time3->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
 	Time2->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });
 	Time1->SetPozition({ WinApp::window_width / GoNmb::two,WinApp::window_height / GoNmb::two });

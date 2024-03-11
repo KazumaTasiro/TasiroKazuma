@@ -1,9 +1,9 @@
 #include "Enemy.h"
 #include "Player.h"
 
-void Enemy::Initialize(Vector3 EnemyPos,SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel,int EnemyNmb,int EnemyRootNmb)
+void Enemy::Initialize(Vector3 EnemyPos,Model* model,Model* enemyBulletModel,Model* enemyReticleModel,int EnemyNmb,int EnemyRootNmb)
 {
-	assert(sptriteCommon);
+
 	assert(model);
 	assert(enemyBulletModel);
 	assert(enemyReticleModel);
@@ -25,13 +25,16 @@ void Enemy::Initialize(Vector3 EnemyPos,SpriteCommon* sptriteCommon,Model* model
 	worldTransformReticle_->SetModel(enemyReticleModel_);
 	worldTransformReticle_->wtf.scale = EnemyReticleScale;
 
+	enemyBulletAttck = new EnemyBulletAttack();
+	enemyBulletAttck->Initialize(enemyBulletModel);
+
 	particleMana_ = new ParticleManager();
 	particleMana_->Initialize();
 	particleMana_->LoadTexture("EnemyDamageParticle.png");
 
 
 	spriteLock = new Sprite();
-	spriteLock->Initialize(sptriteCommon,two);
+	spriteLock->Initialize(two);
 
 	input_ = Input::GetInstance();
 
@@ -65,14 +68,11 @@ void Enemy::Update(Player* player)
  {
 	 return LockBullet->IsDead();
 		});
-	EnemyBullets_.remove_if([ ] (std::unique_ptr<EnemyBullet>& enemyBullet)
- {
-	 return enemyBullet->IsDead();
-		});
-
+	
+	
 	//キャラクター移動処理
 	Move();
-
+	enemyBulletAttck->Update(this);
 	spriteLock->SetPozition({ GetWorldPosition().x,GetWorldPosition().y });
 	if ( EnemyHp <= 0 )
 	{
@@ -172,11 +172,7 @@ void Enemy::Fire()
 			}
 		}
 	}
-	//弾更新
-	for ( std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_ )
-	{
-		enemyBullet->Update();
-	}
+
 	//弾更新
 	for ( std::unique_ptr<LockOnBullet>& LockBullet : EnemyLockBullets_ )
 	{
@@ -203,11 +199,8 @@ void Enemy::Draw()
 		{
 			LockBullet->Draw();
 		}
-		//弾更新
-		for ( std::unique_ptr<EnemyBullet>& enemyBullet : EnemyBullets_ )
-		{
-			enemyBullet->Draw();
-		}
+		enemyBulletAttck->Draw();
+
 		worldTransform_->Draw();
 		if ( player_->retrunIsDaed() == false )
 		{
@@ -273,27 +266,15 @@ void Enemy::OnColl()
 			LockBullet->OnCollision();
 		}
 	}
-	for ( std::unique_ptr<EnemyBullet>& enemyBullets : EnemyBullets_ )
-	{
-//敵キャラも座標
-		posA = player_->GetWorldPosition();
 
-		//自弾の座標
-		posB = enemyBullets->GetWorldPosition();
-
-		if ( Collision::CircleCollision(posB,posA,playerWidth,enemyWidth_) )
-		{
-//敵キャラの衝突時コールバックを呼び出す
-			player_->OnCollision();
-			//自弾の衝突時コールバックを呼び出す
-			enemyBullets->OnCollision();
-		}
-	}
+	
 	//敵キャラも座標
 	posA = player_->GetWorldPosition();
 
 	//自弾の座標
 	posB = worldTransform_->GetWorldPosition();
+
+	enemyBulletAttck->OnColl();
 
 	if ( Collision::CircleCollision(posB,posA,playerWidth,enemyWidth_) )
 	{
@@ -357,24 +338,13 @@ void Enemy::ImGuiUpdate()
 
 void Enemy::NormalBulletAttck()
 {
-	velocity_ = player_->GetWorldPosition() - worldTransform_->wtf.position;
-	velocity_.nomalize();
-	velocity_ *= verocitySpeed;
-	//弾を生成し、初期化
-	std::unique_ptr<EnemyBullet> newEnemyBullet = std::make_unique<EnemyBullet>();
-	newEnemyBullet->Initialize(worldTransform_->wtf.position,velocity_,enemyBulletModel_);
-	//弾を発射する
-	EnemyBullets_.push_back(std::move(newEnemyBullet));
+	enemyBulletAttck->Attck();
 	fireFlag = false;
 }
 
 void Enemy::NormalBulletMove()
 {
-	if ( worldTransform_->wtf.position.x >= 5 || worldTransform_->wtf.position.x <= -5 )
-	{
-		move = -move;
-	}
-	worldTransform_->wtf.position = { worldTransform_->wtf.position.x + move,worldTransform_->wtf.position.y,worldTransform_->wtf.position.z };
+	enemyBulletAttck->Move();
 }
 
 void Enemy::TackleAttck()
