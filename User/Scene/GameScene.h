@@ -28,6 +28,8 @@
 #include "LightGroup.h"
 #include "ParticleLibrary.h"
 #include "DirectionalLight.h"
+#include "StageEditor.h"
+
 
 ///<summary>
 ///ボスの生成と行動
@@ -88,6 +90,7 @@ private:
 		Boss,
 		Over,
 		Clear,
+		Editor,
 	};
 	Scene scene;
 private:
@@ -203,5 +206,7 @@ private:
 	Vector3 pointLightPos = { 0,0,0 };
 	Vector3 pointLightColor = { 0,0,0 };
 	Vector3 pointLightAtten = { 0,0,0 };
+
+
 	
 };

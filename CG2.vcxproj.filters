@@ -208,6 +208,12 @@
     <Filter Include="ヘッダー ファイル\Engine\3D\Light">
       <UniqueIdentifier>{a4e64b80-47d6-4b5f-962a-9a2fde1d16da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\StageEditor">
+      <UniqueIdentifier>{35b37733-8d75-4d5d-9bdf-4410daabafe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\StageEditor">
+      <UniqueIdentifier>{873b85af-c36d-4ed4-a9b9-69008f43eb4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -414,6 +420,9 @@
     <ClCompile Include="Engine\3d\ModelManager.cpp">
       <Filter>ソース ファイル\Engine\3D\Object3d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\StageEditor\StageEditor.cpp">
+      <Filter>ソース ファイル\Engine\StageEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -619,6 +628,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\ModelManager.h">
       <Filter>ヘッダー ファイル\Engine\3D\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\StageEditor\StageEditor.h">
+      <Filter>ヘッダー ファイル\Engine\StageEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

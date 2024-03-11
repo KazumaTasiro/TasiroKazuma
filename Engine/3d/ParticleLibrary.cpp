@@ -157,6 +157,11 @@ void ParticleLibrary::DrawImgui()
 {
 	ImGui::InputText("ObjectFileName",objectFileName,sizeof(objectFileName));
 	loadObject = ImGui::Button("loadObject");
+	if ( loadObject )
+	{
+		playerModel = ModelManager::GetInstance()->FindObjModel(objectFileName);
+		player->SetModel(playerModel);
+	}
 	ImGui::SliderFloat("playerRot",&playerRot,-playerRotLimit,playerRotLimit);
 	player->wtf.rotation.y = playerRot * rot;
 	player->Update();

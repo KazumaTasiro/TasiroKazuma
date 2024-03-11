@@ -121,6 +121,8 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	//lightGroupUse->SetPointLightActive(0,true);
 	//lightGroupUse->SetCircleShadowActive(0,true);
 
+
+
 	Object3d::SetLightNon(lightGroupNon);
 	ParticleLibrary::GetInstance()->ObjectInitialize();
 
@@ -128,6 +130,7 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	ParticleLibrary::GetInstance()->ParticleUpdate(0);
 	ParticleLibrary::GetInstance()->ParticleDataSave(1,"RotParticleR");
 	ParticleLibrary::GetInstance()->ParticleUpdate(1);
+	StageEditor::GetInstance()->Initialize();
 	PhaseReset();
 
 }
@@ -137,7 +140,18 @@ void GameScene::Update()
 	//direLight->Update();
 	ImGuiMan_->Bigin();
 #ifdef _DEBUG
+	if ( input_->PushKey(DIK_P) )
+	{
+		scene = Editor;
+	}
+	switch ( scene )
+	{
+	case GameScene::Editor:
+		StageEditor::GetInstance()->Update();
+		StageEditor::GetInstance()->DrawImgui();
 
+		break;
+	}
 #endif
 #ifdef _PARTICLELIBRARY
 
@@ -335,6 +349,7 @@ void GameScene::Update()
 		}
 		LightData::GetInstance()->Update();
 		break;
+
 	default:
 		break;
 	}
@@ -348,9 +363,8 @@ void GameScene::Draw()
 	Object3d::PreDraw(dxCommon_->GetCommandList());
 
 
-#ifndef _PARTICLELIBRARY
-
-
+#ifndef _PARTICLELIBRARY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
 	//player_->Draw();
 
@@ -394,9 +408,13 @@ void GameScene::Draw()
 
 		break;
 
-
+	case GameScene::Editor:
+		skydome_->Draw();
+		road_->Draw();
+		StageEditor::GetInstance()->Draw();
 
 		break;
+
 	default:
 		break;
 	}
@@ -413,8 +431,9 @@ void GameScene::Draw()
 
 	player_->ParticleDraw();
 	Object3d::PostDraw();
-#ifdef _PARTICLELIBRARY
 	ImGuiMan_->Draw();
+#ifdef _PARTICLELIBRARY
+
 #endif // _DEBUG
 #ifndef _PARTICLELIBRARY
 	switch ( scene )

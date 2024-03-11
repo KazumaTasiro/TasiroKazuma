@@ -77,7 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\RailCamera;$(ProjectDir)User\SeenTransition;$(ProjectDir)Engine;$(ProjectDir)Engine\Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\RailCamera;$(ProjectDir)User\SeenTransition;$(ProjectDir)Engine;$(ProjectDir)Engine\StageEditor;$(ProjectDir)Engine\Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -96,7 +96,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_PARTICLELIBRARY;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\RailCamera;$(ProjectDir)User\SeenTransition;$(ProjectDir)Engine;$(ProjectDir)Engine\Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\RailCamera;$(ProjectDir)User\SeenTransition;$(ProjectDir)Engine;$(ProjectDir)Engine\StageEditor;$(ProjectDir)Engine\Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\RailCamera;$(ProjectDir)User\SeenTransition;$(ProjectDir)Engine;$(ProjectDir)Engine\Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)User\Title;$(ProjectDir)Engine\Math;$(ProjectDir)User\Scene;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\base;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\Audio;$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\Include;$(ProjectDir)External\fbx_sdk\include;$(ProjectDir)Resources;$(ProjectDir)Engine\camera;$(ProjectDir)User\Player;$(ProjectDir)User\Enemy;$(ProjectDir)User\Skydome;$(ProjectDir)User\Collision;$(ProjectDir)Externall\imgui;$(ProjectDir)External\DirectXTex;$(ProjectDir)External;$(ProjectDir);$(ProjectDir)User\RailCamera;$(ProjectDir)User\SeenTransition;$(ProjectDir)Engine;$(ProjectDir)Engine\StageEditor;$(ProjectDir)Engine\Light;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -141,6 +141,7 @@
     <ClCompile Include="Engine\LIght\LightGroup.cpp" />
     <ClCompile Include="Engine\LIght\PointLight.cpp" />
     <ClCompile Include="Engine\3d\ParticleLibrary.cpp" />
+    <ClCompile Include="Engine\StageEditor\StageEditor.cpp" />
     <ClCompile Include="User\Enemy\EnemyAttackObstacle.cpp" />
     <ClCompile Include="User\Enemy\EnemyBothSides.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Engine\LIght\PointLight.h" />
     <ClInclude Include="Engine\LIght\SpotLight.h" />
     <ClInclude Include="Engine\3d\ParticleLibrary.h" />
+    <ClInclude Include="Engine\StageEditor\StageEditor.h" />
     <ClInclude Include="User\Enemy\EnemyAttackObstacle.h" />
     <ClInclude Include="User\Enemy\EnemyBothSides.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
