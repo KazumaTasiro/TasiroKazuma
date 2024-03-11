@@ -168,6 +168,7 @@ void StageEditor::CreateSaveFile(const std::string& fileNames)
 		ofs << "SCALE" << "," << enemys[ i ].enemyObject->wtf.scale.x << "," << enemys[ i ].enemyObject->wtf.scale.y << "," << enemys[ i ].enemyObject->wtf.scale.z << std::endl;
 	}
 
+
 }
 
 
