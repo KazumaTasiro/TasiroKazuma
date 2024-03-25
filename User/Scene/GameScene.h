@@ -82,6 +82,8 @@ public:
 
 	void LightUpdate();
 
+	void ModelLoad();
+
 private:
 	enum Scene
 	{

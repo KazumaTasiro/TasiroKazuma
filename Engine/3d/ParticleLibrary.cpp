@@ -170,6 +170,11 @@ void ParticleLibrary::DrawImgui()
 	loadParticle = ImGui::Button("loadParticle");
 
 	saveParticle = ImGui::Button("saveParticle");
+	if ( ImGui::Button("ResetParticle") )
+	{
+		LoadCSVJudgment("Reset");
+		ResetCSVfile();
+	}
 	if ( saveParticle )
 	{
 		CreateSaveFile(fileName);

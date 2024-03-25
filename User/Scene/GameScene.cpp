@@ -147,8 +147,11 @@ void GameScene::Update()
 	switch ( scene )
 	{
 	case GameScene::Editor:
+		camera_->SetEye(cameraGame);
+		camera_->Update();
 		StageEditor::GetInstance()->Update();
 		StageEditor::GetInstance()->DrawImgui();
+		railCamera->Update();
 
 		break;
 	}
@@ -233,6 +236,7 @@ void GameScene::Update()
 			if ( enemyManager_->Clear() == true )
 			{
 				scene = Scene::Boss;
+				railCamera->Reset();
 			}
 			if ( player_->retrunIsDaed() )
 			{
@@ -551,6 +555,14 @@ void GameScene::CursorLimit()
 void GameScene::LightUpdate()
 {
 	lightGroupNon->Update();
+}
+
+void GameScene::ModelLoad()
+{
+	ModelManager::GetInstance()->LoadModel("Sakaban");
+	ModelManager::GetInstance()->LoadModel("SakabanObstacle");
+	ModelManager::GetInstance()->LoadModel("SakabanTakkle");
+
 }
 
 

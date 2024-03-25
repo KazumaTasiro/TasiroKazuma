@@ -15,6 +15,7 @@
 #include "LightData.h"
 #include "EnemyPolymo.h"
 #include "EnemyBulletAttack.h"
+#include "ModelManager.h"
 
 ///<summary>
 ///敵キャラ
@@ -205,19 +206,16 @@ private://敵の基本情報
 
 	Vector3 velocity_;
 
+	Vector3 EnemyDefaltPos;
+
 		////フェーズ
 	//Phase phase_ = Phase::Approch;
 	//キャラクターの移動ベクトル
 	Vector3 ApprochMove = { 0,0,0.0f };
 	Vector3 LeaveMove = { -0.1f,0.1f,-0.1f };
 
-	Vector3 EnemyMoveSpline0 = { 0,0,0 };
 	Vector3 EnemyMoveSpline1 = { -50,20,50 };
 	Vector3 EnemyMoveSpline2 = { -20,15,100 };
-
-	Vector3 EnemyReMoveSpline0 = { 0,0,0 };
-	Vector3 EnemyReMoveSpline1 = { -50,30,-50 };
-	Vector3 EnemyReMoveSpline2 = { -20,30,100 };
 
 	int EnemyHp = 3;
 	int EnemyHpEnd = 0;
@@ -257,32 +255,16 @@ private://敵のスプライン
 
 	Vector3 oneEnemyMoveSpline1 = { -50,20,50 };
 	Vector3 oneEnemyMoveSpline2 = { -20,15,100 };
-	Vector3 oneEnemyMoveSpline0 = {  };
-	Vector3 oneEnemyReMoveSpline0 = {  };
-	Vector3 oneEnemyReMoveSpline1 = {  };
-	Vector3 oneEnemyReMoveSpline2 = {  };
 
 	Vector3 twoEnemyMoveSpline1 = { +50,20,50 };
 	Vector3 twoEnemyMoveSpline2 = { +20,15,100 };
-	Vector3 twoEnemyMoveSpline0 = {  };
+	Vector3 EnemyMoveSpline0 = {  };
 	Vector3 twoEnemyReMoveSpline0 = {  };
-	Vector3 twoEnemyReMoveSpline1 = { };
-	Vector3 twoEnemyReMoveSpline2 = {  };
+	Vector3 EnemyReMoveSpline1 = { };
+	Vector3 EnemyReMoveSpline2 = {  };
 
-	Vector3 threeEnemyMoveSpline1 = { 10,20,-10 };
-	Vector3 threeEnemyMoveSpline2 = { 10,15, -5 };
-	Vector3 threeEnemyMoveSpline0 = {  };
-	Vector3 threeEnemyReMoveSpline0 = {  };
-	Vector3 threeEnemyReMoveSpline1 = { };
-	Vector3 threeEnemyReMoveSpline2 = {  };
-
-	Vector3 fourEnemyMoveSpline1 = { -10,20,-10 };
-	Vector3 fourEnemyMoveSpline2 = { -10,15, -5 };
-	Vector3 fourEnemyMoveSpline0 = {  };
-	Vector3 fourEnemyReMoveSpline0 = {  };
-	Vector3 fourEnemyReMoveSpline1 = { };
-	Vector3 fourEnemyReMoveSpline2 = {  };
-
+	Vector3 enemySpornPos = { 0,0,-20 };
+	Vector3 sprineRoot = {};
 	float sprineX = 100.0f;
 	float sprineY1 = 30.0f;
 	float sprineY2 = 25.0f;

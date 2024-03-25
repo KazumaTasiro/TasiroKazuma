@@ -53,6 +53,9 @@ private:
 
 	static StageEditor* stageEditor;
 private:
+
+	float PI = 3.141592f;
+
 	struct EnemyBox
 	{
 		Object3d* enemyObject;
@@ -74,4 +77,11 @@ private:
 	bool saveEnemyCSV = false;
 
 	uint32_t waitNmb;
+
+	float scaleNmb = 10.0f;
+
+	float enemyScale = 1;
+
+	float enemyRot = 180.0f;
+	float rot = ( PI / 180 );
 };

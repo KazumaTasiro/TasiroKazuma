@@ -26,39 +26,50 @@ void StageEditor::Draw()
 
 void StageEditor::DrawImgui()
 {
+	if ( ImGui::Button("DeleteEnemy") )
+	{
+		Clear();
+	}
+	ImGui::Separator();
 	ImGui::InputText("CSVFileName",fileName,sizeof(fileName));
+	saveEnemyCSV = ImGui::Button("saveCSV");
+	ImGui::Separator();
 	plusEnemy = ImGui::Button("Enemy");
+	ImGui::Separator();
 	if ( plusEnemy )
 	{
 		EnemyBox enemy;
 		enemy.enemyObject = Object3d::Create();
 		enemy.enemyObject->Initialize();
 		enemy.enemyObject->SetModel(enemyModel);
+		enemy.enemyObject->wtf.scale = { scaleNmb,scaleNmb ,scaleNmb };
 		enemy.enemyObject->Update();
 		enemy.enemyNmb = enemyNmbs;
 		enemys.push_back(enemy);
 		enemyNmbs++;
 	}
-	
-	saveEnemyCSV = ImGui::Button("saveCSV");
+
+
 	if ( saveEnemyCSV )
 	{
 		CreateSaveFile(fileName);
 
 	}
+	ImGui::SliderFloat("EnemysRot",&enemyRot,0,360);
+
 	for ( int i = 0; i < enemys.size(); i++ )
 	{
 		std::string wait = { "EnemyWaitTimer" };
 		wait.append(to_string(i));
 		std::string pos = { "EnemyPos" };
 		pos.append(to_string(i));
-		std::string scale = { "EnemyScale" };
-		scale.append(to_string(i));
 
 		ImGui::SliderInt(wait.c_str(),&enemys[ i ].waitTimer,0,200);
-		ImGui::SliderFloat3(pos.c_str(),&enemys[ i ].enemyObject->wtf.position.x,-100,100);
-		ImGui::SliderFloat3(scale.c_str(),&enemys[ i ].enemyObject->wtf.scale.x,1,50);
+		ImGui::SliderFloat3(pos.c_str(),&enemys[ i ].enemyObject->wtf.position.x,-100,120);
 
+		enemys[ i ].enemyObject->wtf.rotation.y = enemyRot * rot;
+
+		ImGui::Separator();
 	}
 
 }
@@ -131,7 +142,7 @@ void StageEditor::UpdateCSVfile()
 			//コマンドループを抜ける
 			break;
 		}
-		else if ( word.find("WAIT") == 0 )
+		else if ( word.find("ENEMYS") == 0 )
 		{
 			getline(line_stream,word,',');
 
@@ -139,10 +150,9 @@ void StageEditor::UpdateCSVfile()
 			int32_t enemyNmb = atoi(word.c_str());
 
 			//待機開始
-			enemys[ waitNmb ].enemyNmb = enemyNmb;
+			enemyNmbs = enemyNmb;
 			break;
 		}
-
 	}
 }
 
@@ -164,8 +174,7 @@ void StageEditor::CreateSaveFile(const std::string& fileNames)
 	for ( int i = 0; i < enemys.size(); i++ )
 	{
 		ofs << "WAIT" << "," << enemys[ i ].waitTimer << "," << "," << std::endl;
-		ofs << "POP" << "," << enemys[ i ].enemyObject->wtf.position.x << "," << enemys[ i ].enemyObject->wtf.position.y << "," << enemys[ i ].enemyObject->wtf.position.z << std::endl;
-		ofs << "SCALE" << "," << enemys[ i ].enemyObject->wtf.scale.x << "," << enemys[ i ].enemyObject->wtf.scale.y << "," << enemys[ i ].enemyObject->wtf.scale.z << std::endl;
+		ofs << "POP" << "," <<static_cast<int> (enemys[ i ].enemyObject->wtf.position.x) << "," << static_cast< int > ( enemys[ i ].enemyObject->wtf.position.y ) << "," << static_cast< int > ( enemys[ i ].enemyObject->wtf.position.z ) << std::endl;
 	}
 
 

@@ -211,4 +211,7 @@ private:
 	float enemyLockWide = 5.0f;
 
 	float dengerTimer = 180.0f;
+
+	//敵の撃破数設定
+	int enemyDeathGoal = 3;
 };

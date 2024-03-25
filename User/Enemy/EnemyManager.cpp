@@ -42,7 +42,7 @@ void EnemyManager::Update()
 {
 	clearTime--;
 	int count = enemyDeath;
-	if ( count == 3 )
+	if ( count == enemyDeathGoal )
 	{
 		enemyDeath = 0;
 		clearCount++;
@@ -151,7 +151,21 @@ void EnemyManager::LoadEnemyPopData()
 {
 	//ファイルを開く
 	std::ifstream file;
-	file.open("Resources/enemyPop2.csv");
+	int randCSV = rand() % 3;
+	if ( randCSV == 0 )
+	{
+		file.open("Resources/EnemyCSVFile/testEnemyCSV.csv");
+	}
+	else if(randCSV==1)
+	{
+		file.open("Resources/EnemyCSVFile/testEnemyCSV2.csv");
+	}
+	else
+	{
+		file.open("Resources/EnemyCSVFile/testEnemyCSV3.csv");
+	}
+	//uint32_t fileRand=
+
 	assert(file.is_open());
 
 	//ファイルを内容を文字列ストリームにコピー
@@ -199,6 +213,14 @@ void EnemyManager::UpdateEnemyPopCommands()
 		{
 			//コメント行は飛ばす
 			continue;
+		}
+		if ( word.find("ENEMYS") == 0 )
+		{
+						//x座標
+			getline(line_stream,word,',');
+			int x = ( int ) std::atof(word.c_str());
+
+			enemyDeathGoal = x;
 		}
 
 		//POPコマンド
@@ -393,7 +415,7 @@ void EnemyManager::EnemyReset()
 	}
 	enemy_.remove_if([ ] (std::unique_ptr<Enemy>& enemy)
 	{
-	return enemy->IsTackleDead();
+		return enemy->IsTackleDead();
 	});
 	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
 	{
