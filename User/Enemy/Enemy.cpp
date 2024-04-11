@@ -19,24 +19,9 @@ void Enemy::Initialize(Vector3 EnemyPos,Model* model,Model* enemyBulletModel,Mod
 
 	enemyNmb = EnemyNmb;
 
-	if ( enemyNmb == 0 )
-	{
-		model_ = ModelManager::GetInstance()->FindObjModel("Sakaban");
-	}
-	else if ( enemyNmb == 1 )
-	{
-		model_ = ModelManager::GetInstance()->FindObjModel("SakabanTakkle");
-	}
-	else if ( enemyNmb == 2 )
-	{
-		model_ = ModelManager::GetInstance()->FindObjModel("SakabanObstacle");
-	}
-	else
-	{
-		model_ = ModelManager::GetInstance()->FindObjModel("Sakaban");
-	}
 
-	
+
+	model_ = model;
 	enemyBulletModel_ = enemyBulletModel;
 	enemyReticleModel_ = enemyReticleModel;
 

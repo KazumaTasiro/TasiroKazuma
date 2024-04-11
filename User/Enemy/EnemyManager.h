@@ -115,6 +115,12 @@ public:
 
 	void CreateObstance();
 
+	//フォルダ以下のファイル一覧を取得する関数
+	//folderPath  フォルダパス
+	//file_names  ファイル名一覧
+	//return        true:成功,false : 失敗
+	bool getFileNames(std::string folderPath,std::vector<std::string>& file_names);
+
 public:
 	//音を止める関数
 	IXAudio2SourceVoice* pSourceVoice[10] = { 0 };
@@ -214,4 +220,5 @@ private:
 
 	//敵の撃破数設定
 	int enemyDeathGoal = 3;
+
 };

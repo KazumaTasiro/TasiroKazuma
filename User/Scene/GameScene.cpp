@@ -35,7 +35,9 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	ImGuiMan_ = ImGuiManager::GetInstance();
 
 	//スプライト共通部分の初期化
-	
+	ModelManager::GetInstance()->LoadModel("Sakaban");
+	ModelManager::GetInstance()->LoadModel("SakabanTakkle");
+	ModelManager::GetInstance()->LoadModel("SakabanObstacle");
 
 
 
@@ -102,6 +104,7 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 
 	title_ = std::make_unique< Titles>();
 	title_->Initialize();
+
 
 
 	scene = Scene::Title;

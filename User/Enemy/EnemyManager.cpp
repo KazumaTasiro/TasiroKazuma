@@ -1,8 +1,11 @@
 #include"EnemyManager.h"
 #include "Player.h"
 
+
+
 EnemyManager::EnemyManager()
 {
+	
 }
 
 EnemyManager::~EnemyManager()
@@ -18,7 +21,6 @@ void EnemyManager::Initialize(Camera* camera,ParticleManager* particle)
 	camera_ = camera;
 	spriteCommon_ = SpriteCommon::GetInstance();
 	input_ = Input::GetInstance();
-	enemyModel_ = Model::LoadFormOBJ("Sakaban");
 	enemyBulletModel_ = Model::LoadFormOBJ("EnemyBullet");
 	enemyObstacle_ = Model::LoadFormOBJ("EnemyObstacle");
 	alertModel_ = Model::LoadFormOBJ("AlertRoad");
@@ -151,20 +153,17 @@ void EnemyManager::LoadEnemyPopData()
 {
 	//ファイルを開く
 	std::ifstream file;
-	int randCSV = rand() % 3;
-	if ( randCSV == 0 )
+	//敵の出現CSVの名前
+	std::vector<std::string> CSVFileNames;
+	getFileNames("Resources/EnemyCSVFile",CSVFileNames);
+	int fileNmb = 0;
+	for ( int i = 0; i < CSVFileNames.size(); i++ )
 	{
-		file.open("Resources/EnemyCSVFile/testEnemyCSV.csv");
+		fileNmb++;
 	}
-	else if(randCSV==1)
-	{
-		file.open("Resources/EnemyCSVFile/testEnemyCSV2.csv");
-	}
-	else
-	{
-		file.open("Resources/EnemyCSVFile/testEnemyCSV3.csv");
-	}
-	//uint32_t fileRand=
+	int randCSV = rand() % fileNmb;
+
+	file.open(CSVFileNames[ randCSV ]);
 
 	assert(file.is_open());
 
@@ -263,6 +262,23 @@ void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 
 	randEnemyNmb = rand() % three;
 	randEnemyRoot = rand() % two;
+	if ( randEnemyNmb == 0 )
+	{
+		enemyModel_ = ModelManager::GetInstance()->FindObjModel("Sakaban");
+	}
+	else if ( randEnemyNmb == 1 )
+	{
+		//enemyModel_ = Model::LoadFormOBJ("Sakaban");
+		enemyModel_ = ModelManager::GetInstance()->FindObjModel("SakabanTakkle");
+	}
+	else if ( randEnemyNmb == 2 )
+	{
+		enemyModel_ = ModelManager::GetInstance()->FindObjModel("SakabanObstacle");
+	}
+	else
+	{
+		enemyModel_ = ModelManager::GetInstance()->FindObjModel("Sakaban");
+	}
 	//敵キャラの生成
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
 	newEnemy->Initialize(EnemyPos,enemyModel_,enemyBulletModel_,enemyReticleModel_,randEnemyNmb,randEnemyRoot);
@@ -557,4 +573,28 @@ void EnemyManager::CreateObstance()
 	{
 		newEnemyObstacleBullet->Update();
 	}
+}
+
+bool EnemyManager::getFileNames(std::string folderPath,std::vector<std::string>& file_names)
+{
+	using namespace std::filesystem;
+	directory_iterator iter(folderPath),end;
+	std::error_code err;
+
+	for ( ; iter != end && !err; iter.increment(err) )
+	{
+		const directory_entry entry = *iter;
+
+		file_names.push_back(entry.path().string());
+		printf("%s\n",file_names.back().c_str());
+	}
+
+	/* エラー処理 */
+	if ( err )
+	{
+		std::cout << err.value() << std::endl;
+		std::cout << err.message() << std::endl;
+		return false;
+	}
+	return true;
 }

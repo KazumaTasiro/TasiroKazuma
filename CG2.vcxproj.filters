@@ -426,6 +426,9 @@
     <ClCompile Include="User\Bullet\EnemyBullet.cpp">
       <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="User\Bullet\BulletBase.cpp">
+      <Filter>ソース ファイル\Game\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -636,6 +639,9 @@
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="User\Bullet\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Bullet\BulletBase.h">
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
   </ItemGroup>

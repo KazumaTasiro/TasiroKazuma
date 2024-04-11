@@ -57,14 +57,12 @@ private:
 	Object3d* worldTransform_;
 	//モデル
 	Model* model_ = nullptr;
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
 
 	//速度
 	Vector3 velocity_;
 
 	//寿命<fim>
-	static const int32_t kLifeTime = 60 * 1000;
+	static const int32_t kLifeTime = 60 * 30;
 
 	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
