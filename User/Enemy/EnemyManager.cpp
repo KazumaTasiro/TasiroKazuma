@@ -21,10 +21,14 @@ void EnemyManager::Initialize(Camera* camera,ParticleManager* particle)
 	camera_ = camera;
 	spriteCommon_ = SpriteCommon::GetInstance();
 	input_ = Input::GetInstance();
-	enemyBulletModel_ = Model::LoadFormOBJ("EnemyBullet");
-	enemyObstacle_ = Model::LoadFormOBJ("EnemyObstacle");
-	alertModel_ = Model::LoadFormOBJ("AlertRoad");
-	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
+	ModelManager::GetInstance()->LoadModel("EnemyBullet");
+	ModelManager::GetInstance()->LoadModel("EnemyObstacle");
+	ModelManager::GetInstance()->LoadModel("AlertRoad");
+	ModelManager::GetInstance()->LoadModel("Reticle");
+	enemyBulletModel_ = ModelManager::GetInstance()->FindObjModel("EnemyBullet");
+	enemyObstacle_ = ModelManager::GetInstance()->FindObjModel("EnemyObstacle");
+	alertModel_ = ModelManager::GetInstance()->FindObjModel("AlertRoad");
+	enemyReticleModel_ = ModelManager::GetInstance()->FindObjModel("Reticle");
 	LoadEnemyPopData();
 
 	spriteRight = new Sprite();

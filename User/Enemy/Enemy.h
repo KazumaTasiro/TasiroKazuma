@@ -152,6 +152,8 @@ public:
 	void LightShadowOff();
 
 
+	void ParticleUpdate();
+
 	void SetEnemyPos(Vector3 enemyPos) {
 		worldTransform_->wtf.position = enemyPos;
 	}
@@ -221,7 +223,7 @@ private://敵の基本情報
 	int EnemyHpEnd = 0;
 
 	Vector3 EnemyScale = { 5,5,5 };
-	Vector3 EnemyReticleScale = { 10,10,10 };;
+	Vector3 EnemyReticleScale = { 10,10,10 };
 
 	//登場時の移動状態
 	bool DemoEnemyMove = false;
@@ -300,7 +302,7 @@ private://影
 private:
 
 	//発射間隔
-	static const int kFireInterval = 100;
+	static const int kFireInterval = 120;
 
 	Input* input_ = nullptr;
 
@@ -314,9 +316,13 @@ private:
 	float LockWidth = 2.0f;
 
 	int32_t time = 0;
-
+	
+	//プレイヤー関係
 	Player* player_ = nullptr;
 	float playerWidth = 1.5f;
 	float enemyWidth_ = 1.5f;
 	Sprite* spriteLock = nullptr;
+
+	//ロックオンのパーティクル
+	bool oldLockOn = false;
 };

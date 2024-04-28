@@ -2,8 +2,10 @@
 
 void Road::Initialize()
 {
-	roadModel = Model::LoadFormOBJ("worldRoad");
-	BillModel = Model::LoadFormOBJ("worldBillding");
+	ModelManager::GetInstance()->LoadModel("worldRoad");
+	ModelManager::GetInstance()->LoadModel("worldBillding");
+	roadModel = ModelManager::GetInstance()->FindObjModel("worldRoad");
+	BillModel = ModelManager::GetInstance()->FindObjModel("worldBillding");
 
 	for ( int i = 0; i < roadCount; i++ )
 	{

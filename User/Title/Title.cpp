@@ -10,22 +10,25 @@ Titles::~Titles()
 
 void Titles::Initialize()
 {
+	ModelManager::GetInstance()->LoadModel("Sakaban");
+	ModelManager::GetInstance()->LoadModel("Title");
+	ModelManager::GetInstance()->LoadModel("trakku");
 	//タイトルにいるサカバン
-	titleBossModel = Model::LoadFormOBJ("Sakaban");
+	titleBossModel = ModelManager::GetInstance()->FindObjModel("Sakaban");
 	titleBoss = new Object3d();
 	titleBoss->Initialize();
 	titleBoss->SetModel(titleBossModel);
 	titleBoss->wtf.scale = { BossScale };
 	titleBoss->wtf.position = { TitleBossPos };
 	//タイトルロゴ
-	titleLogoModel = Model::LoadFormOBJ("Title");
+	titleLogoModel = ModelManager::GetInstance()->FindObjModel("Title");
 	titleLogo = new Object3d();
 	titleLogo->Initialize();
 	titleLogo->SetModel(titleLogoModel);
 	titleLogo->wtf.scale = { LogoScale };
 	titleLogo->wtf.position = { TitleLogoPos };
 	//タイトルプレイヤー
-	titlePlayerModel = Model::LoadFormOBJ("trakku");
+	titlePlayerModel = ModelManager::GetInstance()->FindObjModel("trakku");
 	titlePlayer = new Object3d();
 	titlePlayer->Initialize();
 	titlePlayer->SetModel(titlePlayerModel);

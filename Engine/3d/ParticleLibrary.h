@@ -220,8 +220,12 @@ private:
 	Object3d* player;
 	Model* playerModel;
 
+	//OBJの回転変数
 	float playerRot = 0;
 	float playerRotLimit = 10.0f;
 	float rot = ( PI / 180 );
+
+	//オブジェクトの表示
+	bool objectDrawSwich = false;
 
 };

@@ -133,6 +133,8 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	ParticleLibrary::GetInstance()->ParticleUpdate(0);
 	ParticleLibrary::GetInstance()->ParticleDataSave(1,"RotParticleR");
 	ParticleLibrary::GetInstance()->ParticleUpdate(1);
+	ParticleLibrary::GetInstance()->ParticleDataSave(2,"ring");
+	ParticleLibrary::GetInstance()->ParticleUpdate(2);
 	StageEditor::GetInstance()->Initialize();
 	PhaseReset();
 

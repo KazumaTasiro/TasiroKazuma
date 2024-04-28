@@ -62,6 +62,13 @@ void Enemy::Initialize(Vector3 EnemyPos,Model* model,Model* enemyBulletModel,Mod
 
 void Enemy::Update(Player* player)
 {
+	if ( oldLockOn == false && lockOn == true )
+	{
+		ParticleLibrary::GetInstance()->AddParticle(2,worldTransform_->wtf.position);
+	}
+	ParticleLibrary::GetInstance()->ParticleUpdate(2);
+	oldLockOn = lockOn;
+	
 
 	assert(player);
 	this->player_ = player;
@@ -237,6 +244,7 @@ void Enemy::ParticleDraw()
 	{
 		LockBullet->ParticleDraw();
 	}
+	ParticleLibrary::GetInstance()->ParticleDraw(2);
 	particleMana_->Draw();
 }
 
@@ -473,4 +481,9 @@ void Enemy::LightShadowOff()
 	lightActive = false;
 	worldTransform_->wtf.position = enemyResetPos;
 	LightData::GetInstance()->UpdateCircleShadow(shadowNmb,enemyResetPos,circleShadowDir,circleShadowAtten,circleShadowFactorAngle,lightActive);
+}
+
+void Enemy::ParticleUpdate()
+{
+
 }

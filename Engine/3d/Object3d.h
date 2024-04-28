@@ -207,7 +207,6 @@ public:
 
 	static float win_wi, win_hi;
 
-
 	Vector4  circleShadowDir = { 0,0.5f,0,0 };
 	Vector3  circleShadowAtten = { 1.1f,0.7f,0.0f };
 	Vector2  circleShadowFactorAngle = { 0.5f,1.2f };

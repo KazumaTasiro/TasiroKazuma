@@ -42,7 +42,10 @@ void ParticleLibrary::ObjectUpdate()
 
 void ParticleLibrary::ObjectDraw()
 {
-	player->Draw();
+	if ( objectDrawSwich )
+	{
+		player->Draw();
+	}
 }
 
 void ParticleLibrary::PDraw()
@@ -162,6 +165,7 @@ void ParticleLibrary::DrawImgui()
 		playerModel = ModelManager::GetInstance()->FindObjModel(objectFileName);
 		player->SetModel(playerModel);
 	}
+	ImGui::Checkbox("ObjectDraw",&objectDrawSwich);
 	ImGui::SliderFloat("playerRot",&playerRot,-playerRotLimit,playerRotLimit);
 	player->wtf.rotation.y = playerRot * rot;
 	player->Update();
@@ -200,6 +204,7 @@ void ParticleLibrary::DrawImgui()
 	ImGui::Checkbox("randomParticlePosZ",&randomParticlePosZ);
 	ImGui::SliderFloat3("particlerandomPosX",&randomParticlePos.x,-5.0f,5.0f);
 
+	//エンドポイント関係
 	ImGui::Checkbox("endPoint",&endPoint);
 	ImGui::SliderFloat("particleEndPointSpeed",&particleEndPointSpeed,0,3.0f);
 	ImGui::Checkbox("randomParticleSpeed",&randomParticleSpeedX);
@@ -214,13 +219,14 @@ void ParticleLibrary::DrawImgui()
 	ImGui::SliderFloat("particleRandomSpeedZ",&particleRandomSpeedZ,-0.1f,0.1f);
 
 
-	ImGui::SliderFloat("particleStertScale",&particleStertScale,0,5.0f);
+	//パーティクルのサイズ
+	ImGui::SliderFloat("particleStertScale",&particleStertScale,0,50.0f);
 
 	ImGui::Checkbox("randomParticleStertScale",&randomParticleStertScale);
 	ImGui::SliderFloat("particleRandomStertScale",&particleRandomStertScale,0,5.0f);
 
 
-	ImGui::SliderFloat("particleEndScale",&particleEndScale,0,5.0f);
+	ImGui::SliderFloat("particleEndScale",&particleEndScale,0,50.0f);
 
 	ImGui::Checkbox("randomParticleEndScale",&randomParticleEndScale);
 	ImGui::SliderFloat("particleRandomEndScale",&particleRandomEndScale,0,5.0f);

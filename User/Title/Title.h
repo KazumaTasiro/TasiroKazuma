@@ -2,6 +2,7 @@
 #include "Object3d.h"
 #include "Model.h"
 #include <cassert>
+#include "ModelManager.h"
 
 ///<summary>
 ///タイトルのオブジェクトの生成と動き

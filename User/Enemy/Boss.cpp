@@ -14,7 +14,8 @@ void Boss::Initialize(Model* enemyBulletModel,Model* enemyReticleModel)
 {
 	assert(enemyBulletModel);
 	assert(enemyReticleModel);
-	model_ = Model::LoadFormOBJ("Sakaban");
+	ModelManager::GetInstance()->LoadModel("Sakaban");
+	model_ = ModelManager::GetInstance()->FindObjModel("Sakaban");
 	enemyBulletModel_ = enemyBulletModel;
 	enemyReticleModel_ = enemyReticleModel;
 	input_ = Input::GetInstance();

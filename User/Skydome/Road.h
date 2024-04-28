@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "LightData.h"
 #include <cassert>
+#include "ModelManager.h"
 
 ///<summary>
 ///ボスの生成と行動
