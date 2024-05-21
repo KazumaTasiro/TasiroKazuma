@@ -35,7 +35,9 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	ImGuiMan_ = ImGuiManager::GetInstance();
 
 	//スプライト共通部分の初期化
-	
+	ModelManager::GetInstance()->LoadModel("Sakaban");
+	ModelManager::GetInstance()->LoadModel("SakabanTakkle");
+	ModelManager::GetInstance()->LoadModel("SakabanObstacle");
 
 
 
@@ -104,6 +106,7 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	title_->Initialize();
 
 
+
 	scene = Scene::Title;
 	stertCount_ = std::make_unique<StertCount>();
 	stertCount_->SetCamera(camera_.get());
@@ -130,6 +133,8 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	ParticleLibrary::GetInstance()->ParticleUpdate(0);
 	ParticleLibrary::GetInstance()->ParticleDataSave(1,"RotParticleR");
 	ParticleLibrary::GetInstance()->ParticleUpdate(1);
+	ParticleLibrary::GetInstance()->ParticleDataSave(2,"ring");
+	ParticleLibrary::GetInstance()->ParticleUpdate(2);
 	StageEditor::GetInstance()->Initialize();
 	PhaseReset();
 
@@ -147,8 +152,11 @@ void GameScene::Update()
 	switch ( scene )
 	{
 	case GameScene::Editor:
+		camera_->SetEye(cameraGame);
+		camera_->Update();
 		StageEditor::GetInstance()->Update();
 		StageEditor::GetInstance()->DrawImgui();
+		railCamera->Update();
 
 		break;
 	}
@@ -233,6 +241,7 @@ void GameScene::Update()
 			if ( enemyManager_->Clear() == true )
 			{
 				scene = Scene::Boss;
+				railCamera->Reset();
 			}
 			if ( player_->retrunIsDaed() )
 			{
@@ -551,6 +560,14 @@ void GameScene::CursorLimit()
 void GameScene::LightUpdate()
 {
 	lightGroupNon->Update();
+}
+
+void GameScene::ModelLoad()
+{
+	ModelManager::GetInstance()->LoadModel("Sakaban");
+	ModelManager::GetInstance()->LoadModel("SakabanObstacle");
+	ModelManager::GetInstance()->LoadModel("SakabanTakkle");
+
 }
 
 

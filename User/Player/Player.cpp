@@ -32,14 +32,17 @@ void Player::Initialize(ParticleManager* particle)
 	worldTransform3DReticle_ = Object3d::Create();
 
 	//model_ = FbxLoader::GetInstance()->LoadModelFromFile("trakku");
-	model_ = Model::LoadFormOBJ("trakku");
+	ModelManager::GetInstance()->LoadModel("trakku");
+	model_ = ModelManager::GetInstance()->FindObjModel("trakku");
+	//model_ = Model::LoadFormOBJ("trakku");
 
 	worldTransform_->Initialize();
 	worldTransform_->SetModel(model_);
 	worldTransform_->wtf.position = playerPos;
 	worldTransform_->wtf.scale = playerSc;
 
-	bulletModel_ = Model::LoadFormOBJ("playerBullet");
+	ModelManager::GetInstance()->LoadModel("playerBullet");
+	bulletModel_ = ModelManager::GetInstance()->FindObjModel("playerBullet");
 
 	worldTransform3DReticle_->SetModel(bulletModel_);
 	//スプライト生成
@@ -162,25 +165,32 @@ void Player::Move()
 	Vector3 pos = worldTransform_->wtf.position;
 
 	//const float RotSpeed = 0.05f;
+	if ( input_->PushKey(DIK_W) )
+	{
+		if ( worldTransform_->wtf.position.z <= 5.0f )
+		{
+			worldTransform_->wtf.position.z += speed + speed;
+		}
+	}
 	if ( input_->PushKey(DIK_A) )
 	{
 		worldTransform_->wtf.rotation.y = rot * playerRot;
 		if ( -playerRotLimit < playerRot + playerRotPlus )
 		{
-			if ( playerPos.x - speed > -kMoveLimitX )
+			if ( worldTransform_->wtf.position.x > -posLim )
 			{
 				playerRot -= playerRotPlus;
-				
+				/*ImGui::SliderFloat("aaa",&worldTransform_->wtf.position.x,-10,10);*/
 			}
 			else if ( playerRot < 0 )
 			{
 				playerRot += playerRotPlus + playerRotPlus;
-				
+
 
 			}
 			else
 			{
-				playerRot += playerRotPlus;
+				playerRot = 0;
 			}
 
 		}
@@ -188,8 +198,18 @@ void Player::Move()
 		{
 			if ( speed >= -speedMax )
 			{
-				speed -= speedPlus;
-
+				if ( worldTransform_->wtf.position.x > -posLim )
+				{
+					speed -= speedPlus;
+				}
+				else if ( speed < 0 )
+				{
+					speed += speedPlus;
+				}
+				else
+				{
+					speed = 0;
+				}
 			}
 			//move.x += speed;
 		}
@@ -208,27 +228,39 @@ void Player::Move()
 
 		if ( playerRotLimit > playerRot - playerRotPlus )
 		{
-			if ( playerPos.x - speed > -kMoveLimitX )
+			if ( worldTransform_->wtf.position.x < posLim )
 			{
 				playerRot += playerRotPlus;
-				
+
 			}
 			else if ( playerRot > 0 )
 			{
-				playerRot += playerRotPlus + playerRotPlus;
-				
+				playerRot -= playerRotPlus + playerRotPlus;
+
 			}
 			else
 			{
-				playerRot -= playerRotPlus;
+				playerRot = 0;
 			}
-			
+
 		}
 		if ( playerRot >= 0 )
 		{
 			if ( speed <= speedMax )
 			{
-				speed += speedPlus;
+				if ( worldTransform_->wtf.position.x < posLim )
+				{
+					speed += speedPlus;
+				}
+				else if ( speed > 0 )
+				{
+					speed -= speedPlus;
+				}
+				else
+				{
+					speed = 0;
+				}
+
 			}
 			//move.x += speed;
 		}

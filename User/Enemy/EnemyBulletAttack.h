@@ -54,5 +54,5 @@ private:
 
 
 	Vector3 velocity_;
-	float verocitySpeed = 3.0f;
+	float verocitySpeed = 1.5f;
 };

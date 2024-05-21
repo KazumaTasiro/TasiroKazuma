@@ -45,11 +45,11 @@ public:
 
 	void ResetCSVfile();
 
-	void CreateSaveFile(const std::string& fileNames);
+	void CreateSaveFile(const std::string& fileNames,bool filePathTrue);
 
 	void LoadTexJudgment(const std::string& fileNames);
 
-	void LoadCSVJudgment(const std::string& fileNames);
+	void LoadCSVJudgment(const std::string& fileNames,bool filePathTrue);
 
 	float RandNmber(float randNmb);
 
@@ -65,6 +65,10 @@ public:
 	void ParticleDraw(uint32_t nmb);
 
 	void Finalize();
+
+	void TxtUpdate();
+
+	void TxtRoad(std::string folderPath,std::vector<std::string>& file_names);
 private:
 	ParticleLibrary() = default;
 	~ParticleLibrary();
@@ -121,13 +125,13 @@ public:
 		bool endPoint = false;
 		//ランダムpos
 
-		bool randomParticlePosX;
-		bool randomParticlePosY;
-		bool randomParticlePosZ;
+		bool randomParticlePosX=false;
+		bool randomParticlePosY = false;
+		bool randomParticlePosZ = false;
 		//ランダムspeed
-		bool randomParticleSpeedX;
-		bool randomParticleSpeedY;
-		bool randomParticleSpeedZ;
+		bool randomParticleSpeedX = false;
+		bool randomParticleSpeedY = false;
+		bool randomParticleSpeedZ = false;
 		//ランダムscale
 		bool randomParticleStertScale = false;
 		bool randomParticleEndScale = false;
@@ -141,67 +145,67 @@ public:
 private:
 	float PI = 3.141592f;
 
-	//パーティクルの基本情報
-	//位置
-	Vector3 particlePos = { 0,0,0 };
-	Vector3 randomParticlePos{ 0,0,0 };
+	////パーティクルの基本情報
+	////位置
+	//Vector3 particlePos = { 0,0,0 };
+	//Vector3 randomParticlePos{ 0,0,0 };
 
-	//終点
-	Vector3 particleEndPos = { 0,0,0 };
-	Vector3 endPointPos = { 0,0,0 };
-	//大きさ
-	//最初
-	float particleStertScale = 1;
-	float particleRandomStertScale = 1;
-	//最後
-	float particleEndScale = 1;
-	float particleRandomEndScale = 1;
+	////終点
+	//Vector3 particleEndPos = { 0,0,0 };
+	//Vector3 endPointPos = { 0,0,0 };
+	////大きさ
+	////最初
+	//float particleStertScale = 1;
+	//float particleRandomStertScale = 1;
+	////最後
+	//float particleEndScale = 1;
+	//float particleRandomEndScale = 1;
 
-	//速度
-	Vector3 particleSpeed = { 0,0,0 };
-	float particleEndPointSpeed = 1.0f;
-	Vector3 particleRandomSpeed = { 0,0,0 };
-	float particleRandomSpeedX = 0;
-	float particleRandomSpeedY = 0;
-	float particleRandomSpeedZ = 0;
+	////速度
+	//Vector3 particleSpeed = { 0,0,0 };
+	//float particleEndPointSpeed = 1.0f;
+	//Vector3 particleRandomSpeed = { 0,0,0 };
+	//float particleRandomSpeedX = 0;
+	//float particleRandomSpeedY = 0;
+	//float particleRandomSpeedZ = 0;
 
-	//色
-	Vector4 particleStertColor = { 1,1,1,1 };
-	Vector4 particleEndColor = { 1,1,1,1 };
+	////色
+	//Vector4 particleStertColor = { 1,1,1,1 };
+	//Vector4 particleEndColor = { 1,1,1,1 };
 
-	//数
-	int particleNmber = 0;
-	//パーティクルのライフ
-	int particleLife = 10;
-	//イージングのナンバー
-	int easingNmb = 0;
+	////数
+	//int particleNmber = 0;
+	////パーティクルのライフ
+	//int particleLife = 10;
+	////イージングのナンバー
+	//int easingNmb = 0;
 
 	char fileName[ 30 ] = { "" };
-	char texFileName[ 30 ] = { "standard" };
+	//char texFileName[ 30 ] = { "standard" };
 
 	char objectFileName[ 30 ] = { "" };
 	char defaltObjectFileName[ 30 ] = { "trakku" };
 	bool loadObject = false;
 
 	//パーティクルのスイッチ
-	bool randomParticleStertColor = false;
-	bool randomParticleEndColor = false;
-	bool randomParticleSize = false;
+	//bool randomParticleStertColor = false;
+	//bool randomParticleEndColor = false;
+	//bool randomParticleSize = false;
 	bool loadParticle = false;
 	bool saveParticle = false;
-	bool endPoint = false;
+	//bool endPoint = false;
 	//ランダムpos
 
-	bool randomParticlePosX;
-	bool randomParticlePosY;
-	bool randomParticlePosZ;
-	//ランダムspeed
-	bool randomParticleSpeedX;
-	bool randomParticleSpeedY;
-	bool randomParticleSpeedZ;
+	//bool randomParticlePosX;
+	//bool randomParticlePosY;
+	//bool randomParticlePosZ;
+	////ランダムspeed
+	//bool randomParticleSpeedX;
+	//bool randomParticleSpeedY;
+	//bool randomParticleSpeedZ;
 	//ランダムscale
-	bool randomParticleStertScale = false;
-	bool randomParticleEndScale = false;
+	//bool randomParticleStertScale = false;
+	//bool randomParticleEndScale = false;
 
 	//画像のロードスイッチ
 	bool loadTexSwich = false;
@@ -216,12 +220,20 @@ public:
 	//パーティクル情報取得コマンド
 	std::stringstream particleCSV;
 private:
+	//エディタ内のデータ
+	ParticleData* particleData;
+	//初期値
+	ParticleData* particleClear;
 
 	Object3d* player;
 	Model* playerModel;
 
+	//OBJの回転変数
 	float playerRot = 0;
 	float playerRotLimit = 10.0f;
 	float rot = ( PI / 180 );
+
+	//オブジェクトの表示
+	bool objectDrawSwich = false;
 
 };

@@ -19,6 +19,9 @@ void ParticleLibrary::StaticInitialize()
 void ParticleLibrary::Initialize()
 {
 	particle_ = new ParticleManager();
+	particleData = new ParticleData();
+	particleClear = new ParticleData();
+	particleClear = particleData;
 	particle_->Initialize();
 	particle_->LoadTexture("standard.png");
 
@@ -42,7 +45,10 @@ void ParticleLibrary::ObjectUpdate()
 
 void ParticleLibrary::ObjectDraw()
 {
-	player->Draw();
+	if ( objectDrawSwich )
+	{
+		player->Draw();
+	}
 }
 
 void ParticleLibrary::PDraw()
@@ -52,102 +58,102 @@ void ParticleLibrary::PDraw()
 
 void ParticleLibrary::Update()
 {
-	Vector3 particlePoss = particlePos;
+	Vector3 particlePoss = particleData->particlePos;
 
-	if ( randomParticlePosX )
+	if ( particleData->randomParticlePosX )
 	{
 
-		particlePoss.x += RandNmber(randomParticlePos.x);
+		particlePoss.x += RandNmber(particleData->randomParticlePos.x);
 	}
-	if ( randomParticlePosY )
+	if ( particleData->randomParticlePosY )
 	{
 
-		particlePoss.y += RandNmber(randomParticlePos.y);
+		particlePoss.y += RandNmber(particleData->randomParticlePos.y);
 	}
-	if ( randomParticlePosZ )
+	if ( particleData->randomParticlePosZ )
 	{
 
-		particlePoss.z += RandNmber(randomParticlePos.z);
+		particlePoss.z += RandNmber(particleData->randomParticlePos.z);
 	}
 
 
-	if ( endPoint )
+	if ( particleData->endPoint )
 	{
-		if ( randomParticleSpeedX )
+		if ( particleData->randomParticleSpeedX )
 		{
-			particleEndPointSpeed = RandNmber(particleRandomSpeedX);
+			particleData->particleEndPointSpeed = RandNmber(particleData->particleRandomSpeedX);
 		}
-		endPointPos = ( particleEndPos - particlePoss );
-		endPointPos.nomalize();
-		endPointPos *= particleEndPointSpeed;
+		particleData->endPointPos = ( particleData->particleEndPos - particlePoss );
+		particleData->endPointPos.nomalize();
+		particleData->endPointPos *= particleData->particleEndPointSpeed;
 
 	}
 	else
 	{
 
-		if ( randomParticleSpeedX )
+		if ( particleData->randomParticleSpeedX )
 		{
 
-			particleSpeed.x = RandNmber(particleRandomSpeedX);
+			particleData->particleSpeed.x = RandNmber(particleData->particleRandomSpeedX);
 		}
-		if ( randomParticleSpeedY )
+		if ( particleData->randomParticleSpeedY )
 		{
 
-			particleSpeed.y = RandNmber(particleRandomSpeedY);
+			particleData->particleSpeed.y = RandNmber(particleData->particleRandomSpeedY);
 		}
-		if ( randomParticleSpeedZ )
+		if ( particleData->randomParticleSpeedZ )
 		{
 
-			particleSpeed.z = RandNmber(particleRandomSpeedZ);
+			particleData->particleSpeed.z = RandNmber(particleData->particleRandomSpeedZ);
 		}
 	}
 
-	if ( randomParticleStertScale )
+	if ( particleData->randomParticleStertScale )
 	{
 
-		particleStertScale = RandNmber(particleRandomStertScale);
-		if ( particleStertScale < 0 )
+		particleData->particleStertScale = RandNmber(particleData->particleRandomStertScale);
+		if ( particleData->particleStertScale < 0 )
 		{
-			particleStertScale = -particleStertScale;
+			particleData->particleStertScale = -particleData->particleStertScale;
 		}
 	}
-	if ( randomParticleEndScale )
+	if ( particleData->randomParticleEndScale )
 	{
 
-		particleEndScale = RandNmber(particleRandomEndScale);
-		if ( particleEndScale < 0 )
+		particleData->particleEndScale = RandNmber(particleData->particleRandomEndScale);
+		if ( particleData->particleEndScale < 0 )
 		{
-			particleEndScale = -particleEndScale;
+			particleData->particleEndScale = -particleData->particleEndScale;
 		}
 	}
 
-	if ( randomParticleStertColor )
-	{
-		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
-		randomColor.x /= 100;
-		randomColor.y /= 100;
-		randomColor.z /= 100;
-		particleStertColor = { randomColor.x,randomColor.y,randomColor.z,1 };
-	}
-	if ( randomParticleEndColor )
+	if ( particleData->randomParticleStertColor )
 	{
 		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
 		randomColor.x /= 100;
 		randomColor.y /= 100;
 		randomColor.z /= 100;
-		particleEndColor = { randomColor.x,randomColor.y,randomColor.z,1 };
+		particleData->particleStertColor = { randomColor.x,randomColor.y,randomColor.z,1 };
+	}
+	if ( particleData->randomParticleEndColor )
+	{
+		Vector3 randomColor = { static_cast< float > ( rand() % 100 ),static_cast< float > ( rand() % 100 ) ,static_cast< float > ( rand() % 100 ) };
+		randomColor.x /= 100;
+		randomColor.y /= 100;
+		randomColor.z /= 100;
+		particleData->particleEndColor = { randomColor.x,randomColor.y,randomColor.z,1 };
 
 	}
 
-	for ( int i = 0; i < particleNmber; i++ )
+	for ( int i = 0; i < particleData->particleNmber; i++ )
 	{
-		if ( endPoint )
+		if ( particleData->endPoint )
 		{
-			particle_->Add(particleLife,particlePoss,particleEndPos,endPointPos,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+			particle_->Add(particleData->particleLife,particlePoss,particleData->particleEndPos,particleData->endPointPos,particleData->particleStertScale,particleData->particleEndScale,particleData->easingNmb,particleData->particleStertColor,particleData->particleEndColor);
 		}
 		else
 		{
-			particle_->Add(particleLife,particlePoss,particleEndPos,particleSpeed,particleStertScale,particleEndScale,easingNmb,particleStertColor,particleEndColor);
+			particle_->Add(particleData->particleLife,particlePoss,particleData->particleEndPos,particleData->particleSpeed,particleData->particleStertScale,particleData->particleEndScale,particleData->easingNmb,particleData->particleStertColor,particleData->particleEndColor);
 		}
 	}
 	particle_->Update();
@@ -156,12 +162,17 @@ void ParticleLibrary::Update()
 void ParticleLibrary::DrawImgui()
 {
 	ImGui::InputText("ObjectFileName",objectFileName,sizeof(objectFileName));
+
+	//OVJをロードする
 	loadObject = ImGui::Button("loadObject");
 	if ( loadObject )
 	{
 		playerModel = ModelManager::GetInstance()->FindObjModel(objectFileName);
 		player->SetModel(playerModel);
 	}
+	//Objの表示切替
+	ImGui::Checkbox("ObjectDraw",&objectDrawSwich);
+	//objの角度
 	ImGui::SliderFloat("playerRot",&playerRot,-playerRotLimit,playerRotLimit);
 	player->wtf.rotation.y = playerRot * rot;
 	player->Update();
@@ -170,66 +181,80 @@ void ParticleLibrary::DrawImgui()
 	loadParticle = ImGui::Button("loadParticle");
 
 	saveParticle = ImGui::Button("saveParticle");
+	if ( ImGui::Button("ResetParticle") )
+	{
+		ResetCSVfile();
+		particleData = particleClear;
+		ResetCSVfile();
+	}
 	if ( saveParticle )
 	{
-		CreateSaveFile(fileName);
+		CreateSaveFile(fileName,false);
 
 	}
 	if ( loadParticle )
 	{
-		LoadCSVJudgment(fileName);
+		ResetCSVfile();
+		LoadCSVJudgment(fileName,false);
 		ResetCSVfile();
 
 	}
 
-	ImGui::InputText("TextureFileName",texFileName,sizeof(texFileName));
+	ImGui::InputText("TextureFileName",particleData->texFileName,sizeof(particleData->texFileName));
 	loadTexSwich = ImGui::Button("loadTexture");
 	if ( loadTexSwich )
 	{
-		LoadTexJudgment(texFileName);
+		LoadTexJudgment(particleData->texFileName);
 	}
-	ImGui::SliderInt("particleNmber",&particleNmber,0,70);
-	ImGui::SliderFloat3("particlePos",&particlePos.x,-5.0f,5.0f);
-	ImGui::Checkbox("randomParticlePosX",&randomParticlePosX);
-	ImGui::Checkbox("randomParticlePosY",&randomParticlePosY);
-	ImGui::Checkbox("randomParticlePosZ",&randomParticlePosZ);
-	ImGui::SliderFloat3("particlerandomPosX",&randomParticlePos.x,-5.0f,5.0f);
+	ImGui::SliderInt("particleNmber",&particleData->particleNmber,0,70);
+	ImGui::SliderFloat3("particlePos",&particleData->particlePos.x,-5.0f,5.0f);
+	ImGui::Checkbox("randomParticlePosX",&particleData->randomParticlePosX);
+	ImGui::Checkbox("randomParticlePosY",&particleData->randomParticlePosY);
+	ImGui::Checkbox("randomParticlePosZ",&particleData->randomParticlePosZ);
+	ImGui::SliderFloat3("particlerandomPosX",&particleData->randomParticlePos.x,-5.0f,5.0f);
 
-	ImGui::Checkbox("endPoint",&endPoint);
-	ImGui::SliderFloat("particleEndPointSpeed",&particleEndPointSpeed,0,3.0f);
-	ImGui::Checkbox("randomParticleSpeed",&randomParticleSpeedX);
-	ImGui::SliderFloat("particleRandomSpeed",&particleRandomSpeedX,-3.0f,3.0f);
-	ImGui::SliderFloat3("particleEndPos",&particleEndPos.x,-5.0f,5.0f);
-	ImGui::SliderFloat3("particleSpeed",&particleSpeed.x,-0.1f,0.1f);
-	ImGui::Checkbox("randomParticleSpeedX",&randomParticleSpeedX);
-	ImGui::Checkbox("randomParticleSpeedY",&randomParticleSpeedY);
-	ImGui::Checkbox("randomParticleSpeedZ",&randomParticleSpeedZ);
-	ImGui::SliderFloat("particleRandomSpeedX",&particleRandomSpeedX,-0.1f,0.1f);
-	ImGui::SliderFloat("particleRandomSpeedY",&particleRandomSpeedY,-0.1f,0.1f);
-	ImGui::SliderFloat("particleRandomSpeedZ",&particleRandomSpeedZ,-0.1f,0.1f);
-
-
-	ImGui::SliderFloat("particleStertScale",&particleStertScale,0,5.0f);
-
-	ImGui::Checkbox("randomParticleStertScale",&randomParticleStertScale);
-	ImGui::SliderFloat("particleRandomStertScale",&particleRandomStertScale,0,5.0f);
+	//エンドポイント関係
+	ImGui::Checkbox("endPoint",&particleData->endPoint);
+	ImGui::SliderFloat("particleEndPointSpeed",&particleData->particleEndPointSpeed,0,3.0f);
+	ImGui::Checkbox("randomParticleSpeed",&particleData->randomParticleSpeedX);
+	ImGui::SliderFloat("particleRandomSpeed",&particleData->particleRandomSpeedX,-3.0f,3.0f);
+	ImGui::SliderFloat3("particleEndPos",&particleData->particleEndPos.x,-5.0f,5.0f);
+	ImGui::SliderFloat3("particleSpeed",&particleData->particleSpeed.x,-0.1f,0.1f);
+	ImGui::Checkbox("randomParticleSpeedX",&particleData->randomParticleSpeedX);
+	ImGui::Checkbox("randomParticleSpeedY",&particleData->randomParticleSpeedY);
+	ImGui::Checkbox("randomParticleSpeedZ",&particleData->randomParticleSpeedZ);
+	ImGui::SliderFloat("particleRandomSpeedX",&particleData->particleRandomSpeedX,-0.1f,0.1f);
+	ImGui::SliderFloat("particleRandomSpeedY",&particleData->particleRandomSpeedY,-0.1f,0.1f);
+	ImGui::SliderFloat("particleRandomSpeedZ",&particleData->particleRandomSpeedZ,-0.1f,0.1f);
 
 
-	ImGui::SliderFloat("particleEndScale",&particleEndScale,0,5.0f);
+	//パーティクルのサイズ
+	ImGui::SliderFloat("particleStertScale",&particleData->particleStertScale,0,50.0f);
 
-	ImGui::Checkbox("randomParticleEndScale",&randomParticleEndScale);
-	ImGui::SliderFloat("particleRandomEndScale",&particleRandomEndScale,0,5.0f);
-
-	ImGui::SliderInt("particleLife",&particleLife,0,30);
-	ImGui::SliderInt("easingNmb",&easingNmb,0,2);
+	ImGui::Checkbox("randomParticleStertScale",&particleData->randomParticleStertScale);
+	ImGui::SliderFloat("particleRandomStertScale",&particleData->particleRandomStertScale,0,5.0f);
 
 
-	ImGui::ColorEdit4("particleStertCollor",&particleStertColor.x);
-	ImGui::ColorEdit4("particleCollor",&particleEndColor.x);
+	ImGui::SliderFloat("particleEndScale",&particleData->particleEndScale,0,50.0f);
 
-	ImGui::Checkbox("randomParticleStertColor",&randomParticleStertColor);
-	ImGui::Checkbox("randomParticleEndColor",&randomParticleEndColor);
+	ImGui::Checkbox("randomParticleEndScale",&particleData->randomParticleEndScale);
+	ImGui::SliderFloat("particleRandomEndScale",&particleData->particleRandomEndScale,0,5.0f);
 
+	ImGui::SliderInt("particleLife",&particleData->particleLife,0,30);
+	ImGui::SliderInt("easingNmb",&particleData->easingNmb,0,2);
+
+
+	ImGui::ColorEdit4("particleStertCollor",&particleData->particleStertColor.x);
+	ImGui::ColorEdit4("particleCollor",&particleData->particleEndColor.x);
+
+	ImGui::Checkbox("randomParticleStertColor",&particleData->randomParticleStertColor);
+	ImGui::Checkbox("randomParticleEndColor",&particleData->randomParticleEndColor);
+
+
+	if ( ImGui::Button("TxtUpdate") )
+	{
+		TxtUpdate();
+	}
 	//particle->SetColor(particleColor);
 
 }
@@ -255,6 +280,8 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 {
 	//1行分の文字列を入れる変数
 	std::string line;
+	//初期化
+	particleData = particleClear;
 
 	//コマンド実行ループ
 	while ( getline(particleCSV,line) )
@@ -308,7 +335,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			int x = ( int ) std::atof(word.c_str());
 
 
-			particleNmber = x;
+			particleData->particleNmber = x;
 		}
 
 		//POPコマンド
@@ -324,7 +351,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float z = ( float ) std::atof(word.c_str());
 
-			particlePos = { x,y,z };
+			particleData->particlePos = { x,y,z };
 		}
 		if ( word.find("RandomPosButton") == 0 )
 		{
@@ -338,9 +365,9 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			bool z = ( bool ) std::atof(word.c_str());
 
-			randomParticlePosX = x;
-			randomParticlePosY = y;
-			randomParticlePosZ = z;
+			particleData->randomParticlePosX = x;
+			particleData->randomParticlePosY = y;
+			particleData->randomParticlePosZ = z;
 		}
 		if ( word.find("RandomPos") == 0 )
 		{
@@ -354,7 +381,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float z = ( float ) std::atof(word.c_str());
 
-			randomParticlePos = { x,y,z };
+			particleData->randomParticlePos = { x,y,z };
 		}
 		if ( word.find("EndPosButton") == 0 )
 		{
@@ -362,7 +389,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			bool x = ( bool ) std::atof(word.c_str());
 
-			endPoint = x;
+			particleData->endPoint = x;
 		}
 		if ( word.find("EndPos") == 0 )
 		{
@@ -376,7 +403,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float z = ( float ) std::atof(word.c_str());
 
-			particleEndPos = { x,y,z };
+			particleData->particleEndPos = { x,y,z };
 		}
 		if ( word.find("EndPointSpeed") == 0 )
 		{
@@ -385,7 +412,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			float x = ( float ) std::atof(word.c_str());
 
 
-			particleEndPointSpeed = x;
+			particleData->particleEndPointSpeed = x;
 		}
 
 		if ( word.find("RandomSpeedButton") == 0 )
@@ -400,9 +427,9 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			bool z = ( bool ) std::atof(word.c_str());
 
-			randomParticleSpeedX = x;
-			randomParticleSpeedY = y;
-			randomParticleSpeedZ = z;
+			particleData->randomParticleSpeedX = x;
+			particleData->randomParticleSpeedY = y;
+			particleData->randomParticleSpeedZ = z;
 		}
 		if ( word.find("Speed") == 0 )
 		{
@@ -416,7 +443,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float z = ( float ) std::atof(word.c_str());
 
-			particleSpeed = { x,y,z };
+			particleData->particleSpeed = { x,y,z };
 		}
 		if ( word.find("StertScale") == 0 )
 		{
@@ -424,7 +451,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float x = ( float ) std::atof(word.c_str());
 
-			particleStertScale = x;
+			particleData->particleStertScale = x;
 		}
 		if ( word.find("RandomStertScaleButton") == 0 )
 		{
@@ -432,7 +459,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			bool x = ( bool ) std::atof(word.c_str());
 
-			randomParticleStertScale = x;
+			particleData->randomParticleStertScale = x;
 		}
 		if ( word.find("RandomStertScale") == 0 )
 		{
@@ -440,7 +467,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float x = ( float ) std::atof(word.c_str());
 
-			particleRandomStertScale = x;
+			particleData->particleRandomStertScale = x;
 		}
 
 		if ( word.find("EndScale") == 0 )
@@ -449,7 +476,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float x = ( float ) std::atof(word.c_str());
 
-			particleEndScale = x;
+			particleData->particleEndScale = x;
 		}
 		if ( word.find("RandomEndScaleButton") == 0 )
 		{
@@ -457,7 +484,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			bool x = ( bool ) std::atof(word.c_str());
 
-			randomParticleEndScale = x;
+			particleData->randomParticleEndScale = x;
 		}
 		if ( word.find("RandomEndScale") == 0 )
 		{
@@ -465,7 +492,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float x = ( float ) std::atof(word.c_str());
 
-			particleRandomEndScale = x;
+			particleData->particleRandomEndScale = x;
 		}
 		if ( word.find("Life") == 0 )
 		{
@@ -473,7 +500,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			int x = ( int ) std::atof(word.c_str());
 
-			particleLife = x;
+			particleData->particleLife = x;
 		}
 		if ( word.find("Easing") == 0 )
 		{
@@ -481,7 +508,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			int x = ( int ) std::atof(word.c_str());
 
-			easingNmb = x;
+			particleData->easingNmb = x;
 		}
 		if ( word.find("StertColor") == 0 )
 		{
@@ -497,7 +524,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float w = ( float ) std::atof(word.c_str());
 
-			particleStertColor = { x,y,z ,w };
+			particleData->particleStertColor = { x,y,z ,w };
 		}
 		if ( word.find("EndColor") == 0 )
 		{
@@ -513,7 +540,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			float w = ( float ) std::atof(word.c_str());
 
-			particleEndColor = { x,y,z ,w };
+			particleData->particleEndColor = { x,y,z ,w };
 		}
 		if ( word.find("RandomStertColorButton") == 0 )
 		{
@@ -521,7 +548,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			bool x = ( bool ) std::atof(word.c_str());
 
-			randomParticleStertColor = x;
+			particleData->randomParticleStertColor = x;
 		}
 		if ( word.find("RandomEndColorButton") == 0 )
 		{
@@ -529,7 +556,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 			getline(line_stream,word,',');
 			bool x = ( bool ) std::atof(word.c_str());
 
-			randomParticleEndColor = x;
+			particleData->randomParticleEndColor = x;
 		}
 
 
@@ -543,36 +570,46 @@ void ParticleLibrary::ResetCSVfile()
 	//LoadEnemyPopData();
 }
 
-void ParticleLibrary::CreateSaveFile(const std::string& fileNames)
+void ParticleLibrary::CreateSaveFile(const std::string& fileNames,bool filePathTrue)
 {
 	std::string kDefaultTextureDirectoryPath = "Resources/ParticleCSVFile/";
 	std::string CSVpath = ".csv";
-	std::string fullPath = kDefaultTextureDirectoryPath + fileNames + CSVpath;
+	std::string fullPath;
+	if ( filePathTrue == false )
+	{
+		fullPath = kDefaultTextureDirectoryPath + fileNames + CSVpath;
+	}
+	else
+	{
+		fullPath = fileNames;
+
+	}
 	std::ofstream ofs(fullPath);
 
-	ofs << "File" << "," << texFileName << "," << std::endl;
-	ofs << "particleNmb" << "," << particleNmber << "," << std::endl;
-	ofs << "Pos" << "," << particlePos.x << "," << particlePos.y << "," << particlePos.z << "," << std::endl;
-	ofs << "RandomPosButton" << "," << randomParticlePosX << "," << randomParticlePosY << "," << randomParticlePosZ << "," << std::endl;
-	ofs << "RandomPos" << "," << randomParticlePos.x << "," << randomParticlePos.y << "," << randomParticlePos.z << "," << std::endl;
-	ofs << "EndPosButton" << "," << endPoint << "," << std::endl;
-	ofs << "EndPos" << "," << particleEndPos.x << "," << particleEndPos.y << "," << particleEndPos.z << "," << std::endl;
-	ofs << "EndPointSpeed" << "," << particleEndPointSpeed << "," << std::endl;
-	ofs << "RandomSpeedButton" << "," << randomParticleSpeedX << "," << randomParticleSpeedY << "," << randomParticleSpeedZ << "," << std::endl;
-	ofs << "Speed" << "," << particleSpeed.x << "," << particleSpeed.y << "," << particleSpeed.z << "," << std::endl;
-	ofs << "RandomSpeed" << "," << particleRandomSpeedX << "," << particleRandomSpeedY << "," << particleRandomSpeedZ << "," << std::endl;
-	ofs << "StertScale" << "," << particleStertScale << "," << std::endl;
-	ofs << "RandomStertScaleButton" << "," << randomParticleStertScale << "," << std::endl;
-	ofs << "RandomStertScale" << "," << particleRandomStertScale << "," << std::endl;
-	ofs << "EndScale" << "," << particleEndScale << "," << std::endl;
-	ofs << "RandomEndScaleButton" << "," << randomParticleEndScale << "," << std::endl;
-	ofs << "RandomEndScale" << "," << particleRandomEndScale << "," << std::endl;
-	ofs << "Life" << "," << particleLife << "," << std::endl;
-	ofs << "Easing" << "," << easingNmb << "," << std::endl;
-	ofs << "StertColor" << "," << particleStertColor.x << "," << particleStertColor.y << "," << particleStertColor.z << "," << particleStertColor.w << "," << std::endl;
-	ofs << "EndColor" << "," << particleEndColor.x << "," << particleEndColor.y << "," << particleEndColor.z << "," << particleEndColor.w << "," << std::endl;
-	ofs << "RandomStertColorButton" << "," << randomParticleStertColor << "," << std::endl;
-	ofs << "RandomEndColorButton" << "," << randomParticleEndColor << "," << std::endl;
+	ofs << "File" << "," << particleData->texFileName << "," << std::endl;
+	ofs << "particleNmb" << "," << particleData->particleNmber << "," << std::endl;
+	ofs << "Pos" << "," << particleData->particlePos.x << "," << particleData->particlePos.y << "," << particleData->particlePos.z << "," << std::endl;
+	ofs << "RandomPosButton" << "," << particleData->randomParticlePosX << "," << particleData->randomParticlePosY << "," << particleData->randomParticlePosZ << "," << std::endl;
+	ofs << "RandomPos" << "," << particleData->randomParticlePos.x << "," << particleData->randomParticlePos.y << "," << particleData->randomParticlePos.z << "," << std::endl;
+	ofs << "EndPosButton" << "," << particleData->endPoint << "," << std::endl;
+	ofs << "EndPos" << "," << particleData->particleEndPos.x << "," << particleData->particleEndPos.y << "," << particleData->particleEndPos.z << "," << std::endl;
+	ofs << "EndPointSpeed" << "," << particleData->particleEndPointSpeed << "," << std::endl;
+	ofs << "RandomSpeedButton" << "," << particleData->randomParticleSpeedX << "," << particleData->randomParticleSpeedY << "," << particleData->randomParticleSpeedZ << "," << std::endl;
+	ofs << "Speed" << "," << particleData->particleSpeed.x << "," << particleData->particleSpeed.y << "," << particleData->particleSpeed.z << "," << std::endl;
+	ofs << "RandomSpeed" << "," << particleData->particleRandomSpeedX << "," << particleData->particleRandomSpeedY << "," << particleData->particleRandomSpeedZ << "," << std::endl;
+	ofs << "StertScale" << "," << particleData->particleStertScale << "," << std::endl;
+	ofs << "RandomStertScaleButton" << "," << particleData->randomParticleStertScale << "," << std::endl;
+	ofs << "RandomStertScale" << "," << particleData->particleRandomStertScale << "," << std::endl;
+	ofs << "EndScale" << "," << particleData->particleEndScale << "," << std::endl;
+	ofs << "RandomEndScaleButton" << "," << particleData->randomParticleEndScale << "," << std::endl;
+	ofs << "RandomEndScale" << "," << particleData->particleRandomEndScale << "," << std::endl;
+	ofs << "Life" << "," << particleData->particleLife << "," << std::endl;
+	ofs << "Easing" << "," << particleData->easingNmb << "," << std::endl;
+	ofs << "StertColor" << "," << particleData->particleStertColor.x << "," << particleData->particleStertColor.y << "," << particleData->particleStertColor.z << "," << particleData->particleStertColor.w << "," << std::endl;
+	ofs << "EndColor" << "," << particleData->particleEndColor.x << "," << particleData->particleEndColor.y << "," << particleData->particleEndColor.z << "," << particleData->particleEndColor.w << "," << std::endl;
+	ofs << "RandomStertColorButton" << "," << particleData->randomParticleStertColor << "," << std::endl;
+	ofs << "RandomEndColorButton" << "," << particleData->randomParticleEndColor << "," << std::endl;
+	ofs << "text" << std::endl;
 }
 
 void ParticleLibrary::LoadTexJudgment(const std::string& fileNames)
@@ -597,11 +634,20 @@ void ParticleLibrary::LoadTexJudgment(const std::string& fileNames)
 
 }
 
-void ParticleLibrary::LoadCSVJudgment(const std::string& fileNames)
+void ParticleLibrary::LoadCSVJudgment(const std::string& fileNames,bool filePathTrue)
 {
 	std::string kDefaultTextureDirectoryPath = "Resources/ParticleCSVFile/";
 	std::string CSVpath = ".csv";
-	std::string fullPath = kDefaultTextureDirectoryPath + fileNames + CSVpath;
+	std::string fullPath;
+	if ( filePathTrue )
+	{
+		fullPath = fileNames ;
+	}
+	else
+	{
+		fullPath = kDefaultTextureDirectoryPath + fileNames + CSVpath;
+	}
+
 	bool isExists = std::filesystem::exists(fullPath);
 	if ( isExists )
 	{
@@ -632,66 +678,66 @@ void ParticleLibrary::ParticleDataSave(uint32_t nmb,const std::string& fileNames
 	UpdateCSVfile(particleBox[ nmb ].particleUse);
 
 	
-	particleBox[ nmb ].pData.easingNmb = easingNmb;
-	particleBox[ nmb ].pData.particlePos = particlePos;
-	particleBox[ nmb ].pData.randomParticlePos = randomParticlePos;
+	particleBox[ nmb ].pData.easingNmb = particleData->easingNmb;
+	particleBox[ nmb ].pData.particlePos = particleData->particlePos;
+	particleBox[ nmb ].pData.randomParticlePos = particleData->randomParticlePos;
 	//終点
-	particleBox[ nmb ].pData.particleEndPos = particleEndPos;
-	particleBox[ nmb ].pData.endPointPos = endPointPos;
+	particleBox[ nmb ].pData.particleEndPos = particleData->particleEndPos;
+	particleBox[ nmb ].pData.endPointPos = particleData->endPointPos;
 	//大きさ
 	//最初
-	particleBox[ nmb ].pData.particleStertScale = particleStertScale;
-	particleBox[ nmb ].pData.particleRandomStertScale = particleRandomStertScale;
+	particleBox[ nmb ].pData.particleStertScale = particleData->particleStertScale;
+	particleBox[ nmb ].pData.particleRandomStertScale = particleData->particleRandomStertScale;
 	//最後
-	particleBox[ nmb ].pData.particleEndScale = particleEndScale;
-	particleBox[ nmb ].pData.particleRandomEndScale = particleRandomEndScale;
+	particleBox[ nmb ].pData.particleEndScale = particleData->particleEndScale;
+	particleBox[ nmb ].pData.particleRandomEndScale = particleData->particleRandomEndScale;
 
 	//速度
-	particleBox[ nmb ].pData.particleSpeed = particleSpeed;
-	particleBox[ nmb ].pData.particleEndPointSpeed = particleEndPointSpeed;
-	particleBox[ nmb ].pData.particleRandomSpeed = particleRandomSpeed;
-	particleBox[ nmb ].pData.particleRandomSpeedX = particleRandomSpeedX;
-	particleBox[ nmb ].pData.particleRandomSpeedY = particleRandomSpeedY;
-	particleBox[ nmb ].pData.particleRandomSpeedZ = particleRandomSpeedZ;
+	particleBox[ nmb ].pData.particleSpeed = particleData->particleSpeed;
+	particleBox[ nmb ].pData.particleEndPointSpeed = particleData->particleEndPointSpeed;
+	particleBox[ nmb ].pData.particleRandomSpeed = particleData->particleRandomSpeed;
+	particleBox[ nmb ].pData.particleRandomSpeedX = particleData->particleRandomSpeedX;
+	particleBox[ nmb ].pData.particleRandomSpeedY = particleData->particleRandomSpeedY;
+	particleBox[ nmb ].pData.particleRandomSpeedZ = particleData->particleRandomSpeedZ;
 
 	//色
-	particleBox[ nmb ].pData.particleStertColor = particleStertColor;
-	particleBox[ nmb ].pData.particleEndColor = particleEndColor;
+	particleBox[ nmb ].pData.particleStertColor = particleData->particleStertColor;
+	particleBox[ nmb ].pData.particleEndColor = particleData->particleEndColor;
 
 	//数
-	particleBox[ nmb ].pData.particleNmber = particleNmber;
+	particleBox[ nmb ].pData.particleNmber = particleData->particleNmber;
 	//パーティクルのライフ
-	particleBox[ nmb ].pData.particleLife = particleLife;
+	particleBox[ nmb ].pData.particleLife = particleData->particleLife;
 	//イージングのナンバー
-	particleBox[ nmb ].pData.easingNmb = easingNmb;
+	particleBox[ nmb ].pData.easingNmb = particleData->easingNmb;
 
 	for ( int i = 0; i < 30; i++ )
 	{
-		particleBox[ nmb ].pData.texFileName[ i ] = texFileName[ i ];
+		particleBox[ nmb ].pData.texFileName[ i ] = particleData->texFileName[ i ];
 	}
 	//パーティクルのスイッチ
-	particleBox[ nmb ].pData.randomParticleStertColor = randomParticleStertColor;
-	particleBox[ nmb ].pData.randomParticleEndColor = randomParticleEndColor;
-	particleBox[ nmb ].pData.randomParticleSize = randomParticleSize;
-	particleBox[ nmb ].pData.endPoint = endPoint;
+	particleBox[ nmb ].pData.randomParticleStertColor = particleData->randomParticleStertColor;
+	particleBox[ nmb ].pData.randomParticleEndColor = particleData->randomParticleEndColor;
+	particleBox[ nmb ].pData.randomParticleSize = particleData->randomParticleSize;
+	particleBox[ nmb ].pData.endPoint = particleData->endPoint;
 	//ランダムpos
 
-	particleBox[ nmb ].pData.randomParticlePosX = randomParticlePosX;
-	particleBox[ nmb ].pData.randomParticlePosY = randomParticlePosY;
-	particleBox[ nmb ].pData.randomParticlePosZ = randomParticlePosZ;
+	particleBox[ nmb ].pData.randomParticlePosX = particleData->randomParticlePosX;
+	particleBox[ nmb ].pData.randomParticlePosY = particleData->randomParticlePosY;
+	particleBox[ nmb ].pData.randomParticlePosZ = particleData->randomParticlePosZ;
 	//ランダムspeed
-	particleBox[ nmb ].pData.randomParticleSpeedX = randomParticleSpeedX;
-	particleBox[ nmb ].pData.randomParticleSpeedY = randomParticleSpeedY;
-	particleBox[ nmb ].pData.randomParticleSpeedZ = randomParticleSpeedZ;
+	particleBox[ nmb ].pData.randomParticleSpeedX = particleData->randomParticleSpeedX;
+	particleBox[ nmb ].pData.randomParticleSpeedY = particleData->randomParticleSpeedY;
+	particleBox[ nmb ].pData.randomParticleSpeedZ = particleData->randomParticleSpeedZ;
 	//ランダムscale
-	particleBox[ nmb ].pData.randomParticleStertScale = randomParticleStertScale;
-	particleBox[ nmb ].pData.randomParticleEndScale = randomParticleEndScale;
+	particleBox[ nmb ].pData.randomParticleStertScale = particleData->randomParticleStertScale;
+	particleBox[ nmb ].pData.randomParticleEndScale = particleData->randomParticleEndScale;
 
 }
 
 void ParticleLibrary::AddParticle(uint32_t nmb,Vector3 ObjectPos)
 {
-	Vector3 particlePoss = particlePos;
+	Vector3 particlePoss = particleData->particlePos;
 
 	if ( particleBox[ nmb ].pData.randomParticlePosX )
 	{
@@ -779,7 +825,7 @@ void ParticleLibrary::AddParticle(uint32_t nmb,Vector3 ObjectPos)
 	}
 	for ( int i = 0; i < particleBox[ nmb ].pData.particleNmber; i++ )
 	{
-		if ( endPoint )
+		if ( particleBox[ nmb ].pData.endPoint )
 		{
 			particleBox[ nmb ].particleUse->Add(particleBox[ nmb ].pData.particleLife,particleBox[ nmb ].pData.particlePos+ObjectPos,particleBox[ nmb ].pData.particleEndPos,particleBox[ nmb ].pData.endPointPos,particleBox[ nmb ].pData.particleStertScale,particleBox[ nmb ].pData.particleEndScale,particleBox[ nmb ].pData.easingNmb,particleBox[ nmb ].pData.particleStertColor,particleBox[ nmb ].pData.particleEndColor);
 		}
@@ -812,6 +858,43 @@ void ParticleLibrary::Finalize()
 	}
 	delete particle_;
 	delete particleLibrary;
+}
+
+void ParticleLibrary::TxtUpdate()
+{
+	std::vector<std::string> CSVFileNames;
+	TxtRoad("Resources/ParticleCSVFile",CSVFileNames);
+
+	for ( int i = 0; i < CSVFileNames.size(); i++ )
+	{
+		ResetCSVfile();
+		LoadCSVJudgment(CSVFileNames[ i ],true);
+		ResetCSVfile();
+		CreateSaveFile(CSVFileNames[ i ],true);
+	}
+
+}
+
+void ParticleLibrary::TxtRoad(std::string folderPath,std::vector<std::string>& file_names)
+{
+	using namespace std::filesystem;
+	directory_iterator iter(folderPath),end;
+	std::error_code err;
+
+	for ( ; iter != end && !err; iter.increment(err) )
+	{
+		const directory_entry entry = *iter;
+
+		file_names.push_back(entry.path().string());
+		printf("%s\n",file_names.back().c_str());
+	}
+
+	/* エラー処理 */
+	if ( err )
+	{
+		std::cout << err.value() << std::endl;
+		std::cout << err.message() << std::endl;
+	}
 }
 
 ParticleLibrary::~ParticleLibrary()

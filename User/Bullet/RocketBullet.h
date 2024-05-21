@@ -4,16 +4,13 @@
 #include <cassert>
 #include "Input.h"
 
-///<summary>
-///雑魚敵の行動
-///</summary>
-class EnemyBullet {
-public:
+class RocketBullet
+{
 	///<summary>
 	///初期化
 	///</summary>
 
-	void Initialize(const Vector3& position, const Vector3& velocity, Model* bulletModel);
+	void Initialize(const Vector3& position,const Vector3& velocity,Model* bulletModel);
 
 
 
@@ -21,7 +18,7 @@ public:
 	///更新
 	///</summary>
 
-	void Update();
+	void Update(const Vector3 playerPos);
 
 	///<summary>
 	///描画
@@ -32,10 +29,14 @@ public:
 	///<summary>
 	////弾消滅
 	///</summary>
-	bool IsDead()const { return isDead_; }
+	bool IsDead()const {
+		return isDead_;
+	}
 
-	//衝突を検出したら呼び出されるコールバック関数
+//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
+
+	void PlayerHit();
 
 	///<summary>
 	////敵の座標
@@ -45,11 +46,13 @@ public:
 	///<summary>
 	////弾のサイズを変える
 	///</summary>
-	void SetSize(Vector3 Size) { worldTransform_->wtf.scale = Size; }
+	void SetSize(Vector3 Size) {
+		worldTransform_->wtf.scale = Size;
+	}
 
-	///<summary>
-	////弾の進行方向に弾に向きを変える
-	///</summary>
+///<summary>
+////弾の進行方向に弾に向きを変える
+///</summary>
 	void VecRot();
 
 private:
@@ -71,4 +74,12 @@ private:
 	int32_t deathTimerEnd_ = 0;
 	//デスフラグ
 	bool isDead_ = false;
+
+	//弾のHP
+	uint32_t bulletHP = 2;
+
+	float speed = 3.0f;
+
+	float time = 0;
+
 };

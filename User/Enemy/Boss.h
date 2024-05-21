@@ -13,6 +13,7 @@
 #include "EnemyBullet.h"
 #include "ParticleManager.h"
 #include "LightData.h"
+#include "ModelManager.h"
 
 class GameScene;
 class Player;

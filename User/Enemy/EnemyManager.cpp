@@ -1,8 +1,11 @@
 #include"EnemyManager.h"
 #include "Player.h"
 
+
+
 EnemyManager::EnemyManager()
 {
+	
 }
 
 EnemyManager::~EnemyManager()
@@ -18,11 +21,14 @@ void EnemyManager::Initialize(Camera* camera,ParticleManager* particle)
 	camera_ = camera;
 	spriteCommon_ = SpriteCommon::GetInstance();
 	input_ = Input::GetInstance();
-	enemyModel_ = Model::LoadFormOBJ("Sakaban");
-	enemyBulletModel_ = Model::LoadFormOBJ("EnemyBullet");
-	enemyObstacle_ = Model::LoadFormOBJ("EnemyObstacle");
-	alertModel_ = Model::LoadFormOBJ("AlertRoad");
-	enemyReticleModel_ = Model::LoadFormOBJ("Reticle");
+	ModelManager::GetInstance()->LoadModel("EnemyBullet");
+	ModelManager::GetInstance()->LoadModel("EnemyObstacle");
+	ModelManager::GetInstance()->LoadModel("AlertRoad");
+	ModelManager::GetInstance()->LoadModel("Reticle");
+	enemyBulletModel_ = ModelManager::GetInstance()->FindObjModel("EnemyBullet");
+	enemyObstacle_ = ModelManager::GetInstance()->FindObjModel("EnemyObstacle");
+	alertModel_ = ModelManager::GetInstance()->FindObjModel("AlertRoad");
+	enemyReticleModel_ = ModelManager::GetInstance()->FindObjModel("Reticle");
 	LoadEnemyPopData();
 
 	spriteRight = new Sprite();
@@ -42,7 +48,7 @@ void EnemyManager::Update()
 {
 	clearTime--;
 	int count = enemyDeath;
-	if ( count == 3 )
+	if ( count == enemyDeathGoal )
 	{
 		enemyDeath = 0;
 		clearCount++;
@@ -151,7 +157,18 @@ void EnemyManager::LoadEnemyPopData()
 {
 	//ファイルを開く
 	std::ifstream file;
-	file.open("Resources/enemyPop2.csv");
+	//敵の出現CSVの名前
+	std::vector<std::string> CSVFileNames;
+	getFileNames("Resources/EnemyCSVFile",CSVFileNames);
+	int fileNmb = 0;
+	for ( int i = 0; i < CSVFileNames.size(); i++ )
+	{
+		fileNmb++;
+	}
+	int randCSV = rand() % fileNmb;
+
+	file.open(CSVFileNames[ randCSV ]);
+
 	assert(file.is_open());
 
 	//ファイルを内容を文字列ストリームにコピー
@@ -200,6 +217,14 @@ void EnemyManager::UpdateEnemyPopCommands()
 			//コメント行は飛ばす
 			continue;
 		}
+		if ( word.find("ENEMYS") == 0 )
+		{
+						//x座標
+			getline(line_stream,word,',');
+			int x = ( int ) std::atof(word.c_str());
+
+			enemyDeathGoal = x;
+		}
 
 		//POPコマンド
 		if ( word.find("POP") == 0 )
@@ -241,6 +266,23 @@ void EnemyManager::ExistenceEnemy(const Vector3& EnemyPos)
 
 	randEnemyNmb = rand() % three;
 	randEnemyRoot = rand() % two;
+	if ( randEnemyNmb == 0 )
+	{
+		enemyModel_ = ModelManager::GetInstance()->FindObjModel("Sakaban");
+	}
+	else if ( randEnemyNmb == 1 )
+	{
+		//enemyModel_ = Model::LoadFormOBJ("Sakaban");
+		enemyModel_ = ModelManager::GetInstance()->FindObjModel("SakabanTakkle");
+	}
+	else if ( randEnemyNmb == 2 )
+	{
+		enemyModel_ = ModelManager::GetInstance()->FindObjModel("SakabanObstacle");
+	}
+	else
+	{
+		enemyModel_ = ModelManager::GetInstance()->FindObjModel("Sakaban");
+	}
 	//敵キャラの生成
 	std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
 	newEnemy->Initialize(EnemyPos,enemyModel_,enemyBulletModel_,enemyReticleModel_,randEnemyNmb,randEnemyRoot);
@@ -393,7 +435,7 @@ void EnemyManager::EnemyReset()
 	}
 	enemy_.remove_if([ ] (std::unique_ptr<Enemy>& enemy)
 	{
-	return enemy->IsTackleDead();
+		return enemy->IsTackleDead();
 	});
 	for ( std::unique_ptr<EnemyObstacleBullet>& newEnemyObstacleBullet : enemyObstacleBullet )
 	{
@@ -535,4 +577,28 @@ void EnemyManager::CreateObstance()
 	{
 		newEnemyObstacleBullet->Update();
 	}
+}
+
+bool EnemyManager::getFileNames(std::string folderPath,std::vector<std::string>& file_names)
+{
+	using namespace std::filesystem;
+	directory_iterator iter(folderPath),end;
+	std::error_code err;
+
+	for ( ; iter != end && !err; iter.increment(err) )
+	{
+		const directory_entry entry = *iter;
+
+		file_names.push_back(entry.path().string());
+		printf("%s\n",file_names.back().c_str());
+	}
+
+	/* エラー処理 */
+	if ( err )
+	{
+		std::cout << err.value() << std::endl;
+		std::cout << err.message() << std::endl;
+		return false;
+	}
+	return true;
 }

@@ -4,7 +4,8 @@
 
 void Skydome::Initalize()
 {
-	model_ = Model::LoadFormOBJ("uv");
+	ModelManager::GetInstance()->LoadModel("uv");
+	model_ = ModelManager::GetInstance()->FindObjModel("uv");
 	worldTransform_ = Object3d::Create();
 	worldTransform_->wtf.scale= skydomeScale;
 	worldTransform_->wtf.position = skydomePos;

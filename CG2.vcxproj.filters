@@ -288,19 +288,16 @@
     <ClCompile Include="Engine\PostEffect\PostEffect.cpp">
       <Filter>ソース ファイル\Engine\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="User\Player\LockOnBullet.cpp">
+    <ClCompile Include="User\Bullet\LockOnBullet.cpp">
       <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="User\Player\PlayerBullet.cpp">
+    <ClCompile Include="User\Bullet\PlayerBullet.cpp">
       <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="User\Enemy\Boss.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="User\Enemy\Enemy.cpp">
-      <Filter>ソース ファイル\Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="User\Enemy\EnemyBullet.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="User\Enemy\EnemyManager.cpp">
@@ -381,7 +378,7 @@
     <ClCompile Include="User\Enemy\EnemyPolymo.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="User\Enemy\EnemyObstacleBullet.cpp">
+    <ClCompile Include="User\Bullet\EnemyObstacleBullet.cpp">
       <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\ParticleLibrary.cpp">
@@ -422,6 +419,15 @@
     </ClCompile>
     <ClCompile Include="Engine\StageEditor\StageEditor.cpp">
       <Filter>ソース ファイル\Engine\StageEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Bullet\RocketBullet.cpp">
+      <Filter>ソース ファイル\Game\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Bullet\EnemyBullet.cpp">
+      <Filter>ソース ファイル\Game\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Bullet\BulletBase.cpp">
+      <Filter>ソース ファイル\Game\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,19 +500,16 @@
     <ClInclude Include="Engine\PostEffect\PostEffect.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="User\Player\LockOnBullet.h">
+    <ClInclude Include="User\Bullet\LockOnBullet.h">
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="User\Player\PlayerBullet.h">
+    <ClInclude Include="User\Bullet\PlayerBullet.h">
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="User\Enemy\Boss.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="User\Enemy\Enemy.h">
-      <Filter>ヘッダー ファイル\Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="User\Enemy\EnemyBullet.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="User\Enemy\EnemyManager.h">
@@ -590,7 +593,7 @@
     <ClInclude Include="User\Enemy\EnemyPolymo.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="User\Enemy\EnemyObstacleBullet.h">
+    <ClInclude Include="User\Bullet\EnemyObstacleBullet.h">
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\ParticleLibrary.h">
@@ -631,6 +634,15 @@
     </ClInclude>
     <ClInclude Include="Engine\StageEditor\StageEditor.h">
       <Filter>ヘッダー ファイル\Engine\StageEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Bullet\RocketBullet.h">
+      <Filter>ヘッダー ファイル\Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Bullet\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Bullet\BulletBase.h">
+      <Filter>ヘッダー ファイル\Game\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

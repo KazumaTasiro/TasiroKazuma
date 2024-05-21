@@ -26,41 +26,59 @@ void StageEditor::Draw()
 
 void StageEditor::DrawImgui()
 {
+	if ( ImGui::Button("DeleteEnemy") )
+	{
+		Clear();
+	}
+	ImGui::Separator();
 	ImGui::InputText("CSVFileName",fileName,sizeof(fileName));
+	saveEnemyCSV = ImGui::Button("saveCSV");
+	ImGui::Separator();
 	plusEnemy = ImGui::Button("Enemy");
+	ImGui::Separator();
 	if ( plusEnemy )
 	{
 		EnemyBox enemy;
 		enemy.enemyObject = Object3d::Create();
 		enemy.enemyObject->Initialize();
 		enemy.enemyObject->SetModel(enemyModel);
+		enemy.enemyObject->wtf.scale = { scaleNmb,scaleNmb ,scaleNmb };
 		enemy.enemyObject->Update();
 		enemy.enemyNmb = enemyNmbs;
 		enemys.push_back(enemy);
 		enemyNmbs++;
 	}
-	
-	saveEnemyCSV = ImGui::Button("saveCSV");
+
+
 	if ( saveEnemyCSV )
 	{
-		CreateSaveFile(fileName);
+		CreateSaveFile(fileName,false);
 
 	}
+	ImGui::SliderFloat("EnemysRot",&enemyRot,0,360);
+
 	for ( int i = 0; i < enemys.size(); i++ )
 	{
 		std::string wait = { "EnemyWaitTimer" };
 		wait.append(to_string(i));
 		std::string pos = { "EnemyPos" };
 		pos.append(to_string(i));
-		std::string scale = { "EnemyScale" };
-		scale.append(to_string(i));
 
 		ImGui::SliderInt(wait.c_str(),&enemys[ i ].waitTimer,0,200);
-		ImGui::SliderFloat3(pos.c_str(),&enemys[ i ].enemyObject->wtf.position.x,-100,100);
-		ImGui::SliderFloat3(scale.c_str(),&enemys[ i ].enemyObject->wtf.scale.x,1,50);
+		ImGui::SliderFloat3(pos.c_str(),&enemys[ i ].enemyObject->wtf.position.x,-100,120);
+		if ( ImGui::Button("delete") )
+		{
+			enemys.erase(enemys.begin() + i);;
+		}
 
+		enemys[ i ].enemyObject->wtf.rotation.y = enemyRot * rot;
+
+		ImGui::Separator();
 	}
-
+	if ( ImGui::Button("TxtUpdate") )
+	{
+		TxtUpdate();
+	}
 }
 
 void StageEditor::LoadCSVfile(const std::string& fileNames)
@@ -131,7 +149,7 @@ void StageEditor::UpdateCSVfile()
 			//コマンドループを抜ける
 			break;
 		}
-		else if ( word.find("WAIT") == 0 )
+		else if ( word.find("ENEMYS") == 0 )
 		{
 			getline(line_stream,word,',');
 
@@ -139,10 +157,9 @@ void StageEditor::UpdateCSVfile()
 			int32_t enemyNmb = atoi(word.c_str());
 
 			//待機開始
-			enemys[ waitNmb ].enemyNmb = enemyNmb;
+			enemyNmbs = enemyNmb;
 			break;
 		}
-
 	}
 }
 
@@ -153,20 +170,30 @@ void StageEditor::ResetCSVfile()
 	//LoadEnemyPopData();
 }
 
-void StageEditor::CreateSaveFile(const std::string& fileNames)
+void StageEditor::CreateSaveFile(const std::string& fileNames,bool filePathTrue)
 {
 	std::string kDefaultTextureDirectoryPath = "Resources/EnemyCSVFile/";
 	std::string CSVpath = ".csv";
-	std::string fullPath = kDefaultTextureDirectoryPath + fileNames + CSVpath;
+	std::string fullPath;
+	if ( filePathTrue == false )
+	{
+		fullPath = kDefaultTextureDirectoryPath + fileNames + CSVpath;
+	}
+	else
+	{
+		fullPath = fileNames;
+
+	}
+	
 	std::ofstream ofs(fullPath);
 
 	ofs << "ENEMYS" << "," << enemyNmbs << "," << "," << std::endl;
 	for ( int i = 0; i < enemys.size(); i++ )
 	{
 		ofs << "WAIT" << "," << enemys[ i ].waitTimer << "," << "," << std::endl;
-		ofs << "POP" << "," << enemys[ i ].enemyObject->wtf.position.x << "," << enemys[ i ].enemyObject->wtf.position.y << "," << enemys[ i ].enemyObject->wtf.position.z << std::endl;
-		ofs << "SCALE" << "," << enemys[ i ].enemyObject->wtf.scale.x << "," << enemys[ i ].enemyObject->wtf.scale.y << "," << enemys[ i ].enemyObject->wtf.scale.z << std::endl;
+		ofs << "POP" << "," <<static_cast<int> (enemys[ i ].enemyObject->wtf.position.x) << "," << static_cast< int > ( enemys[ i ].enemyObject->wtf.position.y ) << "," << static_cast< int > ( enemys[ i ].enemyObject->wtf.position.z ) << std::endl;
 	}
+
 
 }
 
@@ -202,6 +229,39 @@ void StageEditor::Clear()
 	enemys.clear();
 	enemyNmbs = 0;
 	waitNmb = 0;
+}
+
+void StageEditor::TxtUpdate()
+{
+	std::vector<std::string> CSVFileNames;
+	TxtRoad("Resources/EnemyCSVFile",CSVFileNames);
+
+	for ( int i = 0; i < CSVFileNames.size(); i++ )
+	{
+		CreateSaveFile(CSVFileNames[ i ],true);
+	}
+}
+
+void StageEditor::TxtRoad(std::string folderPath,std::vector<std::string>& file_names)
+{
+	using namespace std::filesystem;
+	directory_iterator iter(folderPath),end;
+	std::error_code err;
+
+	for ( ; iter != end && !err; iter.increment(err) )
+	{
+		const directory_entry entry = *iter;
+
+		file_names.push_back(entry.path().string());
+		printf("%s\n",file_names.back().c_str());
+	}
+
+	/* エラー処理 */
+	if ( err )
+	{
+		std::cout << err.value() << std::endl;
+		std::cout << err.message() << std::endl;
+	}
 }
 
 StageEditor::~StageEditor()

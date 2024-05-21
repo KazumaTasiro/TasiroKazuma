@@ -71,6 +71,6 @@ private:
 	float speedGra = 0;
 
 	//床の座標
-	float roadPos = -2.5f;
+	float roadPos = -1.5f;
 
 };

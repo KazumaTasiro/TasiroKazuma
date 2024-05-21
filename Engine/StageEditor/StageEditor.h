@@ -37,7 +37,7 @@ public:
 
 	void ResetCSVfile();
 
-	void CreateSaveFile(const std::string& fileNames);
+	void CreateSaveFile(const std::string& fileNames,bool filePathTrue);
 
 
 	void LoadCSVJudgment(const std::string& fileNames);
@@ -45,6 +45,10 @@ public:
 	void CSVEnemys(Vector3 enemyPos);
 
 	void Clear();
+
+	void TxtUpdate();
+
+	void TxtRoad(std::string folderPath,std::vector<std::string>& file_names);
 private:
 	StageEditor() = default;
 	~StageEditor();
@@ -53,6 +57,9 @@ private:
 
 	static StageEditor* stageEditor;
 private:
+
+	float PI = 3.141592f;
+
 	struct EnemyBox
 	{
 		Object3d* enemyObject;
@@ -74,4 +81,11 @@ private:
 	bool saveEnemyCSV = false;
 
 	uint32_t waitNmb;
+
+	float scaleNmb = 10.0f;
+
+	float enemyScale = 1;
+
+	float enemyRot = 180.0f;
+	float rot = ( PI / 180 );
 };

@@ -4,8 +4,6 @@ void EnemyBullet::Initialize(const Vector3& position, const Vector3& velocity ,M
 {
 
 	model_ = bulletModel;
-	//テクスチャ読み込み
-	/*textureHandle_ = TextureManager::Load("EnemyBullet.jpg");*/
 
 	//ワールドトランスフォームの初期化
 	worldTransform_ = Object3d::Create();
