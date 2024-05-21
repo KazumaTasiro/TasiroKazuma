@@ -165,12 +165,19 @@ void Player::Move()
 	Vector3 pos = worldTransform_->wtf.position;
 
 	//const float RotSpeed = 0.05f;
+	if ( input_->PushKey(DIK_W) )
+	{
+		if ( worldTransform_->wtf.position.z <= 5.0f )
+		{
+			worldTransform_->wtf.position.z += speed + speed;
+		}
+	}
 	if ( input_->PushKey(DIK_A) )
 	{
 		worldTransform_->wtf.rotation.y = rot * playerRot;
 		if ( -playerRotLimit < playerRot + playerRotPlus )
 		{
-			if ( worldTransform_->wtf.position.x  > -posLim )
+			if ( worldTransform_->wtf.position.x > -posLim )
 			{
 				playerRot -= playerRotPlus;
 				/*ImGui::SliderFloat("aaa",&worldTransform_->wtf.position.x,-10,10);*/
@@ -178,7 +185,7 @@ void Player::Move()
 			else if ( playerRot < 0 )
 			{
 				playerRot += playerRotPlus + playerRotPlus;
-				
+
 
 			}
 			else
@@ -195,7 +202,7 @@ void Player::Move()
 				{
 					speed -= speedPlus;
 				}
-				else if(speed<0)
+				else if ( speed < 0 )
 				{
 					speed += speedPlus;
 				}
@@ -224,18 +231,18 @@ void Player::Move()
 			if ( worldTransform_->wtf.position.x < posLim )
 			{
 				playerRot += playerRotPlus;
-				
+
 			}
 			else if ( playerRot > 0 )
 			{
 				playerRot -= playerRotPlus + playerRotPlus;
-				
+
 			}
 			else
 			{
 				playerRot = 0;
 			}
-			
+
 		}
 		if ( playerRot >= 0 )
 		{
@@ -253,7 +260,7 @@ void Player::Move()
 				{
 					speed = 0;
 				}
-				
+
 			}
 			//move.x += speed;
 		}

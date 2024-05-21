@@ -52,7 +52,7 @@ void StageEditor::DrawImgui()
 
 	if ( saveEnemyCSV )
 	{
-		CreateSaveFile(fileName);
+		CreateSaveFile(fileName,false);
 
 	}
 	ImGui::SliderFloat("EnemysRot",&enemyRot,0,360);
@@ -66,12 +66,19 @@ void StageEditor::DrawImgui()
 
 		ImGui::SliderInt(wait.c_str(),&enemys[ i ].waitTimer,0,200);
 		ImGui::SliderFloat3(pos.c_str(),&enemys[ i ].enemyObject->wtf.position.x,-100,120);
+		if ( ImGui::Button("delete") )
+		{
+			enemys.erase(enemys.begin() + i);;
+		}
 
 		enemys[ i ].enemyObject->wtf.rotation.y = enemyRot * rot;
 
 		ImGui::Separator();
 	}
-
+	if ( ImGui::Button("TxtUpdate") )
+	{
+		TxtUpdate();
+	}
 }
 
 void StageEditor::LoadCSVfile(const std::string& fileNames)
@@ -163,11 +170,21 @@ void StageEditor::ResetCSVfile()
 	//LoadEnemyPopData();
 }
 
-void StageEditor::CreateSaveFile(const std::string& fileNames)
+void StageEditor::CreateSaveFile(const std::string& fileNames,bool filePathTrue)
 {
 	std::string kDefaultTextureDirectoryPath = "Resources/EnemyCSVFile/";
 	std::string CSVpath = ".csv";
-	std::string fullPath = kDefaultTextureDirectoryPath + fileNames + CSVpath;
+	std::string fullPath;
+	if ( filePathTrue == false )
+	{
+		fullPath = kDefaultTextureDirectoryPath + fileNames + CSVpath;
+	}
+	else
+	{
+		fullPath = fileNames;
+
+	}
+	
 	std::ofstream ofs(fullPath);
 
 	ofs << "ENEMYS" << "," << enemyNmbs << "," << "," << std::endl;
@@ -212,6 +229,39 @@ void StageEditor::Clear()
 	enemys.clear();
 	enemyNmbs = 0;
 	waitNmb = 0;
+}
+
+void StageEditor::TxtUpdate()
+{
+	std::vector<std::string> CSVFileNames;
+	TxtRoad("Resources/EnemyCSVFile",CSVFileNames);
+
+	for ( int i = 0; i < CSVFileNames.size(); i++ )
+	{
+		CreateSaveFile(CSVFileNames[ i ],true);
+	}
+}
+
+void StageEditor::TxtRoad(std::string folderPath,std::vector<std::string>& file_names)
+{
+	using namespace std::filesystem;
+	directory_iterator iter(folderPath),end;
+	std::error_code err;
+
+	for ( ; iter != end && !err; iter.increment(err) )
+	{
+		const directory_entry entry = *iter;
+
+		file_names.push_back(entry.path().string());
+		printf("%s\n",file_names.back().c_str());
+	}
+
+	/* エラー処理 */
+	if ( err )
+	{
+		std::cout << err.value() << std::endl;
+		std::cout << err.message() << std::endl;
+	}
 }
 
 StageEditor::~StageEditor()

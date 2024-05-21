@@ -37,7 +37,7 @@ public:
 
 	void ResetCSVfile();
 
-	void CreateSaveFile(const std::string& fileNames);
+	void CreateSaveFile(const std::string& fileNames,bool filePathTrue);
 
 
 	void LoadCSVJudgment(const std::string& fileNames);
@@ -45,6 +45,10 @@ public:
 	void CSVEnemys(Vector3 enemyPos);
 
 	void Clear();
+
+	void TxtUpdate();
+
+	void TxtRoad(std::string folderPath,std::vector<std::string>& file_names);
 private:
 	StageEditor() = default;
 	~StageEditor();
