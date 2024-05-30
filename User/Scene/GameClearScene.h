@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "Player.h"
 #include "ParticleManager.h"
+#include "LightGroup.h"
 #include "Camera.h"
 
 class GameClearScene :public GameSceneState
@@ -26,12 +27,12 @@ public:
 private:
 	std::unique_ptr <GameClear> gameClearScene = nullptr;
 	std::unique_ptr <Road> road_ = nullptr;
-	std::unique_ptr<SeenTransition> seenTransition_ = nullptr;
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<ParticleManager> particleManager_ = nullptr;
 	std::unique_ptr<Camera> camera_ = nullptr;
 	std::unique_ptr <Skydome> skydome_ = nullptr;
 	std::unique_ptr <Sprite> stert_ = nullptr;
+	LightGroup* lightGroupNon = nullptr;
 
 	float gamestertUp = 50.0f;
 	Vector3 cameraGame = { 0,0,-10 };

@@ -1,12 +1,17 @@
 #include "SeenTransition.h"
-
-SeenTransition::SeenTransition()
-{
-}
+SeenTransition* SeenTransition::seenTransition = nullptr;
 
 SeenTransition::~SeenTransition()
 {
 
+}
+SeenTransition* SeenTransition::GetInstance()
+{
+	if (seenTransition == nullptr)
+	{
+		seenTransition = new SeenTransition();
+	}
+	return seenTransition;
 }
 void SeenTransition::Initialize()
 {

@@ -130,7 +130,7 @@ private://障害物
 	Model* enemyObstacle_ = nullptr;
 	Model* alertModel_ = nullptr;
 	//それぞれの当たり判定
-	float playerWidth = 0.5f;
+	float playerWidth = 2.0f;
 	float enemyWidth_ = 0.5f;
 
 private:

@@ -70,7 +70,7 @@ void GameClear::BossSpriteUpdate()
 
 void GameClear::CameraUpdate()
 {
-	if ( cameraPIPuls < 10 )
+	if ( cameraPIPuls <= 10.0f )
 	{
 		cameraPIPuls += cameraPI;
 	}

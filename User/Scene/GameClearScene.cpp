@@ -6,6 +6,12 @@ void GameClearScene::Initialize()
 	camera_ = std::make_unique<Camera>(WinApp::window_width,WinApp::window_height);
 	camera_->SetEye(cameraGame);
 	camera_->Update();
+
+
+	lightGroupNon = LightGroup::Create();
+
+	Object3d::SetLightNon(lightGroupNon);
+
 	Object3d::SetCamera(camera_.get());
 	ParticleManager::SetCamera(camera_.get());
 
@@ -23,31 +29,37 @@ void GameClearScene::Initialize()
 	stert_->Initialize(3);
 	stert_->SetPozition({ WinApp::GetInstance()->window_width / 2.0f, WinApp::GetInstance()->window_height / 2.0f + gamestertUp});
 
+	gameClearScene = std::make_unique < GameClear>();
+	gameClearScene->SetCamera(camera_.get());
+	gameClearScene->Initialize();
+
 	player_ = std::make_unique<Player>();
 	player_->Initialize(particleManager_.get());
 	player_->SetCamera(camera_.get());
+
 }
 
 void GameClearScene::Update()
 {
+	skydome_->Update();
 	gameClearScene->Update();
 	road_->roadUpdate();
-	seenTransition_->Update();
+	SeenTransition::GetInstance()->Update();
 	player_->ClearMove();
-	if ( seenTransition_->ReturnSeenNotEnd() == false )
+	if ( SeenTransition::GetInstance()->ReturnSeenNotEnd() == false )
 	{
 		if ( gameClearScene->ClearTrue() )
 		{
 			if ( Input::GetInstance()->TriggerMouse(0) )
 			{
-				seenTransition_->OnSeenTrans();
+				SeenTransition::GetInstance()->OnSeenTrans();
 				seenFlag = true;
 			}
 		}
 	}
 	if ( seenFlag )
 	{
-		if ( seenTransition_->ReturnSeenTrans() )
+		if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 		{
 			GameSceneState* state = new TitleScene();
 			SceneManager::GetInstance()->SetNextScene(state);
@@ -69,10 +81,12 @@ void GameClearScene::SpriteDraw()
 {
 			//gameClear_->Draw();
 	gameClearScene->SpriteDraw();
+
 	if ( gameClearScene->ClearTrue() )
 	{
 		stert_->Draw();
 	}
+	SeenTransition::GetInstance()->Draw();
 }
 
 void GameClearScene::Finalize()

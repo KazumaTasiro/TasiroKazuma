@@ -1,4 +1,5 @@
 #include "StageEditor.h"
+#include "StageEditorScene.h"
 StageEditor* StageEditor::stageEditor = nullptr;
 
 void StageEditor::Initialize()
@@ -15,6 +16,7 @@ void StageEditor::Update()
 		enemys[ i ].enemyObject->Update();
 	}
 }
+
 
 void StageEditor::Draw()
 {
@@ -66,13 +68,12 @@ void StageEditor::DrawImgui()
 
 		ImGui::SliderInt(wait.c_str(),&enemys[ i ].waitTimer,0,200);
 		ImGui::SliderFloat3(pos.c_str(),&enemys[ i ].enemyObject->wtf.position.x,-100,120);
+		enemys[ i ].enemyObject->wtf.rotation.y = enemyRot * rot;
+
 		if ( ImGui::Button("delete") )
 		{
 			enemys.erase(enemys.begin() + i);;
 		}
-
-		enemys[ i ].enemyObject->wtf.rotation.y = enemyRot * rot;
-
 		ImGui::Separator();
 	}
 	if ( ImGui::Button("TxtUpdate") )

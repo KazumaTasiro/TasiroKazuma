@@ -82,7 +82,7 @@ void Enemy::Update(Player* player)
  {
 	 return LockBullet->IsDead();
 		});
-
+	
 
 	//キャラクター移動処理
 	Move();

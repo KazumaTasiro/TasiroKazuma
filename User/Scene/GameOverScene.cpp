@@ -6,6 +6,11 @@ void GameOverScene::Initialize()
 	camera_ = std::make_unique<Camera>(WinApp::window_width,WinApp::window_height);
 	camera_->SetEye(cameraGame);
 	camera_->Update();
+
+
+	lightGroupNon = LightGroup::Create();
+
+	Object3d::SetLightNon(lightGroupNon);
 	Object3d::SetCamera(camera_.get());
 	ParticleManager::SetCamera(camera_.get());
 
@@ -33,21 +38,22 @@ void GameOverScene::Initialize()
 
 void GameOverScene::Update()
 {
+	skydome_->Update();
 	road_->roadUpdate();
 	gameOver->Update();
-	seenTransition_->Update();
+	SeenTransition::GetInstance()->Update();
 	camera_->SetTarget(TargetCamRes);
-	if ( seenTransition_->ReturnSeenNotEnd() == false )
+	if ( SeenTransition::GetInstance()->ReturnSeenNotEnd() == false )
 	{
 		if (Input::GetInstance()->TriggerMouse(0) )
 		{
-			seenTransition_->OnSeenTrans();
+			SeenTransition::GetInstance()->OnSeenTrans();
 			seenFlag = true;
 		}
 	}
 	if ( seenFlag )
 	{
-		if ( seenTransition_->ReturnSeenTrans() )
+		if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 		{
 			GameSceneState* state = new TitleScene();
 			SceneManager::GetInstance()->SetNextScene(state);
@@ -55,11 +61,12 @@ void GameOverScene::Update()
 		}
 	}
 
-	
+	LightData::GetInstance()->Update();
 }
 
 void GameOverScene::ObjectDraw()
 {
+	
 	skydome_->Draw();
 	road_->Draw();
 	gameOver->Draw();
@@ -68,8 +75,10 @@ void GameOverScene::ObjectDraw()
 
 void GameOverScene::SpriteDraw()
 {
+
 	gameOver_->Draw();
 	stert_->Draw();
+	SeenTransition::GetInstance()->Draw();
 }
 
 

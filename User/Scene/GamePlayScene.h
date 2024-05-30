@@ -11,6 +11,7 @@
 #include "RailCamera.h"
 #include "EnemyManager.h"
 #include "StertCount.h"
+#include "LightGroup.h"
 #include "RailCamera.h"
 
 class GamePlayScene:public GameSceneState
@@ -26,10 +27,12 @@ public:
 	//終了処理
 	void Finalize() override;
 
+	//カーソルが画面外に出ない処理
+	void CursorLimit();
+
 private:
 
 	std::unique_ptr <Road> road_ = nullptr;
-	std::unique_ptr<SeenTransition> seenTransition_ = nullptr;
 	std::unique_ptr<Player> player_ = nullptr;
 	std::unique_ptr<EnemyManager> enemyManager_ = nullptr;
 	std::unique_ptr<ParticleManager> particleManager_ = nullptr;
@@ -40,9 +43,14 @@ private:
 	std::unique_ptr <Sprite> operation_ = nullptr;
 	std::unique_ptr <Sprite> cameraMoveOps_ = nullptr;
 	std::unique_ptr <Sprite> moveTute_ = nullptr;
-
+	LightGroup* lightGroupNon = nullptr;
 
 	float bossTime = 3.0f;
 	Vector3 cameraGame = { 0,0,-10 };
 	Vector2 operationPos = { 128,64 };
+
+	WinApp* winApp_ = nullptr;
+
+	RECT rcClip;
+	RECT rcOldClip;
 };

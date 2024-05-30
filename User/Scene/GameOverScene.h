@@ -6,6 +6,7 @@
 #include "Road.h"
 #include "Input.h"
 #include "ParticleManager.h"
+#include "LightGroup.h"
 #include "Camera.h"
 
 class GameOverScene :public GameSceneState
@@ -24,13 +25,12 @@ public:
 private:
 	std::unique_ptr <GameOver> gameOver = nullptr;
 	std::unique_ptr <Road> road_ = nullptr;
-	std::unique_ptr<SeenTransition> seenTransition_ = nullptr;
 	std::unique_ptr<ParticleManager> particleManager_ = nullptr;
 	std::unique_ptr<Camera> camera_ = nullptr;
 	std::unique_ptr <Skydome> skydome_ = nullptr;
 	std::unique_ptr <Sprite> stert_ = nullptr;
 	std::unique_ptr <Sprite> gameOver_ = nullptr;
-
+	LightGroup* lightGroupNon = nullptr;
 
 
 	Vector3 TargetCamRes = { 0,0,0 };

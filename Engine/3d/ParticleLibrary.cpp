@@ -21,7 +21,6 @@ void ParticleLibrary::Initialize()
 	particle_ = new ParticleManager();
 	particleData = new ParticleData();
 	particleClear = new ParticleData();
-	particleClear = particleData;
 	particle_->Initialize();
 	particle_->LoadTexture("standard.png");
 
@@ -35,7 +34,6 @@ void ParticleLibrary::ObjectInitialize()
 	player = Object3d::Create();
 	player->Initialize();
 	player->SetModel(playerModel);
-	player->Update();
 }
 
 void ParticleLibrary::ObjectUpdate()
@@ -184,7 +182,7 @@ void ParticleLibrary::DrawImgui()
 	if ( ImGui::Button("ResetParticle") )
 	{
 		ResetCSVfile();
-		particleData = particleClear;
+		ResetParticleData();
 		ResetCSVfile();
 	}
 	if ( saveParticle )
@@ -281,7 +279,7 @@ void ParticleLibrary::UpdateCSVfile(ParticleManager* particlemana)
 	//1行分の文字列を入れる変数
 	std::string line;
 	//初期化
-	particleData = particleClear;
+	ResetParticleData();
 
 	//コマンド実行ループ
 	while ( getline(particleCSV,line) )
@@ -733,6 +731,7 @@ void ParticleLibrary::ParticleDataSave(uint32_t nmb,const std::string& fileNames
 	particleBox[ nmb ].pData.randomParticleStertScale = particleData->randomParticleStertScale;
 	particleBox[ nmb ].pData.randomParticleEndScale = particleData->randomParticleEndScale;
 
+	ResetParticleData();
 }
 
 void ParticleLibrary::AddParticle(uint32_t nmb,Vector3 ObjectPos)
@@ -895,6 +894,46 @@ void ParticleLibrary::TxtRoad(std::string folderPath,std::vector<std::string>& f
 		std::cout << err.value() << std::endl;
 		std::cout << err.message() << std::endl;
 	}
+}
+
+void ParticleLibrary::ResetParticleData()
+{
+	particleData->particlePos=particleClear->particlePos;
+	particleData->randomParticlePos=particleClear->randomParticlePos;
+	particleData->particleEndPos=particleClear->particleEndPos;
+	particleData->endPointPos=particleClear->endPointPos;
+	particleData->particleStertScale=particleClear->particleStertScale;;
+	particleData->particleRandomStertScale= particleClear->particleRandomStertScale;
+	particleData->particleEndScale= particleClear->particleEndScale;
+	particleData->particleRandomEndScale= particleClear->particleRandomEndScale;
+	particleData->particleSpeed= particleClear->particleSpeed;
+	particleData->particleEndPointSpeed= particleClear->particleEndPointSpeed;
+	particleData->particleRandomSpeed= particleClear->particleRandomSpeed;
+	particleData->particleRandomSpeedX= particleClear->particleRandomSpeedX;
+	particleData->particleRandomSpeedY= particleClear->particleRandomSpeedY;
+	particleData->particleRandomSpeedZ= particleClear->particleRandomSpeedZ;
+	particleData->particleStertColor= particleClear->particleStertColor;
+	particleData->particleEndColor= particleClear->particleEndColor;
+	particleData->particleNmber= particleClear->particleNmber;
+	particleData->particleLife= particleClear->particleLife;
+	particleData->easingNmb= particleClear->easingNmb;
+	for ( int i = 0; i < 30; i++ )
+	{
+		particleData->texFileName[i ] = particleClear->texFileName[i];
+	}
+
+	particleData->randomParticleStertColor= particleClear->randomParticleStertColor;
+	particleData->randomParticleEndColor= particleClear->randomParticleEndColor;
+	particleData->randomParticleSize= particleClear->randomParticleSize;
+	particleData->endPoint= particleClear->endPoint;
+	particleData->randomParticlePosX= particleClear->randomParticlePosX;
+	particleData->randomParticlePosY= particleClear->randomParticlePosY;
+	particleData->randomParticlePosZ= particleClear->randomParticlePosZ;
+	particleData->randomParticleSpeedX= particleClear->randomParticleSpeedX;
+	particleData->randomParticleSpeedY= particleClear->randomParticleSpeedY;
+	particleData->randomParticleSpeedZ= particleClear->randomParticleSpeedZ;
+	particleData->randomParticleStertScale= particleClear->randomParticleStertScale;
+	particleData->randomParticleEndScale= particleClear->randomParticleEndScale;
 }
 
 ParticleLibrary::~ParticleLibrary()

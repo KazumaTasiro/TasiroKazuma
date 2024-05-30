@@ -23,17 +23,24 @@ void GameMain::Initialize()
 	ParticleLibrary::GetInstance()->Initialize();
 	SpriteCommon::GetInstance()->Initialize(Framework::GetDXCommon());
 	SpriteInitialize();
+	ParticleInitialize();
+	ModelLoad();
+	StageEditor::GetInstance()->Initialize();
+	SeenTransition::GetInstance()->Initialize();
+	GameSceneState* scene = new TitleScene();
+	SceneManager::GetInstance()->SetNextScene(scene);
 	//DirectionalLight::StaticInitialize(Framework::GetDXCommon()->GetDevice());
 
 
-	gameScene = new GameScene();
-	gameScene->Initialize(Framework::GetDXCommon());
+	//gameScene = new GameScene();
+	//gameScene->Initialize(Framework::GetDXCommon());
 
 }
 
 void GameMain::Finalize()
 {
-	gameScene->Finalize();
+	SceneManager::GetInstance()->Update();
+	//gameScene->Finalize();
 	FbxLoader::GetInstance()->Finalize();
 
 	
@@ -47,14 +54,18 @@ void GameMain::Finalize()
 void GameMain::Update()
 {
 	Framework::Update();
-	gameScene->Update();
+	SceneManager::GetInstance()->Update();
+	//gameScene->Update();
 }
 
 void GameMain::Draw()
 {
 	posteffect->PreDrawScene(Framework::GetDXCommon()->GetCommandList());
 
-	gameScene->Draw();
+	Object3d::PreDraw(Framework::GetDXCommon()->GetCommandList());
+	SceneManager::GetInstance()->ObjectDraw();
+	Object3d::PostDraw();
+	//gameScene->Draw();
 
 	posteffect->PostDrawScene(Framework::GetDXCommon()->GetCommandList());
 
@@ -62,6 +73,7 @@ void GameMain::Draw()
 
 	posteffect->Draw(Framework::GetDXCommon()->GetCommandList());
 
+	SceneManager::GetInstance()->SpriteDraw();
 	Framework::GetDXCommon()->PostDraw();
 
 
@@ -94,4 +106,24 @@ void GameMain::SpriteInitialize()
 	SpriteCommon::GetInstance()->LoadTexture(22,"CengeCmaraQ.png");
 	SpriteCommon::GetInstance()->LoadTexture(23,"damageEf.png");
 	SpriteCommon::GetInstance()->LoadTexture(24,"MoveTuto.png");
+}
+
+void GameMain::ParticleInitialize()
+{
+	ParticleLibrary::GetInstance()->ObjectInitialize();
+
+	ParticleLibrary::GetInstance()->ParticleDataSave(0,"RotParticleL");
+	//ParticleLibrary::GetInstance()->ParticleUpdate(0);
+	ParticleLibrary::GetInstance()->ParticleDataSave(1,"RotParticleR");
+	//ParticleLibrary::GetInstance()->ParticleUpdate(1);
+	ParticleLibrary::GetInstance()->ParticleDataSave(2,"ring");
+	//ParticleLibrary::GetInstance()->ParticleUpdate(2);
+}
+
+void GameMain::ModelLoad()
+{
+	
+	ModelManager::GetInstance()->LoadModel("Sakaban");
+	ModelManager::GetInstance()->LoadModel("SakabanTakkle");
+	ModelManager::GetInstance()->LoadModel("SakabanObstacle");
 }

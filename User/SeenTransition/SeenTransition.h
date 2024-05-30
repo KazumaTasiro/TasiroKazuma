@@ -9,8 +9,9 @@
 class SeenTransition
 {
 public:
-	SeenTransition();
-	~SeenTransition();
+
+	//シングルトン
+	static SeenTransition* GetInstance();
 	///<summary>
 	////初期化
 	///</summary>
@@ -47,6 +48,14 @@ public:
 	////画像のランダムリセット
 	///</summary>
 	void ResetBlindSprite();
+private:
+	SeenTransition() = default;
+	~SeenTransition();
+	SeenTransition(const SeenTransition&) = delete;
+	const SeenTransition& operator=(const SeenTransition&) = delete;
+
+	static SeenTransition* seenTransition;
+private:
 
 private:
 	enum Nmb

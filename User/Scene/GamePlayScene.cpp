@@ -6,6 +6,11 @@ void GamePlayScene::Initialize()
 	camera_ = std::make_unique<Camera>(WinApp::window_width,WinApp::window_height);
 	camera_->SetEye(cameraGame);
 	camera_->Update();
+
+
+	lightGroupNon = LightGroup::Create();
+
+	Object3d::SetLightNon(lightGroupNon);
 	Object3d::SetCamera(camera_.get());
 	ParticleManager::SetCamera(camera_.get());
 
@@ -19,8 +24,6 @@ void GamePlayScene::Initialize()
 	road_ = std::make_unique <Road>();
 	road_->Initialize();
 
-	seenTransition_ = std::make_unique < SeenTransition>();
-	seenTransition_->Initialize();
 
 	railCamera = std::make_unique < RailCamera>();
 	railCamera->SetCamera(camera_.get());
@@ -37,32 +40,39 @@ void GamePlayScene::Initialize()
 	enemyManager_->SetPlayer(player_.get());
 
 	stertCount_ = std::make_unique<StertCount>();
+	stertCount_->SetCamera(camera_.get());
 	stertCount_->Initialize();
+
 
 	operation_ = std::make_unique <Sprite>();
 	operation_->Initialize(19);
-	operation_->SetPozition({ WinApp::GetInstance()->window_width / 2 - operationPos.x,( WinApp::GetInstance()->window_height / 2 ) - operationPos.y });
+	operation_->SetPozition({ WinApp::GetInstance()->window_width- operationPos.x,( WinApp::GetInstance()->window_height  ) - operationPos.y });
 
 	cameraMoveOps_ = std::make_unique <Sprite>();
 	cameraMoveOps_->Initialize(20);
-	cameraMoveOps_->SetPozition({ WinApp::GetInstance()->window_width / 2 - operationPos.x,( WinApp::GetInstance()->window_height / 2 ) - ( operationPos.y * 3 ) });
+	cameraMoveOps_->SetPozition({ WinApp::GetInstance()->window_width - operationPos.x,( WinApp::GetInstance()->window_height ) - ( operationPos.y * 3 ) });
 
 	moveTute_ = std::make_unique <Sprite>();
 	moveTute_->Initialize(24);
-	moveTute_->SetPozition({ WinApp::GetInstance()->window_width / 2 - operationPos.x,( WinApp::GetInstance()->window_height / 2 ) - ( operationPos.y * 5 ) });
+	moveTute_->SetPozition({ WinApp::GetInstance()->window_width  - operationPos.x,( WinApp::GetInstance()->window_height ) - ( operationPos.y * 5 ) });
 }
 
 void GamePlayScene::Update()
 {
+#ifdef NDEBUG
+	CursorLimit();
+
+#endif // DEBUG
+
+	skydome_->Update();
 	if ( enemyManager_->Clear() == false ){ 
 	road_->Update();
 	stertCount_->Update();
 	if ( stertCount_->GoStert() )
 	{
-		//camera_->SetEye(cameraGame);
 		player_->cameraUpdate();
 	}
-	seenTransition_->Update();
+	SeenTransition::GetInstance()->Update();
 	camera_->Update();
 	player_->Update();
 
@@ -80,8 +90,8 @@ void GamePlayScene::Update()
 
 		if ( player_->retrunIsDaed() )
 		{
-			seenTransition_->OnSeenTrans();
-			if ( seenTransition_->ReturnSeenTrans() )
+			SeenTransition::GetInstance()->OnSeenTrans();
+			if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 			{
 				GameSceneState* state = new GameOverScene();
 				SceneManager::GetInstance()->SetNextScene(state);
@@ -94,7 +104,7 @@ void GamePlayScene::Update()
 	if ( enemyManager_->Clear() == true )
 	{
 		bossTime--;
-		seenTransition_->Update();
+		SeenTransition::GetInstance()->Update();
 		player_->cameraUpdate();
 		road_->Update();
 		enemyManager_->SetPlayer(player_.get());
@@ -107,8 +117,8 @@ void GamePlayScene::Update()
 		if ( enemyManager_->BossClear() )
 		{
 			player_->ResetDamageFlag();
-			seenTransition_->OnSeenTrans();
-			if ( seenTransition_->ReturnSeenTrans() )
+			SeenTransition::GetInstance()->OnSeenTrans();
+			if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 			{
 				GameSceneState* state = new GameClearScene();
 				SceneManager::GetInstance()->SetNextScene(state);
@@ -117,8 +127,8 @@ void GamePlayScene::Update()
 		}
 		if ( player_->retrunIsDaed() )
 		{
-			seenTransition_->OnSeenTrans();
-			if ( seenTransition_->ReturnSeenTrans() )
+			SeenTransition::GetInstance()->OnSeenTrans();
+			if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 			{
 				GameSceneState* state = new GameOverScene();
 				SceneManager::GetInstance()->SetNextScene(state);
@@ -147,6 +157,7 @@ void GamePlayScene::ObjectDraw()
 
 void GamePlayScene::SpriteDraw()
 {
+	SeenTransition::GetInstance()->Draw();
 	if ( stertCount_->stertEnd() )
 	{
 		player_->DrawUI();
@@ -161,4 +172,15 @@ void GamePlayScene::SpriteDraw()
 
 void GamePlayScene::Finalize()
 {
+
+}
+
+void GamePlayScene::CursorLimit()
+{
+	
+
+	GetClipCursor(&rcOldClip);
+	GetWindowRect(WinApp::GetInstance()->GetHwnd(),&rcClip);
+	ClipCursor(&rcClip);
+	ClipCursor(&rcOldClip);
 }

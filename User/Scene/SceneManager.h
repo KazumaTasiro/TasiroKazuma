@@ -20,6 +20,8 @@ public:
 
 	void SpriteDraw();
 
+	void Finalize();
+
 private:
 	SceneManager() = default;
 	~SceneManager();

@@ -246,7 +246,7 @@ private:
 	float speedMax = 0.15f;
 
 	float playerHp;
-	float playerMaxHp = 30.0f;
+	float playerMaxHp = 2.0f;
 
 	bool DeadParticle = false;
 

@@ -214,6 +214,12 @@
     <Filter Include="ヘッダー ファイル\Engine\StageEditor">
       <UniqueIdentifier>{873b85af-c36d-4ed4-a9b9-69008f43eb4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\Scene">
+      <UniqueIdentifier>{30d78d06-fe7a-4fad-9909-4a115fe6d5cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Game\Scene">
+      <UniqueIdentifier>{7495f47c-2b9a-4ca8-b6d0-5ce5947b115f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -303,9 +309,6 @@
     <ClCompile Include="User\Enemy\EnemyManager.cpp">
       <Filter>ソース ファイル\Game\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="User\Scene\GameScene.cpp">
-      <Filter>ソース ファイル\Game\GameScene</Filter>
-    </ClCompile>
     <ClCompile Include="User\Player\Player.cpp">
       <Filter>ソース ファイル\Game\Player</Filter>
     </ClCompile>
@@ -347,12 +350,6 @@
     </ClCompile>
     <ClCompile Include="Engine\base\WinApp.cpp">
       <Filter>ソース ファイル\Engine\EngineMain\WinApp</Filter>
-    </ClCompile>
-    <ClCompile Include="User\Scene\GameOver.cpp">
-      <Filter>ソース ファイル\Game\GameScene</Filter>
-    </ClCompile>
-    <ClCompile Include="User\Scene\GameClear.cpp">
-      <Filter>ソース ファイル\Game\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="User\RailCamera\RailCamera.cpp">
       <Filter>ソース ファイル\Game\RailCamera</Filter>
@@ -428,6 +425,21 @@
     </ClCompile>
     <ClCompile Include="User\Bullet\BulletBase.cpp">
       <Filter>ソース ファイル\Game\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\StageEditorScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameClear.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameOver.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\GameScene.cpp">
+      <Filter>ソース ファイル\Game\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="User\Scene\ParticleEditorScene.cpp">
+      <Filter>ソース ファイル\Game\GameScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -515,9 +527,6 @@
     <ClInclude Include="User\Enemy\EnemyManager.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="User\Scene\GameScene.h">
-      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
-    </ClInclude>
     <ClInclude Include="User\Player\Player.h">
       <Filter>ヘッダー ファイル\Game\Player</Filter>
     </ClInclude>
@@ -560,12 +569,6 @@
     <ClInclude Include="Engine\base\WinApp.h">
       <Filter>ヘッダー ファイル\Engine\EngineMain\WinApp</Filter>
     </ClInclude>
-    <ClInclude Include="User\Scene\GameOver.h">
-      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
-    </ClInclude>
-    <ClInclude Include="User\Scene\GameClear.h">
-      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
-    </ClInclude>
     <ClInclude Include="User\RailCamera\RailCamera.h">
       <Filter>ヘッダー ファイル\Game\RailCamera</Filter>
     </ClInclude>
@@ -595,9 +598,6 @@
     </ClInclude>
     <ClInclude Include="User\Bullet\EnemyObstacleBullet.h">
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\ParticleLibrary.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="User\Enemy\EnemyTackle.h">
       <Filter>ヘッダー ファイル\Game\Enemy</Filter>
@@ -643,6 +643,24 @@
     </ClInclude>
     <ClInclude Include="User\Bullet\BulletBase.h">
       <Filter>ヘッダー ファイル\Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\StageEditorScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameClear.h">
+      <Filter>ヘッダー ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameOver.h">
+      <Filter>ヘッダー ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ParticleLibrary.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="User\Scene\ParticleEditorScene.h">
+      <Filter>ヘッダー ファイル\Game\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

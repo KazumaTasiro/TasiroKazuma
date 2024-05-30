@@ -91,8 +91,8 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	enemyManager_->SetPlayer(player_.get());
 
 	//player_->Update();
-	seenTransition_ = std::make_unique < SeenTransition>();
-	seenTransition_->Initialize();
+	//seenTransition_ = std::make_unique < SeenTransition>();
+	//seenTransition_->Initialize();
 
 	gameOverSeen = std::make_unique<GameOver>();
 	gameOverSeen->Initialize();
@@ -116,7 +116,7 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	railCamera->Initialize();
 	railCamera->Update();
 
-	lightGroupNon = LightGroup::Create();
+
 
 	//direLight = DirectionalLight::Create();
 
@@ -124,18 +124,11 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 	//lightGroupUse->SetPointLightActive(0,true);
 	//lightGroupUse->SetCircleShadowActive(0,true);
 
-
+	lightGroupNon = LightGroup::Create();
 
 	Object3d::SetLightNon(lightGroupNon);
-	ParticleLibrary::GetInstance()->ObjectInitialize();
 
-	ParticleLibrary::GetInstance()->ParticleDataSave(0,"RotParticleL");
-	ParticleLibrary::GetInstance()->ParticleUpdate(0);
-	ParticleLibrary::GetInstance()->ParticleDataSave(1,"RotParticleR");
-	ParticleLibrary::GetInstance()->ParticleUpdate(1);
-	ParticleLibrary::GetInstance()->ParticleDataSave(2,"ring");
-	ParticleLibrary::GetInstance()->ParticleUpdate(2);
-	StageEditor::GetInstance()->Initialize();
+
 	PhaseReset();
 
 }
@@ -193,19 +186,19 @@ void GameScene::Update()
 
 		road_->BeforeUpdate();
 		title_->Update();
-		seenTransition_->Update();
+		SeenTransition::GetInstance()->Update();
 		//player_->Update();
-		if ( seenTransition_->ReturnSeenNotEnd() == false )
+		if ( SeenTransition::GetInstance()->ReturnSeenNotEnd() == false )
 		{
 			if ( input_->TriggerMouse(0) )
 			{
-				seenTransition_->OnSeenTrans();
+				SeenTransition::GetInstance()->OnSeenTrans();
 				seenFlag = true;
 			}
 		}
 		if ( seenFlag )
 		{
-			if ( seenTransition_->ReturnSeenTrans() )
+			if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 			{
 				stertCount_->Initialize();
 				camera_->SetEye(cameraGame);
@@ -223,7 +216,7 @@ void GameScene::Update()
 			//camera_->SetEye(cameraGame);
 			player_->cameraUpdate();
 		}
-		seenTransition_->Update();
+		SeenTransition::GetInstance()->Update();
 		camera_->Update();
 		player_->Update();
 
@@ -245,8 +238,8 @@ void GameScene::Update()
 			}
 			if ( player_->retrunIsDaed() )
 			{
-				seenTransition_->OnSeenTrans();
-				if ( seenTransition_->ReturnSeenTrans() )
+				SeenTransition::GetInstance()->OnSeenTrans();
+				if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 				{
 					scene = Scene::Over;
 				}
@@ -264,7 +257,7 @@ void GameScene::Update()
 			//}
 			if ( DemoClear )
 			{
-				if ( seenTransition_->ReturnSeenTrans() )
+				if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 				{
 					scene = Scene::Clear;
 				}
@@ -275,7 +268,7 @@ void GameScene::Update()
 	case GameScene::Boss:
 
 		bossTime--;
-		seenTransition_->Update();
+		SeenTransition::GetInstance()->Update();
 		player_->cameraUpdate();
 		road_->Update();
 		enemyManager_->SetPlayer(player_.get());
@@ -288,8 +281,8 @@ void GameScene::Update()
 		if ( enemyManager_->BossClear() )
 		{
 			player_->ResetDamageFlag();
-			seenTransition_->OnSeenTrans();
-			if ( seenTransition_->ReturnSeenTrans() )
+			SeenTransition::GetInstance()->OnSeenTrans();
+			if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 			{
 				scene = Scene::Clear;
 			}
@@ -297,8 +290,8 @@ void GameScene::Update()
 		}
 		if ( player_->retrunIsDaed() )
 		{
-			seenTransition_->OnSeenTrans();
-			if ( seenTransition_->ReturnSeenTrans() )
+			SeenTransition::GetInstance()->OnSeenTrans();
+			if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 			{
 				scene = Scene::Over;
 
@@ -309,19 +302,19 @@ void GameScene::Update()
 	case GameScene::Over:
 		road_->roadUpdate();
 		gameOverSeen->Update();
-		seenTransition_->Update();
+		SeenTransition::GetInstance()->Update();
 		camera_->SetTarget(TargetCamRes);
-		if ( seenTransition_->ReturnSeenNotEnd() == false )
+		if ( SeenTransition::GetInstance()->ReturnSeenNotEnd() == false )
 		{
 			if ( input_->TriggerMouse(0) )
 			{
-				seenTransition_->OnSeenTrans();
+				SeenTransition::GetInstance()->OnSeenTrans();
 				seenFlag = true;
 			}
 		}
 		if ( seenFlag )
 		{
-			if ( seenTransition_->ReturnSeenTrans() )
+			if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 			{
 				PhaseReset();
 				scene = Scene::Title;
@@ -334,22 +327,22 @@ void GameScene::Update()
 
 		gameClearScene->Update();
 		road_->roadUpdate();
-		seenTransition_->Update();
+		SeenTransition::GetInstance()->Update();
 		player_->ClearMove();
-		if ( seenTransition_->ReturnSeenNotEnd() == false )
+		if ( SeenTransition::GetInstance()->ReturnSeenNotEnd() == false )
 		{
 			if ( gameClearScene->ClearTrue() )
 			{
 				if ( input_->TriggerMouse(0) )
 				{
-					seenTransition_->OnSeenTrans();
+					SeenTransition::GetInstance()->OnSeenTrans();
 					seenFlag = true;
 				}
 			}
 		}
 		if ( seenFlag )
 		{
-			if ( seenTransition_->ReturnSeenTrans() )
+			if ( SeenTransition::GetInstance()->ReturnSeenTrans() )
 			{
 				PhaseReset();
 				scene = Scene::Title;
@@ -445,26 +438,6 @@ void GameScene::Draw()
 
 #endif // _DEBUG
 #ifndef _PARTICLELIBRARY
-	switch ( scene )
-	{
-	case GameScene::Title:
-		player_->DrawFbx();
-		break;
-	case GameScene::Game:
-		player_->DrawFbx();
-		break;
-	case GameScene::Boss:
-		player_->DrawFbx();
-		break;
-	case GameScene::Over:
-		break;
-	case GameScene::Clear:
-		player_->DrawFbx();
-
-		break;
-	default:
-		break;
-	}
 
 
 	switch ( scene )
@@ -506,7 +479,7 @@ void GameScene::Draw()
 	default:
 		break;
 	}
-	seenTransition_->Draw();
+	SeenTransition::GetInstance()->Draw();
 
 
 #endif // !_PARTICLELIBRARY

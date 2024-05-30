@@ -526,7 +526,7 @@ void ParticleManager::Update()
 	//寿命が尽きたパーティクルを削除
 	particles.remove_if(
 		[ ] (Particle& x)
- {
+	 {
 	 return x.frame >= x.num_frame;
 		}
 	);

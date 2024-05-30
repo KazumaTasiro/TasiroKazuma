@@ -198,7 +198,9 @@
     <ClCompile Include="User\Scene\GamePlayScene.cpp" />
     <ClCompile Include="User\Scene\GameScene.cpp" />
     <ClCompile Include="User\Scene\GameSceneState.cpp" />
+    <ClCompile Include="User\Scene\ParticleEditorScene.cpp" />
     <ClCompile Include="User\Scene\SceneManager.cpp" />
+    <ClCompile Include="User\Scene\StageEditorScene.cpp" />
     <ClCompile Include="User\Scene\TitleScene.cpp" />
     <ClCompile Include="User\SeenTransition\SeenTransition.cpp" />
     <ClCompile Include="User\SeenTransition\StertCount.cpp" />
@@ -271,7 +273,9 @@
     <ClInclude Include="User\Scene\GamePlayScene.h" />
     <ClInclude Include="User\Scene\GameScene.h" />
     <ClInclude Include="User\Scene\GameSceneState.h" />
+    <ClInclude Include="User\Scene\ParticleEditorScene.h" />
     <ClInclude Include="User\Scene\SceneManager.h" />
+    <ClInclude Include="User\Scene\StageEditorScene.h" />
     <ClInclude Include="User\Scene\TitleScene.h" />
     <ClInclude Include="User\SeenTransition\SeenTransition.h" />
     <ClInclude Include="User\SeenTransition\StertCount.h" />

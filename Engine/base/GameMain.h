@@ -5,6 +5,11 @@
 #include "Framework.h"
 #include "DirectionalLight.h"
 #include "SpriteCommon.h"
+#include "ParticleLibrary.h"
+#include "StageEditor.h"
+#include "SceneManager.h"
+#include "GameSceneState.h"
+#include "TitleScene.h"
 
 
 //ゲーム全体
@@ -29,6 +34,12 @@ public:
 
 	//スプライトまとめ
 	void SpriteInitialize();
+
+	//パーティクル読みこみ
+	void ParticleInitialize();
+
+	//モデル読み込み
+	void ModelLoad();
 
 private:
 	

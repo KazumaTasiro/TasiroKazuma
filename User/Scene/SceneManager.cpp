@@ -50,6 +50,11 @@ void SceneManager::SpriteDraw()
 	scene_->SpriteDraw();
 }
 
+void SceneManager::Finalize()
+{
+	delete sceneManager;
+}
+
 SceneManager::~SceneManager()
 {
 	scene_->Finalize();

@@ -181,7 +181,7 @@ private:
 
 	std::unique_ptr <Titles> title_ = nullptr;
 
-	std::unique_ptr<SeenTransition> seenTransition_ = nullptr;
+	//std::unique_ptr<SeenTransition> seenTransition_ = nullptr;
 	bool seenFlag = false;
 
 	std::unique_ptr <StertCount> stertCount_ = nullptr;
