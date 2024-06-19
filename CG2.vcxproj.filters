@@ -220,6 +220,9 @@
     <Filter Include="ソース ファイル\Game\Scene">
       <UniqueIdentifier>{7495f47c-2b9a-4ca8-b6d0-5ce5947b115f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Game\PlaySceneState">
+      <UniqueIdentifier>{1b2cd50b-6097-4bb6-ae22-10a1bae09bd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -661,6 +664,18 @@
     </ClInclude>
     <ClInclude Include="User\Scene\ParticleEditorScene.h">
       <Filter>ヘッダー ファイル\Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="CountCameaState.h">
+      <Filter>ヘッダー ファイル\Game\PlaySceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayEnemyScene.h">
+      <Filter>ヘッダー ファイル\Game\PlaySceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayBossScene.h">
+      <Filter>ヘッダー ファイル\Game\PlaySceneState</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlaySceneState.h">
+      <Filter>ヘッダー ファイル\Game\PlaySceneState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

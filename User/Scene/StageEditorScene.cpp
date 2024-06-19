@@ -29,8 +29,22 @@ void StageEditorScene::Update()
 	ImGuiMan_->Bigin();
 
 	skydome_->Update();
+	road_->roadUpdate();
 
-	camera_->SetEye(cameraGame);
+	ImGui::SliderInt("CameraPosSet",&CameraPos,0,2);
+	if ( CameraPos == 0 )
+	{
+		camera_->SetEye(cameraLeft);
+	}
+	else if ( CameraPos == 1 )
+	{
+		camera_->SetEye(cameraGame);
+	}
+	else
+	{
+		camera_->SetEye(cameraRight);
+	}
+
 	camera_->Update();
 	StageEditor::GetInstance()->Update();
 	StageEditor::GetInstance()->DrawImgui();

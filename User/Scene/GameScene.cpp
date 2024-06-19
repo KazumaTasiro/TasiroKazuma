@@ -23,6 +23,7 @@ void GameScene::Initialize(DirectXCommon* dxcomon)
 
 	audio_ = std::make_unique <Audio>();
 	audio_->Initialize();
+	
 
 	// カメラ生成
 	camera_ = std::make_unique <Camera>(WinApp::window_width,WinApp::window_height);

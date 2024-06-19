@@ -38,7 +38,7 @@ private:
 
 	LightGroup* lightGroupNon = nullptr;
 
-	Vector3 cameraImgui = { 0,0,0 };
+	Vector3 cameraImgui = { 0,0,-10.0f };
 
 	Vector3 TargetCamRes = { 0,0,0 };
 	float gameOverUp = 80.0f;

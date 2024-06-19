@@ -49,6 +49,8 @@ public:
 	void TxtUpdate();
 
 	void TxtRoad(std::string folderPath,std::vector<std::string>& file_names);
+
+
 private:
 	StageEditor() = default;
 	~StageEditor();
@@ -79,6 +81,7 @@ private:
 
 	bool plusEnemy = false;
 	bool saveEnemyCSV = false;
+	bool LoadEnemyCSV = false;
 
 	uint32_t waitNmb;
 
@@ -88,4 +91,6 @@ private:
 
 	float enemyRot = 180.0f;
 	float rot = ( PI / 180 );
+
+	int waitBox[ 99 ];
 };

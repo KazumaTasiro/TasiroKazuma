@@ -33,4 +33,8 @@ private:
 	ImGuiManager* ImGuiMan_ = nullptr;
 
 	Vector3 cameraGame = { 0,0,-10 };
+	Vector3 cameraRight = { 10,0,0 };
+	Vector3 cameraLeft = { -10,0,0 };
+
+	int CameraPos = 1;
 };

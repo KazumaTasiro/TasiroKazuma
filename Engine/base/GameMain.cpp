@@ -122,7 +122,6 @@ void GameMain::ParticleInitialize()
 
 void GameMain::ModelLoad()
 {
-	
 	ModelManager::GetInstance()->LoadModel("Sakaban");
 	ModelManager::GetInstance()->LoadModel("SakabanTakkle");
 	ModelManager::GetInstance()->LoadModel("SakabanObstacle");

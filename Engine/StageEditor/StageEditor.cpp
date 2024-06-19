@@ -14,7 +14,9 @@ void StageEditor::Update()
 	for ( int i = 0; i < enemys.size(); i++ )
 	{
 		enemys[ i ].enemyObject->Update();
+		
 	}
+	UpdateCSVfile();
 }
 
 
@@ -35,6 +37,7 @@ void StageEditor::DrawImgui()
 	ImGui::Separator();
 	ImGui::InputText("CSVFileName",fileName,sizeof(fileName));
 	saveEnemyCSV = ImGui::Button("saveCSV");
+	LoadEnemyCSV = ImGui::Button("LoadCSV");
 	ImGui::Separator();
 	plusEnemy = ImGui::Button("Enemy");
 	ImGui::Separator();
@@ -57,6 +60,12 @@ void StageEditor::DrawImgui()
 		CreateSaveFile(fileName,false);
 
 	}
+	if ( LoadEnemyCSV )
+	{
+		ResetCSVfile();
+		LoadCSVJudgment(fileName);
+
+	}
 	ImGui::SliderFloat("EnemysRot",&enemyRot,0,360);
 
 	for ( int i = 0; i < enemys.size(); i++ )
@@ -69,16 +78,14 @@ void StageEditor::DrawImgui()
 		ImGui::SliderInt(wait.c_str(),&enemys[ i ].waitTimer,0,200);
 		ImGui::SliderFloat3(pos.c_str(),&enemys[ i ].enemyObject->wtf.position.x,-100,120);
 		enemys[ i ].enemyObject->wtf.rotation.y = enemyRot * rot;
+		std::string deleteButton= { "delete" };
+		deleteButton.append(to_string(i));
 
-		if ( ImGui::Button("delete") )
+		if ( ImGui::Button(deleteButton.c_str()) )
 		{
 			enemys.erase(enemys.begin() + i);;
 		}
 		ImGui::Separator();
-	}
-	if ( ImGui::Button("TxtUpdate") )
-	{
-		TxtUpdate();
 	}
 }
 
@@ -101,7 +108,7 @@ void StageEditor::LoadCSVfile(const std::string& fileNames)
 
 void StageEditor::UpdateCSVfile()
 {
-	Clear();
+
 	std::string line;
 	//コマンド実行ループ
 	while ( getline(enemyCSV,line) )
@@ -145,7 +152,7 @@ void StageEditor::UpdateCSVfile()
 			int32_t waitTime = atoi(word.c_str());
 
 			//待機開始
-			enemys[ waitNmb ].waitTimer = waitTime;
+			waitBox[ waitNmb ] = waitTime;
 			waitNmb++;
 			//コマンドループを抜ける
 			break;
@@ -192,7 +199,7 @@ void StageEditor::CreateSaveFile(const std::string& fileNames,bool filePathTrue)
 	for ( int i = 0; i < enemys.size(); i++ )
 	{
 		ofs << "WAIT" << "," << enemys[ i ].waitTimer << "," << "," << std::endl;
-		ofs << "POP" << "," <<static_cast<int> (enemys[ i ].enemyObject->wtf.position.x) << "," << static_cast< int > ( enemys[ i ].enemyObject->wtf.position.y ) << "," << static_cast< int > ( enemys[ i ].enemyObject->wtf.position.z ) << std::endl;
+		ofs << "POP" << "," <<static_cast<int> (enemys[ i ].enemyObject->wtf.position.x) << "," << static_cast< int > ( enemys[ i ].enemyObject->wtf.position.y ) << "," << static_cast< int > ( enemys[ i ].enemyObject->wtf.position.z ) << ","  << std::endl;
 	}
 
 
@@ -207,6 +214,7 @@ void StageEditor::LoadCSVJudgment(const std::string& fileNames)
 	bool isExists = std::filesystem::exists(fullPath);
 	if ( isExists )
 	{
+		Clear();
 		LoadCSVfile(fileNames);
 		UpdateCSVfile();
 	}
@@ -218,11 +226,14 @@ void StageEditor::CSVEnemys(Vector3 enemyPos)
 	enemy.enemyObject = Object3d::Create();
 	enemy.enemyObject->Initialize();
 	enemy.enemyObject->SetModel(enemyModel);
+	enemy.enemyObject->wtf.scale = { scaleNmb,scaleNmb ,scaleNmb };
 	enemy.enemyObject->wtf.position = enemyPos;
 	enemy.enemyObject->Update();
 	enemy.enemyNmb = enemyNmbs;
+	enemy.waitTimer = waitBox[ waitNmb ];
 	enemys.push_back(enemy);
 	enemyNmbs++;
+
 }
 
 void StageEditor::Clear()

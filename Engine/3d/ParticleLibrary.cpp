@@ -249,10 +249,6 @@ void ParticleLibrary::DrawImgui()
 	ImGui::Checkbox("randomParticleEndColor",&particleData->randomParticleEndColor);
 
 
-	if ( ImGui::Button("TxtUpdate") )
-	{
-		TxtUpdate();
-	}
 	//particle->SetColor(particleColor);
 
 }
@@ -607,7 +603,6 @@ void ParticleLibrary::CreateSaveFile(const std::string& fileNames,bool filePathT
 	ofs << "EndColor" << "," << particleData->particleEndColor.x << "," << particleData->particleEndColor.y << "," << particleData->particleEndColor.z << "," << particleData->particleEndColor.w << "," << std::endl;
 	ofs << "RandomStertColorButton" << "," << particleData->randomParticleStertColor << "," << std::endl;
 	ofs << "RandomEndColorButton" << "," << particleData->randomParticleEndColor << "," << std::endl;
-	ofs << "text" << std::endl;
 }
 
 void ParticleLibrary::LoadTexJudgment(const std::string& fileNames)

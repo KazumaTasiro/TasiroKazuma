@@ -209,6 +209,7 @@
     <ClCompile Include="User\Title\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CountCameaState.h" />
     <ClInclude Include="Engine\3d\ModelManager.h" />
     <ClInclude Include="Engine\LIght\CircleShadow.h" />
     <ClInclude Include="Engine\LIght\DirectionalLight.h" />
@@ -218,6 +219,9 @@
     <ClInclude Include="Engine\LIght\SpotLight.h" />
     <ClInclude Include="Engine\3d\ParticleLibrary.h" />
     <ClInclude Include="Engine\StageEditor\StageEditor.h" />
+    <ClInclude Include="GamePlayBossScene.h" />
+    <ClInclude Include="GamePlayEnemyScene.h" />
+    <ClInclude Include="GamePlaySceneState.h" />
     <ClInclude Include="User\Bullet\BulletBase.h" />
     <ClInclude Include="User\Bullet\RocketBullet.h" />
     <ClInclude Include="User\Enemy\EnemyAttackObstacle.h" />
