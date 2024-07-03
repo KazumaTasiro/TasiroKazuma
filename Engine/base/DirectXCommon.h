@@ -15,7 +15,11 @@
 class DirectXCommon 
 {
 public://メンバ関数
+
+	static DirectXCommon* GetInstance();
+
 	//初期化
+
 	void Initialize();
 
 	void InitializeDevice();
@@ -46,6 +50,14 @@ public://メンバ関数
 	//バックバッファの数を取得
 	size_t GetBufferCount()const { return backBuffers.size(); }
 
+	void Destroy();
+private:
+	DirectXCommon() = default;
+	~DirectXCommon() = default;
+	DirectXCommon(const DirectXCommon&) = delete;
+	const DirectXCommon& operator=(const DirectXCommon&) = delete;
+
+	static DirectXCommon* DirectXCommon_;
 private:
 	//DirectX12デバイス
 	Microsoft::WRL::ComPtr<ID3D12Device> device;

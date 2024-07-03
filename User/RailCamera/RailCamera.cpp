@@ -193,10 +193,12 @@ void RailCamera::Update()
 		}
 
 	}
+
 	for ( int i = 0; i < 4; i++ )
 	{
 		cameraPos[ i ]->Update();
 	}
+
 }
 
 void RailCamera::Reset()

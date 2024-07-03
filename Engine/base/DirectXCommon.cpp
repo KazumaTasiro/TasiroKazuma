@@ -8,6 +8,18 @@
 
 using namespace Microsoft::WRL;
 
+DirectXCommon* DirectXCommon::DirectXCommon_ = nullptr;
+
+DirectXCommon* DirectXCommon::GetInstance()
+{
+	if ( DirectXCommon_ == nullptr )
+	{
+		DirectXCommon_ = new DirectXCommon();
+	}
+
+	return DirectXCommon_;
+}
+
 void DirectXCommon::Initialize()
 {
 	//NULL検知
@@ -325,4 +337,9 @@ void DirectXCommon::PostDraw()
 	// 再びコマンドリストを貯める準備
 	result = commandList->Reset(cmdAllocator.Get(), nullptr);
 	assert(SUCCEEDED(result));
+}
+
+void DirectXCommon::Destroy()
+{
+	delete DirectXCommon_;
 }

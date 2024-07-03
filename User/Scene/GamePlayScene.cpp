@@ -55,6 +55,7 @@ void GamePlayScene::Initialize()
 	moveTute_ = std::make_unique <Sprite>();
 	moveTute_->Initialize(24);
 	moveTute_->SetPozition({ WinApp::GetInstance()->window_width  - operationPos.x,( WinApp::GetInstance()->window_height ) - ( operationPos.y * 5 ) });
+
 }
 
 void GamePlayScene::Update()
@@ -71,6 +72,7 @@ void GamePlayScene::Update()
 	if ( stertCount_->GoStert() )
 	{
 		player_->cameraUpdate();
+
 	}
 	SeenTransition::GetInstance()->Update();
 	camera_->Update();

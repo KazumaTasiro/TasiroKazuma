@@ -241,12 +241,17 @@ private:
 
 	Vector3 playerResetPos = { 0,-2.5f,0 };
 
-	 float speed = 0.1f;
+	float speed = 0.1f;
+	float frontSpeed = 0.0f;
+	float backSpeed = 0.15f;
+	float frontSpeedPlus = 0.05f;
+	float backSpeedPlus = 0.03f;
+	float frontSpeedMax = 0.15f;
 	float speedPlus = 0.01f;
 	float speedMax = 0.15f;
 
 	float playerHp;
-	float playerMaxHp = 2.0f;
+	float playerMaxHp = 20.0f;
 
 	bool DeadParticle = false;
 

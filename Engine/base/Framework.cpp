@@ -27,7 +27,7 @@ void Framework::Initialize()
 
 	//ポインタ
 
-	dxCommon = new DirectXCommon();
+	dxCommon = DirectXCommon::GetInstance();
 	dxCommon->Initialize();
 
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
@@ -54,7 +54,7 @@ void Framework::Finalize()
 	delete fps;
 
 	//DirectX解放
-	delete dxCommon;
+	dxCommon->Destroy();
 	//WindowsAPIの終了処理
 	winApp->Finalize();
 	//WindowsAPI解放
@@ -69,7 +69,7 @@ void Framework::Update()
 	fps->FpsControlBegin();
 
 	//Windowsのメッセージ処理
-	if (winApp->ProcessMessage()) {
+	if (winApp->ProcessMessage()||input->PushKey(DIK_ESCAPE)) {
 		//ゲームループを抜ける
 		endRequest_ = true;
 	}

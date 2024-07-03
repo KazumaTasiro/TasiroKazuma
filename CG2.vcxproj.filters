@@ -223,6 +223,12 @@
     <Filter Include="ヘッダー ファイル\Game\PlaySceneState">
       <UniqueIdentifier>{1b2cd50b-6097-4bb6-ae22-10a1bae09bd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\2D\Trail">
+      <UniqueIdentifier>{ec97881d-bbc6-429b-a06e-6ab4b4204892}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\2D\Trail">
+      <UniqueIdentifier>{33d3b2b3-e388-42a7-9389-c3b1a6416e1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

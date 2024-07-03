@@ -24,12 +24,12 @@ public:
 	///</summary>
 	/// EnemyNmb 敵の行動の種類
 	/// EnemyRootNmb 敵の行動ルート　0:左 1:右
-	void Initialize(Vector3 EnemyPos,SpriteCommon* sptriteCommon,Model* model,Model* enemyBulletModel,Model* enemyReticleModel,int EnemyNmb,int EnemyRootNmb);
+	void Initialize();
 	///<summary>
 	///更新
 	///</summary>
 
-	void Update(Player* player);
+	void Update();
 	///<summary>
 	////敵の動き
 	///</summary>

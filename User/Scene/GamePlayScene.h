@@ -46,7 +46,7 @@ private:
 	LightGroup* lightGroupNon = nullptr;
 
 	float bossTime = 3.0f;
-	Vector3 cameraGame = { 0,0,-10 };
+	Vector3 cameraGame = { 0,0,-15 };
 	Vector2 operationPos = { 128,64 };
 
 	WinApp* winApp_ = nullptr;

@@ -162,16 +162,45 @@ void Player::Move()
 	//キャラクターの移動ベクトル
 	Vector3 move = { };
 	Vector3 camMove = { };
-	Vector3 pos = worldTransform_->wtf.position;
+	Vector3 pos;
+
 
 	//const float RotSpeed = 0.05f;
-	if ( input_->PushKey(DIK_W) )
+
+	if ( worldTransform_->wtf.position.z <= 5 )
 	{
-		if ( worldTransform_->wtf.position.z <= 5.0f )
+		if ( input_->PushKey(DIK_W) )
 		{
-			worldTransform_->wtf.position.z += speed + speed;
+			if ( frontSpeed <= frontSpeedMax )
+			{
+
+				frontSpeed += frontSpeedPlus;
+			}
+
+		}
+		else
+		{
+			if ( worldTransform_->wtf.position.z > -3 )
+			{
+
+					frontSpeed = -backSpeed;
+			}
+			else if ( worldTransform_->wtf.position.z < -3 )
+			{
+
+				worldTransform_->wtf.position.z = -3;
+				frontSpeed = 0;
+			}
 		}
 	}
+	else if ( worldTransform_->wtf.position.z > 5 )
+	{
+		worldTransform_->wtf.position.z = 5.0f;
+		frontSpeed = 0;
+	}
+	
+
+	/*worldTransform_->wtf.position.z += frontSpeed;*/
 	if ( input_->PushKey(DIK_A) )
 	{
 		worldTransform_->wtf.rotation.y = rot * playerRot;
@@ -302,6 +331,8 @@ void Player::Move()
 		}
 	}
 	move.x += speed;
+	move.z += frontSpeed;
+	pos = worldTransform_->wtf.position;
 	worldTransform_->wtf.rotation.y = rot * playerRot;
 	worldTransform_->wtf.position = { pos.x + move.x,pos.y + move.y,pos.z + move.z };
 	worldTransform_->camera->SetTarget(worldTransform_->camera->GetTarget() + camMove);
